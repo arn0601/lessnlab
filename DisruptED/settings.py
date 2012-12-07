@@ -118,6 +118,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
+    'accounts',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -151,3 +152,5 @@ LOGGING = {
 
 import dj_database_url
 DATABASES['default'] =  dj_database_url.config()
+
+AUTH_PROFILE_MODULE = 'accounts.UserProfile'
