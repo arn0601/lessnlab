@@ -1,8 +1,9 @@
 # Create your views here.
-
+from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
 
+@csrf_exempt
 def login_user(request):
 	state = "Please log in below"
 	username = password = ''
