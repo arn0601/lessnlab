@@ -105,7 +105,7 @@ ROOT_URLCONF = 'DisruptED.urls'
 WSGI_APPLICATION = 'DisruptED.wsgi.application'
 
 DJANGO_ROOT = os.path.dirname(os.path.realpath(django.__file__))
-SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+SITE_ROOT = os.path.join(os.path.dirname(os.path.realpath(__file__)),'..')
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
