@@ -11,13 +11,13 @@ body{
 </style>
 </head>
 <body>
-	{{ title}}
+	{{ title}}'s Lessons
 	<div class="allLessons">
-		{% for lesson in allLessons: %}
+		{% for lesson in allLessons %}
 		<div class="lesson">
-			{lesson.LessonTitle}
+			{{lesson.LessonTitle}}
 		</div>
-		{% endFor %}
+		{% endfor %}
 			
 	</div>
 </body>

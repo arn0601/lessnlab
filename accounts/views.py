@@ -2,6 +2,8 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
+from django.http import HttpResponseRedirect
+
 
 @csrf_exempt
 def login_user(request):
@@ -15,6 +17,7 @@ def login_user(request):
 			if user.is_active:
 				login(request, user)
 				state = "Successfully logged in"
+				return HttpResponseRedirect('/lessons/')
 			else:
 				state = "Your account isnt active"
 		else:
