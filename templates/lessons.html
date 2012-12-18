@@ -10,32 +10,36 @@ body{
         font-size: 12px;
 }
 </style>
-<script type="text/javascript">
-    var today = "{{ today }}"
-</script>
 <script type="text/javascript" src="/media/showLesson.js"></script>
-
-
 <script type="text/javascript">
-    var today = "{{ today }}"
-</script>
-<script type="text/javascript" src="/media/today.js"></script>
-
-
+        var cont = "{{ cont }}";
+    </script>
 </head>
 <body>
-	Date is: <div id="date">{{ today }}</div>
-   <a href="#" id="yesterday">Get Yesterday</a>
 
 	{{title}}'s Lessons
 	<div class="allLessons">
 		{% for lesson in allLessons %}
 		<div class="lesson">
-		<a href="#" id="lesson" >{{lesson.LessonTitle}}</a>
+			<a href="#" id="lesson{{lesson.LessonID}}" class="l" lID="{{lesson.LessonID}}" >{{lesson.LessonTitle}}</a>
 		</div>
 		{% endfor %}
 			
 	</div>
+	Content is: <div id="cont">{{ cont }}</div>	
+	
+
+	<!--
+	<div id="Cont" class="allLessons">
+                CONTENT
+		{% for content in allContent %}
+                <div class="lesson">
+                        Content - {{content.Content}}
+                </div>
+                {% endfor %}
+
+        </div>-->
+
 </body>
 </html>
 

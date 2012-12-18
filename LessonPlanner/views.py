@@ -1,12 +1,20 @@
 # Create your views here.
 from LessonPlanner.models import Lesson
+from LessonPlanner.models import ContentSection
 from django.shortcuts import render_to_response
-
+from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+@csrf_exempt
 def showLesson(request):
 	print "IN REQUEST"
     	if request.is_ajax():
-        	print "AJAX REQUEST"
-		return render_to_response('lessons.html', {'allLessons':allLessons, 'title':creatorName})
+        	lessonID = request.POST.get('lID')
+		print "AJAX REQUEST"
+		content = ContentSection.objects.filter(LessonID=lessonID)
+		print content.count()
+		if content.count() == 0:
+			return HttpResponse("")
+		return HttpResponse(content[0].Content)
 	else:
 		creatorID = request.user.id
 		creatorName = request.user.username
@@ -22,7 +30,6 @@ from django.shortcuts import render_to_response
 from django.http import HttpResponse
 from datetime import datetime
 from dateutil import parser
-from django.views.decorators.csrf import csrf_exempt
 DATE_FORMAT='%m/%d/%Y'
 @csrf_exempt
 def today(request):

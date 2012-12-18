@@ -1,14 +1,16 @@
-// today.js
 $(document).ready(function() {
-    $('#lesson').click(function() {
-        var id = $(this).attr('lID');
-	alert("HELLO")
-	$.post("/lessons/", {
-            lID:id ,
-            },
-
-        );
-    });
+    $( ".l").each(function() {
+        $(this).click(function() {
+                var id = $(this).attr('lID');
+                $.post("/lessons/", {
+                    lID:id ,
+                 },
+	    		function(data) {
+				$('#cont').html(data);
+                		cont = data;
+            		}
+	    	);
+		
+       } );
+    })
 });
-
-
