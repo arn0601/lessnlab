@@ -6,8 +6,13 @@ $(document).ready(function() {
                     lID:id ,
                  },
 	    		function(data) {
-				$('#cont').html(data);
-                		cont = data;
+				var myData = eval("(" + data + ")");
+				var htmlString = '';
+				$.each(myData,function(){
+					htmlString += this['fields']['Content'] + "<br/>"
+				});
+				$('#cont12').html(htmlString);
+                		cont = myData;
             		}
 	    	);
 		
