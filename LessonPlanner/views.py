@@ -15,7 +15,7 @@ def showLesson(request):
 		print content.count()
 		if content.count() == 0:
 			return HttpResponse("")
-		data = serializers.serialize('json', content, fields=('Content','ContentType','LessonID'))
+		data = serializers.serialize('json', content, fields=('Content','SectionNumber','Header','ContentType','LessonID'))
 		print data,"","asd"
 		return HttpResponse(data)
 	else:
