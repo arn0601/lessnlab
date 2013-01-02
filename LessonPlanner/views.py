@@ -20,14 +20,13 @@ def showLesson(request):
 		else:
 			print "ajax request 2"
 			jsonobj = request.POST.get('section')
-			print jsonobj
 			data = simplejson.loads(jsonobj)
-			print data['sectionNumber'], request.POST.get('lID')
 			content = ContentSection.objects.filter(LessonID=request.POST.get('lID')).filter(SectionNumber=1)
 			print content
-			content.Content=data['content']
-			print content.Content
-			content.save()
+			for c in content:
+				c.Content=data['content']
+				print c.Content
+				c.save()
 			#data = serializers.serialize('json', content, fields=('Content','SectionNumber','Header','ContentType','LessonID'))
 			print "pushing data"
 			#return HttpResponse(data)

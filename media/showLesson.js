@@ -1,7 +1,6 @@
 
 function saveSection(lid, formname) {
 	try {
-	alert(formname)
 	var form = document.forms[formname];
 	var sectionNumber = form["secnum"].value;
 	var header = form["header"].value;
@@ -75,7 +74,6 @@ $(document).ready(function() {
 				}
 				
 				var myData = jQuery.parseJSON(data)
-				alert (myData)
 				var htmlString = '';
 				$.each(myData,function(){
 					htmlString += this['fields']['Content'] + "<br/>"
