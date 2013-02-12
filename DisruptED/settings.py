@@ -13,9 +13,9 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'django',                      # Or path to database file if using sqlite3.
-        'USER': 'admin',                      # Not used with sqlite3.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'lab',                      # Or path to database file if using sqlite3.
+        'USER': 'dab',                      # Not used with sqlite3.
         'PASSWORD': 'admin',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'accounts',
+    'registration',
     'LessonPlanner',
 )
 
@@ -162,3 +163,10 @@ import dj_database_url
 #DATABASES['default'] =  dj_database_url.config()
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
+
+ACCOUNT_ACTIVATION_DAYS=3
+
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+

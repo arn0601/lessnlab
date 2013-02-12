@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
 
-
+'''
 @csrf_exempt
 def login_user(request):
 	state = "Please log in below"
@@ -23,4 +23,4 @@ def login_user(request):
 		else:
 			state = "Something is incorrect"
 	return render_to_response('auth.html', {'state':state, 'username':username, 'password':password})
-
+'''
