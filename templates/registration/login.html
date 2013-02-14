@@ -1,15 +1,133 @@
-{% extends "base.html" %}
-{% load i18n %}
 
-{% block content %}
-<form method="post" action=".">
-  {% csrf_token %} 
-  {{ form.as_p }}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Sign in</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
 
-  <input type="submit" value="{% trans 'Log in' %}" />
-  <input type="hidden" name="next" value="{{ next }}" />
-</form>
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 0px;
+        padding-bottom: 0px;
+        background-color: #f5f5f5;
+      }
+      
+      .loginlinks {
+      
+        text-align: center;
+      
+      }
+      
+      .logindivider{
+        color: #f5f5f5;
+      }
+      
+      .page-header {
+        margin-top:0px;
+        padding-left: 75px;
+        padding-top:20px;
+        background-color: #22347A;
+        color: white;
+      }
+      
+      .page-footer {
+        padding-left: 75px;
+        padding-top: 20px;
+        padding-bottom:100px;
+        height: 80px;
+        background-color: #f5f5f5;
+        color: grey;
+      }
 
-<p>{% trans "Forgot password" %}? <a href="{% url auth_password_reset %}">{% trans "Reset it" %}</a>!</p>
-<p>{% trans "Not member" %}? <a href="{% url registration_register %}">{% trans "Register" %}</a>!</p>
-{% endblock %}
+      .form-signin {
+        max-width: 300px;
+        padding: 19px 29px 29px;
+        margin: 0 auto 20px;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      }
+      .form-signin .form-signin-heading,
+      .form-signin .checkbox {
+        margin-bottom: 10px;
+      }
+      .form-signin input[type="text"],
+      .form-signin input[type="password"] {
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 15px;
+        padding: 7px 9px;
+      }
+
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="../assets/ico/favicon.png">
+  </head>
+
+  <body>
+  
+  <div class="page-header">
+    <h1>Welcome to Lesson Lab</h1>
+    <p class="lead"><i>Helping teachers make time for what's important</i></p>
+  </div>
+
+ <div class="container">
+	{% csrf_token %}
+      <form class="form-signin" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %} 
+        <h3 class="form-signin-heading">Sign In</h3>
+        <input type="text" class="input-block-level" name="username" placeholder="Username">
+        <input type="password" class="input-block-level" name="password" placeholder="Password">
+        <ul>{{ errors }}</ul>
+	<hr/>
+	 <label class="checkbox">
+            <input type="checkbox" value="remember-me"> Remember me
+        </label>
+	<hr/>
+        <div class="loginlinks">
+            <button class="btn btn-primary" type="submit">Sign in</button>
+        </div>
+        <!--        <div class="loginlinks">
+            <a href="#"><img src="images/twittersignin.png"></img></a>
+        </div> -->
+        <div class="loginlinks">
+            <a href="#"></a>
+        </div>
+        <hr/>
+        <div class="loginlinks">
+           <span><a href="../accounts/password/change">Forgot Password?</a></span>
+           <span class="logindivider">|</span>
+           <span> <a href="{% url registration_register %}">Register</a> </span>
+       </div>
+      </form>
+    </div> <!-- /container -->
+    <hr/>
+    <div class="page-footer">
+        <p>Copyright 2013. Created by <a href="#">LessnLab Inc. </a></p>
+      </div>
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/bootstrap.js"></script>
+  </body>
+</html>
