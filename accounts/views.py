@@ -20,7 +20,8 @@ def login_user(request):
 		username = request.POST['username']
     		password = request.POST['password']
 	    	user = authenticate(username=username, password=password)
-		if user is not None:
+	        print username,password,'HERERER'
+        	if user is not None:
         		if user.is_active:
             			login(request, user)
 				return HttpResponseRedirect('/lessons/')
@@ -28,6 +29,7 @@ def login_user(request):
             			# Return a 'disabled account' error message
     		else:
 			error = "Invalid User Credentials"
+                        print 'invalid cred'
         		return render_to_response('registration/login.html', {'errors':error, 'username':username, 'password':password})
 			# Return an 'invalid login' error message.
 	else:
