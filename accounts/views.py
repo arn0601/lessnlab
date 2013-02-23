@@ -16,6 +16,7 @@ from django.contrib.auth.decorators import login_required
 @csrf_exempt
 @login_required
 def login_user(request):
+        print 'login user'
 	if request.POST:
 		username = request.POST['username']
     		password = request.POST['password']
