@@ -34,6 +34,7 @@ def login_user(request):
         		return render_to_response('registration/login.html', {'errors':error, 'username':username, 'password':password})
 			# Return an 'invalid login' error message.
 	else:
+                print "login really try this"
 		return render_to_response('registration/login.html')
 
 
