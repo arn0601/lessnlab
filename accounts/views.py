@@ -14,7 +14,6 @@ def logout_view(request):
 from django.contrib.auth.decorators import login_required
 
 @csrf_exempt
-@login_required
 def login_user(request):
 	if request.POST:
 		username = request.POST['username']
