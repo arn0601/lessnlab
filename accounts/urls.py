@@ -8,6 +8,6 @@ from accounts.forms import UserProfileRegistrationForm
 
 urlpatterns = patterns('',
 	url(r'^register/$',register,{'backend':'registration.backends.default.DefaultBackend', 'form_class' : UserProfileRegistrationForm},name='registration.views.register'),
-url(r'^/login/$', 'accounts.views.login_user'),
+#url(r'^/login/$', 'accounts.views.login_user'),
 
 )
