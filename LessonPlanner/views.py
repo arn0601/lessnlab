@@ -7,6 +7,12 @@ from django.http import HttpResponse
 from django.core import serializers
 import simplejson
 @csrf_exempt
+def showTemplateLesson(request):
+	uname = request.user.username
+	fullname = uname
+	return render_to_response('course.html', {'username':uname, 'fullname':uname})
+
+
 def showLesson(request):
     	if request.is_ajax():
 		action = request.POST.get('action')
