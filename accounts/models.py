@@ -3,6 +3,7 @@ from accounts.forms import UserProfileRegistrationForm
 from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 # Create your models here.
+import accounts.forms
 
 class UserProfile(models.Model):
 	user = models.OneToOneField(User)
@@ -11,8 +12,9 @@ class UserProfile(models.Model):
         user_dob = models.DateField()
 	user_school_name = models.CharField(max_length=32)
 	user_school_district = models.CharField(max_length=32)
-        user_school_state = models.CharField(max_length=32)
-        user_school_country = models.CharField(max_length=32)
+        user_school_state = models.CharField(max_length=32, choices=accounts.forms.STATE_CHOICES, default='')
+        #user_school_country = models.CharField(max_length=32)
+	teacher_code = models.CharField(max_length=32)
 
 def registerUserProfile(sender, user, request, **kwargs):
 	form = UserProfileRegistrationForm(request.POST)
@@ -23,6 +25,7 @@ def registerUserProfile(sender, user, request, **kwargs):
 	user_profile.user_school_name = form.data['school']
 	user_profile.user_school_district = form.data['school_district']
 	user_profile.user_school_state = form.data['school_state']
+	user_profile.teacher_code = form.data['teacher_code']
 	user_profile.save()
 
 from registration.signals import user_registered
