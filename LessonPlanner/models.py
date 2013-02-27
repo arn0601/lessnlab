@@ -13,11 +13,8 @@ class Lesson(models.Model):
 	CreatorID = models.ForeignKey('accounts.UserProfile')
 	Tags = models.TextField()
 
-class ContentSection(models.Model):
-	LessonID = models.ForeignKey('Lesson')
-	SectionNumber = models.PositiveIntegerField()
-	Header = models.IntegerField(choices=HEADER)
-	ContentType = models.IntegerField(choices=CONTENTTYPE)
-	Content = models.TextField()
-	Tags = models.TextField()
-
+class Course(models.Model):
+	owner = models.ForeignKey('accounts.UserProfile')
+	department = models.CharField(max_length=32)
+	subject = models.CharField(max_length=32)
+	year = models.PositiveIntegerField()

@@ -14,8 +14,3 @@ class Objective(models.Model):
 	description = models.TextField()
 	rating = models.PositiveIntegerField()
 
-class Course(models.Model):
-	owner = models.ForeignKey('accounts.UserProfile')
-	department = models.CharField(max_length=32)
-	subject = models.CharField(max_length=32)
-	year = models.PositiveIntegerField()
