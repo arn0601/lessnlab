@@ -1,6 +1,6 @@
 # Create your views here.
 from LessonPlanner.models import Lesson
-from LessonPlanner.models import ContentSection
+from LessonPlanner.models import Course
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
@@ -42,4 +42,19 @@ def showLesson(request):
 		title =  "'s Lessons "
 		allLessons = Lesson.objects.filter(CreatorID=creatorID)
 		return render_to_response('lessons.html', {'allLessons':allLessons, 'title':creatorName})
+
+def addCourse(request):
+	
+	if request.method == 'POST':
+		form = AddCourse(data=request.POST)
+		if form.is_valid():
+			course = Course()
+			course.subject = form.data['name']
+			course.department = form.data['department']
+			course.year = str(form.data['year'])
+			course.save()
+		form = AddCourse()
+		return render_to_response('courses.html', {'courseAddForm':form})
+	else:
+		return render_to_response('courses.html', {'courseAddForm':form})
 
