@@ -18,7 +18,7 @@ urlpatterns = patterns('',
 #    (r'^accounts/login/$', 'django.contrib.auth.views.login'),
     (r'^accounts/', include('accounts.urls')),
     (r'^accounts/', include('registration.backends.simple.urls')),
-    url(r'^lessons/$', 'LessonPlanner.views.showTemplateLesson'),
+    url(r'^lessons/$', 'LessonPlanner.views.addCourse'),
     (r'^login/$', 'accounts.views.login_user'),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
            'document_root': settings.MEDIA_ROOT,

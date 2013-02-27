@@ -6,12 +6,14 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
 from django.core import serializers
+from accounts.models import UserProfile
 import simplejson
 @csrf_exempt
 def showTemplateLesson(request):
 	uname = request.user.username
 	fullname = uname
-	return render_to_response('course.html', {'username':uname, 'fullname':uname})
+	form = AddCourse()
+	return render_to_response('course.html', {'username':uname, 'fullname':uname, 'courseAddForm':form})
 
 
 def showLesson(request):
@@ -43,19 +45,25 @@ def showLesson(request):
 		title =  "'s Lessons "
 		allLessons = Lesson.objects.filter(CreatorID=creatorID)
 		return render_to_response('lessons.html', {'allLessons':allLessons, 'title':creatorName})
-
+@csrf_exempt
 def addCourse(request):
-	
+	print "Adding Course"	
+	uname = request.user.username
+        fullname = uname
+	form = AddCourse()
 	if request.method == 'POST':
+		print "POSTING COURSE"
 		form = AddCourse(data=request.POST)
 		if form.is_valid():
 			course = Course()
+			
+			course.owner = UserProfile.objects.get(user=request.user)
 			course.subject = form.data['name']
 			course.department = form.data['department']
 			course.year = str(form.data['year'])
 			course.save()
-		form = AddCourse()
-		return render_to_response('courses.html', {'courseAddForm':form})
+			form = AddCourse()
+		return render_to_response('course.html', {'username':uname, 'fullname':uname, 'courseAddForm':form})
 	else:
-		return render_to_response('courses.html', {'courseAddForm':form})
+		return render_to_response('course.html',{'username':uname, 'fullname':uname, 'courseAddForm':form} )
 
