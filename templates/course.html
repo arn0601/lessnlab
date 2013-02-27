@@ -140,7 +140,7 @@
           				 <b class="caret"></b>  
       					 </a>  
      			<ul class="dropdown-menu">
-      				<li><a href="#">Course</a></li> 
+      				<li><a href="#addCourse" data-toggle="modal">Course</a></li> 
 					<li><a href="#">Unit</a></li>
       				<li><a href="#">Lesson</a></li>
       				<li><a href="#">Student</a></li>
@@ -175,10 +175,44 @@
   <li class="nav-header">Tools</li>
   <li><a href="#">Manage Students</a></li>
   <li><a href="#">Manage Courses</a></li>
-  <li><a href="#">Add Course</a></li>
+  <li><a href="#addCourse" data-toggle="modal">Add Course</a></li>
 </ul>
 </div>
 </div>
+
+<div class="modal hide" id="addCourse">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a course</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="" name="login_form">
+	{% for field in courseAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+        </div>
+    {% endfor %}
+<!--      <p><input type="name" class="span3" name="eid" id="courseName" placeholder="Course Name"></p>
+      <p><input type="description" class="span3" name="passwd" placeholder="Description"></p>-->
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+	<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+<!--  <div class="modal-footer">
+    <a href="#" class="btn btn-primary">Submit</a>
+    <a href="#" class="btn btn-primary">Cancel</a>
+  </div>-->
+</div>
+
+
+
 <!-- Middle column main content -->
 <div class="span7" id="middlecontent">
 	<div class="row-fluid">
