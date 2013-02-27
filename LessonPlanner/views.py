@@ -1,6 +1,7 @@
 # Create your views here.
 from LessonPlanner.models import Lesson
 from LessonPlanner.models import Course
+from LessonPlanner.forms import AddCourse
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse
