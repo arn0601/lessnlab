@@ -65,6 +65,8 @@ def addCourse(request):
 			course.year = str(form.data['year'])
 			course.save()
 			form = AddCourse()
-	user_courses = Course.objects.filter(owner=request.user)
+	user = UserProfile.objects.get(user=request.user) 
+	user_courses =  Course.objects.filter(owner=user)
+	print user_courses,"data"
 	return render_to_response('course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'courseAddForm':form})
 
