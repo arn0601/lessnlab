@@ -13,7 +13,7 @@ def showTemplateLesson(request):
 	uname = request.user.username
 	fullname = uname
 	form = AddCourse()
-	return render_to_response('course.html', {'username':uname, 'fullname':uname, 'courseAddForm':form})
+	return render_to_response('unit.html', {'username':uname, 'fullname':uname, 'courseAddForm':form})
 
 
 def showLesson(request):
