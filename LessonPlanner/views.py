@@ -48,6 +48,8 @@ def showLesson(request):
 @csrf_exempt
 def addCourse(request):
 	print "Adding Course"	
+	if not request.user.is_authenticated():
+		return redirect('/login/')
 	uname = request.user.username
         fullname = uname
 	form = AddCourse()
@@ -63,7 +65,6 @@ def addCourse(request):
 			course.year = str(form.data['year'])
 			course.save()
 			form = AddCourse()
-		return render_to_response('course.html', {'username':uname, 'fullname':uname, 'courseAddForm':form})
-	else:
-		return render_to_response('course.html',{'username':uname, 'fullname':uname, 'courseAddForm':form} )
+	user_courses = Course.objects.filter(owner=request.user)
+	return render_to_response('course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'courseAddForm':form})
 
