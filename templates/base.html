@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
     <link href="/static/bootstrap.css" rel="stylesheet" media="screen">
-	
 	<style>
-	
 		   .navtitle{
 		   		  padding-left: 10px;
 				  color: efefef;
@@ -39,9 +37,6 @@
 			 
 			 div #leftnav {
 			 
-				border-right-width:1px;
-				border-right-style:solid;
-				border-right-color:#c8c8c8;
 				height: 100%;
 			
 			 }
@@ -67,7 +62,11 @@
 			 	text-align: justify;
 			 	border-top-width: 1px;
 			 	border-top-color: #c8c8c8;
-			 	border-top-style: dotted;
+			 	border-top-style: solid;
+			 	border-left-width: 1px;
+			 	border-left-color: #c8c8c8;
+			 	border-left-style: solid;
+			 	padding-left: 10px;
 			 }
 			 
 			 .footer {
@@ -101,7 +100,6 @@
 			 }
 			 	 
 	</style>
-	
 	<script type="text/javascript"> <!-- scroll jquery -->
 		function goToByScroll(id){
  			$('html,body').animate({scrollTop: $("#"+id).offset().top},1000);
