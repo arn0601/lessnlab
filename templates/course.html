@@ -2,7 +2,6 @@
 {% load staticfiles %}
 <!DOCTYPE html>
 {% block content %}
-<div class="row-fluid">
 {% for course in userCourses %}
          <div class="unitbox" id="u1">
        <a href="#"><h4>{{ course.subject }}</h4></a>
@@ -10,8 +9,8 @@
 	{{ course.department }}
 	<p><b>Year:</b>
         {{ course.year }}
+        </div>
 {% endfor %}
-</div>
 {% endblock %}
 
 
