@@ -22,7 +22,7 @@ def login_user(request):
         	if user is not None:
         		if user.is_active:
             			login(request, user)
-				return HttpResponseRedirect('/lessons/')
+				return HttpResponseRedirect('/courses/')
         		
             			# Return a 'disabled account' error message
     		else:
