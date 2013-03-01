@@ -9,6 +9,19 @@ from django.core import serializers
 from accounts.models import UserProfile
 import simplejson
 @csrf_exempt
+def showUnits(request):
+	courseID = request.GET.get('courseID')
+	print courseID,"-Course"
+	uname = request.user.username
+        fullname = uname
+        form = AddCourse()
+	user = UserProfile.objects.get(user=request.user)
+        user_courses =  Course.objects.filter(owner=user)
+	return render_to_response('unit.html', {'userCourses': user_courses,'username':uname, 'fullname':uname, 'courseAddForm':form})
+
+
+
+
 def showTemplateLesson(request):
 	uname = request.user.username
 	fullname = uname
