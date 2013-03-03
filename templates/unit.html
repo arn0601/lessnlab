@@ -5,8 +5,8 @@
 
 {% block content %}
 <!-- Middle column main content -->
-{% for unit in userUnits %}
 <div class="span7" id="content">
+{% for unit in userUnits %}
 	<div class="unitbox" id="{{ unit.id }}">
     			  <h4>{{ unit.name }}</h4>
 				  <p><a href="/lesson/?unitid={{ unit.id }}"></a> - Taught over {{ unit.week_length }} weeks</p>
@@ -15,16 +15,17 @@
     			  <button class="btn btn-primary btn-small" type="button">Edit Unit</button>
     			  <button class="btn btn-primary btn-small" type="button">Delete Unit</button>
 	</div>
-</div>
 
 {% endfor %}
+</div>
+
 <!-- right nav -->
 <div class="span3" id="rightnav">
-<div class="row-fluid">
-	<div class="span12 rightnavsubheader">
-		<h4 class="page-header">Course Units</h4>
+	<div class="row-fluid">
+		<div class="span12 rightnavsubheader">
+			<h4 class="page-header">Course Units</h4>
+		</div>
 	</div>
-</div>
 	<div class="row-fluid">
 		<div class="span12">
 			{% if userUnits|length == 0 %}
