@@ -1,7 +1,10 @@
 # Create your views here.
+from django.template import RequestContext
 from LessonPlanner.models import Lesson
 from LessonPlanner.models import Course
 from LessonPlanner.forms import AddCourse
+from LessonPlanner.forms import EditCourse
+from LessonPlanner.forms import DeleteCourse
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect
@@ -12,7 +15,6 @@ import simplejson
 @csrf_exempt
 def showUnits(request):
 	courseID = request.GET.get('courseID')
-	print courseID,"-Course"
 	uname = request.user.username
         fullname = uname
         form = AddCourse()
@@ -32,16 +34,20 @@ def lastPageToRedirect(request):
 
 @csrf_exempt
 def courses(request):
-	print "Course Page"	
-	uname = request.user.username
-        fullname = uname
-	(addCourseForm) = returnBlankForms()
-		
-	user = UserProfile.objects.get(user=request.user) 
-	user_courses =  Course.objects.filter(owner=user)
-	print user_courses,"data"
-	request.session['last_page'] = 'courses'
-	return render_to_response('course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'courseAddForm':addCourseForm})
+	courseID = request.GET.get('courseID')
+	action = request.GET.get('action')
+	if action == "Edit":
+		return EditCourseRequest(request, courseID)
+	elif action == "Delete":
+                return DeleteCourseRequest(request, courseID)
+	else:	
+		uname = request.user.username
+        	fullname = uname
+		(addCourseForm) = returnBlankForms()
+		user = UserProfile.objects.get(user=request.user) 
+		user_courses =  Course.objects.filter(owner=user)
+		request.session['last_page'] = 'courses'
+		return render_to_response('course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'courseAddForm':addCourseForm})
 
 @csrf_exempt
 def addCourse(request):
@@ -51,9 +57,52 @@ def addCourse(request):
 			return HttpResponseRedirect(lastPageToRedirect(request))
 	return lastPageToView(request)
 
+@csrf_exempt
+def editCourse(request):
+	if request.method == 'POST':
+                addCourseForm = EditCourse(data=request.POST)
+                if saveCourse(addCourseForm,request.user):
+                        return HttpResponseRedirect(lastPageToRedirect(request))
+        return lastPageToView(request)
+
+@csrf_exempt
+def deleteCourse(request):
+        if request.method == 'POST':
+                addCourseForm = DeleteCourse(data=request.POST)
+                if deleteCourseData(addCourseForm,request.user):
+                        return HttpResponseRedirect(lastPageToRedirect(request))
+        return lastPageToView(request)
+
+
+def DeleteCourseRequest(request, courseID):
+        uname = request.user.username
+        user = UserProfile.objects.get(user=request.user)
+        user_courses =  Course.objects.filter(owner=user)
+        course = Course.objects.get(id=courseID)
+        deleteCourseForm = DeleteCourse()
+        deleteCourseForm.fields["courseID"].initial = course.id
+        return render_to_response('course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteCourseForm':deleteCourseForm,'showDeleteCourse': 1}, context_instance=RequestContext(request))
+
+
+def EditCourseRequest(request, courseID):
+	uname = request.user.username
+	user = UserProfile.objects.get(user=request.user)
+        user_courses =  Course.objects.filter(owner=user)
+	course = Course.objects.get(id=courseID)
+	editCourseForm = EditCourse()	
+	editCourseForm.fields["courseID"].initial = course.id	
+	editCourseForm.fields["name"].initial = course.subject
+	editCourseForm.fields["department"].initial = course.department
+	editCourseForm.fields["year"].initial = course.year
+	return render_to_response('course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'editCourseForm':editCourseForm,'showEditCourse': 1})
+
+
+
 def saveCourse(addCourseForm, request_user):
 	if addCourseForm.is_valid():
 		course = Course()
+		if 'courseID' in addCourseForm.data:
+			course = Course.objects.get(id=addCourseForm.data['courseID'])
 		course.owner = UserProfile.objects.get(user=request_user)
 		course.subject = addCourseForm.data['name']
 		course.department = addCourseForm.data['department']
@@ -61,6 +110,13 @@ def saveCourse(addCourseForm, request_user):
 		course.save()
 		return True;
 	return False;
+
+def deleteCourseData(courseForm, request_user):
+	if 'courseID' in courseForm.data:
+       		course = Course.objects.get(id=courseForm.data['courseID']).delete()
+                return True;
+        return False;
+
 
 def returnBlankForms():
 	addCourseForm = AddCourse()
