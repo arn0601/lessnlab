@@ -36,5 +36,5 @@ class Unit(models.Model):
 	parent_unit_id = models.ForeignKey('self', null=True)
 	standards = models.ManyToManyField('Standards.Standard')
 	tags = models.ManyToManyField(Tag)
-	
+	week_length = models.IntegerField()
 	
