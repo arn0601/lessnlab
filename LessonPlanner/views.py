@@ -20,9 +20,10 @@ def showUnits(request):
         fullname = uname
         (courseAddForm) = returnBlankForms()
 	user = UserProfile.objects.get(user=request.user)
+	user_courses =  Course.objects.filter(owner=user)
         user_units =  Unit.objects.filter(owner=user)
 	course = Course.objects.get(id=courseID)
-	return render_to_response('unit.html', {'course': course, 'userUnits': user_units,'username':uname, 'fullname':uname, 'courseAddForm':courseAddForm})
+	return render_to_response('unit.html', {'userCourses': user_courses, 'course': course, 'userUnits': user_units,'username':uname, 'fullname':uname, 'courseAddForm':courseAddForm})
 
 #show the lessons of a unit
 
