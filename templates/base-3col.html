@@ -1,0 +1,220 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>LessnLab - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="/static/bootstrap.css" rel="stylesheet" media="screen">
+	<style>
+		   .navtitle{
+		   		  padding-left: 10px;
+				  color: efefef;
+		    }
+			
+			.course {
+					padding: 10px;
+					text-align:left;
+					background-color: 
+			 }
+			 
+			 .profileImage{
+			 
+			 	height: 60px;
+			 	width: 60px;
+			 }
+			 
+			 .profileImageBox {
+			 	
+			 	padding-left:10px;
+			 	padding-top:10px;
+			 
+			 }
+			 
+			 div #middlecontent{
+				height: 100%;
+			 }
+			 
+			 div #leftnav {
+			 
+				height: 100%;
+			
+			 }
+			 
+			 div #rightnav {
+			 
+			 	border-left-width:1px;
+				border-left-style:solid;
+				border-left-color:#c8c8c8;
+				padding-right: 10px;
+				padding-left:10px;
+			 	height: 100%;
+			 }
+			 
+			  .unitbox {
+			 	
+			 	height:20%px;
+			 	width: 100%;
+			 	padding-top: 10px;
+			 	padding-bottom: 30px;
+			 	vertical-align: middle;
+			 	font-size: 10pt;
+			 	text-align: justify;
+			 	border-top-width: 1px;
+			 	border-top-color: #c8c8c8;
+			 	border-top-style: solid;
+			 	border-left-width: 1px;
+			 	border-left-color: #c8c8c8;
+			 	border-left-style: solid;
+			 	padding-left: 10px;
+			 }
+			 
+			 .footer {
+			 
+			 	background-color: #efefef;
+			 	border-top-width:1px;
+				border-top-style:solid;
+				border-top-color:#c8c8c8;
+				height: 50px;
+				padding: 10px;
+				vertical-align: middle;
+				
+			 }
+			 
+			 .rightnavheader{
+			 	
+			 	text-align: center;
+			 
+			 }
+			 .rightnavsubheader {
+			 
+			 	padding-top:10px;
+			 	height: 50px;
+			 	
+			 }
+			 
+			 .rightnavtext {
+			 	
+			 	font-size: 10pt;
+			 
+			 }
+			 	 
+	</style>
+	<script type="text/javascript"> <!-- scroll jquery -->
+		function goToByScroll(id){
+ 			$('html,body').animate({scrollTop: $("#"+id).offset().top},1000);
+	}
+	</script>
+	
+  </head>
+  <body style="padding-top:40px;">
+  <div class="navbar navbar-fixed-top navcolor">
+  <div class="navbar-inner">
+  	   <div class="row-fluid">
+	   		<div class="span7">
+				 <h4><a href="template.html" class="navtitle">Lesson Lab</a></h4>
+		  	</div>
+			<div class="span5">
+				 <ul class="nav pull-right">
+				 <li class="dropdown">  
+      				 	 <a href="#"  
+          				 class="dropdown-toggle"  
+          				 data-toggle="dropdown">  
+          				 <i class="icon-user"></i> {{username}}
+          				 <b class="caret"></b>  
+      					 </a>  
+     			<ul class="dropdown-menu">
+      				<li><a href="#">Profile</a></li> 
+					<li><a href="#">Network</a></li>
+      				<li><a href="#">Settings</a></li>
+      				<li><a href="#">Logout</a></li>
+    			</ul>  
+   					  </li>
+		 		<li class="dropdown">  
+      				 	 <a href="#"  
+          				 class="dropdown-toggle"  
+          				 data-toggle="dropdown">  
+          				 <i class="icon-plus"></i> Add
+          				 <b class="caret"></b>  
+      					 </a>  
+     			<ul class="dropdown-menu">
+      				<li><a href="#addCourse" data-toggle="modal">Course</a></li> 
+					<li><a href="#">Unit</a></li>
+      				<li><a href="#">Lesson</a></li>
+      				<li><a href="#">Student</a></li>
+    			</ul>  
+   				</li>
+				</ul> 
+  		</div>
+	</div>
+</div>
+</div>
+<div class="row-fluid">
+<!-- left hand secondary nav -->
+	<div class="span2" id="leftnav">
+		<div class="row-fluid">
+			<div class="span8 profileImageBox">
+				<img class="img-rounded profileImage" src="/static/{{username}}.jpg"/>
+				<h5>{{fullname}}</h5>
+			</div>	
+		</div>
+		<div class="row-fluid">
+			<ul class="nav nav-list">
+  				<li class="nav-header">Favorites</li>
+  				<li><a href="template.html">Home</a></li>
+			</ul>
+			<ul class="nav nav-list">
+  				<li class="nav-header">Courses</li>
+					{% for course in userCourses %}  
+					<li><a href="#">{{ course.subject }}</a></li>
+					{% endfor %}
+			</ul>
+			<ul class="nav nav-list">
+  				<li class="nav-header">Tools</li>
+  				<li><a href="#">Manage Students</a></li>
+  				<li><a href="#">Manage Courses</a></li>
+  				<li><a href="#addCourse" data-toggle="modal">Add Course</a></li>
+			</ul>
+		</div>
+	</div>
+<!-- Content Area -->
+	<div class="span7" id="content">
+        {% block content %}{% endblock %}
+ 	</div>
+</div>
+<!-- Footer -->
+<div class="row-fluid footer">
+		<div class="row-fluid" style="text-align:center; height: 50px; padding-bottom: 20px; background-color:#efefef; vertical-align: middle;">
+			<small><p style="padding-top: 10px;">Created by <a href="#">LessnLab Inc.</a>, Copyright 2013. All Rights Reserved.</p></small>
+		</div>
+</div>
+<div class="modal hide" id="addCourse">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a course</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addCourse %}" name="login_form">
+	{% csrf_token %}
+	{% for field in courseAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+   		</div>
+    {% endfor %}
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+		<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+</div>
+</body>
+<!-- Javascript -->
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="/static/bootstrap.js"></script>
+
+</html>
