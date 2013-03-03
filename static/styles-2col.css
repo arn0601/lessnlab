@@ -1,0 +1,92 @@
+			.navtitle{
+		   		  padding-left: 10px;
+				  color: efefef;
+		    }
+			
+			.course {
+					padding: 10px;
+					text-align:left;
+					background-color: 
+			 }
+			 
+			 .profileImage{
+			 
+			 	height: 60px;
+			 	width: 60px;
+			 }
+			 
+			 .profileImageBox {
+			 	
+			 	padding-left:10px;
+			 	padding-top:10px;
+			 
+			 }
+			 
+			 div #middlecontent{
+				height: 100%;
+			 }
+			 
+			 div #leftnav {
+			 
+				height: 100%;
+			
+			 }
+			 
+			 div #rightnav {
+			 
+			 	border-left-width:1px;
+				border-left-style:solid;
+				border-left-color:#c8c8c8;
+				padding-right: 10px;
+				padding-left:10px;
+			 	height: 100%;
+			 }
+			 
+			  .unitbox {
+			 	
+			 	height:20%px;
+			 	width: 100%;
+			 	padding-top: 10px;
+			 	padding-bottom: 30px;
+			 	vertical-align: middle;
+			 	font-size: 10pt;
+			 	text-align: justify;
+			 	border-top-width: 1px;
+			 	border-top-color: #c8c8c8;
+			 	border-top-style: solid;
+			 	border-left-width: 1px;
+			 	border-left-color: #c8c8c8;
+			 	border-left-style: solid;
+			 	padding-left: 10px;
+			 }
+			 
+			 .footer {
+			 
+			 	background-color: #efefef;
+			 	border-top-width:1px;
+				border-top-style:solid;
+				border-top-color:#c8c8c8;
+				height: 50px;
+				padding: 10px;
+				vertical-align: middle;
+				
+			 }
+			 
+			 .rightnavheader{
+			 	
+			 	text-align: center;
+			 
+			 }
+			 .rightnavsubheader {
+			 
+			 	padding-top:10px;
+			 	height: 50px;
+			 	
+			 }
+			 
+			 .rightnavtext {
+			 	
+			 	font-size: 10pt;
+			 
+			 }
+			 	 
