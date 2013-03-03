@@ -27,7 +27,7 @@
 	<div class="row-fluid">
 		<div class="span12">
 			{% if userUnits|length == 0 %}
-			<h6>No units created yet</h6>
+			<div class="alert alert-info">No units created yet</div>
 			{% endif %}
 			<ul>
 				{% for unit in userUnits %}
