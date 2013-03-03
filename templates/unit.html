@@ -2,8 +2,9 @@
 {% load staticfiles %}
 
 <!DOCTYPE html>
-<div class="span7" id="content">
 {% block content %}
+<div class="span7" id="content">
+
 <!-- Middle column main content -->
 
 {% for unit in userUnits %}
@@ -15,9 +16,8 @@
     			  <button class="btn btn-primary btn-small" type="button">Edit Unit</button>
     			  <button class="btn btn-primary btn-small" type="button">Delete Unit</button>
 	</div>
-{% endfor %}{% endblock %}
+{% endfor %}
 </div>
-
 <!-- right nav -->
 <div class="span3" id="rightnav">
 	<div class="row-fluid">
@@ -27,16 +27,15 @@
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
-			{% block units %}
 			{% if userUnits|length == 0 %}
 			<h6>No units created yet</h6>
 			{% endif %}
 			<ul>
 				{% for unit in userUnits %}
 				<li><a href="/lesson/?unitid={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
-				{% endfor %}{% endblock %}
+				{% endfor %}
 			</ul>
 		</div>
 	</div>
 </div>
-
+{% endblock %}
