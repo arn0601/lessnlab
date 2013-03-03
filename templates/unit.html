@@ -2,11 +2,11 @@
 {% load staticfiles %}
 
 <!DOCTYPE html>
-
 {% block content %}
-<!-- Middle column main content -->
-{% for unit in userUnits %}
 
+<!-- Middle column main content -->
+
+{% for unit in userUnits %}
 	<div class="unitbox" id="{{ unit.id }}">
     			  <h4>{{ unit.name }}</h4>
 				  <p><a href="/lesson/?unitid={{ unit.id }}"></a> - Taught over {{ unit.week_length }} weeks</p>
@@ -16,17 +16,18 @@
     			  <button class="btn btn-primary btn-small" type="button">Delete Unit</button>
 	</div>
 {% endfor %}
+{% endblock %}
 <!-- right nav -->
-<div class="span1" id="rightnav">
-<div class="row-fluid">
-	<div class="span12 rightnavsubheader">
-		<h4 class="page-header">Course Units</h4>
+{% block rightnav %}
+	<div class="row-fluid">
+		<div class="span12 rightnavsubheader">
+			<h4 class="page-header">Course Units</h4>
+		</div>
 	</div>
-</div>
 	<div class="row-fluid">
 		<div class="span12">
 			{% if userUnits|length == 0 %}
-			No units created
+			<div class="alert alert-info">No units created yet</div>
 			{% endif %}
 			<ul>
 				{% for unit in userUnits %}
@@ -35,6 +36,13 @@
 			</ul>
 		</div>
 	</div>
-</div>
+	<div class="row-fluid">
+		<div class="span5">
+		
+		</div>
+		<div class="span7 pull-right">
+			<button class="btn btn-primary btn-mini" type="button">Add Unit</button>
+			<button class="btn btn-mini" type="button">Delete Unit</button>
+		</div>
+	</div>
 {% endblock %}
-
