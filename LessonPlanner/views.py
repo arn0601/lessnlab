@@ -1,7 +1,7 @@
 # Create your views here.
 from django.template import RequestContext
 from LessonPlanner.models import Lesson
-from LessonPlanner.models import Course
+from LessonPlanner.models import Course,Unit
 from LessonPlanner.forms import AddCourse
 from LessonPlanner.forms import EditCourse
 from LessonPlanner.forms import DeleteCourse
@@ -12,15 +12,19 @@ from django.core import serializers
 from accounts.models import UserProfile
 import simplejson
 
+#show the units for a specific course
 @csrf_exempt
 def showUnits(request):
 	courseID = request.GET.get('courseID')
 	uname = request.user.username
         fullname = uname
-        form = AddCourse()
+        (courseAddForm) = returnBlankForms()
 	user = UserProfile.objects.get(user=request.user)
-        user_courses =  Course.objects.filter(owner=user)
-	return render_to_response('unit.html', {'userCourses': user_courses,'username':uname, 'fullname':uname, 'courseAddForm':form})
+        user_units =  Unit.objects.filter(owner=user)
+	course = Course.objects.get(id=courseID)
+	return render_to_response('unit.html', {'course': course, 'userUnits': user_units,'username':uname, 'fullname':uname, 'courseAddForm':courseAddForm})
+
+#show the lessons of a unit
 
 def lastPageToView(request):
 	if request.session['last_page'] == 'courses':
