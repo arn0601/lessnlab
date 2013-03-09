@@ -22,6 +22,7 @@ urlpatterns = patterns('',
     url(r'^editCourse/$', 'LessonPlanner.views.editCourse', name="editCourse"),
     url(r'^deleteCourse/$', 'LessonPlanner.views.deleteCourse', name="deleteCourse"),
     url(r'^addCourse/$', 'LessonPlanner.views.addCourse'),
+    url(r'^addUnit/$', 'LessonPlanner.views.addUnit'),
     (r'^login/$', 'accounts.views.login_user'),
     (r'^units/$', 'LessonPlanner.views.showUnits'),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
