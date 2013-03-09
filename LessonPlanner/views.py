@@ -28,9 +28,9 @@ def showUnits(request):
         (courseAddForm, unitAddForm) = returnBlankForms()
 	unitAddForm.fields["courseID"].initial = courseID
 	user = UserProfile.objects.get(user=request.user)
-        user_units =  Unit.objects.filter(owner=user)
-	user_courses =  Course.objects.filter(owner=user)
 	course = Course.objects.get(id=courseID)
+        user_units =  Unit.objects.filter(courseID=course)
+	user_courses =  Course.objects.filter(owner=user)
 	slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
 	request.session['last_page'] = '/units/?courseID='+str(courseID)
 	return render_to_response('unit.html', {'course': course, 'userCourses':user_courses,'userUnits': user_units,'username':uname, 'fullname':uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'standardlist':slist })
@@ -153,7 +153,8 @@ def DeleteUnitRequest(request, unitID):
         unit = Unit.objects.get(id=unitID)
         deleteUnitForm = DeleteUnit()
         deleteUnitForm.fields["unitID"].initial = unit.id
-        return render_to_response('unit.html', {'courseID':unit.courseID.id,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteUnitForm':deleteUnitForm,'showDeleteUnit': 1}, context_instance=RequestContext(request))
+	course_units =  Unit.objects.filter(courseID=unit.courseID)
+        return render_to_response('unit.html', {'courseID':unit.courseID.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteUnitForm':deleteUnitForm,'showDeleteUnit': 1}, context_instance=RequestContext(request))
 
 
 def EditUnitRequest(request, unitID):
@@ -167,7 +168,8 @@ def EditUnitRequest(request, unitID):
         editUnitForm.fields["name"].initial = unit.name
         editUnitForm.fields["description"].initial = unit.description
         editUnitForm.fields["week_length"].initial = unit.week_length
-        return render_to_response('unit.html', {'courseID':unit.courseID.id,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'editUnitForm':editUnitForm,'showEditUnit': 1})
+	course_units =  Unit.objects.filter(courseID=unit.courseID)
+        return render_to_response('unit.html', {'courseID':unit.courseID.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'editUnitForm':editUnitForm,'showEditUnit': 1})
 
 
 
