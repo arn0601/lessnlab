@@ -163,6 +163,7 @@ def EditUnitRequest(request, unitID):
         unit = Unit.objects.get(id=unitID)
         editUnitForm = EditUnit()
         editUnitForm.fields["unitID"].initial = unit.id
+	editUnitForm.fields["courseID"].initial = unit.courseID.id
         editUnitForm.fields["name"].initial = unit.name
         editUnitForm.fields["description"].initial = unit.description
         editUnitForm.fields["week_length"].initial = unit.week_length
@@ -186,6 +187,8 @@ def saveCourse(addCourseForm, request_user):
 def saveUnit(addUnitForm, request_user):
 	if addUnitForm.is_valid():
 		unit = Unit()
+		if 'unitID' in addUnitForm.data:
+                        unit = Unit.objects.get(id=addUnitForm.data['unitID'])
 		unit.name = addUnitForm.data['name']
 		unit.description = addUnitForm.data['description']
 		courseID = addUnitForm.data['courseID']
@@ -207,6 +210,7 @@ def saveUnit(addUnitForm, request_user):
 			unit.assessment_types.add(a)'''
 		return True
 	print "invalid form - unit"
+	print addUnitForm.errors
 	return False
 
 def deleteCourseData(courseForm, request_user):
