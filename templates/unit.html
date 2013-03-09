@@ -8,13 +8,11 @@
 
 {% for unit in userUnits %}
 	<div class="unitbox" id="{{ unit.id }}">
-    			  <h4>{{ unit.name }}</h4>
-				  <p><a href="/lesson/?unitid={{ unit.id }}"></a> - Taught over {{ unit.week_length }} weeks</p>
+				  <p><a href="/lesson/?unitid={{ unit.id }}"><h4>{{ unit.name }}</h4></a>Taught over {{ unit.week_length }} weeks</p>
 				  <p><b>Description:</b>{{ unit.description }}</p>
-    			  <button class="btn btn-primary btn-small" type="button">View Unit</button>
-    			  <button class="btn btn-primary btn-small" type="button">Edit Unit</button>
-    			  <button class="btn btn-primary btn-small" type="button">Delete Unit</button>
-	</div>
+<a class="btn btn-primary btn-small" type="button" href="?unitID={{ unit.id }}&action=Edit">Edit</a>
+        <a class="btn btn-primary btn-small" type="button" href="?unitID={{ unit.id }}&action=Delete">Delete</a>	
+</div>
 {% endfor %}
 {% endblock %}
 <!-- right nav -->
@@ -45,4 +43,57 @@
 			<button class="btn btn-mini" type="button">Delete Unit</button>
 		</div>
 	</div>
+{% if showEditUnit %}
+<div class="modal" id="editCourse">
+  <div class="modal-header">
+    <a class="close" type="button" href="/units/?courseID={{ courseID }}">x</a>
+    <h3>Edit Unit</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url editUnit %}" name="login_form">
+        {% csrf_token %}
+        {% for field in editUnitForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <p><button type="submit" class="btn btn-primary">Update</button>
+        <a class="btn btn-primary" type="button" href="/units/?courseID={{ courseID }}">Cancel</a>
+      </p>
+    </form>
+  </div>
+</div>
+{% endif %}
+{% if showDeleteUnit %}
+<div class="modal" id="deleteUnit">
+  <div class="modal-header">
+    <a class="close" type="button" href="/units/?courseID={{ courseID }}">x</a>
+    <h3>Delete course</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url deleteUnit %}" name="login_form">
+        {% csrf_token %}
+        {% for field in deleteUnitForm %}
+        <div class="control-group">
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     Are you sure you want to delete the unit?
+<p>
+     <p><button type="submit" class="btn btn-primary">Yes</button>
+        <a class="btn btn-primary" type="button" href="/units/?courseID={{ courseID }}">No</a>
+      </p>
+    </form>
+  </div>
+</div>
+{% endif %}
+
+
 {% endblock %}
