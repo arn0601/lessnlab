@@ -24,8 +24,8 @@ class AddUnitForm(forms.Form):
 	name = forms.CharField(label='Unit Name')
 	description = forms.CharField(widget=forms.Textarea, label='Description')
 	week_length = forms.IntegerField(label='Number of weeks')		
-	assessments = forms.MultipleChoiceField(label='Assessment Type', choices=ASSESSMENTTYPE, widget=forms.CheckboxSelectMultiple())
-	tags = forms.CharField(label='Tags')
+	assessments = forms.MultipleChoiceField(label='Assessment Type', choices=ASSESSMENTTYPE, widget=forms.CheckboxSelectMultiple(),blank=True)
+	tags = forms.CharField(label='Tags',blank=True)
 	courseID = forms.CharField(label="")
         courseID.widget = forms.HiddenInput()
 
