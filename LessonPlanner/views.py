@@ -39,7 +39,7 @@ def showUnits(request):
 
 def showLesson(request):
 	unitID = request.GET.get('unitID')
-	return render_to_response('lessons.html')
+	return render_to_response('lessonPlanner.html')
 
 def lastPageToView(request):
 	if request.session['last_page'] == 'courses':
