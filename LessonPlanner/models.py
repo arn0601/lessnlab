@@ -20,6 +20,7 @@ class Lesson(models.Model):
 	LessonTitle = models.CharField(max_length=30)
 	CreatorID = models.ForeignKey('accounts.UserProfile')
 	Tags = models.TextField()
+	standards = models.ManyToManyField('Standards.Standard')
 
 class Section(models.Model):
 	lesson = models.ForeignKey(Lesson)
@@ -34,6 +35,7 @@ class Content(models.Model):
 	creation_date = models.DateTimeField()
 	
 #All content types will be subclasses of Content
+
 
 class Course(models.Model):
 	owner = models.ForeignKey('accounts.UserProfile')
