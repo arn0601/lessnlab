@@ -4,7 +4,7 @@ from Standards.models import Standard
 HEADER = ((1,'Review Previous'),(2,'New Content'),(3,'Assessment'))
 
 
-CONTENTTYPE = ((1,'Video'),(2,'TEXT'),(3,'PICTURE'))
+CONTENTTYPE = ((1,'General'),(2,'Check for Understanding'),(3,'Media'))
 
 ASSESSMENTTYPE = ((1, 'Quiz'), (2, 'Unit Test'), (3, 'Complex Performance Task'), (4, 'Peer Eval'), (5, 'Presentation/Project'), (6, 'Other'))
 
@@ -20,6 +20,20 @@ class Lesson(models.Model):
 	LessonTitle = models.CharField(max_length=30)
 	CreatorID = models.ForeignKey('accounts.UserProfile')
 	Tags = models.TextField()
+
+class Section(models.Model):
+	lesson = models.ForeignKey(Lesson)
+	section_placement = models.IntegerField()
+	section_name = models.CharField(max_length=32)
+	section_description = models.TextField()
+	creation_date = models.DateTimeField()	
+
+class Content(models.Model):
+	content_type = models.IntegerField(choices=CONTENTTYPE)
+	section = models.ForeignKey(Section)
+	creation_date = models.DateTimeField()
+	
+#All content types will be subclasses of Content
 
 class Course(models.Model):
 	owner = models.ForeignKey('accounts.UserProfile')
