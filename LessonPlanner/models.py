@@ -34,7 +34,6 @@ class Unit(models.Model):
 	
 # Create your models here.
 class Lesson(models.Model):
-	LessonID = models.AutoField(primary_key=True)
 	LessonTitle = models.CharField(max_length=30)
 	unit = models.ForeignKey(Unit)
 	CreatorID = models.ForeignKey('accounts.UserProfile')

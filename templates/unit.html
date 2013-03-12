@@ -8,7 +8,7 @@
 
 {% for unit in userUnits %}
 	<div class="unitbox" id="{{ unit.id }}">
-				  <p><a href="/lesson/?unitID={{ unit.id }}"><h4>{{ unit.name }}</h4></a>Taught over {{ unit.week_length }} weeks</p>
+				  <p><a href="/lessons/?unitID={{ unit.id }}"><h4>{{ unit.name }}</h4></a>Taught over {{ unit.week_length }} weeks</p>
 				  <p><b>Description:</b>{{ unit.description }}</p>
 <a class="btn btn-primary btn-small" type="button" href="?unitID={{ unit.id }}&action=Edit">Edit</a>
         <a class="btn btn-primary btn-small" type="button" href="?unitID={{ unit.id }}&action=Delete">Delete</a>	
@@ -29,7 +29,7 @@
 			{% endif %}
 			<ul>
 				{% for unit in userUnits %}
-				<li><a href="/lesson/?unitid={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
+				<li><a href="/lessons/?unitID={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
 				{% endfor %}
 			</ul>
 		</div>

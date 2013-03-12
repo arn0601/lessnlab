@@ -45,3 +45,18 @@ class DeleteUnit(forms.Form):
         unitID = forms.CharField(label="")
         unitID.widget = forms.HiddenInput()
 
+class AddLessonForm(forms.Form):
+        LessonTitle = forms.CharField(label='Lesson Name')
+        unitID = forms.CharField(label="")
+        unitID.widget = forms.HiddenInput()
+
+class EditLesson(forms.Form):
+        lessonID = forms.CharField(label="")
+        lessonID.widget = forms.HiddenInput()
+	LessonTitle = forms.CharField(label='Unit Name')
+	unitID = forms.CharField(label="")
+        unitID.widget = forms.HiddenInput()
+
+class DeleteLesson(forms.Form):
+        lessonID = forms.CharField(label="")
+        lessonID.widget = forms.HiddenInput()

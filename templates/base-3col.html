@@ -48,7 +48,7 @@
      			<ul class="dropdown-menu">
       				<li><a href="#addCourse" data-toggle="modal">Course</a></li> 
 					<li><a href="#addUnit" data-toggle="modal">Unit</a></li>
-      				<li><a href="#">Lesson</a></li>
+      				<li><a href="#addLesson" data-toggle="modal">Lesson</a></li>
       				<li><a href="#">Student</a></li>
     			</ul>  
    				</li>
@@ -105,6 +105,33 @@
 			<small><p style="padding-top: 10px;">Created by <a href="#">LessnLab Inc.</a>, Copyright 2013. All Rights Reserved.</p></small>
 		</div>
 </div>
+
+<div class="modal hide" id="addLesson">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a Lesson</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addLesson %}" name="login_form">
+        {% csrf_token %}
+        {% for field in lessonAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+</div>
+
+
 
 <div class="modal hide" id="addUnit">
   <div class="modal-header">
