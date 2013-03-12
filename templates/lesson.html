@@ -6,12 +6,12 @@
 
 <!-- Middle column main content -->
 
-{% for unit in userUnits %}
-	<div class="unitbox" id="{{ unit.id }}">
-				  <p><a href="/lesson/?unitid={{ unit.id }}"><h4>{{ unit.name }}</h4></a>Taught over {{ unit.week_length }} weeks</p>
-				  <p><b>Description:</b>{{ unit.description }}</p>
-<a class="btn btn-primary btn-small" type="button" href="?unitID={{ unit.id }}&action=Edit">Edit</a>
-        <a class="btn btn-primary btn-small" type="button" href="?unitID={{ unit.id }}&action=Delete">Delete</a>	
+{% for lesson in userLessons %}
+	<div class="unitbox" id="{{ lesson.id }}">
+				  <p><a href="/lessonPlanner/?lessonID={{ lesson.id }}"><h4>{{ lesson.name }}</h4></a></p>
+				  <p><b>Description:</b>{{ lesson.description }}</p>
+<a class="btn btn-primary btn-small" type="button" href="?lessonID={{ lesson.id }}&action=Edit">Edit</a>
+        <a class="btn btn-primary btn-small" type="button" href="?lessonID={{ lesson.id }}&action=Delete">Delete</a>	
 </div>
 {% endfor %}
 {% endblock %}
@@ -19,17 +19,17 @@
 {% block rightnav %}
 	<div class="row-fluid">
 		<div class="span12 rightnavsubheader">
-			<h4 class="page-header">Course Units</h4>
+			<h4 class="page-header">Unit Lessons</h4>
 		</div>
 	</div>
 	<div class="row-fluid">
 		<div class="span12">
-			{% if userUnits|length == 0 %}
-			<div class="alert alert-info">No units created yet</div>
+			{% if userLessons|length == 0 %}
+			<div class="alert alert-info">No lessons created yet</div>
 			{% endif %}
 			<ul>
-				{% for unit in userUnits %}
-				<li><a href="/lesson/?unitid={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
+				{% for lesson in userLessons %}
+				<li><a href="/lessonPlanner/?lessonid={{ lesson.id }}" onclick="goToByScroll('u1')">{{ lesson.name }}</a></li>
 				{% endfor %}
 			</ul>
 		</div>
@@ -43,16 +43,16 @@
 			<button class="btn btn-mini" type="button">Delete Unit</button>-->
 		</div>
 	</div>
-{% if showEditUnit %}
-<div class="modal" id="editUnit">
+{% if showEditLesson %}
+<div class="modal" id="editLesson">
   <div class="modal-header">
-    <a class="close" type="button" href="/units/?courseID={{ courseID }}">x</a>
-    <h3>Edit Unit</h3>
+    <a class="close" type="button" href="/lessons/?unitID={{ unitID }}">x</a>
+    <h3>Edit Lesson</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url editUnit %}" name="login_form">
+    <form method="post" action="{% url editLesson %}" name="login_form">
         {% csrf_token %}
-        {% for field in editUnitForm %}
+        {% for field in editLessonForm %}
         <div class="control-group">
         {{ field.errors.as_text }}
          <label class="control-label">{{ field.label_tag }}</label>
@@ -62,20 +62,20 @@
                 </div>
     {% endfor %}
      <p><button type="submit" class="btn btn-primary">Update</button>
-        <a class="btn btn-primary" type="button" href="/units/?courseID={{ courseID }}">Cancel</a>
+        <a class="btn btn-primary" type="button" href="/lessons/?unitID={{ unitID }}">Cancel</a>
       </p>
     </form>
   </div>
 </div>
 {% endif %}
-{% if showDeleteUnit %}
-<div class="modal" id="deleteUnit">
+{% if showDeleteLesson %}
+<div class="modal" id="deleteLesson">
   <div class="modal-header">
-    <a class="close" type="button" href="/units/?courseID={{ courseID }}">x</a>
-    <h3>Delete unit</h3>
+    <a class="close" type="button" href="/lessons/?unitID={{ unitID }}">x</a>
+    <h3>Delete lesson</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url deleteUnit %}" name="login_form">
+    <form method="post" action="{% url deleteLesson %}" name="login_form">
         {% csrf_token %}
         {% for field in deleteUnitForm %}
         <div class="control-group">
@@ -85,10 +85,10 @@
             </div>
                 </div>
     {% endfor %}
-     Are you sure you want to delete the unit?
+     Are you sure you want to delete the lesson?
 <p>
      <p><button type="submit" class="btn btn-primary">Yes</button>
-        <a class="btn btn-primary" type="button" href="/units/?courseID={{ courseID }}">No</a>
+        <a class="btn btn-primary" type="button" href="/lessons/?unitID={{ unitID }}">No</a>
       </p>
     </form>
   </div>
