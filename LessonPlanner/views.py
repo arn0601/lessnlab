@@ -2,9 +2,9 @@
 from django.template import RequestContext
 from LessonPlanner.models import Lesson
 from LessonPlanner.models import Course,Unit,Tag
-from LessonPlanner.forms import AddCourse,AddUnitForm
-from LessonPlanner.forms import EditCourse,EditUnit
-from LessonPlanner.forms import DeleteCourse,DeleteUnit
+from LessonPlanner.forms import AddCourse,AddUnitForm,AddLessonForm
+from LessonPlanner.forms import EditCourse,EditUnit,EditLesson
+from LessonPlanner.forms import DeleteCourse,DeleteUnit,DeleteLesson
 from Standards.models import Standard
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
@@ -25,7 +25,7 @@ def showUnits(request):
                 return DeleteUnitRequest(request, unitID)
 	uname = request.user.username
         fullname = uname
-        (courseAddForm, unitAddForm) = returnBlankForms()
+        (courseAddForm, unitAddForm,lessonAddForm) = returnBlankForms()
 	course = Course.objects.get(id=courseID)
 	user = UserProfile.objects.get(user=request.user)
 	slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
@@ -41,8 +41,26 @@ def showUnits(request):
 #show the lessons of a unit
 
 def showLesson(request):
-	unitID = request.GET.get('unitID')
-	return render_to_response('lessonPlanner.html')
+        unitID = request.GET.get('unitID')
+        action = request.GET.get('action')
+	lessonID = request.GET.get('lessonID')
+        if action == "Edit":
+                return EditLessonRequest(request, lessonID)
+        elif action == "Delete":
+                return DeleteLessonRequest(request, lessonID)
+	user = UserProfile.objects.get(user=request.user)
+	unit = Unit.objects.get(id=unitID)
+	uname = request.user.username
+        fullname = uname
+	course = unit.courseID
+        user_units =  Unit.objects.filter(courseID=course)
+	user_lessons = Lesson.objects.filter(unit=unit)
+        user_courses =  Course.objects.filter(owner=user)
+        slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
+        (courseAddForm,unitAddForm,lessonAddForm) = returnBlankForms()
+	lessonAddForm.fields["unitID"].initial = unitID
+	request.session['last_page'] = '/lessons/?unitID='+str(unitID)
+	return render_to_response('lesson.html', {'course': course, 'userCourses':user_courses,'userUnits': user_units,'userLessons': user_lessons,'username':uname, 'fullname':uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'standardlist':slist })
 
 def lastPageToView(request):
 	if request.session['last_page'] == 'courses':
@@ -55,6 +73,8 @@ def lastPageToRedirect(request):
 	if request.session['last_page'] == 'courses':
 		return '/courses/'
 	elif 'units' in request.session['last_page']:
+                return request.session['last_page']
+	elif 'lessons' in request.session['last_page']:
                 return request.session['last_page']
 	return '/courses/'
 
@@ -69,7 +89,7 @@ def courses(request):
 	else:	
 		uname = request.user.username
         	fullname = uname
-		(addCourseForm,addUnitForm) = returnBlankForms()
+		(addCourseForm,addUnitForm,addLessonForm) = returnBlankForms()
 		user = UserProfile.objects.get(user=request.user) 
 		user_courses =  Course.objects.filter(owner=user)
 		request.session['last_page'] = 'courses'
@@ -132,6 +152,30 @@ def deleteUnit(request):
         return lastPageToView(request)
 
 
+@csrf_exempt
+def addLesson(request):
+        if request.method == 'POST':
+                addLessonForm = AddLessonForm(data=request.POST)
+                if saveLesson(addLessonForm, request.user):
+                        return HttpResponseRedirect(lastPageToRedirect(request))
+        return lastPageToView(request)
+
+@csrf_exempt
+def editLesson(request):
+        if request.method == 'POST':
+                lessonForm = EditLesson(data=request.POST)
+                if saveLesson(lessonForm,request.user):
+                        return HttpResponseRedirect(lastPageToRedirect(request))
+        return lastPageToView(request)
+
+@csrf_exempt
+def deleteLesson(request):
+        if request.method == 'POST':
+                lessonForm = DeleteLesson(data=request.POST)
+                if deleteLessonData(lessonForm,request.user):
+                        return HttpResponseRedirect(lastPageToRedirect(request))
+        return lastPageToView(request)
+
 def DeleteCourseRequest(request, courseID):
         uname = request.user.username
         user = UserProfile.objects.get(user=request.user)
@@ -179,6 +223,29 @@ def EditUnitRequest(request, unitID):
 	course_units =  Unit.objects.filter(courseID=unit.courseID)
         return render_to_response('unit.html', {'courseID':unit.courseID.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'editUnitForm':editUnitForm,'showEditUnit': 1})
 
+def DeleteLessonRequest(request, lessonID):
+        uname = request.user.username
+        user = UserProfile.objects.get(user=request.user)
+        user_courses =  Course.objects.filter(owner=user)
+        lesson = Lesson.objects.get(id=lessonID)
+        deleteLessonForm = DeleteLesson()
+        deleteLessonForm.fields["lessonID"].initial = lesson.id
+	unit_lessons =  Lesson.objects.filter(unit=lesson.unit)
+        return render_to_response('lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname, 'fullname':uname,'userLessons':unit_lessons, 'deleteLessonForm':deleteLessonForm,'showDeleteLesson': 1}, context_instance=RequestContext(request))
+
+
+def EditLessonRequest(request, lessonID):
+        uname = request.user.username
+        user = UserProfile.objects.get(user=request.user)
+        user_courses =  Course.objects.filter(owner=user)
+        lesson = Lesson.objects.get(id=lessonID)
+        unit = lesson.unit
+	unit_lessons =  Lesson.objects.filter(unit=lesson.unit)
+	editLessonForm = EditLesson()
+	editLessonForm.fields["lessonID"].initial = lesson.id
+        editLessonForm.fields["unitID"].initial = unit.id
+        editLessonForm.fields["LessonTitle"].initial = lesson.LessonTitle
+        return render_to_response('lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1})
 
 
 def saveCourse(addCourseForm, request_user):
@@ -222,6 +289,23 @@ def saveUnit(addUnitForm, request_user):
 	print addUnitForm.errors
 	return False
 
+def saveLesson(addLessonForm, request_user):
+        if addLessonForm.is_valid():
+                lesson = Lesson()
+                if 'lessonID' in addLessonForm.data:
+                        lesson = Lesson.objects.get(id=addLessonForm.data['lessonID'])
+                lesson.LessonTitle = addLessonForm.data['LessonTitle']
+                unitID = addLessonForm.data['unitID']
+                unit = Unit.objects.get(id=unitID)
+                lesson.CreatorID = UserProfile.objects.get(user=request_user)
+		lesson.unit = unit
+                lesson.save()
+		return True
+	print "invalid form - lesson"
+        print addLessonForm.errors
+        return False
+
+
 def deleteCourseData(courseForm, request_user):
 	if 'courseID' in courseForm.data:
        		Course.objects.get(id=courseForm.data['courseID']).delete()
@@ -234,10 +318,15 @@ def deleteUnitData(unitForm, request_user):
                 return True;
         return False;
 
-
-
+def deleteLessonData(lessonForm, request_user):
+	print lessonForm.data
+        if 'lessonID' in lessonForm.data:
+                Lesson.objects.get(id=lessonForm.data['lessonID']).delete()
+                return True;
+        return False;
 
 def returnBlankForms():
 	addCourseForm = AddCourse()
 	addUnitForm = AddUnitForm()
-	return (addCourseForm, addUnitForm)
+	addLessonForm = AddLessonForm()
+	return (addCourseForm, addUnitForm , addLessonForm)
