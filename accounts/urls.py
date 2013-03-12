@@ -7,6 +7,6 @@ from registration.views import register
 from accounts.forms import UserProfileRegistrationForm
 
 urlpatterns = patterns('',
-	url(r'^register/$',register,{'backend':'registration.backends.simple.SimpleBackend', 'form_class' : UserProfileRegistrationForm, 'success_url': 'LessonPlanner.views.showTemplateLesson' },name='registration.views.register'),
+	url(r'^register/$',register,{'backend':'registration.backends.simple.SimpleBackend', 'form_class' : UserProfileRegistrationForm, 'success_url': '/courses/' },name='registration.views.register'),
 
 )

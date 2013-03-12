@@ -17,19 +17,18 @@ import simplejson
 @csrf_exempt
 def showUnits(request):
 	course_id = request.GET.get('course_id')
-	unitID = request.GET.get('unitID')
+	unit_id = request.GET.get('unitID')
         action = request.GET.get('action')
         if action == "Edit":
-                return EditUnitRequest(request, unitID)
+                return EditUnitRequest(request, unit_id)
         elif action == "Delete":
-                return DeleteUnitRequest(request, unitID)
+                return DeleteUnitRequest(request, unit_id)
 	uname = request.user.username
         fullname = uname
         (courseAddForm, unitAddForm,lessonAddForm) = returnBlankForms()
 	course = Course.objects.get(id=course_id)
 	user = UserProfile.objects.get(user=request.user)
 	slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
-	#slist = Standard.objects.all()
 	s_choices = [(s.id, s.description) for s in slist]
 	unitAddForm.fields["course_id"].initial = course_id
         user_units =  Unit.objects.filter(course=course)
@@ -41,7 +40,7 @@ def showUnits(request):
 #show the lessons of a unit
 
 def showLesson(request):
-        unitID = request.GET.get('unitID')
+        unit_id = request.GET.get('unitID')
         action = request.GET.get('action')
 	lessonID = request.GET.get('lessonID')
         if action == "Edit":
@@ -49,7 +48,7 @@ def showLesson(request):
         elif action == "Delete":
                 return DeleteLessonRequest(request, lessonID)
 	user = UserProfile.objects.get(user=request.user)
-	unit = Unit.objects.get(id=unitID)
+	unit = Unit.objects.get(id=unit_id)
 	uname = request.user.username
         fullname = uname
 	course = unit.course
@@ -58,8 +57,8 @@ def showLesson(request):
         user_courses =  Course.objects.filter(owner=user)
         slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
         (courseAddForm,unitAddForm,lessonAddForm) = returnBlankForms()
-	lessonAddForm.fields["unitID"].initial = unitID
-	request.session['last_page'] = '/lessons/?unitID='+str(unitID)
+	lessonAddForm.fields["unitID"].initial = unit_id
+	request.session['last_page'] = '/lessons/?unitID='+str(unit_id)
 	return render_to_response('lesson.html', {'course': course, 'userCourses':user_courses,'userUnits': user_units,'userLessons': user_lessons,'username':uname, 'fullname':uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'standardlist':slist })
 
 def showLessonPlanner(request):
@@ -88,7 +87,7 @@ def courses(request):
 	if action == "Edit":
 		return EditCourseRequest(request, course_id)
 	elif action == "Delete":
-                return DeleteCourseRequest(request, course_id
+                return DeleteCourseRequest(request, course_id)
 	else:	
 		uname = request.user.username
         	fullname = uname
