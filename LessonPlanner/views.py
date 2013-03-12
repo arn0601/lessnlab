@@ -63,6 +63,9 @@ def showLesson(request):
 	request.session['last_page'] = '/lessons/?unitID='+str(unitID)
 	return render_to_response('lesson.html', {'course': course, 'userCourses':user_courses,'userUnits': user_units,'userLessons': user_lessons,'username':uname, 'fullname':uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'standardlist':slist })
 
+def showLessonPlanner(request):
+	return render_to_response('lessonPlanner.html')
+
 def lastPageToView(request):
 	if request.session['last_page'] == 'courses':
 		return course(request)
