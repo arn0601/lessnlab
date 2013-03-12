@@ -42,8 +42,23 @@ def showUnits(request):
 #show the lessons of a unit
 
 def showLesson(request):
-	unitID = request.GET.get('unitID')
-	return render_to_response('lessonPlanner.html')
+        unitID = request.GET.get('unitID')
+        action = request.GET.get('action')
+        if action == "Edit":
+                return EditLessonRequest(request, lessonID)
+        elif action == "Delete":
+                return DeleteLessonRequest(request, lessonID)
+	user = UserProfile.objects.get(user=request.user)
+	unit = Unit.objects.get(id=unitID)
+	uname = request.user.username
+        fullname = uname
+	course = unit.courseID
+        user_units =  Unit.objects.filter(courseID=course)
+	user_lessons = Lesson.objects.filter(unitID=unit)
+        user_courses =  Course.objects.filter(owner=user)
+        slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
+        (courseAddForm, unitAddForm,lessonAddForm) = returnBlankForms()
+	return render_to_response('lesson.html', {'course': course, 'userCourses':user_courses,'userUnits': user_units,'userLessons': user_lessons,'username':uname, 'fullname':uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'standardlist':slist })
 
 def lastPageToView(request):
 	if request.session['last_page'] == 'courses':
