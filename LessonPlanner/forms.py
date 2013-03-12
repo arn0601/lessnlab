@@ -28,7 +28,14 @@ class AddUnitForm(forms.Form):
 	tags = forms.CharField(label='Tags',required=False)
 	courseID = forms.CharField(label="")
         courseID.widget = forms.HiddenInput()
-	standards = forms.MultipleChoiceField(label='Standards', choices=[], widget=forms.SelectMultiple(), required=False)
+	standards = forms.MultipleChoiceField(label='Standards', widget=forms.SelectMultiple(), required=False)
+
+	'''def __init__(self, *args, **kwargs):
+		standard_choices = kwargs.pop('standard_choices', None)
+		super(AddUnitForm, self).__init__(*args, **kwargs)
+		if standard_choices:
+			self.fields['standards'].choices=standard_choices
+	'''
 
 class EditUnit(forms.Form):
 	unitID = forms.CharField(label="")

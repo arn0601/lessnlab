@@ -26,15 +26,14 @@ def showUnits(request):
 	uname = request.user.username
         fullname = uname
         (courseAddForm, unitAddForm) = returnBlankForms()
-	unitAddForm.fields["courseID"].initial = courseID
-	user = UserProfile.objects.get(user=request.user)
 	course = Course.objects.get(id=courseID)
-        user_units =  Unit.objects.filter(courseID=course)
-	user_courses =  Course.objects.filter(owner=user)
+	user = UserProfile.objects.get(user=request.user)
 	slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
 	#slist = Standard.objects.all()
 	s_choices = [(s.id, s.description) for s in slist]
-	print s_choices
+	unitAddForm.fields["courseID"].initial = courseID
+        user_units =  Unit.objects.filter(courseID=course)
+	user_courses =  Course.objects.filter(owner=user)
 	unitAddForm.fields["standards"].choices=s_choices
 	request.session['last_page'] = '/units/?courseID='+str(courseID)
 	return render_to_response('unit.html', {'course': course, 'userCourses':user_courses,'userUnits': user_units,'username':uname, 'fullname':uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'standardlist':slist })
@@ -104,10 +103,15 @@ def deleteCourse(request):
 def addUnit(request):
 	if request.method == 'POST':
                 addUnitForm = AddUnitForm(data=request.POST)
+		courseID = request.POST['courseID']
+		course = Course.objects.get(id=courseID)
+		user = UserProfile.objects.get(user=request.user)
+		slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
+	        s_choices = [(s.id, s.description) for s in slist]
+
+		addUnitForm.fields['standards'].choices = s_choices
 		standard_list = request.POST.getlist('standards')
-		print "asdasd"
                 if saveUnit(addUnitForm, request.user):
-			print "Asdasdasd"
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return lastPageToView(request)
 
@@ -192,6 +196,7 @@ def saveCourse(addCourseForm, request_user):
 
 def saveUnit(addUnitForm, request_user):
 	if addUnitForm.is_valid():
+		print "creating unit"
 		unit = Unit()
 		if 'unitID' in addUnitForm.data:
                         unit = Unit.objects.get(id=addUnitForm.data['unitID'])
@@ -208,14 +213,12 @@ def saveUnit(addUnitForm, request_user):
 		for t in separated_tags:
 			newTag, created = Tag.objects.get_or_create(tagname=t)
 			unit.tags.add(newTag)
-		'''for standard in standards:
-			s = Standard.objects.get(id=standard)
-			unit.standards.add(s)
-		for ass_type in assessment_types:
-			a = AssessmentType.objects.get(assessmentType = ass_type);
-			unit.assessment_types.add(a)'''
+		for s in addUnitForm.cleaned_data['standards']:
+			standard_id = int(s)
+			standard = Standard.objects.get(id=standard_id)
+			print standard
+			unit.standards.add(standard)
 		return True
-	print "invalid form - unit"
 	print addUnitForm.errors
 	return False
 
