@@ -4,14 +4,14 @@
 {% block content %}
 {% for course in userCourses %}
          <div class="unitbox" id="u1">
-       <a href="/units/?courseID={{ course.id }}" ><h4>{{ course.subject }}</h4></a>
+       <a href="/units/?course_id={{ course.id }}" ><h4>{{ course.subject }}</h4></a>
 	 <p><b>Department:</b>
 	{{ course.department }}
 	<p><b>Year:</b>
         {{ course.year }}
 	<p>
-	<a class="btn btn-primary btn-small" type="button" href="?courseID={{ course.id }}&action=Edit">Edit</a>
-        <a class="btn btn-primary btn-small" type="button" href="?courseID={{ course.id }}&action=Delete">Delete</a>
+	<a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Edit">Edit</a>
+        <a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Delete">Delete</a>
 
         </div>
 {% endfor %}

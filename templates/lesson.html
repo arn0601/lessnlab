@@ -8,7 +8,7 @@
 
 {% for lesson in userLessons %}
 	<div class="unitbox" id="{{ lesson.id }}">
-				  <p><a href="/lessonPlanner/?lessonID={{ lesson.id }}"><h4>{{ lesson.LessonTitle }}</h4></a></p>
+				  <p><a href="/lessonPlanner/?lessonID={{ lesson.id }}"><h4>{{ lesson.name }}</h4></a></p>
 				 
 <a class="btn btn-primary btn-small" type="button" href="?lessonID={{ lesson.id }}&action=Edit">Edit</a>
         <a class="btn btn-primary btn-small" type="button" href="?lessonID={{ lesson.id }}&action=Delete">Delete</a>	
@@ -29,7 +29,7 @@
 			{% endif %}
 			<ul>
 				{% for lesson in userLessons %}
-				<li><a href="/lessonPlanner/?lessonid={{ lesson.id }}" onclick="goToByScroll('u1')">{{ lesson.LessonTitle }}</a></li>
+				<li><a href="/lessonPlanner/?lessonid={{ lesson.id }}" onclick="goToByScroll('u1')">{{ lesson.name }}</a></li>
 				{% endfor %}
 			</ul>
 		</div>

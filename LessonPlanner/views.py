@@ -16,7 +16,7 @@ import simplejson
 #show the units for a specific course
 @csrf_exempt
 def showUnits(request):
-	courseID = request.GET.get('courseID')
+	course_id = request.GET.get('course_id')
 	unitID = request.GET.get('unitID')
         action = request.GET.get('action')
         if action == "Edit":
@@ -26,16 +26,16 @@ def showUnits(request):
 	uname = request.user.username
         fullname = uname
         (courseAddForm, unitAddForm,lessonAddForm) = returnBlankForms()
-	course = Course.objects.get(id=courseID)
+	course = Course.objects.get(id=course_id)
 	user = UserProfile.objects.get(user=request.user)
 	slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
 	#slist = Standard.objects.all()
 	s_choices = [(s.id, s.description) for s in slist]
-	unitAddForm.fields["courseID"].initial = courseID
-        user_units =  Unit.objects.filter(courseID=course)
+	unitAddForm.fields["course_id"].initial = course_id
+        user_units =  Unit.objects.filter(course=course)
 	user_courses =  Course.objects.filter(owner=user)
 	unitAddForm.fields["standards"].choices=s_choices
-	request.session['last_page'] = '/units/?courseID='+str(courseID)
+	request.session['last_page'] = '/units/?course_id='+str(course_id)
 	return render_to_response('unit.html', {'course': course, 'userCourses':user_courses,'userUnits': user_units,'username':uname, 'fullname':uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'standardlist':slist })
 
 #show the lessons of a unit
@@ -52,8 +52,8 @@ def showLesson(request):
 	unit = Unit.objects.get(id=unitID)
 	uname = request.user.username
         fullname = uname
-	course = unit.courseID
-        user_units =  Unit.objects.filter(courseID=course)
+	course = unit.course
+        user_units =  Unit.objects.filter(course=course)
 	user_lessons = Lesson.objects.filter(unit=unit)
         user_courses =  Course.objects.filter(owner=user)
         slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
@@ -83,12 +83,12 @@ def lastPageToRedirect(request):
 
 @csrf_exempt
 def courses(request):
-	courseID = request.GET.get('courseID')
+	course_id = request.GET.get('course_id')
 	action = request.GET.get('action')
 	if action == "Edit":
-		return EditCourseRequest(request, courseID)
+		return EditCourseRequest(request, course_id)
 	elif action == "Delete":
-                return DeleteCourseRequest(request, courseID)
+                return DeleteCourseRequest(request, course_id
 	else:	
 		uname = request.user.username
         	fullname = uname
@@ -126,8 +126,8 @@ def deleteCourse(request):
 def addUnit(request):
 	if request.method == 'POST':
                 addUnitForm = AddUnitForm(data=request.POST)
-		courseID = request.POST['courseID']
-		course = Course.objects.get(id=courseID)
+		course_id = request.POST['course_id']
+		course = Course.objects.get(id=course_id)
 		user = UserProfile.objects.get(user=request.user)
 		slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
 	        s_choices = [(s.id, s.description) for s in slist]
@@ -179,23 +179,23 @@ def deleteLesson(request):
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return lastPageToView(request)
 
-def DeleteCourseRequest(request, courseID):
+def DeleteCourseRequest(request, course_id):
         uname = request.user.username
         user = UserProfile.objects.get(user=request.user)
         user_courses =  Course.objects.filter(owner=user)
-        course = Course.objects.get(id=courseID)
+        course = Course.objects.get(id=course_id)
         deleteCourseForm = DeleteCourse()
-        deleteCourseForm.fields["courseID"].initial = course.id
+        deleteCourseForm.fields["course_id"].initial = course.id
         return render_to_response('course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteCourseForm':deleteCourseForm,'showDeleteCourse': 1}, context_instance=RequestContext(request))
 
 
-def EditCourseRequest(request, courseID):
+def EditCourseRequest(request, course_id):
 	uname = request.user.username
 	user = UserProfile.objects.get(user=request.user)
         user_courses =  Course.objects.filter(owner=user)
-	course = Course.objects.get(id=courseID)
+	course = Course.objects.get(id=course_id)
 	editCourseForm = EditCourse()	
-	editCourseForm.fields["courseID"].initial = course.id	
+	editCourseForm.fields["course_id"].initial = course.id	
 	editCourseForm.fields["name"].initial = course.subject
 	editCourseForm.fields["department"].initial = course.department
 	editCourseForm.fields["year"].initial = course.year
@@ -208,8 +208,8 @@ def DeleteUnitRequest(request, unitID):
         unit = Unit.objects.get(id=unitID)
         deleteUnitForm = DeleteUnit()
         deleteUnitForm.fields["unitID"].initial = unit.id
-	course_units =  Unit.objects.filter(courseID=unit.courseID)
-        return render_to_response('unit.html', {'courseID':unit.courseID.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteUnitForm':deleteUnitForm,'showDeleteUnit': 1}, context_instance=RequestContext(request))
+	course_units =  Unit.objects.filter(course=unit.course)
+        return render_to_response('unit.html', {'course_id':unit.course.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteUnitForm':deleteUnitForm,'showDeleteUnit': 1}, context_instance=RequestContext(request))
 
 
 def EditUnitRequest(request, unitID):
@@ -219,12 +219,12 @@ def EditUnitRequest(request, unitID):
         unit = Unit.objects.get(id=unitID)
         editUnitForm = EditUnit()
         editUnitForm.fields["unitID"].initial = unit.id
-	editUnitForm.fields["courseID"].initial = unit.courseID.id
+	editUnitForm.fields["course_id"].initial = unit.course.id
         editUnitForm.fields["name"].initial = unit.name
         editUnitForm.fields["description"].initial = unit.description
         editUnitForm.fields["week_length"].initial = unit.week_length
-	course_units =  Unit.objects.filter(courseID=unit.courseID)
-        return render_to_response('unit.html', {'courseID':unit.courseID.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'editUnitForm':editUnitForm,'showEditUnit': 1})
+	course_units =  Unit.objects.filter(course=unit.course)
+        return render_to_response('unit.html', {'course_id':unit.course.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'editUnitForm':editUnitForm,'showEditUnit': 1})
 
 def DeleteLessonRequest(request, lessonID):
         uname = request.user.username
@@ -247,15 +247,15 @@ def EditLessonRequest(request, lessonID):
 	editLessonForm = EditLesson()
 	editLessonForm.fields["lessonID"].initial = lesson.id
         editLessonForm.fields["unitID"].initial = unit.id
-        editLessonForm.fields["LessonTitle"].initial = lesson.LessonTitle
+        editLessonForm.fields["name"].initial = lesson.name
         return render_to_response('lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1})
 
 
 def saveCourse(addCourseForm, request_user):
 	if addCourseForm.is_valid():
 		course = Course()
-		if 'courseID' in addCourseForm.data:
-			course = Course.objects.get(id=addCourseForm.data['courseID'])
+		if 'course_id' in addCourseForm.data:
+			course = Course.objects.get(id=addCourseForm.data['course_id'])
 		course.owner = UserProfile.objects.get(user=request_user)
 		course.subject = addCourseForm.data['name']
 		course.department = addCourseForm.data['department']
@@ -272,9 +272,9 @@ def saveUnit(addUnitForm, request_user):
                         unit = Unit.objects.get(id=addUnitForm.data['unitID'])
 		unit.name = addUnitForm.data['name']
 		unit.description = addUnitForm.data['description']
-		courseID = addUnitForm.data['courseID']
-		course = Course.objects.get(id=courseID)
-		unit.courseID = course
+		course_id = addUnitForm.data['course_id']
+		course = Course.objects.get(id=course_id)
+		unit.course = course
 		unit.owner = UserProfile.objects.get(user=request_user)
 		unit.week_length = addUnitForm.data['week_length']
 		tags_ = addUnitForm.data['tags']
@@ -297,10 +297,10 @@ def saveLesson(addLessonForm, request_user):
                 lesson = Lesson()
                 if 'lessonID' in addLessonForm.data:
                         lesson = Lesson.objects.get(id=addLessonForm.data['lessonID'])
-                lesson.LessonTitle = addLessonForm.data['LessonTitle']
+                lesson.name = addLessonForm.data['name']
                 unitID = addLessonForm.data['unitID']
                 unit = Unit.objects.get(id=unitID)
-                lesson.CreatorID = UserProfile.objects.get(user=request_user)
+                lesson.owner = UserProfile.objects.get(user=request_user)
 		lesson.unit = unit
                 lesson.save()
 		return True
@@ -310,8 +310,8 @@ def saveLesson(addLessonForm, request_user):
 
 
 def deleteCourseData(courseForm, request_user):
-	if 'courseID' in courseForm.data:
-       		Course.objects.get(id=courseForm.data['courseID']).delete()
+	if 'course_id' in courseForm.data:
+       		Course.objects.get(id=courseForm.data['course_id']).delete()
                 return True;
         return False;
 

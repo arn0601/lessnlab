@@ -24,20 +24,20 @@ class Course(models.Model):
 class Unit(models.Model):
 	name = models.CharField(max_length=32)
 	description = models.TextField()
-	assessmentType = models.ManyToManyField(AssessmentType)
-	courseID = models.ForeignKey('Course')
+	assessment_type = models.ManyToManyField(AssessmentType)
+	course = models.ForeignKey('Course')
 	owner = models.ForeignKey('accounts.UserProfile')
-	parent_unit_id = models.ForeignKey('self', null=True)
+	parent_unit = models.ForeignKey('self', null=True)
 	standards = models.ManyToManyField('Standards.Standard')
 	tags = models.ManyToManyField(Tag)
 	week_length = models.IntegerField()
 	
 # Create your models here.
 class Lesson(models.Model):
-	LessonTitle = models.CharField(max_length=30)
+	name = models.CharField(max_length=30)
 	unit = models.ForeignKey(Unit)
-	CreatorID = models.ForeignKey('accounts.UserProfile')
-	Tags = models.TextField()
+	owner = models.ForeignKey('accounts.UserProfile')
+	tags = models.TextField()
 	standards = models.ManyToManyField('Standards.Standard')
 
 class Section(models.Model):

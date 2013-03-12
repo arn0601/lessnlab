@@ -21,7 +21,7 @@ body{
 	<div class="allLessons">
 		{% for lesson in allLessons %}
 		<div class="lesson">
-			<a href="#" id="lesson{{lesson.LessonID}}" class="l" lID="{{lesson.LessonID}}" >{{lesson.LessonTitle}}</a>
+			<a href="#" id="lesson{{lesson.LessonID}}" class="l" lID="{{lesson.LessonID}}" >{{lesson.name}}</a>
 		</div>
 		<div id="cont{{lesson.LessonID}}"></div>
 		{% endfor %}
