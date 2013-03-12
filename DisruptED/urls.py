@@ -31,6 +31,7 @@ urlpatterns = patterns('',
     url(r'^addLesson/$', 'LessonPlanner.views.addLesson'),
     (r'^login/$', 'accounts.views.login_user'),
     (r'^lessons/$', 'LessonPlanner.views.showLesson'),
+    (r'^lessonPlanner/$', 'LessonPlanner.views.showLessonPlanner'),
     (r'^units/$', 'LessonPlanner.views.showUnits'),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
            'document_root': settings.MEDIA_ROOT,
