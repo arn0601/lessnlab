@@ -28,6 +28,7 @@ class AddUnitForm(forms.Form):
 	tags = forms.CharField(label='Tags',required=False)
 	courseID = forms.CharField(label="")
         courseID.widget = forms.HiddenInput()
+	standards = forms.MultipleChoiceField(label='Standards', choices=[], widget=forms.SelectMultiple(), required=False)
 
 class EditUnit(forms.Form):
 	unitID = forms.CharField(label="")

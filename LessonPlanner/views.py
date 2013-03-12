@@ -32,6 +32,10 @@ def showUnits(request):
         user_units =  Unit.objects.filter(courseID=course)
 	user_courses =  Course.objects.filter(owner=user)
 	slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
+	#slist = Standard.objects.all()
+	s_choices = [(s.id, s.description) for s in slist]
+	print s_choices
+	unitAddForm.fields["standards"].choices=s_choices
 	request.session['last_page'] = '/units/?courseID='+str(courseID)
 	return render_to_response('unit.html', {'course': course, 'userCourses':user_courses,'userUnits': user_units,'username':uname, 'fullname':uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'standardlist':slist })
 
