@@ -51,7 +51,15 @@ class Content(models.Model):
 	content_type = models.IntegerField(choices=CONTENTTYPE)
 	section = models.ForeignKey(Section)
 	creation_date = models.DateTimeField()
-	
-#All content types will be subclasses of Content
+	section_position = models.IntegerField()
 
+#All content types will be subclasses of Content
+class TextContent(Content):
+	text = models.TextField()
+
+class OnlineVideoContent(Content):
+	link = models.CharField(max_length=256)
+
+class ArticleLinkContent(Content):
+	link = models.CharField(max_length=256)
 

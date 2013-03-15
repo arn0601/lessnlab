@@ -22,35 +22,59 @@ def createBaseDict(request):
 	(courseAddForm, unitAddForm,lessonAddForm) = returnBlankForms()
 	user = UserProfile.objects.get(user=request.user)
 
+	#get all courses associated with the user
 	user_courses =  Course.objects.filter(owner=user)
 	
-	course_id = request.GET.get('course_id')
-	if ( not course_id == None ):
-		course = Course.objects.get(id=course_id)
-        	user_units =  Unit.objects.filter(course=course)
-		unitAddForm.fields['course_id'].initial = course_id
+	lesson = None	
 	
-		standards_list = getStandardsList(course, user)
-	else:
-		course = None
-		user_units = None
-		standards_list = []
-	
-	unit_id = request.GET.get('unitID')
-	if ( not unit_id == None ):
-		unit = Unit.objects.get(id=unit_id)
-		user_lessons = Lesson.objects.filter(unit=unit)
-		lessonAddForm.fields['unitID'].initial = unit_id
-	else:
-		unit = None
-		user_lessons = None
-
+	#####################################
+	#get the lesson
+	###################################
 	lessonID = request.GET.get('lessonID')
 	if ( not lessonID == None ):
 		lesson = Lesson.objects.get(id=lessonID)
-	else:
-		lesson = None	
 
+	#####################################
+	#get the unit
+	####################################
+
+	unit = None
+	user_lessons = None
+
+	#if we have lesson, get unit:
+	if ( lesson ):
+		unit = lesson.unit
+	
+	#get unit id
+	unit_id = request.GET.get('unitID')
+	if ( not unit_id == None ):
+		unit = Unit.objects.get(id=unit_id)
+		lessonAddForm.fields['unitID'].initial = unit_id
+
+	##########################################
+	#get the course
+	##############################################	
+
+	course = None
+	user_units = None
+	standards_list = []
+	
+	#if we have a unit get a course, and get the lesson for the unit
+	if ( unit ):
+		user_lessons = Lesson.objects.filter(unit=unit)
+		course = unit.course
+
+	#get the course id and course
+	course_id = request.GET.get('course_id')
+	if ( not course_id == None ):
+		course = Course.objects.get(id=course_id)
+		unitAddForm.fields['course_id'].initial = course_id
+	
+	#check course
+	if ( course ):
+        	user_units =  Unit.objects.filter(course=course)
+                standards_list = getStandardsList(course, user)
+	
 	uname = request.user.username
 
 	unitAddForm.fields['standards'].choices = standards_list

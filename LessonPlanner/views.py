@@ -44,6 +44,7 @@ def showLesson(request):
 	return render_to_response('lesson.html', base_dict)
 
 def showLessonPlanner(request):
+	base_dict = base_methods.createBaseDict(request)
 	return render_to_response('lessonPlanner.html')
 
 def lastPageToView(request):
