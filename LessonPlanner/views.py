@@ -40,7 +40,7 @@ def showLesson(request):
         elif action == "Delete":
                 return DeleteLessonRequest(request, base_dict['lesson'].id)
 
-	request.session['last_page'] = '/lessons/?unitID='+str(base_dict['unit'].id)
+	request.session['last_page'] = '/lessons/?unit_id='+str(base_dict['unit'].id)
 	return render_to_response('lesson.html', base_dict)
 
 def showLessonPlanner(request):

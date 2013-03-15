@@ -39,6 +39,7 @@ def createBaseDict(request):
 	unit_id = request.GET.get('unitID')
 	if ( not unit_id == None ):
 		unit = Unit.objects.get(id=unit_id)
+		course = unit.course
 		user_lessons = Lesson.objects.filter(unit=unit)
 		lessonAddForm.fields['unitID'].initial = unit_id
 	else:
