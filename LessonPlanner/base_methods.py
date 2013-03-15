@@ -1,6 +1,6 @@
 from django.template import RequestContext
 from LessonPlanner.models import Lesson
-from LessonPlanner.models import Course,Unit,Tag
+from LessonPlanner.models import *
 from LessonPlanner.forms import AddCourse,AddUnitForm,AddLessonForm
 from LessonPlanner.forms import EditCourse,EditUnit,EditLesson
 from LessonPlanner.forms import DeleteCourse,DeleteUnit,DeleteLesson
@@ -30,7 +30,7 @@ def createBaseDict(request):
 	#####################################
 	#get the lesson
 	###################################
-	lessonID = request.GET.get('lessonID')
+	lessonID = request.GET.get('lesson_id')
 	if ( not lessonID == None ):
 		lesson = Lesson.objects.get(id=lessonID)
 
@@ -46,7 +46,7 @@ def createBaseDict(request):
 		unit = lesson.unit
 	
 	#get unit id
-	unit_id = request.GET.get('unitID')
+	unit_id = request.GET.get('unit_id')
 	if ( not unit_id == None ):
 		unit = Unit.objects.get(id=unit_id)
 		lessonAddForm.fields['unitID'].initial = unit_id
@@ -81,6 +81,18 @@ def createBaseDict(request):
 	
 	#return (stuff for function, stuff to render)
 	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'standardlist':standards_list}
+
+def getLessonSpecificInfo(lesson):
+	lesson_sections = Section.objects.filter(lesson=lesson)
+	content_list = []
+	for section in lesson_sections:
+		content = Content.objects.filter(section=section)
+		if (content.subtype == 'Text'):
+			content_list.append(content.textcontent)
+		elif (content.subtype == 'VideoLink'):
+			content_list.append(content.videolinkcontent)
+		elif (content.subtype == 'ArticleLink'):
+			content_list.append(content.articlelinkcontent)
 
 def returnBlankForms():
 	addCourseForm = AddCourse()

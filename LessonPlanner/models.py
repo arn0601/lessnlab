@@ -4,7 +4,7 @@ from Standards.models import Standard
 HEADER = ((1,'Review Previous'),(2,'New Content'),(3,'Assessment'))
 
 
-CONTENTTYPE = ((1,'General'),(2,'Check for Understanding'),(3,'Media'))
+CONTENTTYPE = (('Text','Text'),('VideoLink','VideoLink'),('ArticleLink','ArticleLink'))
 
 ASSESSMENTTYPE = ((1, 'Quiz'), (2, 'Unit Test'), (3, 'Complex Performance Task'), (4, 'Peer Eval'), (5, 'Presentation/Project'), (6, 'Other'))
 
@@ -52,6 +52,7 @@ class Content(models.Model):
 	section = models.ForeignKey(Section)
 	creation_date = models.DateTimeField()
 	section_position = models.IntegerField()
+	content_subtype = models.CharField(choices=CONTENTTYPE, max_length=32)
 
 #All content types will be subclasses of Content
 class TextContent(Content):
