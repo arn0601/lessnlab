@@ -84,15 +84,19 @@ def createBaseDict(request):
 
 def getLessonSpecificInfo(lesson):
 	lesson_sections = Section.objects.filter(lesson=lesson)
-	content_list = []
+	section_dict = {}
 	for section in lesson_sections:
-		content = Content.objects.filter(section=section)
-		if (content.subtype == 'Text'):
-			content_list.append(content.textcontent)
-		elif (content.subtype == 'VideoLink'):
-			content_list.append(content.videolinkcontent)
-		elif (content.subtype == 'ArticleLink'):
-			content_list.append(content.articlelinkcontent)
+		content_list = []
+		section_content = Content.objects.filter(section=section)
+		for content in section_content
+			if (content.subtype == 'Text'):
+				content_list.append(content.textcontent)
+			elif (content.subtype == 'VideoLink'):
+				content_list.append(content.videolinkcontent)
+			elif (content.subtype == 'ArticleLink'):
+				content_list.append(content.articlelinkcontent)
+		section_dict[section] = content_list
+	return { 'sections' : section_dict }
 
 def returnBlankForms():
 	addCourseForm = AddCourse()
