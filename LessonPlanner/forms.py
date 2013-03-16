@@ -38,8 +38,8 @@ class AddUnitForm(forms.Form):
 	'''
 
 class EditUnit(forms.Form):
-	unitID = forms.CharField(label="")
-        unitID.widget = forms.HiddenInput()
+	unit_id = forms.CharField(label="")
+        unit_id.widget = forms.HiddenInput()
 	name = forms.CharField(label='Unit Name')
         description = forms.CharField(widget=forms.Textarea, label='Description')
         week_length = forms.IntegerField(label='Number of weeks')
@@ -49,21 +49,21 @@ class EditUnit(forms.Form):
         course_id.widget = forms.HiddenInput()
 
 class DeleteUnit(forms.Form):
-        unitID = forms.CharField(label="")
-        unitID.widget = forms.HiddenInput()
+        unit_id = forms.CharField(label="")
+        unit_id.widget = forms.HiddenInput()
 
 class AddLessonForm(forms.Form):
         name = forms.CharField(label='Lesson Name')
-        unitID = forms.CharField(label="")
-        unitID.widget = forms.HiddenInput()
+        unit_id = forms.CharField(label="")
+        unit_id.widget = forms.HiddenInput()
 
 class EditLesson(forms.Form):
-        lessonID = forms.CharField(label="")
-        lessonID.widget = forms.HiddenInput()
+        lesson_id = forms.CharField(label="")
+        lesson_id.widget = forms.HiddenInput()
 	name = forms.CharField(label='Unit Name')
-	unitID = forms.CharField(label="")
-        unitID.widget = forms.HiddenInput()
+	unit_id = forms.CharField(label="")
+        unit_id.widget = forms.HiddenInput()
 
 class DeleteLesson(forms.Form):
-        lessonID = forms.CharField(label="")
-        lessonID.widget = forms.HiddenInput()
+        lesson_id = forms.CharField(label="")
+        lesson_id.widget = forms.HiddenInput()

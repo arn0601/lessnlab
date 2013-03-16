@@ -46,7 +46,7 @@ def showLesson(request):
 def showLessonPlanner(request):
 	base_dict = base_methods.createBaseDict(request)
 	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
-	return render_to_response('lessonPlanner.html')
+	return render_to_response('lessonPlanner.html', base_dict)
 
 def lastPageToView(request):
 	if request.session['last_page'] == 'courses':
@@ -178,7 +178,7 @@ def DeleteUnitRequest(request, unitID):
         user_courses =  Course.objects.filter(owner=user)
         unit = Unit.objects.get(id=unitID)
         deleteUnitForm = DeleteUnit()
-        deleteUnitForm.fields["unitID"].initial = unit.id
+        deleteUnitForm.fields["unit_id"].initial = unit.id
 	course_units =  Unit.objects.filter(course=unit.course)
         return render_to_response('unit.html', {'course_id':unit.course.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteUnitForm':deleteUnitForm,'showDeleteUnit': 1}, context_instance=RequestContext(request))
 
@@ -189,7 +189,7 @@ def EditUnitRequest(request, unitID):
         user_courses =  Course.objects.filter(owner=user)
         unit = Unit.objects.get(id=unitID)
         editUnitForm = EditUnit()
-        editUnitForm.fields["unitID"].initial = unit.id
+        editUnitForm.fields["unit_id"].initial = unit.id
 	editUnitForm.fields["course_id"].initial = unit.course.id
         editUnitForm.fields["name"].initial = unit.name
         editUnitForm.fields["description"].initial = unit.description
@@ -203,7 +203,7 @@ def DeleteLessonRequest(request, lessonID):
         user_courses =  Course.objects.filter(owner=user)
         lesson = Lesson.objects.get(id=lessonID)
         deleteLessonForm = DeleteLesson()
-        deleteLessonForm.fields["lessonID"].initial = lesson.id
+        deleteLessonForm.fields["lesson_id"].initial = lesson.id
 	unit_lessons =  Lesson.objects.filter(unit=lesson.unit)
         return render_to_response('lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname, 'fullname':uname,'userLessons':unit_lessons, 'deleteLessonForm':deleteLessonForm,'showDeleteLesson': 1}, context_instance=RequestContext(request))
 
@@ -216,8 +216,8 @@ def EditLessonRequest(request, lessonID):
         unit = lesson.unit
 	unit_lessons =  Lesson.objects.filter(unit=lesson.unit)
 	editLessonForm = EditLesson()
-	editLessonForm.fields["lessonID"].initial = lesson.id
-        editLessonForm.fields["unitID"].initial = unit.id
+	editLessonForm.fields["lesson_id"].initial = lesson.id
+        editLessonForm.fields["unit_id"].initial = unit.id
         editLessonForm.fields["name"].initial = lesson.name
         return render_to_response('lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1})
 
@@ -239,8 +239,8 @@ def saveUnit(addUnitForm, request_user):
 	if addUnitForm.is_valid():
 		print "creating unit"
 		unit = Unit()
-		if 'unitID' in addUnitForm.data:
-                        unit = Unit.objects.get(id=addUnitForm.data['unitID'])
+		if 'unit_id' in addUnitForm.data:
+                        unit = Unit.objects.get(id=addUnitForm.data['unit_id'])
 		user = UserProfile.objects.get(user=request_user)
 		course_id = addUnitForm.data['course_id']
                 course = Course.objects.get(id=course_id)
@@ -270,10 +270,10 @@ def saveUnit(addUnitForm, request_user):
 def saveLesson(addLessonForm, request_user):
         if addLessonForm.is_valid():
                 lesson = Lesson()
-                if 'lessonID' in addLessonForm.data:
-                        lesson = Lesson.objects.get(id=addLessonForm.data['lessonID'])
+                if 'lesson_id' in addLessonForm.data:
+                        lesson = Lesson.objects.get(id=addLessonForm.data['lesson_id'])
                 lesson.name = addLessonForm.data['name']
-                unitID = addLessonForm.data['unitID']
+                unitID = addLessonForm.data['unit_id']
                 unit = Unit.objects.get(id=unitID)
                 lesson.owner = UserProfile.objects.get(user=request_user)
 		lesson.unit = unit
@@ -291,15 +291,15 @@ def deleteCourseData(courseForm, request_user):
         return False;
 
 def deleteUnitData(unitForm, request_user):
-        if 'unitID' in unitForm.data:
-                Unit.objects.get(id=unitForm.data['unitID']).delete()
+        if 'unit_id' in unitForm.data:
+                Unit.objects.get(id=unitForm.data['unit_id']).delete()
                 return True;
         return False;
 
 def deleteLessonData(lessonForm, request_user):
 	print lessonForm.data
-        if 'lessonID' in lessonForm.data:
-                Lesson.objects.get(id=lessonForm.data['lessonID']).delete()
+        if 'lesson_id' in lessonForm.data:
+                Lesson.objects.get(id=lessonForm.data['lesson_id']).delete()
                 return True;
         return False;
 

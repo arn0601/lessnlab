@@ -30,9 +30,11 @@ def createBaseDict(request):
 	#####################################
 	#get the lesson
 	###################################
-	lessonID = request.GET.get('lesson_id')
-	if ( not lessonID == None ):
-		lesson = Lesson.objects.get(id=lessonID)
+	lesson_id = request.GET.get('lesson_id')
+	if ( not lesson_id == None ):
+		lesson = Lesson.objects.get(id=lesson_id)
+		lessonAddForm.fields['unit_id'].initial = lesson.unit.id
+                unitAddForm.fields['course_id'].initial = lesson.unit.course.id
 
 	#####################################
 	#get the unit
@@ -49,7 +51,7 @@ def createBaseDict(request):
 	unit_id = request.GET.get('unit_id')
 	if ( not unit_id == None ):
 		unit = Unit.objects.get(id=unit_id)
-		lessonAddForm.fields['unitID'].initial = unit_id
+		lessonAddForm.fields['unit_id'].initial = unit_id
 		unitAddForm.fields['course_id'].initial = unit.course.id
 	##########################################
 	#get the course
