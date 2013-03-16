@@ -105,14 +105,6 @@ def deleteCourse(request):
 def addUnit(request):
 	if request.method == 'POST':
                 addUnitForm = AddUnitForm(data=request.POST)
-		course_id = request.POST['course_id']
-		course = Course.objects.get(id=course_id)
-		user = UserProfile.objects.get(user=request.user)
-		slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
-	        s_choices = [(s.id, s.description) for s in slist]
-
-		addUnitForm.fields['standards'].choices = s_choices
-		standard_list = request.POST.getlist('standards')
                 if saveUnit(addUnitForm, request.user):
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return lastPageToView(request)
@@ -249,10 +241,14 @@ def saveUnit(addUnitForm, request_user):
 		unit = Unit()
 		if 'unitID' in addUnitForm.data:
                         unit = Unit.objects.get(id=addUnitForm.data['unitID'])
+		user = UserProfile.objects.get(user=request_user)
+		course_id = addUnitForm.data['course_id']
+                course = Course.objects.get(id=course_id)
+                slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
+                s_choices = [(s.id, s.description) for s in slist]
+		addUnitForm.fields['standards'].choices = s_choices	
 		unit.name = addUnitForm.data['name']
 		unit.description = addUnitForm.data['description']
-		course_id = addUnitForm.data['course_id']
-		course = Course.objects.get(id=course_id)
 		unit.course = course
 		unit.owner = UserProfile.objects.get(user=request_user)
 		unit.week_length = addUnitForm.data['week_length']

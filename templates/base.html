@@ -24,7 +24,7 @@
       				 	 <a href="#"  
           				 class="dropdown-toggle"  
           				 data-toggle="dropdown">  
-          				 <i class="icon-user"></i> Zain Pasha
+          				 <i class="icon-user"></i> {{ fullname }}
           				 <b class="caret"></b>  
       					 </a>  
      			<ul class="dropdown-menu">
@@ -49,13 +49,13 @@
 						Current Course
 					{% endif %}
       					 </a>  
-     				<ul class="dropdown-menu">
-				{% for course in userCourses %}  
-					<li><a href="/units/?course_id={{ course.id }}">{{ course.subject }}</a></li>
-				{% endfor %}
+	     				<ul class="dropdown-menu">
+					{% for course in userCourses %}  
+						<li><a href="/units/?course_id={{ course.id }}">{{ course.subject }}</a></li>
+					{% endfor %}
 
-      				<li><a href="#addCourse" data-toggle="modal"><i class="icon-plus"></i> Add Course</a></li>
-    				</ul>  
+	      				<li><a href="#addCourse" data-toggle="modal"><i class="icon-plus"></i> Add Course</a></li>
+	    				</ul>  
    				</li>
 
 {% if course %}

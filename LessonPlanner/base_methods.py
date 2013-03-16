@@ -50,7 +50,7 @@ def createBaseDict(request):
 	if ( not unit_id == None ):
 		unit = Unit.objects.get(id=unit_id)
 		lessonAddForm.fields['unitID'].initial = unit_id
-
+		unitAddForm.fields['course_id'].initial = unit.course.id
 	##########################################
 	#get the course
 	##############################################	
