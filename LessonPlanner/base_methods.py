@@ -90,7 +90,7 @@ def getLessonSpecificInfo(lesson):
 	for section in lesson_sections:
 		content_list = []
 		section_content = Content.objects.filter(section=section)
-		for content in section_content
+		for content in section_content:
 			if (content.subtype == 'Text'):
 				content_list.append(content.textcontent)
 			elif (content.subtype == 'VideoLink'):
