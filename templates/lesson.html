@@ -8,10 +8,10 @@
 
 {% for lesson in userLessons %}
 	<div class="unitbox" id="{{ lesson.id }}">
-				  <p><a href="/lessonPlanner/?lessonID={{ lesson.id }}"><h4>{{ lesson.name }}</h4></a></p>
+				  <p><a href="/lessonPlanner/?lesson_id={{ lesson.id }}"><h4>{{ lesson.name }}</h4></a></p>
 				 
-<a class="btn btn-primary btn-small" type="button" href="?lessonID={{ lesson.id }}&action=Edit">Edit</a>
-        <a class="btn btn-primary btn-small" type="button" href="?lessonID={{ lesson.id }}&action=Delete">Delete</a>	
+<a class="btn btn-primary btn-small" type="button" href="?lesson_id={{ lesson.id }}&action=Edit">Edit</a>
+        <a class="btn btn-primary btn-small" type="button" href="?lesson_id={{ lesson.id }}&action=Delete">Delete</a>	
 </div>
 {% endfor %}
 {% endblock %}
@@ -29,7 +29,7 @@
 			{% endif %}
 			<ul>
 				{% for lesson in userLessons %}
-				<li><a href="/lessonPlanner/?lessonid={{ lesson.id }}" onclick="goToByScroll('u1')">{{ lesson.name }}</a></li>
+				<li><a href="/lessonPlanner/?lesson_id={{ lesson.id }}" onclick="goToByScroll('u1')">{{ lesson.name }}</a></li>
 				{% endfor %}
 			</ul>
 		</div>
@@ -46,7 +46,7 @@
 {% if showEditLesson %}
 <div class="modal" id="editLesson">
   <div class="modal-header">
-    <a class="close" type="button" href="/lessons/?unitID={{ unitID }}">x</a>
+    <a class="close" type="button" href="/lessons/?unit_id={{ unitID }}">x</a>
     <h3>Edit Lesson</h3>
   </div>
   <div class="modal-body">
@@ -62,7 +62,7 @@
                 </div>
     {% endfor %}
      <p><button type="submit" class="btn btn-primary">Update</button>
-        <a class="btn btn-primary" type="button" href="/lessons/?unitID={{ unitID }}">Cancel</a>
+        <a class="btn btn-primary" type="button" href="/lessons/?unit_id={{ unitID }}">Cancel</a>
       </p>
     </form>
   </div>
@@ -71,7 +71,7 @@
 {% if showDeleteLesson %}
 <div class="modal" id="deleteLesson">
   <div class="modal-header">
-    <a class="close" type="button" href="/lessons/?unitID={{ unitID }}">x</a>
+    <a class="close" type="button" href="/lessons/?unit_id={{ unitID }}">x</a>
     <h3>Delete lesson</h3>
   </div>
   <div class="modal-body">
@@ -88,7 +88,7 @@
      Are you sure you want to delete the lesson?
 <p>
      <p><button type="submit" class="btn btn-primary">Yes</button>
-        <a class="btn btn-primary" type="button" href="/lessons/?unitID={{ unitID }}">No</a>
+        <a class="btn btn-primary" type="button" href="/lessons/?unit_id={{ unitID }}">No</a>
       </p>
     </form>
   </div>

@@ -95,8 +95,68 @@
 			 	
 			 }
 			 
-			 .rightnavtext {
+
+ 			.rightnavtext {
 			 	
 			 	font-size: 10pt;
 			 
 			 }
+			 
+			 .dropdownLessonPlanner {
+			 
+			 	padding-bottom: 10px;
+			 }
+			
+			 
+			 .leftmenu {
+			 
+			 	position: fixed; 
+				top: 50px;
+				left:0px;	
+			 
+			 }
+			 
+			 .leftnav {
+			 	
+			 	padding-left: 10px;
+			 	border-color: #c8c8c8;
+			 	border-right-style: dotted;
+			 	border-width: 1px;
+				
+				} 
+
+
+ 			.sectionheader {
+			 
+			 	font-size: 14pt;
+			 	font-weight: bold;
+			 	text-align: left;
+			 	border-color: #c8c8c8;
+			 	border-bottom-style: dotted;
+			 	border-width: 1px;
+			 	padding-bottom: 10px;
+			 	margin-bottom: 15px;
+			 	margin-top: 10px;
+			 	vertical-align: center;
+			 	
+			 } 
+			 
+			  .overviewsectionnav {
+        			margin-top:0px;
+        			background-color: #fffff;
+        			border: none;
+        			vertical-align: center;
+			 		font-size: 10pt;
+			 		margin-bottom: 5px;
+			 		text-align: left;
+			 	}
+			 
+			   .sectionnav {
+        			margin-top:0px;
+        			background-color: #fffff;
+        			vertical-align: center;
+        			border-bottom-color: #c8c8c8;
+			 		border-bottom-style: dotted;
+			 		border-bottom-width: 1px;
+			 		margin-bottom: 5px;
+      			}
