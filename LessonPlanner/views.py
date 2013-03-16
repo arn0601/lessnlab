@@ -47,13 +47,19 @@ def showLessonPlanner(request):
 	base_dict = base_methods.createBaseDict(request)
 	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
 	base_dict.update(lesson_info)
+	request.session['last_page'] = '/lessonPlanner/?lesson_id='+str(base_dict['lesson'].id)
+
 	return render_to_response('lessonPlanner.html', base_dict)
 
 def lastPageToView(request):
 	if request.session['last_page'] == 'courses':
 		return course(request)
-	elif request.session['last_page'] == 'units':
+	elif units in request.session['last_page']:
                 return unit(request)
+	elif 'lessons' in request.session['last_page']:
+		return request.session['last_page']
+	elif 'lessonPlanner' in request.session['last_page']:
+		return request.session['last_page']
 	return courses(request)
 	
 def lastPageToRedirect(request):
@@ -150,6 +156,14 @@ def deleteLesson(request):
                 if deleteLessonData(lessonForm,request.user):
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return lastPageToView(request)
+
+def addSection(request):
+	if request.method == 'POST':
+		sectionForm = AddSectionForm(data=request.POST)
+		if saveSection(sectionForm, request.user):
+			return HttpResponseRedirect(lastPageToRedirect(request))
+	return lastPageToView(request)
+
 
 def DeleteCourseRequest(request, course_id):
         uname = request.user.username
@@ -284,6 +298,21 @@ def saveLesson(addLessonForm, request_user):
         print addLessonForm.errors
         return False
 
+def saveSection(addSectionForm, request_user):
+	if addSectionForm.is_valid():
+		section = Section()
+		lesson = Lesson.objects.get(id=addSectionForm.data['lesson_id'])
+		otherSections = Section.objects.filter(lesson=lesson)
+		size = otherSections.size()
+		section.lesson=lesson
+		section.placement=size+1
+		section.name=addSectionForm.data['name']
+		section.description = addSectionForm.data['description']
+		section.save()
+		return True
+	print "invlaid form - section"
+	print addSectionForm.errors
+	return False
 
 def deleteCourseData(courseForm, request_user):
 	if 'course_id' in courseForm.data:

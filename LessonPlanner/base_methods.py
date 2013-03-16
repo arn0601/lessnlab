@@ -1,9 +1,7 @@
 from django.template import RequestContext
 from LessonPlanner.models import Lesson
 from LessonPlanner.models import *
-from LessonPlanner.forms import AddCourse,AddUnitForm,AddLessonForm
-from LessonPlanner.forms import EditCourse,EditUnit,EditLesson
-from LessonPlanner.forms import DeleteCourse,DeleteUnit,DeleteLesson
+from LessonPlanner.forms import *
 from Standards.models import Standard
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
@@ -19,7 +17,7 @@ def getStandardsList(course, user):
 	return s_choices	
 
 def createBaseDict(request):
-	(courseAddForm, unitAddForm,lessonAddForm) = returnBlankForms()
+	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm) = returnBlankForms()
 	user = UserProfile.objects.get(user=request.user)
 
 	#get all courses associated with the user
@@ -35,7 +33,7 @@ def createBaseDict(request):
 		lesson = Lesson.objects.get(id=lesson_id)
 		lessonAddForm.fields['unit_id'].initial = lesson.unit.id
                 unitAddForm.fields['course_id'].initial = lesson.unit.course.id
-
+		sectionAddForm.fields['lesson_id'].initial = lesson_id
 	#####################################
 	#get the unit
 	####################################
@@ -82,7 +80,7 @@ def createBaseDict(request):
 	unitAddForm.fields['standards'].choices = standards_list
 	
 	#return (stuff for function, stuff to render)
-	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'standardlist':standards_list}
+	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'standardlist':standards_list, 'sectionAddForm':sectionAddForm}
 
 def getLessonSpecificInfo(lesson):
 	lesson_sections = Section.objects.filter(lesson=lesson)
@@ -104,4 +102,5 @@ def returnBlankForms():
 	addCourseForm = AddCourse()
 	addUnitForm = AddUnitForm()
 	addLessonForm = AddLessonForm()
-	return (addCourseForm, addUnitForm , addLessonForm)
+	addSectionForm = AddSectionForm()
+	return (addCourseForm, addUnitForm , addLessonForm, addSectionForm)

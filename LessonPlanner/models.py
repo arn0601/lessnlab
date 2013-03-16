@@ -1,8 +1,8 @@
 from django.db import models
 from accounts.models import UserProfile
 from Standards.models import Standard
-HEADER = ((1,'Review Previous'),(2,'New Content'),(3,'Assessment'))
 
+SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
 
 CONTENTTYPE = (('Text','Text'),('VideoLink','VideoLink'),('ArticleLink','ArticleLink'))
 
@@ -38,21 +38,21 @@ class Lesson(models.Model):
 	unit = models.ForeignKey(Unit)
 	owner = models.ForeignKey('accounts.UserProfile')
 	tags = models.TextField()
+	description = models.TextField()
 	standards = models.ManyToManyField('Standards.Standard')
 
 class Section(models.Model):
 	lesson = models.ForeignKey(Lesson)
-	section_placement = models.IntegerField()
-	section_name = models.CharField(max_length=32)
-	section_description = models.TextField()
+	placement = models.IntegerField()
+	name = models.IntegerField(max_length=32, choices=SECTIONTYPE)
+	description = models.TextField()
 	creation_date = models.DateTimeField()	
 
 class Content(models.Model):
-	content_type = models.IntegerField(choices=CONTENTTYPE)
 	section = models.ForeignKey(Section)
 	creation_date = models.DateTimeField()
-	section_position = models.IntegerField()
-	content_subtype = models.CharField(choices=CONTENTTYPE, max_length=32)
+	placement = models.IntegerField()
+	content_type = models.CharField(choices=CONTENTTYPE, max_length=32)
 
 #All content types will be subclasses of Content
 class TextContent(Content):

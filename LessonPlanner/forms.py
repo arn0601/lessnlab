@@ -1,5 +1,9 @@
 from django import forms
 
+SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
+
+CONTENTTYPE = (('Text','Text'),('VideoLink','VideoLink'),('ArticleLink','ArticleLink'))
+
 ASSESSMENTTYPE = ((1, 'Quiz'), (2, 'Unit Test'), (3, 'Complex Performance Task'), (4, 'Peer Eval'), (5, 'Presentation/Project'), (6, 'Other'))
 
 class AddCourse(forms.Form):
@@ -67,3 +71,23 @@ class EditLesson(forms.Form):
 class DeleteLesson(forms.Form):
         lesson_id = forms.CharField(label="")
         lesson_id.widget = forms.HiddenInput()
+
+class AddSectionForm(forms.Form):
+	lesson_id = forms.CharField(label="")
+	lesson_id.widget = forms.HiddenInput()
+	name = forms.ChoiceField(label="Section Type", choices=SECTIONTYPE)	
+	description = forms.CharField(label='Description', max_length=256, widget=forms.Textarea)
+
+class AddContentForm(forms.Form):
+	section_id = forms.CharField(label="")
+	#section_id.widget = forms.HiddenInput()
+
+class AddTextContent(AddContentForm):
+	text = forms.CharField(label="Text", max_length=256, widget=forms.Textarea)
+
+class AddVideoLinkContent(AddContentForm):
+	link = forms.CharField(label="Link")
+
+class AddArticleLinkContent(AddContentForm):
+	link = forms.CharField(label="Link")
+
