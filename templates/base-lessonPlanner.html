@@ -118,10 +118,11 @@
 	<div class="span2 leftnav leftmenu">
 		<ul class="nav nav-pills nav-stacked" id="navbar">
 			<li><a href="javascript:void(0)" onClick="goToByScroll('overview')">Overview</a></li>
-  			<li><a href="javascript:void(0)" onClick="goToByScroll('introduction')">Introduction</a></li>
-  			<li><a href="javascript:void(0)" onClick="goToByScroll('newmaterial')">New Material</a></li>
+			{% for section, content_list in sections %}
+  				<li><a href="javascript:void(0)" onClick="goToByScroll('{{ section.name }}')">{{ section.name }}</a></li>
+			{% endfor %}
 		</ul>
-		<button class="btn btn-primary btn-mini">Add Section</button>
+		<a class="btn btn-primary btn-small" type="button" href="#addSection" data-toggle="modal">Add Section</a>
 	</div>
 </div>
 

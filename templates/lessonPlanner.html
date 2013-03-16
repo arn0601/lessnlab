@@ -21,22 +21,23 @@
 			1. Lesson Overview
 		</div>
 		<div class="row overviewsectionnav">
+						
 			<div class="span4">
-				<b>Causes of the Civil War</b> in the <a href="#">Civil War Unit</a>
+				
+				<b>{{ lesson.name }}</b> in the <a href="/lessons/?unit_id={{ unit.id }}"> {{ unit.name }}</a>
 			</div>
 			<div class="span5">
 				<b>Aligns to Standard(s): </b> <a href="#">3.1.a</a>, <a href="#">3.1.b</a>
 			</div>
 			<div class="span3">
-				<b>Written By: </b><a href="#">Zain Pasha</a>
+				<b>Written By: </b><a href="#">{{ fullname }}</a>
 			</div>
 		</div>
 		<div class="row">
 			<div class="span12 well">
 				<h5>Lesson Description</h5>
-				<p>"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem
-				 voluptatem accusantium doloremque laudantium, totam rem  voluptatem accusantium doloremque laudantium, totam rem
-				  voluptatem accusantium doloremque laudantium, totam rem
+				<p> 
+				{{ lesson.description }} NONE
 				</p>
 				<button class="btn btn-primary btn-mini">Edit Description</button>
 			</div>
@@ -54,10 +55,15 @@
 				<button class="btn btn-mini">Delete Objectives</button>
 			</div>
 		</div>
-		<div class="row sectionheader" id="introduction">
-			2. Introduction
-		</div>
-		<div class="row sectionnav">
+
+		{% for section, content_list in sections %}
+			<div class="row sectionheader" id="{{ section.section_name }}">
+			{{ section.section_name }}
+			</div>
+			{% for content in content_list %}
+				content.content_type
+			{% endfor %}
+			<div class="row sectionnav">
 			<div class="span2">
 				<h5>Add Content</h5>
 			</div>
@@ -131,83 +137,11 @@
 				</ul>
 			</div> 
 		</div><!-- End Introduction Section -->
-		<div class="row sectionheader" id="newmaterial">
-			3. New Material
-		</div>
-		<div class="row sectionnav">
-			<div class="span2">
-				<h5>Add Content</h5>
-			</div>
-			<div class="span10">
-				<ul class="nav nav-pills">
-  					<li class="dropdown">
-   						 <a class="dropdown-toggle"
-       					data-toggle="dropdown"
-      				 	href="#">
-        				General
-       				 <b class="caret"></b>
-      					</a>
-    					<ul class="dropdown-menu">
-      						<li><a href="#">Add Teacher Note</a></li>
-      						<li><a href="#">Add Administrator Note</a></li>
-      						<li><a href="#">Add Lecture</a></li>			
-      					</ul>
- 					</li>
- 					<li class="dropdown">
-   						 <a class="dropdown-toggle"
-       					data-toggle="dropdown"
-      				 	href="#">
-        				Checks For Understanding
-       				 <b class="caret"></b>
-      					</a>
-    					<ul class="dropdown-menu">
-      						<li><a href="#">Multiple Choice</a></li>
-      						<li><a href="#">Think-Pair-Share</a></li>
-      						<li><a href="#">Whip Around</a></li>			
-      					</ul>
- 					</li>
- 					<li class="dropdown">
-   						 <a class="dropdown-toggle"
-       					data-toggle="dropdown"
-      				 	href="#">
-        				Media
-       				 <b class="caret"></b>
-      					</a>
-    					<ul class="dropdown-menu">
-      						<li><a href="#">Video</a></li>
-      						<li><a href="#">Article</a></li>
-      						<li><a href="#">Photo</a></li>	
-      						<li><a href="#">Tweet</a></li>		
-      					</ul>
- 					</li>
- 					<li class="dropdown">
-   						 <a class="dropdown-toggle"
-       					data-toggle="dropdown"
-      				 	href="#">
-        				Activity
-       				 <b class="caret"></b>
-      					</a>
-    					<ul class="dropdown-menu">
-      						<li><a href="#">Mind Map</a></li>
-      						<li><a href="#">Make a Poster</a></li>		
-      					</ul>
- 					</li>
- 					<li class="dropdown">
-   						 <a class="dropdown-toggle"
-       					data-toggle="dropdown"
-      				 	href="#">
-        				Assessment
-       				 <b class="caret"></b>
-      					</a>
-    					<ul class="dropdown-menu">
-      						<li><a href="#">Multiple Choice Quiz</a></li>
-      						<li><a href="#">Free Response Quiz</a></li>
-      						<li><a href="#"></a></li>		
-      					</ul>
- 					</li>
-				</ul>
-			</div> 
-		</div><!-- End New Material-->
+			
+
+		{% endfor %}
+		
+		
 	</div>
 </div>
 </div>

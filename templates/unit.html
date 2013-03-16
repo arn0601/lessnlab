@@ -8,9 +8,9 @@
 
 {% for unit in userUnits %}
 	<div class="unitbox" id="{{ unit.id }}">
-				  <p><a href="/lessons/?unit_id={{ unit.id }}"><h4>{{ unit.name }}</h4></a>Taught over {{ unit.week_length }} weeks</p>
-				  <p><b>Description:</b>{{ unit.description }}</p>
-<a class="btn btn-primary btn-small" type="button" href="?unit_id={{ unit.id }}&action=Edit">Edit</a>
+	<p><a href="/lessons/?unit_id={{ unit.id }}"><h4>{{ unit.name }}</h4></a>Taught over {{ unit.week_length }} weeks</p>
+	  <p><b>Description:</b>{{ unit.description }}</p>
+	<a class="btn btn-primary btn-small" type="button" href="?unit_id={{ unit.id }}&action=Edit">Edit</a>
         <a class="btn btn-primary btn-small" type="button" href="?unit_id={{ unit.id }}&action=Delete">Delete</a>	
 </div>
 {% endfor %}
@@ -32,15 +32,6 @@
 				<li><a href="/lessons/?unit_id={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
 				{% endfor %}
 			</ul>
-		</div>
-	</div>
-<!--	<div class="row-fluid">
-		<div class="span5">
-		
-		</div>
-		<div class="span7 pull-right">
-			<button class="btn btn-primary btn-mini" type="button">Add Unit</button>
-			<button class="btn btn-mini" type="button">Delete Unit</button>-->
 		</div>
 	</div>
 {% if showEditUnit %}
