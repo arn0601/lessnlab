@@ -1,8 +1,8 @@
 # Create your views here.
 from django.template import RequestContext
-from LessonPlanner.models import Lesson
-from LessonPlanner.models import Course,Unit,Tag
-from LessonPlanner.forms import AddCourse,AddUnitForm,AddLessonForm
+from LessonPlanner.models import Lesson,Course,Unit,Section
+from LessonPlanner.models import Tag
+from LessonPlanner.forms import AddCourse,AddUnitForm,AddLessonForm,AddSectionForm
 from LessonPlanner.forms import EditCourse,EditUnit,EditLesson
 from LessonPlanner.forms import DeleteCourse,DeleteUnit,DeleteLesson
 from Standards.models import Standard
@@ -11,8 +11,11 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
 from accounts.models import UserProfile
+import datetime
+from django.utils.timezone import utc
 import simplejson
 import base_methods 
+
 
 #show the units for a specific course
 @csrf_exempt
@@ -47,6 +50,7 @@ def showLessonPlanner(request):
 	base_dict = base_methods.createBaseDict(request)
 	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
 	base_dict.update(lesson_info)
+	print "LessonInfo",lesson_info
 	request.session['last_page'] = '/lessonPlanner/?lesson_id='+str(base_dict['lesson'].id)
 
 	return render_to_response('lessonPlanner.html', base_dict)
@@ -68,6 +72,8 @@ def lastPageToRedirect(request):
 	elif 'units' in request.session['last_page']:
                 return request.session['last_page']
 	elif 'lessons' in request.session['last_page']:
+                return request.session['last_page']
+	elif 'lessonPlanner' in request.session['last_page']:
                 return request.session['last_page']
 	return '/courses/'
 
@@ -157,6 +163,7 @@ def deleteLesson(request):
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return lastPageToView(request)
 
+@csrf_exempt
 def addSection(request):
 	if request.method == 'POST':
 		sectionForm = AddSectionForm(data=request.POST)
@@ -290,6 +297,7 @@ def saveLesson(addLessonForm, request_user):
                 lesson.name = addLessonForm.data['name']
                 unitID = addLessonForm.data['unit_id']
                 unit = Unit.objects.get(id=unitID)
+		lesson.description = addLessonForm.data['description']
                 lesson.owner = UserProfile.objects.get(user=request_user)
 		lesson.unit = unit
                 lesson.save()
@@ -303,14 +311,15 @@ def saveSection(addSectionForm, request_user):
 		section = Section()
 		lesson = Lesson.objects.get(id=addSectionForm.data['lesson_id'])
 		otherSections = Section.objects.filter(lesson=lesson)
-		size = otherSections.size()
+		size = len(otherSections)
 		section.lesson=lesson
 		section.placement=size+1
 		section.name=addSectionForm.data['name']
 		section.description = addSectionForm.data['description']
+		section.creation_date = datetime.datetime.utcnow().replace(tzinfo=utc)
 		section.save()
 		return True
-	print "invlaid form - section"
+	print "invalid form - section"
 	print addSectionForm.errors
 	return False
 

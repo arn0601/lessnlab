@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load dictionary_extras %}
 <!DOCTYPE html>
 <html>
   <head>
@@ -118,9 +119,15 @@
 	<div class="span2 leftnav leftmenu">
 		<ul class="nav nav-pills nav-stacked" id="navbar">
 			<li><a href="javascript:void(0)" onClick="goToByScroll('overview')">Overview</a></li>
-			{% for section, content_list in sections %}
-  				<li><a href="javascript:void(0)" onClick="goToByScroll('{{ section.name }}')">{{ section.name }}</a></li>
+			{% for section, content_list in sections.items %}
+			 {% with section.name as user_key %}
+  				<li><a href="javascript:void(0)" onClick="goToByScroll('{{ section.name }}_{{ section.placement }}')">{{ section_types|access:user_key }} </a></li>
+
+			
+    			
+ 			{% endwith %}
 			{% endfor %}
+
 		</ul>
 		<a class="btn btn-primary btn-small" type="button" href="#addSection" data-toggle="modal">Add Section</a>
 	</div>
@@ -140,6 +147,33 @@
 			<small><p style="padding-top: 10px;">Created by <a href="#">LessnLab Inc.</a>, Copyright 2013. All Rights Reserved.</p></small>
 		</div>
 </div>
+
+
+<div class="modal hide" id="addSection">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a Lesson</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addSection %}" name="login_form">
+        {% csrf_token %}
+        {% for field in sectionAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+</div>
+
 
 <div class="modal hide" id="addLesson">
   <div class="modal-header">

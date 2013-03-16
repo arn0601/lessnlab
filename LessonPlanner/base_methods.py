@@ -96,8 +96,17 @@ def getLessonSpecificInfo(lesson):
 			elif (content.subtype == 'ArticleLink'):
 				content_list.append(content.articlelinkcontent)
 		section_dict[section] = content_list
-	return { 'sections' : section_dict }
+	return { 'sections' : section_dict,'section_types' : getSectionMapping() }
 
+
+def getSectionMapping():
+	section_mapping = {}
+	for sec in SECTIONTYPE:
+		section_mapping[sec[0]] = sec[1]
+	print "Mapping",section_mapping
+	return section_mapping
+
+	
 def returnBlankForms():
 	addCourseForm = AddCourse()
 	addUnitForm = AddUnitForm()

@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^deleteLesson/$', 'LessonPlanner.views.deleteLesson', name="deleteLesson"),
 
     url(r'^addCourse/$', 'LessonPlanner.views.addCourse'),
+    url(r'^addSection/$', 'LessonPlanner.views.addSection'),
     url(r'^addUnit/$', 'LessonPlanner.views.addUnit'),
     url(r'^addLesson/$', 'LessonPlanner.views.addLesson'),
     (r'^login/$', 'accounts.views.login_user'),

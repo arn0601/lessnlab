@@ -1,18 +1,8 @@
 <!DOCTYPE html>
 {% extends "base-lessonPlanner.html" %}
+{% load dictionary_extras %}
 
 
-<div class="container-fluid">
-<div class="row-fluid">
-	<div class="span2 leftnav leftmenu">
-		<ul class="nav nav-pills nav-stacked" id="navbar">
-			<li><a href="javascript:void(0)" onClick="goToByScroll('overview')">Overview</a></li>
-  			<li><a href="javascript:void(0)" onClick="goToByScroll('introduction')">Introduction</a></li>
-  			<li><a href="javascript:void(0)" onClick="goToByScroll('newmaterial')">New Material</a></li>
-		</ul>
-		<button class="btn btn-primary btn-mini">Add Section</button>
-	</div>
-</div>
 
 {% block content %}
 <div class="row-fluid">
@@ -37,7 +27,7 @@
 			<div class="span12 well">
 				<h5>Lesson Description</h5>
 				<p> 
-				{{ lesson.description }} NONE
+				{{ lesson.description }}
 				</p>
 				<button class="btn btn-primary btn-mini">Edit Description</button>
 			</div>
@@ -56,9 +46,12 @@
 			</div>
 		</div>
 
-		{% for section, content_list in sections %}
-			<div class="row sectionheader" id="{{ section.section_name }}">
-			{{ section.section_name }}
+		{% for section, content_list in sections.items %}
+			<div class="row sectionheader" id="{{ section.name }}_{{ section.placement }}">
+			{% with section.name as user_key %}
+			{{ section_types|access:user_key }} -  {{ section.description }}
+			
+			{% endwith %}
 			</div>
 			{% for content in content_list %}
 				content.content_type

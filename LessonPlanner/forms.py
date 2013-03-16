@@ -58,6 +58,7 @@ class DeleteUnit(forms.Form):
 
 class AddLessonForm(forms.Form):
         name = forms.CharField(label='Lesson Name')
+	description = forms.CharField(widget=forms.Textarea, label='Description')
         unit_id = forms.CharField(label="")
         unit_id.widget = forms.HiddenInput()
 
@@ -65,6 +66,7 @@ class EditLesson(forms.Form):
         lesson_id = forms.CharField(label="")
         lesson_id.widget = forms.HiddenInput()
 	name = forms.CharField(label='Unit Name')
+	description = forms.CharField(widget=forms.Textarea, label='Description')
 	unit_id = forms.CharField(label="")
         unit_id.widget = forms.HiddenInput()
 
