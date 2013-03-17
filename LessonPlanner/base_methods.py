@@ -101,37 +101,37 @@ def getLessonSpecificInfo(lesson):
 	return { 'sections' : section_dict, 'section_content_forms': add_content_form_dict, 'section_types' : getSectionMapping() }
 
 def getAddContentForms(section_id):
-	content_form_list = []
+	content_form_list = {}
 
 	online_video_form = AddOnlineVideoContent()
 	online_video_form.fields['content_type'] = 'OnlineVideo'
 	online_video_form.fields['section_id'] = section_id
-	content_form_list.append(online_video_form)
+	content_form_list['OnlineVideo'] = online_video_form
 
 	online_picture_form = AddOnlinePictureContent()
 	online_picture_form.fields['content_type'] = 'OnlinePicture'
 	online_picture_form.fields['section_id'] = section_id
-	content_form_list.append(online_picture_form)
+	content_form_list['OnlinePicture'] = online_picture_form
 	
 	online_article_form = AddOnlineArticleContent()
 	online_article_form.fields['content_type'] = 'OnlineArticle'
 	online_article_form.fields['section_id'] = section_id
-	content_form_list.append(online_article_form)
+	content_form_list['OnlineArticle'] = online_article_form
 	
 	text_form = AddTextContent()
 	text_form.fields['content_type'] = 'Text'
 	text_form.fields['section_id'] = section_id
-	content_form_list.append(text_form)
+	content_form_list['Text'] = text_form
 	
 	teacher_note = AddTeacherNoteContent()
 	teacher_note.fields['content_type'] = 'TeacherNote'
 	teacher_note.fields['section_id'] = section_id
-	content_form_list.append(teacher_note)
+	content_form_list['TeacherNote'] = teacher_note
 	
 	administrator_note = AddAdministratorNoteContent()
 	administrator_note.fields['content_type'] = 'AdministratorNote'
 	administrator_note.fields['section_id'] = section_id
-	content_form_list.append(administrator_note)
+	content_form_list['AdministratorNote'] = administrator_note
 
 	print content_form_list
 	return content_form_list
