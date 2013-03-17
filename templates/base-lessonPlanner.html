@@ -149,38 +149,34 @@
 </div>
 
 <div class="modal hide" id="addContent">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">x</button>
-    <h3>Add a Unit</h3>
-  </div>
-  <div class="modal-body">
-
  {% for type,contentAddForm in section_content_forms.items  %}
-	<div>
-    	<form id="content_form" method="post" action="{% url LessonPlanner.views.addContent %}" name="c_{{ type }}">
-        {% csrf_token %}
-	{% for field in contentAddForm %}
- 	<div class="control-group">
-        {{ field.errors.as_text }}
-        	<label class="control-label">{{ field.label_tag }}</label>
-            	<div class="controls">
-		{{ field }}
-            	</div>
-         </div>
-	 {% endfor %}
-	<div>
-
-
-     <p><button type="submit" class="btn btn-primary">Submit</button>
-                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
-
-
-<!--Department,Subject,Year-->
-      </p>
-    </form>
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">x</button>
+	    	<h3>Add Content - {{ type }} </h3>
+	 </div>
+	 <div class="modal-body">
+		<div>
+    		<form id="content_form" method="post" action="{% url LessonPlanner.views.addContent %}" name="c_{{ type }}">
+		{% csrf_token %}
+			{% for field in contentAddForm %}
+		 	<div class="control-group">
+			{{ field.errors.as_text }}
+				<label class="control-label">{{ field.label_tag }}</label>
+			    	<div class="controls">
+				{{ field }}
+			    	</div>
+			 </div>
+			 {% endfor %}
+			
+		     	<p><button type="submit" class="btn btn-primary">Submit</button>
+				<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+			</p>
+		</form>
+  		</div>
+	</div>
 {% endfor %}
-  </div>
 </div>
+
 
 
 
