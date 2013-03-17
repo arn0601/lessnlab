@@ -90,49 +90,50 @@ def getLessonSpecificInfo(lesson):
 		content_list = []
 		section_content = Content.objects.filter(section=section)
 		for content in section_content:
-			if (content.subtype == 'Text'):
+			if (content.content_type == 'Text'):
 				content_list.append(content.textcontent)
-			elif (content.subtype == 'VideoLink'):
-				content_list.append(content.videolinkcontent)
-			elif (content.subtype == 'ArticleLink'):
-				content_list.append(content.articlelinkcontent)
+			elif (content.content_type == 'OnlineVideo'):
+				content_list.append(content.onlinevideocontent)
+			elif (content.content_type == 'OnlineArticle'):
+				content_list.append(content.onlinearticlecontent)
 		section_dict[section] = content_list
 	
 	add_content_form_dict = getAddContentForms(str(section.id))
-	return { 'sections' : section_dict, 'section_content_forms': add_content_form_dict, 'section_types' : getSectionMapping() }
+	return { 'sections' : section_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
 
 def getAddContentForms(section_id):
-	content_form_dict = {}
+	
+	content_form_dict = {'General': {} , 'Media': {}, 'Activity': {}, 'Checks For Understanding': {}, 'Assessment': {} }
 	
 	online_video_form = AddOnlineVideoContent()
 	online_video_form.fields['content_type'].initial = 'OnlineVideo'
 	online_video_form.fields['section_id'].initial = section_id
-	content_form_dict["OnlineVideo"] = online_video_form
+	content_form_dict['Media']["OnlineVideo"] = online_video_form
 	
 	online_picture_form = AddOnlinePictureContent()
 	online_picture_form.fields['content_type'].initial = 'OnlinePicture'
 	online_picture_form.fields['section_id'].initial = section_id
-	content_form_dict["OnlinePicture"] = online_picture_form
+	content_form_dict['Media']["OnlinePicture"] = online_picture_form
 	
 	online_article_form = AddOnlineArticleContent()
 	online_article_form.fields['content_type'].initial = 'OnlineArticle'
 	online_article_form.fields['section_id'].initial = section_id
-	content_form_dict['OnlineArticle'] = online_article_form
+	content_form_dict['Media']['OnlineArticle'] = online_article_form
 	
 	text_form = AddTextContent()
 	text_form.fields['content_type'].initial = 'Text'
 	text_form.fields['section_id'].initial = section_id
-	content_form_dict['Text'] = text_form
+	content_form_dict['General']['Text'] = text_form
 	
 	teacher_note = AddTeacherNoteContent()
 	teacher_note.fields['content_type'].initial = 'TeacherNote'
 	teacher_note.fields['section_id'].initial = section_id
-	content_form_dict['TeacherNote'] = teacher_note
+	content_form_dict['General']['TeacherNote'] = teacher_note
 	
 	administrator_note = AddAdministratorNoteContent()
 	administrator_note.fields['content_type'].initial = 'AdministratorNote'
 	administrator_note.fields['section_id'].initial = section_id
-	content_form_dict['AdministratorNote'] = administrator_note
+	content_form_dict['General']['AdministratorNote'] = administrator_note
 
 	print "print",content_form_dict
 	return content_form_dict
