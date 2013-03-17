@@ -148,6 +148,43 @@
 		</div>
 </div>
 
+<div class="modal hide" id="addContent">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a Unit</h3>
+  </div>
+  <div class="modal-body">
+
+ {% for type,contentAddForm in section_content_forms.items  %}
+	<div>
+    	<form id="content_form" method="post" action="{% url LessonPlanner.views.addContent %}" name="c_{{ type }}">
+        {% csrf_token %}
+	{% for field in contentAddForm %}
+ 	<div class="control-group">
+        {{ field.errors.as_text }}
+        	<label class="control-label">{{ field.label_tag }}</label>
+            	<div class="controls">
+		{{ field }}
+            	</div>
+         </div>
+	 {% endfor %}
+	<div>
+
+
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+
+
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+{% endfor %}
+  </div>
+</div>
+
+
+
+
 
 <div class="modal hide" id="addSection">
   <div class="modal-header">
@@ -227,10 +264,6 @@
   </div>
 </div>
 
-
-
-
-
 <div class="modal hide" id="addCourse">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">x</button>
@@ -259,5 +292,35 @@
 <!-- Javascript -->
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/static/bootstrap.js"></script>
+	<script>
+	
+	   $(".content_show").click(function(){ // Click to only happen on announce links 
+		var sid = $(this).data('sectionid'); 
+		var ct = $(this).data('contenttype'); 
+		
+	     	var x=document.getElementsByTagName("form");
+		for(var i=0;i<x.length;i++)
+		{
+			var name = x[i].attributes["name"].value;
+			if(name.indexOf("c_") === 0)
+		      	{
+				var parentDiv = x[i].parentNode;
+			  	parentDiv.style.cssText = "display:none";
+				if(name.indexOf(ct) !== -1)
+				{
+					
+			       		parentDiv.style.cssText="";
+					    $("<input type='hidden' / >")
+					     .attr("id", "section_id")
+					     .attr("name", "section_id")
+					     .attr("value", sid)
+					     .appendTo(x);
+			  	}
+			}
+		}
+		$('#addContent').modal('show');
+	   });
+
+	</script>
 
 </html>

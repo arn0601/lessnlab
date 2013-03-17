@@ -171,6 +171,9 @@ def addSection(request):
 			return HttpResponseRedirect(lastPageToRedirect(request))
 	return lastPageToView(request)
 
+def addContent(request):
+        return lastPageToView(request)
+
 
 def DeleteCourseRequest(request, course_id):
         uname = request.user.username
