@@ -2,7 +2,7 @@ from django import forms
 
 SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
 
-CONTENTTYPE = (('Text','Text'),('VideoLink','VideoLink'),('ArticleLink','ArticleLink'))
+CONTENTTYPE = (('Text','Text'),('OnlineVideo','OnlineVideo'),('OnlineArticle','OnlineArticle'),('OnlinePicture','OnlinePicture'),('TeacherNote','TeacherNote'),('AdministratorNote','AdministratorNote'))
 
 ASSESSMENTTYPE = ((1, 'Quiz'), (2, 'Unit Test'), (3, 'Complex Performance Task'), (4, 'Peer Eval'), (5, 'Presentation/Project'), (6, 'Other'))
 
@@ -83,13 +83,24 @@ class AddSectionForm(forms.Form):
 class AddContentForm(forms.Form):
 	section_id = forms.CharField(label="")
 	#section_id.widget = forms.HiddenInput()
+	content_type = forms.CharField(label="")
+	content_type.widget = forms.HiddenInput()
 
 class AddTextContent(AddContentForm):
 	text = forms.CharField(label="Text", max_length=256, widget=forms.Textarea)
 
-class AddVideoLinkContent(AddContentForm):
+class AddOnlineVideoContent(AddContentForm):
 	link = forms.CharField(label="Link")
 
-class AddArticleLinkContent(AddContentForm):
+class AddOnlineArticleContent(AddContentForm):
 	link = forms.CharField(label="Link")
+
+class AddTeacherNoteContent(AddContentForm):
+        text = forms.CharField(label="Text", max_length=256, widget=forms.Textarea)
+
+class AddAdministratorNoteContent(AddContentForm):
+        text = forms.CharField(label="Text", max_length=256, widget=forms.Textarea)
+
+class AddOnlinePictureContent(AddContentForm):
+        link = forms.CharField(label="Link")
 

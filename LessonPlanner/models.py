@@ -61,6 +61,14 @@ class TextContent(Content):
 class OnlineVideoContent(Content):
 	link = models.CharField(max_length=256)
 
-class ArticleLinkContent(Content):
+class OnlineArticleContent(Content):
 	link = models.CharField(max_length=256)
 
+class TeacherNote(Content):
+	note = models.CharField(max_length=256)
+
+class AdministratorNode(Content):
+	note = models.CharField(max_length=256)
+
+class OnlinePictureContent(Content):
+	link = models.CharField(max_length=256)
