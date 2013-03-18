@@ -42,8 +42,8 @@
 				<button class="btn btn-mini">Delete Objectives</button>
 			</div>
 		</div>
+		{% for section, section_placement in sections|sort_sections %}
 
-		{% for section, content_list in sections.items %}
 			<div class="row sectionheader" id="{{ section.name }}_{{ section.placement }}">
 			{% with section.name as user_key %}
 			{{ section_types|access:user_key }} -  {{ section.description }}
@@ -58,80 +58,39 @@
 				<h5>Add Content</h5>
 			</div>
 			<div class="span10">
-				<ul class="nav nav-pills">
-  					<li class="dropdown">
-   						 <a class="dropdown-toggle"
-       					data-toggle="dropdown"
-      				 	href="#">
-        				General
-       				 <b class="caret"></b>
-      					</a>
-    					<ul class="dropdown-menu showContent" class="btn btn-primary btn-small announce">
-      						<li><a href="#" class="content_show" data-sectionid="{{ section.name }}" 
-							data-contenttype="TeacherNote"> Teacher Note</a></li>
-      						<li><a href="#">Add Administrator Note</a></li>
-      						<li><a href="#">Add Lecture</a></li>			
-      					</ul>
- 					</li>
- 					<li class="dropdown">
-   						 <a class="dropdown-toggle"
-       					data-toggle="dropdown"
-      				 	href="#">
-        				Checks For Understanding
-       				 <b class="caret"></b>
-      					</a>
-    					<ul class="dropdown-menu">
-      						<li><a href="#">Multiple Choice</a></li>
-      						<li><a href="#">Think-Pair-Share</a></li>
-      						<li><a href="#">Whip Around</a></li>			
-      					</ul>
- 					</li>
- 					<li class="dropdown">
-   						 <a class="dropdown-toggle"
-       					data-toggle="dropdown"
-      				 	href="#">
-        				Media
-       				 <b class="caret"></b>
-      					</a>
-    					<ul class="dropdown-menu">
-      						<li><a href="#">Video</a></li>
-      						<li><a href="#">Article</a></li>
-      						<li><a href="#">Photo</a></li>	
-      						<li><a href="#">Tweet</a></li>		
-      					</ul>
- 					</li>
- 					<li class="dropdown">
-   						 <a class="dropdown-toggle"
-       					data-toggle="dropdown"
-      				 	href="#">
-        				Activity
-       				 <b class="caret"></b>
-      					</a>
-    					<ul class="dropdown-menu">
-      						<li><a href="#">Mind Map</a></li>
-      						<li><a href="#">Make a Poster</a></li>		
-      					</ul>
- 					</li>
- 					<li class="dropdown">
-   						 <a class="dropdown-toggle"
-       					data-toggle="dropdown"
-      				 	href="#">
-        				Assessment
-       				 <b class="caret"></b>
-      					</a>
-    					<ul class="dropdown-menu">
-      						<li><a href="#">Multiple Choice Quiz</a></li>
-      						<li><a href="#">Free Response Quiz</a></li>
-      						<li><a href="#"></a></li>		
-      					</ul>
- 					</li>
+				<ul class="nav nav-pills">				
+				  
+				{% for dropdown_header in dropdown_order %}
+
+   							<li class="dropdown">
+   						 	<a class="dropdown-toggle"
+       							 data-toggle="dropdown"
+      				 			 href="#">
+        							{{ dropdown_header }}
+       				 			<b class="caret"></b>
+      							</a>
+    							<ul class="dropdown-menu showContent" class="btn btn-primary btn-small announce">
+      								
+							{% for dropdown_header_dict in section_content_forms|access:section|access:dropdown_header %}
+								{% with content_type_form as section_content_forms|access:section|access:dropdown_header|access:dropdown_header_dict %}
+								{{ content_type_form }} 
+								<li><a href="#" class="content_show" data-sectionid="{{ section.id }}" 
+								data-contenttype="{{ dropdown_header_dict }}">{{ dropdown_header_dict }}</a></li>
+      							{% endwith %}	
+						{% endfor %}
+							</ul>
+ 							</li>
+					
+				{% endfor %}
+
 				</ul>
 			</div> 
 		</div><!-- End Introduction Section -->
 			
 
+		{% for content_list in sections|access:section %}
 		{% endfor %}
-		
+		{% endfor %}
 		
 	</div>
 </div>
