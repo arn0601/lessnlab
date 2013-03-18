@@ -71,9 +71,8 @@
       							</a>
     							<ul class="dropdown-menu showContent" class="btn btn-primary btn-small announce">
       								
-							{% for dropdown_header_dict in section_content_forms|access:section|access:dropdown_header %}
-								{% with content_type_form as section_content_forms|access:section|access:dropdown_header|access:dropdown_header_dict %}
-								{{ content_type_form }} 
+							{% for dropdown_header_dict in section_content_forms|access:dropdown_header %}
+								{% with content_type_form as section_content_forms|access:dropdown_header|access:dropdown_header_dict %}
 								<li><a href="#" class="content_show" data-sectionid="{{ section.id }}" 
 								data-contenttype="{{ dropdown_header_dict }}">{{ dropdown_header_dict }}</a></li>
       							{% endwith %}	

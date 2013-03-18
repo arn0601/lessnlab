@@ -148,8 +148,9 @@
 		</div>
 </div>
 
-<div class="modal hide" id="addContent">
- {% for type,contentAddForm in section_content_forms.items  %}
+ {% for header,nested in section_content_forms.items  %}
+ {% for type,contentAddForm in nested.items %}
+<div class="modal hide" id="addContent{{ type }}">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal">x</button>
 	    	<h3>Add Content - {{ type }} </h3>
@@ -174,8 +175,9 @@
 		</form>
   		</div>
 	</div>
-{% endfor %}
 </div>
+{% endfor %}
+{% endfor %}
 
 
 
@@ -293,7 +295,6 @@
 	   $(".content_show").click(function(){ // Click to only happen on announce links 
 		var sid = $(this).data('sectionid'); 
 		var ct = $(this).data('contenttype'); 
-		
 	     	var x=document.getElementsByTagName("form");
 		for(var i=0;i<x.length;i++)
 		{
@@ -303,18 +304,18 @@
 				var parentDiv = x[i].parentNode;
 			  	parentDiv.style.cssText = "display:none";
 				if(name.indexOf(ct) !== -1)
-				{
-					
-			       		parentDiv.style.cssText="";
-					    $("<input type='hidden' / >")
-					     .attr("id", "section_id")
-					     .attr("name", "section_id")
-					     .attr("value", sid)
-					     .appendTo(x);
+				{			
+					x[i].section_id.value=sid
+					parentDiv.style.cssText="";
+	//				    $("<input type='hidden' / >")
+	//				     .attr("id", "section_id")
+	//				     .attr("name", "section_id")
+	//				     .attr("value", sid)
+	//				     .appendTo(x);
 			  	}
 			}
 		}
-		$('#addContent').modal('show');
+		$('#addContent'+ct).modal('show');
 	   });
 
 	</script>

@@ -84,7 +84,7 @@ class AddSectionForm(forms.Form):
 
 class AddContentForm(forms.Form):
 	section_id = forms.CharField(label="")
-	#section_id.widget = forms.HiddenInput()
+	section_id.widget = forms.HiddenInput()
 	content_type = forms.CharField(label="")
 	content_type.widget = forms.HiddenInput()
 

@@ -98,7 +98,7 @@ def getLessonSpecificInfo(lesson):
 				content_list.append(content.onlinearticlecontent)
 		section_dict[section] = content_list
 	
-	add_content_form_dict[section] = getAddContentForms(str(section.id))
+	add_content_form_dict = getAddContentForms(str(section.id))
 	return { 'sections' : section_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
 
 def getAddContentForms(section_id):
