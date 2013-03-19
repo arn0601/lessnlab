@@ -2,8 +2,6 @@
 from django.template import RequestContext
 from LessonPlanner.models import Lesson,Course,Unit,Section
 from LessonPlanner.models import *
-from LessonPlanner.forms import AddCourse,AddUnitForm,AddLessonForm,AddSectionForm
-from LessonPlanner.forms import EditCourse,EditUnit,EditLesson
 from LessonPlanner.forms import *
 from Standards.models import Standard
 from django.shortcuts import render_to_response
@@ -50,8 +48,10 @@ def showLessonPlanner(request):
 	base_dict = base_methods.createBaseDict(request)
 	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
 	base_dict.update(lesson_info)
-	delete_section_form = DeleteSectionForm()
+	delete_section_form = DeleteSection()
+	delete_content_form = DeleteContent()
 	base_dict['deleteSectionForm'] = delete_section_form
+	base_dict['deleteContentForm'] = delete_content_form
 	print "LessonInfo",lesson_info
 	request.session['last_page'] = '/lessonPlanner/?lesson_id='+str(base_dict['lesson'].id)
 	
@@ -172,6 +172,16 @@ def deleteSection(request):
 		if deleteSectionData(sectionForm,request.user):
 			return HttpResponseRedirect(lastPageToRedirect(request))
 	return HttpResponseRedirect(lastPageToView(request))
+
+@csrf_exempt
+def deleteContent(request):
+        if request.method == 'POST':
+                contentForm = DeleteContent(data=request.POST)
+                if deleteContentData(contentForm,request.user):
+                        return HttpResponseRedirect(lastPageToRedirect(request))
+        return HttpResponseRedirect(lastPageToView(request))
+
+
 
 
 @csrf_exempt
@@ -390,7 +400,7 @@ def saveSection(addSectionForm, request_user):
 		section.placement=size+1
 		section.name=addSectionForm.data['name']
 		section.description = addSectionForm.data['description']
-		section.creation_date = datetime.datetime.utcnow().replace(tzinfo=utc)
+		section.creation_date = datetime.utcnow().replace(tzinfo=utc)
 		section.save()
 		return True
 	print "invalid form - section"
@@ -422,3 +432,10 @@ def deleteSectionData(sectionForm, request_user):
 		Section.objects.get(id=sectionForm.data['section_id']).delete()
 		return True
 	return False
+
+def deleteContentData(contentForm, request_user):
+        print contentForm.data
+        if 'content_id' in contentForm.data:
+                Content.objects.get(id=contentForm.data['content_id']).delete()
+                return True
+        return False

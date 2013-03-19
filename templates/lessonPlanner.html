@@ -49,36 +49,35 @@
 			<div class="row sectionheader" id="{{ section.id }}">
 			{% with section.name as user_key %}
 			{{ section_types|access:user_key }} -  {{ section.description }}
-			
+<div>					
+<a id="delete_section" data-sectionid="{{ section.id }}" class="btn btn-primary btn-mini delete_section" href="#">Delete Section</a>
+				
+</div>			
 			{% endwith %}
 			</div>
 			{% for content, content_placement in sections|access:section|sort_content %}
+				<p>
+				
 				{% if content.content_type == "OnlineVideo" %}
 
 				<!--<h1>Vimeo Javascript oEmbed Example</h1>
     					<div id="embed">Loading video...</div>-->
-					<p>
 					<iframe width="300" height="300"
 						src="{{ content.link }}">
 					</iframe>
-					</p>
-
+				{% elif content.content_type == "Text" %}
+						{{ content.text }}					
+				{% else %}
+					OTHER CONTENT - Need to define template
 				{% endif %}
+				</p>
 
-				{% if content.content_type == "Text" %}
-
-				<!--<h1>Vimeo Javascript oEmbed Example</h1>
-    					<div id="embed">Loading video...</div>-->
-					<p>
-						{{ content.text }}
-					</p>
-
-				{% endif %}
-
+					<div>
+					<a id="delete_content" data-contentid="{{ content.id }}" 
+					class="btn btn-primary btn-mini delete_content" href="#">Delete Content</a>
+					</div>	
+				
 			{% endfor %}
-
-
-
 			<div class="row sectionnav">
 			<div class="span2">
 				<h5>Add Content</h5>
