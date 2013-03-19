@@ -50,9 +50,11 @@ def showLessonPlanner(request):
 	base_dict = base_methods.createBaseDict(request)
 	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
 	base_dict.update(lesson_info)
+	delete_section_form = DeleteSectionForm()
+	base_dict['deleteSectionForm'] = delete_section_form
 	print "LessonInfo",lesson_info
 	request.session['last_page'] = '/lessonPlanner/?lesson_id='+str(base_dict['lesson'].id)
-
+	
 	return render_to_response('lessonPlanner.html', base_dict)
 
 def lastPageToView(request):
@@ -162,6 +164,15 @@ def deleteLesson(request):
                 if deleteLessonData(lessonForm,request.user):
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return HttpResponseRedirect(lastPageToView(request))
+
+@csrf_exempt
+def deleteSection(request):
+	if request.method == 'POST':
+		sectionForm = DeleteSection(data=request.POST)
+		if deleteSectionData(sectionForm,request.user):
+			return HttpResponseRedirect(lastPageToRedirect(request))
+	return HttpResponseRedirect(lastPageToView(request))
+
 
 @csrf_exempt
 def addSection(request):
@@ -405,3 +416,9 @@ def deleteLessonData(lessonForm, request_user):
                 return True;
         return False;
 
+def deleteSectionData(sectionForm, request_user):
+	print sectionForm.data
+	if 'section_id' in sectionForm.data:
+		Section.objects.get(id=sectionForm.data['section_id']).delete()
+		return True
+	return False

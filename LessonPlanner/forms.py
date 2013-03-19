@@ -75,6 +75,10 @@ class AddSectionForm(forms.Form):
 	name = forms.ChoiceField(label="Section Type", choices=SECTIONTYPE)	
 	description = forms.CharField(label='Description', max_length=256, widget=forms.Textarea)
 
+class DeleteSection(forms.Form):
+	section_id = forms.CharField(label="")
+	section_id.widget = forms.HiddenInput()
+
 class AddContentForm(forms.Form):
 	section_id = forms.CharField(label="")
 	section_id.widget = forms.HiddenInput()
