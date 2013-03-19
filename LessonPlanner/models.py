@@ -2,12 +2,14 @@ from django.db import models
 from accounts.models import UserProfile
 from Standards.models import Standard
 
+
 SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
 
-CONTENTTYPE = (('Text','Text'),('VideoLink','VideoLink'),('ArticleLink','ArticleLink'))
+CONTENTTYPE = (('Text','Text'),('OnlineVideo','OnlineVideo'),('OnlineArticle','OnlineArticle'),('OnlinePicture','OnlinePicture'),('TeacherNote','TeacherNote'),('AdministratorNote','AdministratorNote'))
 
 ASSESSMENTTYPE = ((1, 'Quiz'), (2, 'Unit Test'), (3, 'Complex Performance Task'), (4, 'Peer Eval'), (5, 'Presentation/Project'), (6, 'Other'))
 
+LESSONPLANNER_DROPDOWN_ORDER = ['General', 'Media', 'Checks for Understanding', 'Activity', 'Assessment']
 
 class AssessmentType(models.Model):
 	assessment_type = models.CharField(max_length=32, choices = ASSESSMENTTYPE)
