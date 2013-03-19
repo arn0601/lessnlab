@@ -175,11 +175,64 @@ def addSection(request):
 def addContent(request):
     	if request.method == 'POST':
                 contentForm = AddContentForm(data=request.POST)
-		
-                if saveContent(contentForm, request.user):
+                (success, content) =  saveContent(contentForm, request)
+		if success:
+			content.section = section
+			content.content_type = contentForm.data['content_type']
+			section_content = Content.objects.filter(section=section)
+			content.placement = section_content.size()+1
+			content.save()
                         return HttpResponseRedirect(lastPageToRedirect(request))
 	return HttpResponseRedirect(lastPageToView(request))
 
+def saveContent(contentForm, request):
+	if contentForm.is_valid():
+		section = Section.objects.get(id=int(contentForm.data['section_id'])
+		content_type = contentForm.data['content_type']
+		if (content_type == 'OnlineVideo'):
+			online_video_form = AddOnlineVideoContent(request)
+			if online_video_form.is_valid():
+				content = OnlineVideoContent()
+				content.link = online_video_form.data['link']
+				return (True, content)
+			return (False, None)
+		if (content_type == 'OnlinePicture'):
+			online_picture_form = AddOnlinePictureContent(request)
+			if online_picture_form.is_valid():
+				content = OnlinePictureContent()
+				content.link = online_picture_form.data['link']
+				return (True, content)
+			return (False, None)
+		if (content_type == 'OnlineArticle'):
+			online_article_form = AddOnlineArticleContent(request)
+			if online_article_form.is_valid():
+				content = OnlineArticleContent()
+				content.link = online_article_form.data['link']
+				return (True, content)
+			return (False, None)
+		if (content_type == 'Text'):
+			text_form = AddTextContent(request)
+			if text_form.is_valid():
+				content = TextContent()
+				content.text = text_form.data['text']
+				return (True, content)
+			return (False, None)
+		if (content_type == 'TeacherNote'):
+			teacher_note_form = AddTeacherNoteContent(request)
+			if teacher_note_form.is_valid():
+				content = TeacherNoteContent()
+				content.text = teacher_note_form.data['text']
+				return (True, content)
+			return (False, None)
+		if (content_type == 'AdministratorNote'):
+			administrator_note_form = AddAdministratorNoteContent(request)
+			if administrator_note_form.is_valid():
+				content = AdministratorNoteContent()
+				content.text = administrator_note_form.data['text']
+				return (True, content)
+			return (False, None)
+
+	return (False, None);
 
 def DeleteCourseRequest(request, course_id):
         uname = request.user.username
