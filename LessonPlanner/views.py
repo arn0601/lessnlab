@@ -1,17 +1,17 @@
 # Create your views here.
 from django.template import RequestContext
 from LessonPlanner.models import Lesson,Course,Unit,Section
-from LessonPlanner.models import Tag
+from LessonPlanner.models import *
 from LessonPlanner.forms import AddCourse,AddUnitForm,AddLessonForm,AddSectionForm
 from LessonPlanner.forms import EditCourse,EditUnit,EditLesson
-from LessonPlanner.forms import DeleteCourse,DeleteUnit,DeleteLesson
+from LessonPlanner.forms import *
 from Standards.models import Standard
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
 from accounts.models import UserProfile
-import datetime
+from datetime import datetime
 from django.utils.timezone import utc
 import simplejson
 import base_methods 
@@ -177,55 +177,56 @@ def addContent(request):
                 contentForm = AddContentForm(data=request.POST)
                 (success, content) =  saveContent(contentForm, request)
 		if success:
+			section = Section.objects.get(id=int(contentForm.data['section_id']))
 			content.section = section
+			content.creation_date=datetime.now()
 			content.content_type = contentForm.data['content_type']
 			section_content = Content.objects.filter(section=section)
-			content.placement = section_content.size()+1
+			content.placement = len(section_content)+1
 			content.save()
                         return HttpResponseRedirect(lastPageToRedirect(request))
 	return HttpResponseRedirect(lastPageToView(request))
 
 def saveContent(contentForm, request):
 	if contentForm.is_valid():
-		section = Section.objects.get(id=int(contentForm.data['section_id'])
 		content_type = contentForm.data['content_type']
 		if (content_type == 'OnlineVideo'):
-			online_video_form = AddOnlineVideoContent(request)
+			online_video_form = AddOnlineVideoContent(data=request.POST)
 			if online_video_form.is_valid():
 				content = OnlineVideoContent()
 				content.link = online_video_form.data['link']
 				return (True, content)
 			return (False, None)
 		if (content_type == 'OnlinePicture'):
-			online_picture_form = AddOnlinePictureContent(request)
+			online_picture_form = AddOnlinePictureContent(data=request.POST)
 			if online_picture_form.is_valid():
 				content = OnlinePictureContent()
 				content.link = online_picture_form.data['link']
 				return (True, content)
 			return (False, None)
 		if (content_type == 'OnlineArticle'):
-			online_article_form = AddOnlineArticleContent(request)
+			online_article_form = AddOnlineArticleContent(data=request.POST)
 			if online_article_form.is_valid():
 				content = OnlineArticleContent()
 				content.link = online_article_form.data['link']
 				return (True, content)
 			return (False, None)
 		if (content_type == 'Text'):
-			text_form = AddTextContent(request)
+			text_form = AddTextContent(data=request.POST)
 			if text_form.is_valid():
 				content = TextContent()
 				content.text = text_form.data['text']
 				return (True, content)
 			return (False, None)
 		if (content_type == 'TeacherNote'):
-			teacher_note_form = AddTeacherNoteContent(request)
+			teacher_note_form = AddTeacherNoteContent(data=request.POST)
 			if teacher_note_form.is_valid():
 				content = TeacherNoteContent()
 				content.text = teacher_note_form.data['text']
 				return (True, content)
 			return (False, None)
 		if (content_type == 'AdministratorNote'):
-			administrator_note_form = AddAdministratorNoteContent(request)
+			administrator_note_form = AddAdministratorNoteContent(data=request.POST)
 			if administrator_note_form.is_valid():
 				content = AdministratorNoteContent()
 				content.text = administrator_note_form.data['text']

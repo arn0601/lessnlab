@@ -96,6 +96,13 @@ def getLessonSpecificInfo(lesson):
 				content_list.append(content.onlinevideocontent)
 			elif (content.content_type == 'OnlineArticle'):
 				content_list.append(content.onlinearticlecontent)
+			elif (content.content_type == 'OnlinePicture'):
+                                content_list.append(content.onlinepicturecontent)
+			elif (content.content_type == 'TeacherNote'):
+				content_list.append(content.teachernotecontent)
+			elif (content.content_type == 'AdministratorNote'):
+				content_list.append(content.administratornotecontent)
+
 		section_dict[section] = content_list
 	
 	add_content_form_dict = getAddContentForms(str(section.id))
