@@ -121,7 +121,7 @@
 			<li><a href="javascript:void(0)" onClick="goToByScroll('overview')">Overview</a></li>
 			{% for section, content_list in sections.items %}
 			 {% with section.name as user_key %}
-  				<li><a href="javascript:void(0)" onClick="goToByScroll('{{ section.name }}_{{ section.placement }}')">{{ section_types|access:user_key }} </a></li>
+  				<li><a href="javascript:void(0)" onClick="goToByScroll('{{ section.id }}')">{{ section_types|access:user_key }} </a></li>
 
 			
     			

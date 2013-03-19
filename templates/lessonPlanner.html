@@ -5,6 +5,8 @@
 
 
 {% block content %}
+
+
 <div class="row-fluid">
 	<div class="span10" style="padding-left: 10px;">
 		<div class="row sectionheader" id="overview">
@@ -44,15 +46,39 @@
 		</div>
 		{% for section, section_placement in sections|sort_sections %}
 
-			<div class="row sectionheader" id="{{ section.name }}_{{ section.placement }}">
+			<div class="row sectionheader" id="{{ section.id }}">
 			{% with section.name as user_key %}
 			{{ section_types|access:user_key }} -  {{ section.description }}
 			
 			{% endwith %}
 			</div>
-			{% for content in content_list %}
-				content.content_type
+			{% for content, content_placement in sections|access:section|sort_content %}
+				{% if content.content_type == "OnlineVideo" %}
+
+				<!--<h1>Vimeo Javascript oEmbed Example</h1>
+    					<div id="embed">Loading video...</div>-->
+					<p>
+					<iframe width="300" height="300"
+						src="{{ content.link }}">
+					</iframe>
+					</p>
+
+				{% endif %}
+
+				{% if content.content_type == "Text" %}
+
+				<!--<h1>Vimeo Javascript oEmbed Example</h1>
+    					<div id="embed">Loading video...</div>-->
+					<p>
+						{{ content.text }}
+					</p>
+
+				{% endif %}
+
 			{% endfor %}
+
+
+
 			<div class="row sectionnav">
 			<div class="span2">
 				<h5>Add Content</h5>
@@ -94,6 +120,33 @@
 	</div>
 </div>
 </div>
+<!--
+  <script>
 
+        // This is the URL of the video you want to load
+        var videoUrl = 'http://www.vimeo.com/7100569';
+        // This is the oEmbed endpoint for Vimeo (we're using JSON)
+        // (Vimeo also supports oEmbed discovery. See the PHP example.)
+        var endpoint = 'http://www.vimeo.com/api/oembed.json';
+        // Tell Vimeo what function to call
+        var callback = 'embedVideo';
+        // Put together the URL
+        var url = endpoint + '?url=' + encodeURIComponent(videoUrl) + '&callback=' + callback + '&width=200';
+        // This function puts the video on the page
+        function embedVideo(video) {
+		
+            document.getElementById('embed').innerHTML = unescape(video.html);
+        }
+        // This function loads the data from Vimeo
+        function init() {
+            var js = document.createElement('script');
+            js.setAttribute('type', 'text/javascript');
+            js.setAttribute('src', url);
+            document.getElementsByTagName('head').item(0).appendChild(js);
+        }
+        // Call our init function when the page loads
+        window.onload = init;
+    </script>
+-->
 {% endblock %}
 
