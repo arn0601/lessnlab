@@ -301,17 +301,10 @@
 			var name = x[i].attributes["name"].value;
 			if(name.indexOf("c_") === 0)
 		      	{
-				var parentDiv = x[i].parentNode;
-			  	parentDiv.style.cssText = "display:none";
 				if(name.indexOf(ct) !== -1)
 				{			
 					x[i].section_id.value=sid
-					parentDiv.style.cssText="";
-	//				    $("<input type='hidden' / >")
-	//				     .attr("id", "section_id")
-	//				     .attr("name", "section_id")
-	//				     .attr("value", sid)
-	//				     .appendTo(x);
+					
 			  	}
 			}
 		}

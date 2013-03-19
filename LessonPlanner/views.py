@@ -58,7 +58,7 @@ def showLessonPlanner(request):
 def lastPageToView(request):
 	if request.session['last_page'] == 'courses':
 		return course(request)
-	elif units in request.session['last_page']:
+	elif 'units' in request.session['last_page']:
                 return unit(request)
 	elif 'lessons' in request.session['last_page']:
 		return request.session['last_page']
@@ -96,7 +96,7 @@ def addCourse(request):
 		addCourseForm = AddCourse(data=request.POST)
 		if saveCourse(addCourseForm, request.user):
 			return HttpResponseRedirect(lastPageToRedirect(request))
-	return lastPageToView(request)
+	return HttpResponseRedirect(lastPageToView(request))
 
 @csrf_exempt
 def editCourse(request):
@@ -104,7 +104,7 @@ def editCourse(request):
                 addCourseForm = EditCourse(data=request.POST)
                 if saveCourse(addCourseForm,request.user):
                         return HttpResponseRedirect(lastPageToRedirect(request))
-        return lastPageToView(request)
+        return HttpResponseRedirect(lastPageToView(request))
 
 @csrf_exempt
 def deleteCourse(request):
@@ -112,7 +112,7 @@ def deleteCourse(request):
                 addCourseForm = DeleteCourse(data=request.POST)
                 if deleteCourseData(addCourseForm,request.user):
                         return HttpResponseRedirect(lastPageToRedirect(request))
-        return lastPageToView(request)
+        return HttpResponseRedirect(lastPageToView(request))
 
 @csrf_exempt
 def addUnit(request):
@@ -120,7 +120,7 @@ def addUnit(request):
                 addUnitForm = AddUnitForm(data=request.POST)
                 if saveUnit(addUnitForm, request.user):
                         return HttpResponseRedirect(lastPageToRedirect(request))
-        return lastPageToView(request)
+        return HttpResponseRedirect(lastPageToView(request))
 
 @csrf_exempt
 def editUnit(request):
@@ -128,7 +128,7 @@ def editUnit(request):
                 unitForm = EditUnit(data=request.POST)
                 if saveUnit(unitForm,request.user):
                         return HttpResponseRedirect(lastPageToRedirect(request))
-        return lastPageToView(request)
+        return HttpResponseRedirect(lastPageToView(request))
 
 @csrf_exempt
 def deleteUnit(request):
@@ -136,7 +136,7 @@ def deleteUnit(request):
                 unitForm = DeleteUnit(data=request.POST)
                 if deleteUnitData(unitForm,request.user):
                         return HttpResponseRedirect(lastPageToRedirect(request))
-        return lastPageToView(request)
+        return HttpResponseRedirect(lastPageToView(request))
 
 
 @csrf_exempt
@@ -145,7 +145,7 @@ def addLesson(request):
                 addLessonForm = AddLessonForm(data=request.POST)
                 if saveLesson(addLessonForm, request.user):
                         return HttpResponseRedirect(lastPageToRedirect(request))
-        return lastPageToView(request)
+        return HttpResponseRedirect(lastPageToView(request))
 
 @csrf_exempt
 def editLesson(request):
@@ -153,7 +153,7 @@ def editLesson(request):
                 lessonForm = EditLesson(data=request.POST)
                 if saveLesson(lessonForm,request.user):
                         return HttpResponseRedirect(lastPageToRedirect(request))
-        return lastPageToView(request)
+        return HttpResponseRedirect(lastPageToView(request))
 
 @csrf_exempt
 def deleteLesson(request):
@@ -161,7 +161,7 @@ def deleteLesson(request):
                 lessonForm = DeleteLesson(data=request.POST)
                 if deleteLessonData(lessonForm,request.user):
                         return HttpResponseRedirect(lastPageToRedirect(request))
-        return lastPageToView(request)
+        return HttpResponseRedirect(lastPageToView(request))
 
 @csrf_exempt
 def addSection(request):
@@ -169,10 +169,16 @@ def addSection(request):
 		sectionForm = AddSectionForm(data=request.POST)
 		if saveSection(sectionForm, request.user):
 			return HttpResponseRedirect(lastPageToRedirect(request))
-	return lastPageToView(request)
+	return HttpResponseRedirect(lastPageToView(request))
 
+@csrf_exempt
 def addContent(request):
-        return lastPageToView(request)
+    	if request.method == 'POST':
+                contentForm = AddContentForm(data=request.POST)
+		
+                if saveContent(contentForm, request.user):
+                        return HttpResponseRedirect(lastPageToRedirect(request))
+	return HttpResponseRedirect(lastPageToView(request))
 
 
 def DeleteCourseRequest(request, course_id):
