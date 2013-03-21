@@ -79,6 +79,11 @@ class DeleteSection(forms.Form):
 	section_id = forms.CharField(label="")
 	section_id.widget = forms.HiddenInput()
 
+class DeleteContent(forms.Form):
+        content_id = forms.CharField(label="")
+        content_id.widget = forms.HiddenInput()
+
+
 class AddContentForm(forms.Form):
 	section_id = forms.CharField(label="")
 	section_id.widget = forms.HiddenInput()

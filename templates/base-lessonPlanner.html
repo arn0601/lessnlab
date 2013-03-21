@@ -30,6 +30,7 @@
           				 <b class="caret"></b>  
       					 </a>  
 		     			<ul class="dropdown-menu">
+						<li><a href="/courses/">Home</a></li> 
 		      				<li><a href="#">Profile</a></li> 
 							<li><a href="#">Network</a></li>
 		      				<li><a href="#">Settings</a></li>
@@ -121,7 +122,7 @@
 			<li><a href="javascript:void(0)" onClick="goToByScroll('overview')">Overview</a></li>
 			{% for section, content_list in sections.items %}
 			 {% with section.name as user_key %}
-  				<li><a href="javascript:void(0)" onClick="goToByScroll('{{ section.name }}_{{ section.placement }}')">{{ section_types|access:user_key }} </a></li>
+  				<li><a href="javascript:void(0)" onClick="goToByScroll('{{ section.id }}')">{{ section_types|access:user_key }} </a></li>
 
 			
     			
@@ -179,15 +180,45 @@
 {% endfor %}
 {% endfor %}
 
-<div class="modal hide" id="addContent{{ type }}">
+<div class="modal hide" id="deleteContent">
         <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">x</button>
-                <h3>Add Content - {{ type }} </h3>
+                <h3>Delete Content</h3>
+        </div>
+         <div class="modal-body">
+                <div>
+		Delete this content?
+                <form id="content_form" method="post" action="{% url LessonPlanner.views.deleteContent %}" name="deleteContent">
+                {% csrf_token %}
+                        {% for field in deleteContentForm %}
+                        <div class="control-group">
+                        {{ field.errors.as_text }}
+                                <label class="control-label">{{ field.label_tag }}</label>
+                                <div class="controls">
+                                {{ field }}
+                                </div>
+                         </div>
+                         {% endfor %}
+
+                        <p><button type="submit" class="btn btn-primary">Submit</button>
+                                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+                        </p>
+                </form>
+                </div>
+        </div>
+</div>
+
+
+
+<div class="modal hide" id="deleteSection">
+        <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">x</button>
+                <h3>Delete Section</h3>
         </div>
          <div class="modal-body">
                 <div>
 		Delete this section?
-                <form id="content_form" method="post" action="{% url LessonPlanner.views.deleteSection %}" name="deleteSection">
+                <form id="section_form" method="post" action="{% url LessonPlanner.views.deleteSection %}" name="deleteSection">
                 {% csrf_token %}
                         {% for field in deleteSectionForm %}
                         <div class="control-group">
@@ -211,7 +242,7 @@
 <div class="modal hide" id="addSection">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">x</button>
-    <h3>Add a Lesson</h3>
+    <h3>Add a Section</h3>
   </div>
   <div class="modal-body">
     <form method="post" action="{% url LessonPlanner.views.addSection %}" name="login_form">
@@ -342,18 +373,33 @@
 	<script>
 
 	$(".delete_section").click(function(){ // Click to only happen on announce links 
+		
 		var sid = $(this).data('sectionid');
 		var x=document.getElementsByTagName("form");
 		for(var i=0;i<x.length;i++)
                 {
                         var name = x[i].attributes["name"].value;
                         if(name.indexOf("deleteSection") === 0)
-                        {
+                        {	
                             x[i].section_id.value=sid               
                         }
                 }
                 $('#deleteSection').modal('show');
-	}
+	});
+	$(".delete_content").click(function(){ // Click to only happen on announce links 
+		var cid = $(this).data('contentid');
+		var x=document.getElementsByTagName("form");
+		
+		for(var i=0;i<x.length;i++)
+                {
+                        var name = x[i].attributes["name"].value;
+                        if(name.indexOf("deleteContent") === 0)
+                        {
+                            x[i].content_id.value=cid             
+                        }
+                }
+                $('#deleteContent').modal('show');
+	});
 	</script>
 
 </html>
