@@ -8,7 +8,7 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
-from accounts.models import UserProfile
+from accounts.models import TeacherProfile
 from datetime import datetime
 from django.utils.timezone import utc
 import simplejson
@@ -268,7 +268,7 @@ def saveContent(contentForm, request):
 
 def DeleteCourseRequest(request, course_id):
         uname = request.user.username
-        user = UserProfile.objects.get(user=request.user)
+        user = TeacherProfile.objects.get(user=request.user)
         user_courses =  Course.objects.filter(owner=user)
         course = Course.objects.get(id=course_id)
         deleteCourseForm = DeleteCourse()
@@ -278,7 +278,7 @@ def DeleteCourseRequest(request, course_id):
 
 def EditCourseRequest(request, course_id):
 	uname = request.user.username
-	user = UserProfile.objects.get(user=request.user)
+	user = TeacherProfile.objects.get(user=request.user)
         user_courses =  Course.objects.filter(owner=user)
 	course = Course.objects.get(id=course_id)
 	editCourseForm = EditCourse()	
@@ -290,7 +290,7 @@ def EditCourseRequest(request, course_id):
 
 def DeleteUnitRequest(request, unitID):
         uname = request.user.username
-        user = UserProfile.objects.get(user=request.user)
+        user = TeacherProfile.objects.get(user=request.user)
         user_courses =  Course.objects.filter(owner=user)
         unit = Unit.objects.get(id=unitID)
         deleteUnitForm = DeleteUnit()
@@ -301,7 +301,7 @@ def DeleteUnitRequest(request, unitID):
 
 def EditUnitRequest(request, unitID):
         uname = request.user.username
-        user = UserProfile.objects.get(user=request.user)
+        user = TeacherProfile.objects.get(user=request.user)
         user_courses =  Course.objects.filter(owner=user)
         unit = Unit.objects.get(id=unitID)
         editUnitForm = EditUnit()
@@ -315,7 +315,7 @@ def EditUnitRequest(request, unitID):
 
 def DeleteLessonRequest(request, lessonID):
         uname = request.user.username
-        user = UserProfile.objects.get(user=request.user)
+        user = TeacherProfile.objects.get(user=request.user)
         user_courses =  Course.objects.filter(owner=user)
         lesson = Lesson.objects.get(id=lessonID)
         deleteLessonForm = DeleteLesson()
@@ -326,7 +326,7 @@ def DeleteLessonRequest(request, lessonID):
 
 def EditLessonRequest(request, lessonID):
         uname = request.user.username
-        user = UserProfile.objects.get(user=request.user)
+        user = TeacherProfile.objects.get(user=request.user)
         user_courses =  Course.objects.filter(owner=user)
         lesson = Lesson.objects.get(id=lessonID)
         unit = lesson.unit
@@ -357,7 +357,7 @@ def saveCourse(addCourseForm, request_user):
 		course = Course()
 		if 'course_id' in addCourseForm.data:
 			course = Course.objects.get(id=addCourseForm.data['course_id'])
-		course.owner = UserProfile.objects.get(user=request_user)
+		course.owner = TeacherProfile.objects.get(user=request_user)
 		course.subject = addCourseForm.data['name']
 		course.department = addCourseForm.data['department']
 		course.year = str(addCourseForm.data['year'])
@@ -371,7 +371,7 @@ def saveUnit(addUnitForm, request_user):
 		unit = Unit()
 		if 'unit_id' in addUnitForm.data:
                         unit = Unit.objects.get(id=addUnitForm.data['unit_id'])
-		user = UserProfile.objects.get(user=request_user)
+		user = TeacherProfile.objects.get(user=request_user)
 		course_id = addUnitForm.data['course_id']
                 course = Course.objects.get(id=course_id)
                 slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
@@ -380,7 +380,7 @@ def saveUnit(addUnitForm, request_user):
 		unit.name = addUnitForm.data['name']
 		unit.description = addUnitForm.data['description']
 		unit.course = course
-		unit.owner = UserProfile.objects.get(user=request_user)
+		unit.owner = TeacherProfile.objects.get(user=request_user)
 		unit.week_length = addUnitForm.data['week_length']
 		tags_ = addUnitForm.data['tags']
 		separated_tags = tags_.split(',')
@@ -406,7 +406,7 @@ def saveLesson(addLessonForm, request_user):
                 unitID = addLessonForm.data['unit_id']
                 unit = Unit.objects.get(id=unitID)
 		lesson.description = addLessonForm.data['description']
-                lesson.owner = UserProfile.objects.get(user=request_user)
+                lesson.owner = TeacherProfile.objects.get(user=request_user)
 		lesson.unit = unit
                 lesson.save()
 		return True

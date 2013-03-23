@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import UserProfile
+from accounts.models import TeacherProfile
 from Standards.models import Standard
 
 
@@ -18,7 +18,7 @@ class Tag(models.Model):
 	tagname = models.CharField(max_length=32)
 
 class Course(models.Model):
-	owner = models.ForeignKey('accounts.UserProfile')
+	owner = models.ForeignKey('accounts.TeacherProfile')
 	department = models.CharField(max_length=32)
 	subject = models.CharField(max_length=32)
 	year = models.PositiveIntegerField()
@@ -28,7 +28,7 @@ class Unit(models.Model):
 	description = models.TextField()
 	assessment_type = models.ManyToManyField(AssessmentType)
 	course = models.ForeignKey('Course')
-	owner = models.ForeignKey('accounts.UserProfile')
+	owner = models.ForeignKey('accounts.TeacherProfile')
 	parent_unit = models.ForeignKey('self', null=True)
 	standards = models.ManyToManyField('Standards.Standard')
 	tags = models.ManyToManyField(Tag)
@@ -38,7 +38,7 @@ class Unit(models.Model):
 class Lesson(models.Model):
 	name = models.CharField(max_length=30)
 	unit = models.ForeignKey(Unit)
-	owner = models.ForeignKey('accounts.UserProfile')
+	owner = models.ForeignKey('accounts.TeacherProfile')
 	tags = models.TextField()
 	description = models.TextField()
 	standards = models.ManyToManyField('Standards.Standard')

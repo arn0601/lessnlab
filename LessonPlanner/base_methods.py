@@ -7,7 +7,7 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
-from accounts.models import UserProfile
+from accounts.models import TeacherProfile
 import simplejson
 
 def getStandardsList(course, user):
@@ -18,7 +18,7 @@ def getStandardsList(course, user):
 
 def createBaseDict(request):
 	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm) = returnBlankForms()
-	user = UserProfile.objects.get(user=request.user)
+	user = TeacherProfile.objects.get(user=request.user)
 
 	#get all courses associated with the user
 	user_courses =  Course.objects.filter(owner=user)
