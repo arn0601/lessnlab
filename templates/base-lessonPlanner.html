@@ -6,9 +6,14 @@
     <title>LessnLab - Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-    <link href="/static/bootstrap.css" rel="stylesheet" media="screen">
-	<link href="/static/styles.css" rel="stylesheet" media="screen">		 	 
-	</style>
+<link href="/static/bootstrap.css" rel="stylesheet" media="screen">
+<link href="/static/styles.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="http://blueimp.github.com/cdn/css/bootstrap.min.css">
+<link rel="stylesheet" href="/static/bootstrap-image-gallery.css">	
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script src="/static/bootstrap.js"></script>
+
+
 	<script type="text/javascript"> <!-- scroll jquery -->
 		function goToByScroll(id){
  			$('html,body').animate({scrollTop: $("#"+id).offset().top},1000);
@@ -16,7 +21,13 @@
 	</script>
 	
   </head>
+
   <body style="padding-top:40px;">
+
+
+
+<script src="http://blueimp.github.com/JavaScript-Load-Image/load-image.min.js"></script>
+
   <div class="navbar navbar-fixed-top navcolor">
     <div class="navbar-inner">
   	   <div class="row-fluid">
@@ -108,6 +119,19 @@
 				{% endif %}
 
 
+	
+		  	<ul class="nav" style="padding-left: 200px;">
+
+
+
+
+<a id="button1" class=btn btn-primary btn-mini" href="#" onclick='$
+("a.fancygallery").trigger("click");'>Presentation Mode</a>
+
+
+			</ul>
+
+
    				</ul>
 		 </div>	
 			
@@ -179,6 +203,7 @@
 </div>
 {% endfor %}
 {% endfor %}
+
 
 <div class="modal hide" id="deleteContent">
         <div class="modal-header">
@@ -345,10 +370,8 @@
 </div>
 </body>
 <!-- Javascript -->
-    <script src="http://code.jquery.com/jquery.js"></script>
-    <script src="/static/bootstrap.js"></script>
-	<script>
-	
+
+<script>
 	   $(".content_show").click(function(){ // Click to only happen on announce links 
 		var sid = $(this).data('sectionid'); 
 		var ct = $(this).data('contenttype'); 
@@ -365,12 +388,10 @@
 			  	}
 			}
 		}
+
 		$('#addContent'+ct).modal('show');
 	   });
 
-	</script>
-
-	<script>
 
 	$(".delete_section").click(function(){ // Click to only happen on announce links 
 		

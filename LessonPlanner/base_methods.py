@@ -102,9 +102,11 @@ def getLessonSpecificInfo(lesson):
 				content_list.append(content.teachernotecontent)
 			elif (content.content_type == 'AdministratorNote'):
 				content_list.append(content.administratornotecontent)
+ 			elif (content.content_type == 'Assessment'):
+                                content_list.append(content.assessmentcontent)
 
 		section_dict[section] = content_list
-	
+	print "HEY",section_dict
 	add_content_form_dict = getAddContentForms(str(-1))
 	return { 'sections' : section_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
 
@@ -141,6 +143,11 @@ def getAddContentForms(section_id):
 	administrator_note.fields['content_type'].initial = 'AdministratorNote'
 	administrator_note.fields['section_id'].initial = section_id
 	content_form_dict['General']['AdministratorNote'] = administrator_note
+
+	assessment_form = AddAssessmentContent()
+        assessment_form.fields['content_type'].initial = 'Assessment'
+        assessment_form.fields['section_id'].initial = section_id
+        content_form_dict['Assessment']['Assessment'] = assessment_form
 
 	print "print",content_form_dict
 	return content_form_dict
