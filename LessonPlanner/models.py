@@ -5,7 +5,7 @@ from Standards.models import Standard
 
 SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
 
-CONTENTTYPE = (('Text','Text'),('OnlineVideo','OnlineVideo'),('OnlineArticle','OnlineArticle'),('OnlinePicture','OnlinePicture'),('TeacherNote','TeacherNote'),('AdministratorNote','AdministratorNote'))
+CONTENTTYPE = (('Text','Text'),('OnlineVideo','OnlineVideo'),('OnlineArticle','OnlineArticle'),('OnlinePicture','OnlinePicture'),('TeacherNote','TeacherNote'),('AdministratorNote','AdministratorNote'),('Assessment','Assessment'))
 
 ASSESSMENTTYPE = ((1, 'Quiz'), (2, 'Unit Test'), (3, 'Complex Performance Task'), (4, 'Peer Eval'), (5, 'Presentation/Project'), (6, 'Other'))
 
@@ -74,3 +74,26 @@ class AdministratorNoteContent(Content):
 
 class OnlinePictureContent(Content):
 	link = models.CharField(max_length=256)
+
+class AssessmentContent(Content):
+        title = models.CharField(max_length=256)
+
+class Question(models.Model):
+	question = models.CharField(max_length=256)
+	assessment =  models.ForeignKey(AssessmentContent)
+	
+class Answer(models.Model):
+	owner = models.ForeignKey('accounts.UserProfile')
+	assessment =  models.ForeignKey(Question)
+	
+class FreeResponseAnswer(Answer):
+	answer = models.CharField(max_length=256)
+
+
+	
+	
+
+
+
+
+

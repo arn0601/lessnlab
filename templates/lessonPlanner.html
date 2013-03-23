@@ -8,8 +8,11 @@
 
 
 <div class="row-fluid">
-	<div class="span10" style="padding-left: 10px;">
+	<div class="span10" style="padding-left: 35px;">
 		<div class="row sectionheader" id="overview">
+
+
+
 			1. Lesson Overview
 		</div>
 		<div class="row overviewsectionnav">
@@ -66,7 +69,22 @@
 						src="{{ content.link }}">
 					</iframe>
 				{% elif content.content_type == "Text" %}
-						{{ content.text }}					
+					<div>	{{ content.text }} </div>
+				{% elif content.content_type == "PowerPoint" %}
+						
+					<iframe src="http://docs.google.com/gview?url={{ content.link }}" style="width:300px; height:300px;" frameborder="0"></iframe>
+				{% elif content.content_type == "Assessment" %}
+					<div>	{{ content.title }}
+
+<a class="btn btn-primary btn-small" type="button" href="?content_id={{ content.id }}&action=Edit">Edit</a>
+					
+					<div>
+					<a id="delete_content" data-contentid="{{ content.id }}" 
+					class="btn btn-primary btn-mini delete_content" href="#">Delete Content</a>
+					</div>	
+
+					</div>	
+				
 				{% else %}
 					OTHER CONTENT - Need to define template
 				{% endif %}
@@ -79,7 +97,7 @@
 				
 			{% endfor %}
 
-<iframe src="http://docs.google.com/gview?url=http://psychology.ucdavis.edu/Simonton/MxAgCrProd.ppt&embedded=true" style="width:600px; height:500px;" frameborder="0"></iframe>
+
 
 			<div class="row sectionnav">
 			<div class="span2">
@@ -113,15 +131,18 @@
 				</ul>
 			</div> 
 		</div><!-- End Introduction Section -->
-			
-
-		{% for content_list in sections|access:section %}
-		{% endfor %}
 		{% endfor %}
 		
 	</div>
 </div>
 </div>
+
+
+<script>
+
+
+</script>
+
 <!--
   <script>
 

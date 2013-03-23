@@ -46,6 +46,10 @@ def showLesson(request):
 
 def showLessonPlanner(request):
 	base_dict = base_methods.createBaseDict(request)
+	action = request.GET.get('action') 
+	if action == "Edit":
+        	return EditContentRequest(request, base_dict['content'].id)
+	base_dict = base_methods.createBaseDict(request)
 	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
 	base_dict.update(lesson_info)
 	delete_section_form = DeleteSection()
@@ -253,7 +257,13 @@ def saveContent(contentForm, request):
 				content.text = administrator_note_form.data['text']
 				return (True, content)
 			return (False, None)
-
+		if (content_type == 'Assessment'):
+                        assessment_form = AddAssessmentContent(data=request.POST)
+                        if assessment_form.is_valid():
+                                content = AssessmentContent()
+                                content.title = assessment_form.data['title']
+                                return (True, content)
+                        return (False, None)
 	return (False, None);
 
 def DeleteCourseRequest(request, course_id):
@@ -326,6 +336,20 @@ def EditLessonRequest(request, lessonID):
         editLessonForm.fields["unit_id"].initial = unit.id
         editLessonForm.fields["name"].initial = lesson.name
         return render_to_response('lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1})
+
+def EditContentRequest(request, contentID):
+        uname = request.user.username
+        user = UserProfile.objects.get(user=request.user)
+        user_courses =  Course.objects.filter(owner=user)
+        lesson = Lesson.objects.get(id=lessonID)
+        unit = lesson.unit
+        unit_lessons =  Lesson.objects.filter(unit=lesson.unit)
+        editLessonForm = EditLesson()
+        editLessonForm.fields["lesson_id"].initial = lesson.id
+        editLessonForm.fields["unit_id"].initial = unit.id
+        editLessonForm.fields["name"].initial = lesson.name
+        return render_to_response('lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1})
+
 
 
 def saveCourse(addCourseForm, request_user):

@@ -108,3 +108,7 @@ class AddAdministratorNoteContent(AddContentForm):
 class AddOnlinePictureContent(AddContentForm):
         link = forms.CharField(label="Link")
 
+class AddAssessmentContent(AddContentForm):
+        title = forms.CharField(label="Title")
+
+
