@@ -176,4 +176,4 @@ EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 LOGIN_URL = "/login/"
 
-LOGIN_EXEMPT_URLS = ( r'^accounts/register/', )
+LOGIN_EXEMPT_URLS = ( r'^accounts/registerTeacher/', )
