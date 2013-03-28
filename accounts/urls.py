@@ -8,6 +8,8 @@ from registration.views import register
 from accounts.forms import *
 
 urlpatterns = patterns('',
-	url(r'^register/$',accounts.views.register,{'backend':'registration.backends.simple.SimpleBackend', 'form_class' : TeacherRegistrationForm, 'success_url': '/courses/' },name='accounts.views.register'),
+	url(r'^registerTeacher/$',accounts.views.registerTeacher,{'backend':'registration.backends.simple.SimpleBackend', 'form_class' : TeacherRegistrationForm, 'success_url': '/courses/', 'template_name': 'registration/registration_teacher.html' },name='accounts.views.registerTeacher'),
+
+	url(r'^registerStudent/$',accounts.views.registerStudent,{'backend':'registration.backends.simple.SimpleBackend', 'form_class' : UserProfileRegistrationForm, 'success_url': '/courses/', 'template_name': 'registration/registration_student.html' },name='accounts.views.registerStudent'),
 
 )

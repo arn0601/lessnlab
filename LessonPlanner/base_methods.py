@@ -1,3 +1,5 @@
+
+from django.core.exceptions import *
 from django.template import RequestContext
 from LessonPlanner.models import Lesson
 from LessonPlanner.models import *
@@ -7,7 +9,7 @@ from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
-from accounts.models import TeacherProfile
+from accounts.models import TeacherProfile, StudentProfile
 import simplejson
 
 def getStandardsList(course, user):
@@ -18,8 +20,10 @@ def getStandardsList(course, user):
 
 def createBaseDict(request):
 	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm) = returnBlankForms()
-	user = TeacherProfile.objects.get(user=request.user)
-
+	try:
+		user = TeacherProfile.objects.get(user=request.user)
+        except TeacherProfile.DoesNotExist:
+		user = StudentProfile.objects.get(user=request.user)
 	#get all courses associated with the user
 	user_courses =  Course.objects.filter(owner=user)
 	
