@@ -13,12 +13,15 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', #django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'lab',                      # Or path to database file if using sqlite3.
-        'USER': 'dab',                      # Not used with sqlite3.
-        'PASSWORD': 'admin',                  # Not used with sqlite3.
+        'ENGINE': 'django.db.backends.mysql', #django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
 
-	'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+
+
+
+        'NAME': 'django',                      # Or path to database file if using sqlite3.
+        'USER': 'admin',                      # Not used with sqlite3.
+        'PASSWORD': 'admin',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
@@ -175,5 +178,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 LOGIN_URL = "/login/"
-
 LOGIN_EXEMPT_URLS = ( r'^accounts/register/', )
