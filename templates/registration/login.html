@@ -132,7 +132,9 @@
 	<div class="loginlinks">
            <span><a href="{% url auth_password_reset %}">Forgot Password?</a></span>
            <span class="logindivider">|</span>
-           <span> <a href="{% url registration_register %}">Register</a> </span>
+           <span> <a href="{% url accounts.views.registerTeacher%}">Register Teacher</a> </span>
+        <span class="logindivider">|</span>
+           <span> <a href="{% url accounts.views.registerStudent%}">Register Student</a> </span>
        </div>
       </form>
     </div>
