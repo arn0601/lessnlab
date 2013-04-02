@@ -53,7 +53,10 @@
             </div>
                 </div>
     {% endfor %}
-     <p><button type="submit" class="btn btn-primary">Update</button>
+	 
+    <p>
+	<input type="hidden" value={{ selectedUnit }} name="selectedUnit">
+	<button type="submit" class="btn btn-primary">Update</button>
         <a class="btn btn-primary" type="button" href="/units/?course_id={{ course_id }}">Cancel</a>
       </p>
     </form>

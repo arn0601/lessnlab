@@ -5,13 +5,12 @@ from LessonPlanner.models import Course
 # Create your models here.
 
 class Objective(models.Model):
-	name = models.CharField(max_length=32)
+	description = models.CharField(max_length=64)
 	standard = models.ForeignKey('Standards.Standard')
 	owner = models.ForeignKey('accounts.TeacherProfile')
-	course = models.ForeignKey('LessonPlanner.Course') 
-	creationDate = models.DateField()
-	parentObjective = models.ForeignKey('self')
-	childrenOnjectives = models.ManyToManyField('self')
+	creation_date = models.DateField()
+	parent_objective = models.ForeignKey('self')
+	children_objectives = models.ManyToManyField('self')
 	description = models.TextField()
 	rating = models.PositiveIntegerField()
 

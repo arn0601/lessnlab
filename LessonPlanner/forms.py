@@ -1,79 +1,53 @@
 from django import forms
+from django.forms.extras.widgets import SelectDateWidget
 from LessonPlanner.models import *
 
-class AddCourse(forms.Form):
-	
-	name = forms.CharField(label='Course Name')
-	department = forms.CharField(label='Department')
-	year = forms.IntegerField(label='Year')
+class AddCourse(forms.ModelForm):
+	class Meta:
+		model = Course
+		widgets = { 'owner': forms.HiddenInput(), 'start_date': SelectDateWidget(years=range(2000,1939,-1)), 'end_date': SelectDateWidget(years=range(2000,1939,-1)) }
 
-
-class EditCourse(forms.Form):
-        course_id = forms.CharField(label="")
-	course_id.widget = forms.HiddenInput()
-        name = forms.CharField(label='Course Name')
-        department = forms.CharField(label='Department')
-        year = forms.IntegerField(label='Year')
+class EditCourse(forms.ModelForm):
+	class Meta:
+		model = Course
+		widgets = { 'owner': forms.HiddenInput(), 'start_date': SelectDateWidget(years=range(2000,1939,-1)), 'end_date': SelectDateWidget(years=range(2000,1939,-1)) }
 
 class DeleteCourse(forms.Form):
         course_id = forms.CharField(label="")
         course_id.widget = forms.HiddenInput()
 
-class AddUnitForm(forms.Form):
-	name = forms.CharField(label='Unit Name')
-	description = forms.CharField(widget=forms.Textarea, label='Description')
-	week_length = forms.IntegerField(label='Number of weeks')		
-	assessments = forms.MultipleChoiceField(label='Assessment Type', choices=ASSESSMENTTYPE, widget=forms.CheckboxSelectMultiple(),required=False)
-	tags = forms.CharField(label='Tags',required=False)
-	course_id = forms.CharField(label="")
-        course_id.widget = forms.HiddenInput()
-	standards = forms.MultipleChoiceField(label='Standards', widget=forms.SelectMultiple(), required=False)
+class AddUnitForm(forms.ModelForm):
+	class Meta:
+		model = Unit
+		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': SelectDateWidget(years=range(2000,1939,-1)), 'end_date': SelectDateWidget(years=range(2000,1939,-1)), 'parent_unit': forms.HiddenInput() }
 
-	'''def __init__(self, *args, **kwargs):
-		standard_choices = kwargs.pop('standard_choices', None)
-		super(AddUnitForm, self).__init__(*args, **kwargs)
-		if standard_choices:
-			self.fields['standards'].choices=standard_choices
-	'''
-
-class EditUnit(forms.Form):
-	unit_id = forms.CharField(label="")
-        unit_id.widget = forms.HiddenInput()
-	name = forms.CharField(label='Unit Name')
-        description = forms.CharField(widget=forms.Textarea, label='Description')
-        week_length = forms.IntegerField(label='Number of weeks')
-        assessments = forms.MultipleChoiceField(label='Assessment Type', choices=ASSESSMENTTYPE, widget=forms.CheckboxSelectMultiple(), required=False)
-        tags = forms.CharField(label='Tags',required=False)
-        course_id = forms.CharField(label="")
-        course_id.widget = forms.HiddenInput()
+class EditUnit(forms.ModelForm):
+	class Meta:
+		model = Unit
+		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': SelectDateWidget(years=range(2000,1939,-1)), 'end_date': SelectDateWidget(years=range(2000,1939,-1)), 'parent_unit': forms.HiddenInput() }
 
 class DeleteUnit(forms.Form):
         unit_id = forms.CharField(label="")
         unit_id.widget = forms.HiddenInput()
 
-class AddLessonForm(forms.Form):
-        name = forms.CharField(label='Lesson Name')
-	description = forms.CharField(widget=forms.Textarea, label='Description')
-        unit_id = forms.CharField(label="")
-        unit_id.widget = forms.HiddenInput()
+class AddLessonForm(forms.ModelForm):
+	class Meta:
+		model = Lesson
+		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput() }
 
-class EditLesson(forms.Form):
-        lesson_id = forms.CharField(label="")
-        lesson_id.widget = forms.HiddenInput()
-	name = forms.CharField(label='Unit Name')
-	description = forms.CharField(widget=forms.Textarea, label='Description')
-	unit_id = forms.CharField(label="")
-        unit_id.widget = forms.HiddenInput()
+class EditLesson(forms.ModelForm):
+	class Meta:
+		model = Lesson
+		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput() }
 
 class DeleteLesson(forms.Form):
         lesson_id = forms.CharField(label="")
         lesson_id.widget = forms.HiddenInput()
 
-class AddSectionForm(forms.Form):
-	lesson_id = forms.CharField(label="")
-	lesson_id.widget = forms.HiddenInput()
-	name = forms.ChoiceField(label="Section Type", choices=SECTIONTYPE)	
-	description = forms.CharField(label='Description', max_length=256, widget=forms.Textarea)
+class AddSectionForm(forms.ModelForm):
+	class Meta:
+		model = Section
+		widgets = { 'lesson': forms.HiddenInput() , 'owner': forms.HiddenInput(), 'placement': forms.HiddenInput(), 'creation_date': forms.HiddenInput() }
 
 class DeleteSection(forms.Form):
 	section_id = forms.CharField(label="")
