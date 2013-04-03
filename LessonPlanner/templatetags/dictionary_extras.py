@@ -9,11 +9,8 @@ def isdict(value):
 
 @register.filter(name='access')
 def access(value, arg):
-	print value
-	
 	if isinstance(value.get(arg),dict):
 		new_dict = {}
-		print 'it is a dictionary'
 		for key in value[arg].keys():
 			new_dict[key] = value[arg][key]
 		return new_dict

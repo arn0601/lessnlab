@@ -23,7 +23,7 @@
 		<div style="height: 100%">
 			{% include "navbar.html" %}
 			<div class="row-fluid" style="">
-				<div class="span2 noborderunitbox" id="leftnav">
+				<div class="span2 rightunitbox" id="leftnav">
 					<ul class="nav nav-pills nav-stacked" id="navbar">
 						<li><a href="javascript:void(0)" onClick="goToByScroll('overview')">Overview</a></li>
 						{% for section, content_list in sections.items %}

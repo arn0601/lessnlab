@@ -89,6 +89,7 @@ def createBaseDict(request):
 def getLessonSpecificInfo(lesson):
 	lesson_sections = Section.objects.filter(lesson=lesson)
 	section_dict = {}
+	assessment_dict = {}
 	add_content_form_dict = {}
 	for section in lesson_sections:
 		content_list = []
@@ -108,11 +109,16 @@ def getLessonSpecificInfo(lesson):
 				content_list.append(content.administratornotecontent)
  			elif (content.content_type == 'Assessment'):
                                 content_list.append(content.assessmentcontent)
-
+				questions = Question.objects.filter(assessment = content.assessmentcontent)
+				question_answer_map = {}
+				for q in questions:
+					a = FreeResponseAnswer.objects.get(question = q)
+					question_answer_map[q] = a
+				assessment_dict[content.assessmentcontent.id] = question_answer_map
 		section_dict[section] = content_list
-	print "HEY",section_dict
 	add_content_form_dict = getAddContentForms(str(-1))
-	return { 'sections' : section_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
+	print section_dict
+	return { 'sections' : section_dict,  'assessment_dict':assessment_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
 
 def getAddContentForms(section_id):
 	
@@ -153,7 +159,6 @@ def getAddContentForms(section_id):
         assessment_form.fields['section_id'].initial = section_id
         content_form_dict['Assessment']['Assessment'] = assessment_form
 
-	print "print",content_form_dict
 	return content_form_dict
 
 

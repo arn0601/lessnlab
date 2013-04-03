@@ -1,6 +1,7 @@
  
 			body {
-				height:500px;
+				
+				height:100%;
 			}
 	
 		   .navtitle{
@@ -51,6 +52,10 @@
 				padding-left:10px;
 			 	height: 100%;
 			 }
+			 div #holder{
+                            height: 100%;
+                            position:relative;
+                        }
 			 
 			  .unitbox {
 			 	
@@ -69,7 +74,54 @@
 			 	border-left-style: solid;
 			 	padding-left: 10px;
 			 }
-			 
+			.noborderunitbox {
+
+                                height:20%px;
+                                width: 100%;
+                                padding-top: 10px;
+                                padding-bottom: 30px;
+                                vertical-align: middle;
+                                font-size: 10pt;
+                                text-align: justify;
+                                padding-left: 10px;
+                         }
+			.rightunitbox {
+				height: 20%px;
+				width: 100%;
+				padding-top: 10px;
+				padding-bottom: 0px;
+				vertical-align: middle;
+				font-size: 10pt;
+				text-align: justify;
+				border-top-width: 1px;
+				border-top-color: #C8C8C8;
+				border-top-style: solid;
+				border-right-width: 1px;
+				border-right-color: #C8C8C8;
+				border-right-style: solid;
+				padding-left: 10px;
+				}
+			.leftunitbox {
+                                height: 20%px;
+                                width: 100%;
+                                padding-top: 10px;
+                                padding-bottom: 0px;
+                                vertical-align: middle;
+                                font-size: 10pt;
+                                text-align: justify;
+                                border-top-width: 1px;
+                                border-top-color: #C8C8C8;
+                                border-top-style: solid;
+                                border-left-width: 1px;
+                                border-left-color: #C8C8C8;
+                                border-left-style: solid;
+                                padding-left: 10px;
+                                }
+	
+			div #holder{
+			    height: 100%;
+			    position:relative;
+			} 
 			 .footer {
 			 
 			 	background-color: #efefef;
@@ -77,10 +129,10 @@
 				border-top-style:solid;
 				border-top-color:#c8c8c8;
 				height: 50px;
-				padding: 10px;
+				padding: 0px;
 				vertical-align: middle;
-				position: relative;
-				top: 100%;
+				position: fixed;
+				bottom: 0;
 			 }
 			 
 			 .rightnavheader{

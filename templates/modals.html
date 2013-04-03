@@ -1,0 +1,197 @@
+	<div class="modal hide" id="addLesson">
+  	<div class="modal-header">
+  	  <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a Lesson</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addLesson %}" name="login_form">
+        {% csrf_token %}
+        {% for field in lessonAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+</div>
+
+
+
+<div class="modal hide" id="addUnit">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a Unit</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addUnit %}" name="login_form">
+        {% csrf_token %}
+        {% for field in unitAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+		{{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+</div>
+
+<div class="modal hide" id="addCourse">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a course</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addCourse %}" name="login_form">
+	{% csrf_token %}
+	{% for field in courseAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+   		</div>
+    {% endfor %}
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+		<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+</div>
+
+<div class="modal hide" id="addLesson">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a Lesson</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addLesson %}" name="login_form">
+        {% csrf_token %}
+        {% for field in lessonAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+</div>
+
+
+
+<div class="modal hide" id="addSection">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a Section</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addSection %}" name="login_form">
+        {% csrf_token %}
+        {% for field in sectionAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+</div>
+
+
+ {% for header,nested in section_content_forms.items  %}
+ {% for type,contentAddForm in nested.items %}
+<div class="modal hide" id="addContent{{ type }}">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">x</button>
+	    	<h3>Add Content - {{ type }} </h3>
+	</div>
+	 <div class="modal-body">
+		<div>
+    		<form id="content_form" method="post" action="{% url LessonPlanner.views.addContent %}" name="c_{{ type }}">
+		{% csrf_token %}
+			{% for field in contentAddForm %}
+		 	<div class="control-group">
+			{{ field.errors.as_text }}
+				<label class="control-label">{{ field.label_tag }}</label>
+			    	<div class="controls">
+				{{ field }}
+			    	</div>
+			 </div>
+			 {% endfor %}
+			<p>
+			{% if type == "Assessment" %}
+				<button type="button" id="addFR"  class="btn btn-primary">Add free response</button>
+				<button type="button" id="addMC"  class="btn btn-primary">Add multiple choice</button>
+			{% endif %}
+			</p>
+		     	<p>
+
+
+				<button type="submit" class="btn btn-primary">Submit</button>
+				<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+			</p>
+		</form>
+  		</div>
+	</div>
+</div>
+{% endfor %}
+{% endfor %}
+
+<div class="modal hide" id="deleteSection">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal">x</button>
+	  <h3>Delete Section</h3>
+	</div>
+  <div class="modal-body">
+    <div>
+			Delete this section?
+		  <form id="section_form" method="post" action="{% url LessonPlanner.views.deleteSection %}" name="deleteSection">
+		 		{% csrf_token %}
+        {% for field in deleteSectionForm %}
+        <div class="control-group">
+        	{{ field.errors.as_text }}
+          <label class="control-label">{{ field.label_tag }}</label>
+          <div class="controls">
+          {{ field }}
+          </div>
+        </div>
+        {% endfor %}
+				<p>
+					<button type="submit" class="btn btn-primary">Submit</button>
+					<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+				</p>
+		  </form>
+    </div>
+	</div>
+</div>
+

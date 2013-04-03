@@ -3,7 +3,7 @@
 <!DOCTYPE html>
 {% block content %}
 {% for course in userCourses %}
-         <div class="noborderunitbox" id="u1">
+         <div class="unitbox" id="u1">
        <a href="/units/?course_id={{ course.id }}" ><h4>{{ course.subject }}</h4></a>
 	 <p><b>Department:</b>
 	{{ course.department }}

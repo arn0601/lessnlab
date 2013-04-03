@@ -19,7 +19,7 @@
 {% block rightnav %}
 	<div class="row-fluid">
 		<div class="span12 rightnavsubheader">
-			<h4>Unit Lessons</h4>
+			<h4 class="page-header">Unit Lessons</h4>
 		</div>
 	</div>
 	<div class="row-fluid">

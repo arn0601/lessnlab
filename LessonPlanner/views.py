@@ -48,7 +48,8 @@ def showLessonPlanner(request):
 	base_dict = base_methods.createBaseDict(request)
 	action = request.GET.get('action') 
 	if action == "Edit":
-        	return EditContentRequest(request, base_dict['content'].id)
+		content_id = request.GET.get('content_id')
+        	return EditContentRequest(request, content_id)
 	base_dict = base_methods.createBaseDict(request)
 	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
 	base_dict.update(lesson_info)
@@ -56,7 +57,6 @@ def showLessonPlanner(request):
 	delete_content_form = DeleteContent()
 	base_dict['deleteSectionForm'] = delete_section_form
 	base_dict['deleteContentForm'] = delete_content_form
-	print "LessonInfo",lesson_info
 	request.session['last_page'] = '/lessonPlanner/?lesson_id='+str(base_dict['lesson'].id)
 	
 	return render_to_response('lessonPlanner.html', base_dict)
@@ -199,8 +199,8 @@ def addSection(request):
 @csrf_exempt
 def addContent(request):
     	if request.method == 'POST':
-                contentForm = AddContentForm(data=request.POST)
-                (success, content) =  saveContent(contentForm, request)
+		contentForm = AddContentForm(data=request.POST)
+                (success, content, fields) =  saveContent(contentForm, request)
 		if success:
 			section = Section.objects.get(id=int(contentForm.data['section_id']))
 			content.section = section
@@ -209,6 +209,11 @@ def addContent(request):
 			section_content = Content.objects.filter(section=section)
 			content.placement = len(section_content)+1
 			content.save()
+			for q,a in fields.items():
+				q.assessment = content
+				q.save()
+				a.question = q
+				a.save()
                         return HttpResponseRedirect(lastPageToRedirect(request))
 	return HttpResponseRedirect(lastPageToView(request))
 
@@ -258,11 +263,28 @@ def saveContent(contentForm, request):
 				return (True, content)
 			return (False, None)
 		if (content_type == 'Assessment'):
-                        assessment_form = AddAssessmentContent(data=request.POST)
+                        assessment_form = AddAssessmentContent(data=request.POST,extra=request.POST.get('extra_field_count'))
                         if assessment_form.is_valid():
                                 content = AssessmentContent()
                                 content.title = assessment_form.data['title']
-                                return (True, content)
+				fields = assessment_form.data['extra_field_count']
+				questionAnswerMap = {}
+				print "num",fields
+				for index in range(0,int(fields),2):
+					print "Index",index
+					qData = assessment_form.data['extra_field_{index}'.format(index=index)]
+					aData = assessment_form.data['extra_field_{index}'.format(index=index+1)]
+					user = TeacherProfile.objects.get(user=request.user)
+					q = Question()
+					q.question = qData
+					q.owner = user
+					a = FreeResponseAnswer()
+					a.answer = aData
+					a.owner = user
+					questionAnswerMap[q] = a
+					print "Added",q,a
+                                return (True, content,questionAnswerMap)
+			print assessment_form.errors
                         return (False, None)
 	return (False, None);
 
@@ -341,10 +363,11 @@ def EditContentRequest(request, contentID):
         uname = request.user.username
         user = UserProfile.objects.get(user=request.user)
         user_courses =  Course.objects.filter(owner=user)
-        lesson = Lesson.objects.get(id=lessonID)
+        content = Content.objects.get(id=contentID)
+	lesson = content.lesson
         unit = lesson.unit
         unit_lessons =  Lesson.objects.filter(unit=lesson.unit)
-        editLessonForm = EditLesson()
+        editLessonForm = EditContent()
         editLessonForm.fields["lesson_id"].initial = lesson.id
         editLessonForm.fields["unit_id"].initial = unit.id
         editLessonForm.fields["name"].initial = lesson.name
@@ -367,7 +390,6 @@ def saveCourse(addCourseForm, request_user):
 
 def saveUnit(addUnitForm, request_user):
 	if addUnitForm.is_valid():
-		print "creating unit"
 		unit = Unit()
 		if 'unit_id' in addUnitForm.data:
                         unit = Unit.objects.get(id=addUnitForm.data['unit_id'])
@@ -391,7 +413,6 @@ def saveUnit(addUnitForm, request_user):
 		for s in addUnitForm.cleaned_data['standards']:
 			standard_id = int(s)
 			standard = Standard.objects.get(id=standard_id)
-			print standard
 			unit.standards.add(standard)
 		return True
 	print addUnitForm.errors
@@ -415,6 +436,7 @@ def saveLesson(addLessonForm, request_user):
         return False
 
 def saveSection(addSectionForm, request_user):
+	print "savingSection"
 	if addSectionForm.is_valid():
 		section = Section()
 		lesson = Lesson.objects.get(id=addSectionForm.data['lesson_id'])
@@ -426,6 +448,7 @@ def saveSection(addSectionForm, request_user):
 		section.description = addSectionForm.data['description']
 		section.creation_date = datetime.utcnow().replace(tzinfo=utc)
 		section.save()
+		print "Saved"
 		return True
 	print "invalid form - section"
 	print addSectionForm.errors
@@ -444,21 +467,18 @@ def deleteUnitData(unitForm, request_user):
         return False;
 
 def deleteLessonData(lessonForm, request_user):
-	print lessonForm.data
         if 'lesson_id' in lessonForm.data:
                 Lesson.objects.get(id=lessonForm.data['lesson_id']).delete()
                 return True;
         return False;
 
 def deleteSectionData(sectionForm, request_user):
-	print sectionForm.data
 	if 'section_id' in sectionForm.data:
 		Section.objects.get(id=sectionForm.data['section_id']).delete()
 		return True
 	return False
 
 def deleteContentData(contentForm, request_user):
-        print contentForm.data
         if 'content_id' in contentForm.data:
                 Content.objects.get(id=contentForm.data['content_id']).delete()
                 return True
