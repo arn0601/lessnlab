@@ -61,7 +61,9 @@
             </div>
                 </div>
     {% endfor %}
-     <p><button type="submit" class="btn btn-primary">Update</button>
+     <p>
+	<input type="hidden" value={{ selectedLesson }} name="selectedLesson">
+<button type="submit" class="btn btn-primary">Update</button>
         <a class="btn btn-primary" type="button" href="/lessons/?unit_id={{ unitID }}">Cancel</a>
       </p>
     </form>

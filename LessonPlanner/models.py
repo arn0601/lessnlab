@@ -18,22 +18,35 @@ class Tag(models.Model):
 	tagname = models.CharField(max_length=32)
 
 class Course(models.Model):
+	name = models.CharField(max_length=32)
 	owner = models.ForeignKey('accounts.TeacherProfile')
 	department = models.CharField(max_length=32)
 	subject = models.CharField(max_length=32)
-	year = models.PositiveIntegerField()
+	grade = models.CharField(max_length=16)
+	start_date = models.DateField()
+	end_date = models.DateField()
+
+class StandardsGroup(models.Model):
+	course = models.ForeignKey('Course')
+	standard = models.ForeignKey('Standards.Standard')
+	creation_date = models.DateField()
 
 class Unit(models.Model):
 	name = models.CharField(max_length=32)
 	description = models.TextField()
-	assessment_type = models.ManyToManyField(AssessmentType)
+	assessment_type = models.ManyToManyField(AssessmentType, blank=True)
 	course = models.ForeignKey('Course')
 	owner = models.ForeignKey('accounts.TeacherProfile')
-	parent_unit = models.ForeignKey('self', null=True)
-	standards = models.ManyToManyField('Standards.Standard')
-	tags = models.ManyToManyField(Tag)
-	week_length = models.IntegerField()
-	
+	parent_unit = models.ForeignKey('self', null=True, blank=True)
+	standards = models.ManyToManyField('Standards.Standard', blank=True)
+	start_date = models.DateField()
+	end_date = models.DateField()
+
+class ObjectivesGroup(models.Model):
+	unit = models.ForeignKey('Unit')
+	objective = models.ForeignKey('Objectives.Objective')	
+	creation_date = models.DateField()
+
 # Create your models here.
 class Lesson(models.Model):
 	name = models.CharField(max_length=30)
@@ -41,14 +54,14 @@ class Lesson(models.Model):
 	owner = models.ForeignKey('accounts.TeacherProfile')
 	tags = models.TextField()
 	description = models.TextField()
-	standards = models.ManyToManyField('Standards.Standard')
+	standards = models.ManyToManyField('Standards.Standard', blank=True)
 
 class Section(models.Model):
 	lesson = models.ForeignKey(Lesson)
-	placement = models.IntegerField()
+	placement = models.IntegerField(blank=True)
 	name = models.IntegerField(max_length=32, choices=SECTIONTYPE)
 	description = models.TextField()
-	creation_date = models.DateTimeField()	
+	creation_date = models.DateTimeField(blank=True, null=True)	
 
 class Content(models.Model):
 	section = models.ForeignKey(Section)

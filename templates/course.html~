@@ -3,13 +3,32 @@
 <!DOCTYPE html>
 {% block content %}
 {% for course in userCourses %}
-         <div class="unitbox" id="u1">
+<<<<<<< HEAD
+         <div class="noborderunitbox" id="u1">
        <a href="/units/?course_id={{ course.id }}" ><h4>{{ course.subject }}</h4></a>
 	 <p><b>Department:</b>
 	{{ course.department }}
 	<p><b>Year:</b>
         {{ course.year }}
 	<p>
+=======
+         <div class="unitbox" id="u1">
+       <a href="/units/?course_id={{ course.id }}" ><h4>{{ course.name }}</h4></a>
+	 <p><b>Subject:</b>
+	{{ course.subject }}
+	</p>
+	<p><b>Department:</b>
+        {{ course.department }}
+	</p>
+        <p><b>Grade:</b>
+        {{ course.grade }}
+        </p>
+	<p><b>Start Date</b>
+	{{ course.start_date }}
+	<p><b>End Date</b>
+	{{ course.end_date }}
+	</p>
+>>>>>>> c04a1f1dc29d19b317d11900ddb99b2498496c2f
 	<a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Edit">Edit</a>
         <a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Delete">Delete</a>
 
@@ -34,7 +53,9 @@
             </div>
                 </div>
     {% endfor %}
-     <p><button type="submit" class="btn btn-primary">Update</button>
+     <p>
+	<input type="hidden" value={{ selectedCourse }} name="selectedCourse">
+	<button type="submit" class="btn btn-primary">Update</button>
 	<a class="btn btn-primary" type="button" href="/courses/">Cancel</a>
       </p>
     </form>

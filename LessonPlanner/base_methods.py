@@ -18,11 +18,15 @@ def getStandardsList(course, user):
 	s_choices = [(s.id, s.description) for s in slist]
 	return s_choices	
 
+
 def createBaseDict(request):
 	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm) = returnBlankForms()
 	try:
 		user = TeacherProfile.objects.get(user=request.user)
-        except TeacherProfile.DoesNotExist:
+        	courseAddForm.fields['owner'].initial = user
+        	unitAddForm.fields['owner'].initial = user
+        	lessonAddForm.fields['owner'].initial = user
+	except TeacherProfile.DoesNotExist:
 		user = StudentProfile.objects.get(user=request.user)
 	#get all courses associated with the user
 	user_courses =  Course.objects.filter(owner=user)
@@ -35,9 +39,9 @@ def createBaseDict(request):
 	lesson_id = request.GET.get('lesson_id')
 	if ( not lesson_id == None ):
 		lesson = Lesson.objects.get(id=lesson_id)
-		lessonAddForm.fields['unit_id'].initial = lesson.unit.id
-                unitAddForm.fields['course_id'].initial = lesson.unit.course.id
-		sectionAddForm.fields['lesson_id'].initial = lesson_id
+		lessonAddForm.fields['unit'].initial = lesson.unit
+                unitAddForm.fields['course'].initial = lesson.unit.course
+		sectionAddForm.fields['lesson'].initial = lesson
 	#####################################
 	#get the unit
 	####################################
@@ -53,8 +57,8 @@ def createBaseDict(request):
 	unit_id = request.GET.get('unit_id')
 	if ( not unit_id == None ):
 		unit = Unit.objects.get(id=unit_id)
-		lessonAddForm.fields['unit_id'].initial = unit_id
-		unitAddForm.fields['course_id'].initial = unit.course.id
+		lessonAddForm.fields['unit'].initial = unit
+		unitAddForm.fields['course'].initial = unit.course
 	##########################################
 	#get the course
 	##############################################	
@@ -72,7 +76,7 @@ def createBaseDict(request):
 	course_id = request.GET.get('course_id')
 	if ( not course_id == None ):
 		course = Course.objects.get(id=course_id)
-		unitAddForm.fields['course_id'].initial = course_id
+		unitAddForm.fields['course'].initial = course
 	
 	#check course
 	if ( course ):
@@ -86,6 +90,7 @@ def createBaseDict(request):
 	#return (stuff for function, stuff to render)
 	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'standardlist':standards_list, 'sectionAddForm':sectionAddForm}
 
+<<<<<<< HEAD
 def getLessonSpecificInfo(lesson):
 	lesson_sections = Section.objects.filter(lesson=lesson)
 	section_dict = {}
@@ -120,6 +125,8 @@ def getLessonSpecificInfo(lesson):
 	print section_dict
 	return { 'sections' : section_dict,  'assessment_dict':assessment_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
 
+=======
+>>>>>>> c04a1f1dc29d19b317d11900ddb99b2498496c2f
 def getAddContentForms(section_id):
 	
 	content_form_dict = {'General': {} , 'Media': {}, 'Activity': {}, 'Checks For Understanding': {}, 'Assessment': {} }
@@ -161,6 +168,33 @@ def getAddContentForms(section_id):
 
 	return content_form_dict
 
+def getLessonSpecificInfo(lesson):
+	lesson_sections = Section.objects.filter(lesson=lesson)
+	section_dict = {}
+	add_content_form_dict = {}
+	for section in lesson_sections:
+		content_list = []
+		section_content = Content.objects.filter(section=section)
+		for content in section_content:
+			if (content.content_type == 'Text'):
+				content_list.append(content.textcontent)
+			elif (content.content_type == 'OnlineVideo'):
+				content_list.append(content.onlinevideocontent)
+			elif (content.content_type == 'OnlineArticle'):
+				content_list.append(content.onlinearticlecontent)
+			elif (content.content_type == 'OnlinePicture'):
+                                content_list.append(content.onlinepicturecontent)
+			elif (content.content_type == 'TeacherNote'):
+				content_list.append(content.teachernotecontent)
+			elif (content.content_type == 'AdministratorNote'):
+				content_list.append(content.administratornotecontent)
+ 			elif (content.content_type == 'Assessment'):
+                                content_list.append(content.assessmentcontent)
+
+		section_dict[section] = content_list
+	print "HEY",section_dict
+	add_content_form_dict = getAddContentForms(str(-1))
+	return { 'sections' : section_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
 
 def getSectionMapping():
 	section_mapping = {}
@@ -171,7 +205,18 @@ def getSectionMapping():
 	
 def returnBlankForms():
 	addCourseForm = AddCourse()
+	addCourseForm.fields['owner'].label=''
 	addUnitForm = AddUnitForm()
+	addUnitForm.fields['owner'].label=''
+	addUnitForm.fields['course'].label=''
+	addUnitForm.fields['parent_unit'].label=''
+	addUnitForm.fields['parent_unit'].initial = None
+	addUnitForm.fields['standards'].initial = None
 	addLessonForm = AddLessonForm()
+	addLessonForm.fields['unit'].label=''
+	addLessonForm.fields['owner'].label=''
 	addSectionForm = AddSectionForm()
+	addSectionForm.fields['lesson'].label=''
+	addSectionForm.fields['placement'].label=''
+	addSectionForm.fields['creation_date'].label=''
 	return (addCourseForm, addUnitForm , addLessonForm, addSectionForm)
