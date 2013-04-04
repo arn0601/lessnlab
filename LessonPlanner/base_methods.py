@@ -124,8 +124,6 @@ def getLessonSpecificInfo(lesson):
 	print section_dict
 	return { 'sections' : section_dict,  'assessment_dict':assessment_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
 
-=======
->>>>>>> c04a1f1dc29d19b317d11900ddb99b2498496c2f
 def getAddContentForms(section_id):
 	
 	content_form_dict = {'General': {} , 'Media': {}, 'Activity': {}, 'Checks For Understanding': {}, 'Assessment': {} }
