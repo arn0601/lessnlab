@@ -79,7 +79,7 @@
 			</div>			
 		{% endfor %}
 
-		<div class="sectionnav" style="bottom-border: 1px">
+		<div class="sectionnav">
 			<div class="span2">
 					<h5>Add Content</h5>
 			</div>

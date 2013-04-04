@@ -84,5 +84,14 @@ class AddOnlinePictureContent(AddContentForm):
 
 class AddAssessmentContent(AddContentForm):
         title = forms.CharField(label="Title")
+	extra_field_count = forms.CharField(label="",widget=forms.HiddenInput())
+	def __init__(self, *args, **kwargs):
+	        extra_fields = kwargs.pop('extra', 0)
+
+        	super(AddAssessmentContent, self).__init__(*args, **kwargs)
+	        self.fields['extra_field_count'].initial = extra_fields
+	        for index in range(int(extra_fields)):
+        	    # generate extra fields in the number specified via extra_fields
+	            	self.fields['extra_field_{index}'.format(index=index)] = forms.CharField(label='extra_field_{index}'.format(index=index),required=False)
 
 

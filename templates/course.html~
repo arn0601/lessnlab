@@ -3,9 +3,17 @@
 <!DOCTYPE html>
 {% block content %}
 {% for course in userCourses %}
-
+<<<<<<< HEAD
          <div class="noborderunitbox" id="u1">
-        <a href="/units/?course_id={{ course.id }}" ><h4>{{ course.name }}</h4></a>
+       <a href="/units/?course_id={{ course.id }}" ><h4>{{ course.subject }}</h4></a>
+	 <p><b>Department:</b>
+	{{ course.department }}
+	<p><b>Year:</b>
+        {{ course.year }}
+	<p>
+=======
+         <div class="unitbox" id="u1">
+       <a href="/units/?course_id={{ course.id }}" ><h4>{{ course.name }}</h4></a>
 	 <p><b>Subject:</b>
 	{{ course.subject }}
 	</p>
@@ -20,6 +28,7 @@
 	<p><b>End Date</b>
 	{{ course.end_date }}
 	</p>
+>>>>>>> c04a1f1dc29d19b317d11900ddb99b2498496c2f
 	<a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Edit">Edit</a>
         <a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Delete">Delete</a>
 

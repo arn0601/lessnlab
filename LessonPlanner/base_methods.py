@@ -90,6 +90,40 @@ def createBaseDict(request):
 	#return (stuff for function, stuff to render)
 	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'standardlist':standards_list, 'sectionAddForm':sectionAddForm}
 
+def getLessonSpecificInfo(lesson):
+	lesson_sections = Section.objects.filter(lesson=lesson)
+	section_dict = {}
+	assessment_dict = {}
+	add_content_form_dict = {}
+	for section in lesson_sections:
+		content_list = []
+		section_content = Content.objects.filter(section=section)
+		for content in section_content:
+			if (content.content_type == 'Text'):
+				content_list.append(content.textcontent)
+			elif (content.content_type == 'OnlineVideo'):
+				content_list.append(content.onlinevideocontent)
+			elif (content.content_type == 'OnlineArticle'):
+				content_list.append(content.onlinearticlecontent)
+			elif (content.content_type == 'OnlinePicture'):
+                                content_list.append(content.onlinepicturecontent)
+			elif (content.content_type == 'TeacherNote'):
+				content_list.append(content.teachernotecontent)
+			elif (content.content_type == 'AdministratorNote'):
+				content_list.append(content.administratornotecontent)
+ 			elif (content.content_type == 'Assessment'):
+                                content_list.append(content.assessmentcontent)
+				questions = Question.objects.filter(assessment = content.assessmentcontent)
+				question_answer_map = {}
+				for q in questions:
+					a = FreeResponseAnswer.objects.get(question = q)
+					question_answer_map[q] = a
+				assessment_dict[content.assessmentcontent.id] = question_answer_map
+		section_dict[section] = content_list
+	add_content_form_dict = getAddContentForms(str(-1))
+	print section_dict
+	return { 'sections' : section_dict,  'assessment_dict':assessment_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
+
 def getAddContentForms(section_id):
 	
 	content_form_dict = {'General': {} , 'Media': {}, 'Activity': {}, 'Checks For Understanding': {}, 'Assessment': {} }

@@ -99,7 +99,7 @@ class Question(models.Model):
 	
 class Answer(models.Model):
 	owner = models.ForeignKey('accounts.UserProfile')
-	assessment =  models.ForeignKey(Question)
+	question =  models.ForeignKey(Question)
 	
 class FreeResponseAnswer(Answer):
 	answer = models.CharField(max_length=256)
