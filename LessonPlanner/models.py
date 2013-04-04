@@ -2,6 +2,7 @@ from django.db import models
 from accounts.models import TeacherProfile
 from Standards.models import Standard
 
+SUBJECTS = (("AP Chemistry", "AP Chemistry"), ("IB Chemistry", "IB Chemistry")
 
 SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
 
@@ -27,8 +28,9 @@ class Course(models.Model):
 	end_date = models.DateField()
 
 class StandardsGroup(models.Model):
+	name = models.CharField(max_length=64)
 	course = models.ForeignKey('Course')
-	standard = models.ForeignKey('Standards.Standard')
+	standard = models.ManyToManyField('Standards.Standard')
 	creation_date = models.DateField()
 
 class Unit(models.Model):
