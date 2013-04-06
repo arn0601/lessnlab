@@ -565,5 +565,6 @@ def getStandardsFromGroup(request):
 			standard_list.append(standard)
 		base_dict['groupStandards'] = standard_list
 		base_dict['showGroupStandards'] = True
+		base_dict['selectedGroup'] = group
 		return render_to_response('course.html', base_dict)
 	return HttpResponseRedirect('/courses/')
