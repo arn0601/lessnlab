@@ -2,7 +2,7 @@ from django.db import models
 from accounts.models import TeacherProfile
 from Standards.models import Standard
 
-SUBJECTS = (("AP Chemistry", "AP Chemistry"), ("IB Chemistry", "IB Chemistry")
+SUBJECTS = (("AP Chemistry", "AP Chemistry"), ("IB Chemistry", "IB Chemistry"))
 
 SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
 
@@ -26,10 +26,12 @@ class Course(models.Model):
 	grade = models.CharField(max_length=16)
 	start_date = models.DateField()
 	end_date = models.DateField()
+	standard_grouping = models.ManyToManyField('StandardGrouping', blank=True, null=True)
 
-class StandardsGroup(models.Model):
+class StandardGrouping(models.Model):
 	name = models.CharField(max_length=64)
-	course = models.ForeignKey('Course')
+	subject = models.CharField(max_length=32)
+	grade = models.CharField(max_length=32)
 	standard = models.ManyToManyField('Standards.Standard')
 	creation_date = models.DateField()
 
