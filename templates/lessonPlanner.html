@@ -41,11 +41,31 @@
 			{% with section.name as user_key %}
 			{{ section_types|access:user_key }} -  {{ section.description }}				
 				<a id="delete_section" data-sectionid="{{ section.id }}" 
-						class="btn btn-primary btn-mini delete_section" href="#" style="right: 10%; position: absolute;">Delete Section</a>	
+						class="btn btn-primary btn-mini delete_section" href="#" style="right: 2%; position: absolute;">Delete Section</a>	
 			{% endwith %}
 		</div>	
 		{% for content, content_placement in sections|access:section|sort_content %}
-			<p>
+			<p/>
+			<div class="well">
+			<div style="position:absolute; right: 2%">
+				
+				{% if not forloop.last %}
+					<a class="btn btn-primary btn-mini" style="" type="button" 
+						href="?content_id={{ content.id }}&action=Edit">&#x25BC;</a>
+				{% endif %}
+
+				{% if not forloop.first %}
+				<a class="btn btn-primary btn-mini" style="" type="button" 
+										href="?content_id={{ content.id }}&action=Edit"> <b>&#x25B2; </b> </a>
+				{% endif %}
+
+				<a class="btn btn-primary btn-mini" style="" type="button" 
+						href="?content_id={{ content.id }}&action=Edit">Edit</a>
+
+				<a id="delete_content" data-contentid="{{ content.id }}" 	
+					class="btn btn-primary btn-mini delete_content" style="" href="#">x</a>
+				
+			</div>
 			{% if content.content_type == "OnlineVideo" %}
 				<!--<h1>Vimeo Javascript oEmbed Example</h1>
 		  					<div id="embed">Loading video...</div>-->
@@ -55,9 +75,10 @@
 			{% elif content.content_type == "PowerPoint" %}			
 				<iframe src="http://docs.google.com/gview?url={{ content.link }}" style="width:300px; height:300px;" frameborder="0"></iframe>
 			{% elif content.content_type == "Assessment" %}
-				<div>	{{ content.title }}
+				<div>	
+					<h6> Assessment - {{ content.title }} </h6>
 					{% for r in assessment_dict|access:content.id %}
-						{{ r }}
+						
 						<div>
 							Question: {{ r.question }}
 						</div>
@@ -67,15 +88,13 @@
 							{% endwith %}
 						</div>
 					{% endfor %}
-					<a class="btn btn-primary btn-small" type="button" href="?content_id={{ content.id }}&action=Edit">Edit</a>
+				
 				</div>		
 			{% else %}
 					OTHER CONTENT - Need to define template
 			{% endif %}
-			</p>
-			<div>
-				<a id="delete_content" data-contentid="{{ content.id }}" 	
-					class="btn btn-primary btn-mini delete_content" href="#">Delete Content</a>
+			
+			
 			</div>			
 		{% endfor %}
 
@@ -86,12 +105,12 @@
 			<div class="span10">
 				<ul class="nav nav-pills">						  
 					{% for dropdown_header in dropdown_order %}
-					<li class="dropdown">
-					 	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+					<li class="dropup">
+					 	<a class="dropdown-toggle ddt" data-toggle="dropdown" href="#">
 									{{ dropdown_header }}
 					 		<b class="caret"></b>
 						</a>
-						<ul class="dropdown-menu showContent" class="btn btn-primary btn-small announce">			
+						<ul class=" mymenu dropdown-menu pull-up showContent " class="btn btn-primary btn-small announce">			
 							{% for dropdown_header_dict in section_content_forms|access:dropdown_header %}
 							<li><a href="#" class="content_show" data-sectionid="{{ section.id }}" 
 									data-contenttype="{{ dropdown_header_dict }}">{{ dropdown_header_dict }}</a></li>   							

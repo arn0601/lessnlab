@@ -219,72 +219,109 @@ def addSection(request):
 		return HttpResponseRedirect(lastPageToRedirect(request))
 	return HttpResponseRedirect(lastPageToRedirect(request))
 
+def getMaxCount(section):
+	section_content = Content.objects.filter(section=section)
+        maxCont = 0
+        for c in section_content:
+        	if c.placement > maxCont:
+                	maxCont = c.placement
+        return  maxCont+1
+
+
+
 @csrf_exempt
 def addContent(request):
     	if request.method == 'POST':
 		contentForm = AddContentForm(data=request.POST)
+		content_type = contentForm.data['content_type']
+		if content_type == "OnlineVideo":
+			print "ONLINE VIDEO"
+			success = saveVideoContent(contentForm, request)
+			if success:
+				return HttpResponseRedirect(lastPageToRedirect(request))
+		        return HttpResponseRedirect(lastPageToView(request))
                 (success, content, fields) =  saveContent(contentForm, request)
 		if success:
 			section = Section.objects.get(id=int(contentForm.data['section_id']))
 			content.section = section
 			content.creation_date=datetime.now()
 			content.content_type = contentForm.data['content_type']
-			section_content = Content.objects.filter(section=section)
-			content.placement = len(section_content)+1
+			content.placement = getMaxCount(section)+1
 			content.save()
-			for q,a in fields.items():
-				q.assessment = content
-				q.save()
-				a.question = q
-				a.save()
+			if fields != None:
+				for q,a in fields.items():
+					q.assessment = content
+					q.save()
+					a.question = q
+					a.save()
                         return HttpResponseRedirect(lastPageToRedirect(request))
 	return HttpResponseRedirect(lastPageToView(request))
+
+def saveVideoContent(contentForm, request):
+       	online_video_form = AddOnlineVideoContent(data=request.POST)
+	if online_video_form.is_valid():
+		content = OnlineVideoContent()
+		if content.link != "":
+			content = OnlineVideoContent()
+			content.link = online_video_form.data['link']
+			section = Section.objects.get(id=int(contentForm.data['section_id']))
+                        content.section = section
+                        content.creation_date=datetime.now()
+                        content.content_type = contentForm.data['content_type']
+			content.placement = getMaxCount(section)+1
+			content.save()
+		for link in online_video_form.cleaned_data['rl']:
+			content = OnlineVideoContent()
+			content.link = link
+                        section = Section.objects.get(id=int(contentForm.data['section_id']))
+                        content.section = section
+                        content.creation_date=datetime.now()
+                        content.content_type = contentForm.data['content_type']
+			content.placement = getMaxCount(section)+1
+                        content.save()
+		return True
+	print online_video_form.errors
+        return (False, None, None)
+
 
 def saveContent(contentForm, request):
 	if contentForm.is_valid():
 		content_type = contentForm.data['content_type']
-		if (content_type == 'OnlineVideo'):
-			online_video_form = AddOnlineVideoContent(data=request.POST)
-			if online_video_form.is_valid():
-				content = OnlineVideoContent()
-				content.link = online_video_form.data['link']
-				return (True, content)
-			return (False, None)
 		if (content_type == 'OnlinePicture'):
 			online_picture_form = AddOnlinePictureContent(data=request.POST)
 			if online_picture_form.is_valid():
 				content = OnlinePictureContent()
 				content.link = online_picture_form.data['link']
-				return (True, content)
-			return (False, None)
+				return (True, content, None)
+			return (False, None, None)
 		if (content_type == 'OnlineArticle'):
 			online_article_form = AddOnlineArticleContent(data=request.POST)
 			if online_article_form.is_valid():
 				content = OnlineArticleContent()
 				content.link = online_article_form.data['link']
-				return (True, content)
-			return (False, None)
+				return (True, content, None)
+			return (False, None, None)
 		if (content_type == 'Text'):
 			text_form = AddTextContent(data=request.POST)
 			if text_form.is_valid():
 				content = TextContent()
 				content.text = text_form.data['text']
-				return (True, content)
-			return (False, None)
+				return (True, content, None)
+			return (False, None, None)
 		if (content_type == 'TeacherNote'):
 			teacher_note_form = AddTeacherNoteContent(data=request.POST)
 			if teacher_note_form.is_valid():
 				content = TeacherNoteContent()
 				content.text = teacher_note_form.data['text']
-				return (True, content)
-			return (False, None)
+				return (True, content, None)
+			return (False, None, None)
 		if (content_type == 'AdministratorNote'):
 			administrator_note_form = AddAdministratorNoteContent(data=request.POST)
 			if administrator_note_form.is_valid():
 				content = AdministratorNoteContent()
 				content.text = administrator_note_form.data['text']
-				return (True, content)
-			return (False, None)
+				return (True, content, None)
+			return (False, None, None)
 		if (content_type == 'Assessment'):
                         assessment_form = AddAssessmentContent(data=request.POST,extra=request.POST.get('extra_field_count'))
                         if assessment_form.is_valid():
@@ -292,9 +329,7 @@ def saveContent(contentForm, request):
                                 content.title = assessment_form.data['title']
 				fields = assessment_form.data['extra_field_count']
 				questionAnswerMap = {}
-				print "num",fields
 				for index in range(0,int(fields),2):
-					print "Index",index
 					qData = assessment_form.data['extra_field_{index}'.format(index=index)]
 					aData = assessment_form.data['extra_field_{index}'.format(index=index+1)]
 					user = TeacherProfile.objects.get(user=request.user)
@@ -305,11 +340,10 @@ def saveContent(contentForm, request):
 					a.answer = aData
 					a.owner = user
 					questionAnswerMap[q] = a
-					print "Added",q,a
                                 return (True, content,questionAnswerMap)
 			print assessment_form.errors
-                        return (False, None)
-	return (False, None);
+                        return (False, None, None)
+	return (False, None, None);
 
 def DeleteCourseRequest(request, course_id):
         uname = request.user.username
@@ -385,86 +419,6 @@ def EditContentRequest(request, contentID):
         return render_to_response('lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1})
 
 
-'''
-def saveCourse(addCourseForm, request_user):
-	if addCourseForm.is_valid():
-		course = Course()
-		if 'course_id' in addCourseForm.data:
-			course = Course.objects.get(id=addCourseForm.data['course_id'])
-		course.owner = TeacherProfile.objects.get(user=request_user)
-		course.subject = addCourseForm.data['name']
-		course.department = addCourseForm.data['department']
-		course.year = str(addCourseForm.data['year'])
-		course.save()
-		return True;
-	return False;
-
-def saveUnit(addUnitForm, request_user):
-	if addUnitForm.is_valid():
-		unit = Unit()
-		if 'unit_id' in addUnitForm.data:
-                        unit = Unit.objects.get(id=addUnitForm.data['unit_id'])
-		user = TeacherProfile.objects.get(user=request_user)
-		course_id = addUnitForm.data['course_id']
-                course = Course.objects.get(id=course_id)
-                slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
-                s_choices = [(s.id, s.description) for s in slist]
-		addUnitForm.fields['standards'].choices = s_choices	
-		unit.name = addUnitForm.data['name']
-		unit.description = addUnitForm.data['description']
-		unit.course = course
-		unit.owner = TeacherProfile.objects.get(user=request_user)
-		unit.week_length = addUnitForm.data['week_length']
-		tags_ = addUnitForm.data['tags']
-		separated_tags = tags_.split(',')
-		unit.save()
-		for t in separated_tags:
-			newTag, created = Tag.objects.get_or_create(tagname=t)
-			unit.tags.add(newTag)
-		for s in addUnitForm.cleaned_data['standards']:
-			standard_id = int(s)
-			standard = Standard.objects.get(id=standard_id)
-			unit.standards.add(standard)
-		return True
-	print addUnitForm.errors
-	return False
-
-def saveLesson(addLessonForm, request_user):
-        if addLessonForm.is_valid():
-                lesson = Lesson()
-                if 'lesson_id' in addLessonForm.data:
-                        lesson = Lesson.objects.get(id=addLessonForm.data['lesson_id'])
-                lesson.name = addLessonForm.data['name']
-                unitID = addLessonForm.data['unit_id']
-                unit = Unit.objects.get(id=unitID)
-		lesson.description = addLessonForm.data['description']
-                lesson.owner = TeacherProfile.objects.get(user=request_user)
-		lesson.unit = unit
-                lesson.save()
-		return True
-	print "invalid form - lesson"
-        print addLessonForm.errors
-        return False
-
-def saveSection(addSectionForm, request_user):
-	print "savingSection"
-	if addSectionForm.is_valid():
-		section = Section()
-		lesson = Lesson.objects.get(id=addSectionForm.data['lesson_id'])
-		otherSections = Section.objects.filter(lesson=lesson)
-		size = len(otherSections)
-		section.lesson=lesson
-		section.placement=size+1
-		section.name=addSectionForm.data['name']
-		section.description = addSectionForm.data['description']
-		section.creation_date = datetime.utcnow().replace(tzinfo=utc)
-		section.save()
-		print "Saved"
-		return True
-	print "invalid form - section"
-	print addSectionForm.errors
-	return False
-'''
 def deleteCourseData(courseForm, request_user):
 	if 'course_id' in courseForm.data:
        		Course.objects.get(id=courseForm.data['course_id']).delete()
