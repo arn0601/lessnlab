@@ -135,11 +135,12 @@ def addLessonObjectives(request):
 			standard_list.append((standard.id, standard.description))
 		form.fields['standards'].choices = standard_list
 		if form.is_valid():
-			sid = form.cleaned_data['standards']:
+			sid = form.cleaned_data['standards']
 			s = Standard.objects.get(id=sid)
 			o = Objective()
 			o.description = form.cleaned_data['description']
 			o.standard = s
+			o.creation_date = datetime.today()
 			o.owner = teacher
 			o.save()
 			lesson.objectives.add(o)
@@ -254,64 +255,29 @@ def addCourse(request):
 	if request.method == 'POST':
 		addCourseForm = AddCourse(request.POST)
 		if addCourseForm.is_valid():
-			addCourseForm.save()
-			return HttpResponseRedirect(lastPageToRedirect(request))
+			course = addCourseForm.save()
+			teacher = TeacherProfile.objects.get(user=request.user)
+			groups_added = addCourseStandards(course, teacher)
+			base_dict = base_methods.createBaseDict(request)
+			base_dict['groupsAdded'] = groups_added
+			return render_to_response('course.html', base_dict)
 		else:
 			print addCourseForm.errors
 	return HttpResponseRedirect(lastPageToRedirect(request))
 
-@csrf_exempt
-def addCourseStandards(request):
-	if request.method == 'POST':
-		form = CourseStandardsForm(data=request.POST)
-		try:
-			course = Course.objects.get(id=int(form.data['course_id']))
-			teacher = TeacherProfile.objects.get(user=request.user)
-		except:
-			return HttpResponseRedirect(lastPageToRedirect(request))
-		groups = StandardGrouping.objects.filter(subject=course.subject).filter(grade=course.grade)
-		groups_to_render = []
-		for group in groups:
-			for standard in group.standard.all():
-				print standard.owner_type, teacher.user_school_state
-				if standard.owner_type == teacher.user_school_state:
-					groups_to_render.append((group.id, group.name))
-					break
-		form.fields['groups'].choices = groups_to_render
-		if form.is_valid():
-			for gid in form.cleaned_data['groups']:
-				group = StandardGrouping.objects.get(id=gid)
+def addCourseStandards(course, teacher):
+	groups = StandardGrouping.objects.filter(subject=course.subject).filter(grade=course.grade)
+	groups_to_render = []
+        groups_add = False;
+	
+	for group in groups:
+		for standard in group.standard.all():
+			print standard.owner_type, teacher.user_school_state
+			if standard.owner_type == teacher.user_school_state:
 				course.standard_grouping.add(group)
-		else:
-			print form.errors
-		return HttpResponseRedirect('/courses/')
-	return HttpResponseRedirect('/courses/')
-
-@csrf_exempt
-def requestCourseStandards(request):
-	print "requesting"
-	if request.method == 'POST':
-		course_id = request.POST['course_id']
-		try:
-			course = Course.objects.get(id=course_id)
-			teacher = TeacherProfile.objects.get(user=request.user)
-		except:
-			return HttpResponseRedirect(lastPageToRedirect(request))
-		groups = StandardGrouping.objects.filter(subject=course.subject).filter(grade=course.grade)
-		groups_to_render = []
-		for group in groups:
-			for standard in group.standard.all():
-				if standard.owner_type == teacher.user_school_state:
-					groups_to_render.append((group.id, group.name))
-					break
-		base_dict = base_methods.createBaseDict(request)
-		course_std_form = CourseStandardsForm()
-		course_std_form.fields['course_id'].initial = str(course_id)
-		course_std_form.fields['groups'].choices = groups_to_render
-		base_dict['courseStandardsForm'] = course_std_form
-		base_dict['addingCourseStandards'] = True
-		return render_to_response('course.html', base_dict)
-		
+				groups_add = True
+				break
+	return groups_add
 
 @csrf_exempt
 def editCourse(request):

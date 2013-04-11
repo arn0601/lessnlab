@@ -15,8 +15,8 @@
 		<p><b>Start Date:</b>{{ unit.start_date }}</p>
 		<p><b>Expected End Date:</b>{{ unit.end_date }}</p>
 		<p><b>Standards for this Unit: </b> 
-		{% for standard in unit.standards.all %}
-			{{ standard.description }}
+	<br>	{% for standard in unit.standards.all %}
+			{{ standard.description }}<br>
 		{% endfor %}
 	<br>
 	<a class="btn btn-primary btn-small" type="button" href="?unit_id={{ unit.id }}&action=Edit">Edit</a>

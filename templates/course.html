@@ -26,7 +26,6 @@
 	</p>
 	<a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Edit">Edit</a>
         <a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Delete">Delete</a>
-	<a class="btn btn-primary btn-small" type="button" onClick="requestCourseStandards('{{ course.id }}')" >Add Standards</a>
         </div>
 {% endfor %}
 
@@ -83,26 +82,15 @@
   </div>
 </div>
 {% endif %}
-{% if addingCourseStandards %}
+{% if groupsAdded %}
 <div class="modal" id="deleteCourse">
   <div class="modal-header">
     <a class="close" type="button" href="/courses/">x</a>
     <h3>Add standards to course</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url addCourseStandards %}" name="add_course_standards">
-        {% csrf_token %}
-        {% for field in courseStandardsForm %}
-        <div class="control-group">
-         <label class="control-label">{{ field.label_tag }}</label>
-            <div class="controls">
-                {{ field }}
-            </div>
-                </div>
-    {% endfor %}
-     
-     <p><button type="submit" class="btn btn-primary">Submit</button>
-        <a class="btn btn-primary" type="button" href="/courses/">Cancel</a>
+        We have synced a set of standards based on criteria from your Course
+        <a class="btn btn-primary" type="button" href="/courses/">OK</a>
       </p>
     </form>
   </div>
@@ -114,10 +102,12 @@
   <div class="modal-header">
     <a class="close" type="button" href="/courses/">x</a>
     <h3>{{ selectedGroup.name }}</h3>
+    <h4>This group has been synced based on class parameters</h4>
   </div>
   <div class="modal-body">
         {% for s in groupStandards %}
-		{{ s.description }} 
+	 {{ s.description }} <br><br>
+        
     {% endfor %}
 
   </div>
@@ -126,21 +116,6 @@
 
 
 <script type="text/javascript"> <!-- scroll jquery -->
-	function requestCourseStandards(id){
-
-		var f = document.createElement("form");
-		f.setAttribute('method',"post");
-		f.setAttribute('action',"{% url LessonPlanner.views.requestCourseStandards %}");
-		var i = document.createElement("input");
-		i.setAttribute('type',"hidden");
-		i.setAttribute('value', id );
-		i.setAttribute('name',"course_id");
-		f.appendChild(i);
-		document.body.appendChild(f);
-		f.submit();
-	}
-
-	
 	function getCourseStandardsFromGroup(id){
 
 		var f = document.createElement("form");
