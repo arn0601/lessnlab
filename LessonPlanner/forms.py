@@ -100,3 +100,21 @@ class CourseStandardsForm(forms.Form):
 	course_id = forms.CharField(label='')
 	course_id.widget = forms.HiddenInput()
 	groups = forms.MultipleChoiceField(label='Select Standards Group')
+
+class UnitStandardsForm(forms.Form):
+	unit_id = forms.CharField(label='')
+	unit_id.widget = forms.HiddenInput()
+	standards = forms.MultipleChoiceField(label='Select Unit Standards')
+
+
+class LessonStandardsForm(forms.Form):
+	lesson_id = forms.CharField(label='')
+	lesson_id.widget = forms.HiddenInput()
+	standards = forms.MultipleChoiceField(label='Select Unit Standards')
+
+
+class LessonObjectivesForm(forms.Form):
+	lesson_id = forms.CharField(label='')
+	lesson_id.widget = forms.HiddenInput()
+	standards = forms.SelectField(label='Select Standard')
+	description = forms.CharField(label='Objective description')

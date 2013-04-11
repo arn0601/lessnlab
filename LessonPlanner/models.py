@@ -1,6 +1,7 @@
 from django.db import models
 from accounts.models import TeacherProfile
 from Standards.models import Standard
+from Objectives.models import Objective
 
 SUBJECTS = (("AP Chemistry", "AP Chemistry"), ("IB Chemistry", "IB Chemistry"))
 
@@ -46,11 +47,6 @@ class Unit(models.Model):
 	start_date = models.DateField()
 	end_date = models.DateField()
 
-class ObjectivesGroup(models.Model):
-	unit = models.ForeignKey('Unit')
-	objective = models.ForeignKey('Objectives.Objective')	
-	creation_date = models.DateField()
-
 # Create your models here.
 class Lesson(models.Model):
 	name = models.CharField(max_length=30)
@@ -59,6 +55,7 @@ class Lesson(models.Model):
 	tags = models.TextField()
 	description = models.TextField()
 	standards = models.ManyToManyField('Standards.Standard', blank=True)
+	objectives = models.ManyToManyField('Objectives.Objective', blank=True)
 
 class Section(models.Model):
 	lesson = models.ForeignKey(Lesson)

@@ -9,9 +9,17 @@
 {% for lesson in userLessons %}
 	<div class="noborderunitbox" id="{{ lesson.id }}">
 				  <p><a href="/lessonPlanner/?lesson_id={{ lesson.id }}"><h4>{{ lesson.name }}</h4></a></p>
-				 
-<a class="btn btn-primary btn-small" type="button" href="?lesson_id={{ lesson.id }}&action=Edit">Edit</a>
+				<p><b>Description: </b> {{ lesson.description }} </p>			 
+				
+		<p><b>Standards for this Lesson: </b> 
+		{% for standard in lesson.standards.all %}
+			{{ standard.description }}
+		{% endfor %}
+    <br><br>
+	<a class="btn btn-primary btn-small" type="button" href="?lesson_id={{ lesson.id }}&action=Edit">Edit</a>
         <a class="btn btn-primary btn-small" type="button" href="?lesson_id={{ lesson.id }}&action=Delete">Delete</a>	
+	<a class="btn btn-primary btn-small" type="button" onClick="requestLessonStandards('{{ lesson.id }}')" >Add Standards</a>
+	<a class="btn btn-primary btn-small" type="button" onClick="requestLessonObjectives('{{ lesson.id }}')" >Add Standards</a>
 </div>
 {% endfor %}
 {% endblock %}
@@ -96,6 +104,84 @@
   </div>
 </div>
 {% endif %}
+{% if addingLessonStandards %}
+<div class="modal" id="deleteCourse">
+  <div class="modal-header">
+    <a class="close" type="button" href="/courses/">x</a>
+    <h3>Add standards to lesson</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url addLessonStandards %}" name="add_unit_standards">
+        {% csrf_token %}
+        {% for field in lessonStandardsForm %}
+        <div class="control-group">
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn btn-primary" type="button" href="/courses/">Cancel</a>
+      </p>
+    </form>
+  </div>
+</div>
+{% endif %}
 
+{% if addingLessonObjectives %}
+<div class="modal" id="addingLessonObjectives">
+  <div class="modal-header">
+    <a class="close" type="button" href="/courses/">x</a>
+    <h3>Add standards to lesson</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url addLessonObjectives %}" name="add_lesson_objectives">
+        {% csrf_token %}
+        {% for field in lessonObjectivesForm %}a
+        <div class="control-group">
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn btn-primary" type="button" href="/courses/">Cancel</a>
+      </p>
+    </form>
+  </div>
+</div>
+{% endif %}
+<script type="text/javascript"> <!-- scroll jquery -->
+	function requestLessonObjectives(id){
+
+		var f = document.createElement("form");
+		f.setAttribute('method',"post");
+		f.setAttribute('action',"{% url LessonPlanner.views.requestLessonObjectives %}");
+		var i = document.createElement("input");
+		i.setAttribute('type',"hidden");
+		i.setAttribute('value', id );
+		i.setAttribute('name',"lesson_id");
+		f.appendChild(i);
+		document.body.appendChild(f);
+		f.submit();
+	}
+	function requestLessonStandards(id){
+
+		var f = document.createElement("form");
+		f.setAttribute('method',"post");
+		f.setAttribute('action',"{% url LessonPlanner.views.requestLessonStandards %}");
+		var i = document.createElement("input");
+		i.setAttribute('type',"hidden");
+		i.setAttribute('value', id );
+		i.setAttribute('name',"lesson_id");
+		f.appendChild(i);
+		document.body.appendChild(f);
+		f.submit();
+	}
+</script>
 
 {% endblock %}

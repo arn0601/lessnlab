@@ -8,10 +8,20 @@
 
 {% for unit in userUnits %}
 	<div class="noborderunitbox" id="{{ unit.id }}">
-	<p><a href="/lessons/?unit_id={{ unit.id }}"><h4>{{ unit.name }}</h4></a>Taught over {{ unit.week_length }} weeks</p>
-	  <p><b>Description:</b>{{ unit.description }}</p>
+	<p><a href="/lessons/?unit_id={{ unit.id }}"><h4>{{ unit.name }}</h4></a></p>
+	  
+		<p><b>Description:</b>{{ unit.description }}</p>
+		{% if unit.parent_unit %} <p><b>Unit derived from</b>{{ unit.parent_unit.name }}</p>{% endif %}
+		<p><b>Start Date:</b>{{ unit.start_date }}</p>
+		<p><b>Expected End Date:</b>{{ unit.end_date }}</p>
+		<p><b>Standards for this Unit: </b> 
+		{% for standard in unit.standards.all %}
+			{{ standard.description }}
+		{% endfor %}
+	<br>
 	<a class="btn btn-primary btn-small" type="button" href="?unit_id={{ unit.id }}&action=Edit">Edit</a>
         <a class="btn btn-primary btn-small" type="button" href="?unit_id={{ unit.id }}&action=Delete">Delete</a>	
+	<a class="btn btn-primary btn-small" type="button" onClick="requestUnitStandards('{{ unit.id }}')" >Add Standards</a>
 </div>
 {% endfor %}
 {% endblock %}
@@ -90,5 +100,44 @@
 </div>
 {% endif %}
 
+{% if addingUnitStandards %}
+<div class="modal" id="addingStandards">
+  <div class="modal-header">
+    <a class="close" type="button" href="/courses/">x</a>
+    <h3>Add standards to unit</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url addUnitStandards %}" name="add_unit_standards">
+        {% csrf_token %}
+        {% for field in unitStandardsForm %}
+        <div class="control-group">
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn btn-primary" type="button" href="/courses/">Cancel</a>
+      </p>
+    </form>
+  </div>
+</div>
+{% endif %}
+<script type="text/javascript"> <!-- scroll jquery -->
+	function requestUnitStandards(id){
 
+		var f = document.createElement("form");
+		f.setAttribute('method',"post");
+		f.setAttribute('action',"{% url LessonPlanner.views.requestUnitStandards %}");
+		var i = document.createElement("input");
+		i.setAttribute('type',"hidden");
+		i.setAttribute('value', id );
+		i.setAttribute('name',"unit_id");
+		f.appendChild(i);
+		document.body.appendChild(f);
+		f.submit();
+	}
+</script>
 {% endblock %}
