@@ -1,6 +1,7 @@
 from django import forms
 from django.forms.extras.widgets import SelectDateWidget
 from LessonPlanner.models import *
+import custom_widgets 
 
 class AddCourse(forms.ModelForm):
 	class Meta:
@@ -74,7 +75,10 @@ class AddTextContent(AddContentForm):
 	text = forms.CharField(label="Text", max_length=256, widget=forms.Textarea)
 
 class AddOnlineVideoContent(AddContentForm):
-	link = forms.CharField(label="Link")
+	link = forms.CharField(label="Link",required=False)
+	recommended_links = custom_widgets.MyCheckboxSelectMultiple(attrs={'class': 'myclass'})
+	rl = forms.MultipleChoiceField(label="Add Recommended Videos:",widget=recommended_links,choices=(('http://www.youtube.com/embed/ImAMVqA6mug','0'),('http://www.youtube.com/embed/ImAMVqA6mug','1')),required=False)
+
 
 class AddOnlineArticleContent(AddContentForm):
 	link = forms.CharField(label="Link")

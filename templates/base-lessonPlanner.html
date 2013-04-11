@@ -1,7 +1,7 @@
 {% load staticfiles %}
 {% load dictionary_extras %}
 <!DOCTYPE html>
-<html>
+<html style="height:100%; position:relative;">
   <head>
     <title>LessnLab - Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -22,14 +22,14 @@
   <body style="padding-top:40px; padding-bottom:50px;">
 		<div style="height: 100%">
 			{% include "navbar.html" %}
-			<div class="row-fluid" style="">
+			<div class="row-fluid" style="position: relative; height: 100%">
 				<div class="span2 noborderunitbox" id="leftnav">
 					<ul class="nav nav-pills nav-stacked" id="navbar">
 						<li><a href="javascript:void(0)" onClick="goToByScroll('overview')">Overview</a></li>
 						{% for section, content_list in sections.items %}
 				 		{% with section.name as user_key %}
 							<li><a href="javascript:void(0)" onClick="goToByScroll('{{ section.id }}')">
-								{{ section_types|access:user_key }}  -  {{ section.description }}
+								{{ section_types|access:user_key }} - {{ section.description }}
 						 </a></li>
 	 					{% endwith %}
 						{% endfor %}
@@ -91,55 +91,87 @@ form_count = $("[name=extra_field_count]").val();
 
 	});
 
-	   $(".content_show").click(function(){ // Click to only happen on announce links 
+   $(".content_show").click(function(){  
 		var sid = $(this).data('sectionid'); 
 		var ct = $(this).data('contenttype'); 
-	     	var x=document.getElementsByTagName("form");
+		var x=document.getElementsByTagName("form");
 		for(var i=0;i<x.length;i++)
 		{
 			var name = x[i].attributes["name"].value;
 			if(name.indexOf("c_") === 0)
-		      	{
+			{
 				if(name.indexOf(ct) !== -1)
 				{			
-					x[i].section_id.value=sid
-					
-			  	}
+					x[i].section_id.value=sid;
+					var a = x[i];
+					var iframes = a.getElementsByTagName("iframe");
+					for(var p=0;p<iframes.length;p++)
+					{
+						var iframe = iframes[p];
+						var url = iframe.getAttribute("temp");
+						iframe.setAttribute("src",url);
+					}
+				}
 			}
-		}
-
+		}		
 		$('#addContent'+ct).modal('show');
-	   });
+   });
+
+	 $(".content_close").click(function(){  
+		var x=document.getElementsByTagName("form");
+		for(var i=0;i<x.length;i++)
+		{
+			var a = x[i];
+			var iframes = a.getElementsByTagName("iframe");
+			for(var p=0;p<iframes.length;p++)
+			{
+				var iframe = iframes[p];
+				iframe.setAttribute("src","");
+			}
+		}		
+   });
 
 
-	$(".delete_section").click(function(){ // Click to only happen on announce links 
+
+	$(".delete_section").click(function(){  
 		
 		var sid = $(this).data('sectionid');
 		var x=document.getElementsByTagName("form");
 		for(var i=0;i<x.length;i++)
-                {
-                        var name = x[i].attributes["name"].value;
-                        if(name.indexOf("deleteSection") === 0)
-                        {	
-                            x[i].section_id.value=sid               
-                        }
-                }
-                $('#deleteSection').modal('show');
+    {
+            var name = x[i].attributes["name"].value;
+            if(name.indexOf("deleteSection") === 0)
+            {	
+                x[i].section_id.value=sid;               
+            }
+    }
+    $('#deleteSection').modal('show');
 	});
-	$(".delete_content").click(function(){ // Click to only happen on announce links 
+	$(".delete_content").click(function(){ 
+	
 		var cid = $(this).data('contentid');
 		var x=document.getElementsByTagName("form");
-		
+
 		for(var i=0;i<x.length;i++)
-                {
-                        var name = x[i].attributes["name"].value;
-                        if(name.indexOf("deleteContent") === 0)
-                        {
-                            x[i].content_id.value=cid             
-                        }
-                }
-                $('#deleteContent').modal('show');
+    {
+      var name = x[i].attributes["name"].value;
+      if(name.indexOf("deleteContent") === 0)
+      {
+          x[i].content_id.value=cid             
+      }
+    }
+    $('#deleteContent').modal('show');
 	});
+
+$('.ddt').click(function(){
+	
+	//	if( ('.mymenu').height().replace('px','') > 98)  
+	//	$('.mymenu').removeClass('.dropdown'); 
+	//	$('.mymenu').addClass('.dropup');
+}
+);
+
+
 	</script>
 
 </html>

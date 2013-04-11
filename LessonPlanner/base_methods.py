@@ -13,7 +13,6 @@ from accounts.models import TeacherProfile, StudentProfile
 import simplejson
 
 def getStandardsList(course, user):
-	print course.department, user.user_school_state
 	slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
 	s_choices = [(s.id, s.description) for s in slist]
 	return s_choices	
@@ -119,7 +118,6 @@ def getLessonSpecificInfo(lesson):
 				assessment_dict[content.assessmentcontent.id] = question_answer_map
 		section_dict[section] = content_list
 	add_content_form_dict = getAddContentForms(str(-1))
-	print section_dict
 	return { 'sections' : section_dict,  'assessment_dict':assessment_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
 
 def getAddContentForms(section_id):
