@@ -3,13 +3,29 @@ from django.forms.extras.widgets import SelectDateWidget
 from LessonPlanner.models import *
 import custom_widgets 
 
+SUBJECTS = [('Mathematics','Mathematics'),('Science','Science'),('Social Studies','Social Studies')]
+SUBJECTS_STRING = '[' + ",".join(["\"%s\"" % s for (s, s2) in SUBJECTS]) + ']'
+GRADES = [('7','7'),('8','8'),('9','9'),('Junior High','Junior High')]
+GRADES_STRING = '[' + ",".join(["\"%s\"" % s for (s, s2) in GRADES]) + ']'
+
 class AddCourse(forms.ModelForm):
+	subject = forms.ChoiceField(label='Subject', choices=SUBJECTS)
+	subject.widget = forms.TextInput(attrs={'data-provide':'typeahead', 'data-source': SUBJECTS_STRING, 'autocomplete':'off' })
+	grade = forms.ChoiceField(label='Grade', choices = GRADES)
+	grade.widget = forms.TextInput(attrs={'data-provide':'typeahead', 'data-source': GRADES_STRING, 'autocomplete':'off' })
 	class Meta:
 		model = Course
 		widgets = { 'owner': forms.HiddenInput(), 'start_date': SelectDateWidget(years=range(2015,2011,-1)), 'end_date': SelectDateWidget(years=range(2015,2011,-1)) }
 		exclude = ['standard_grouping']
 
+class AddGroups(forms.Form):
+	groups = forms.MultipleChoiceField(label='Standards groups')
+	course_id = forms.ChoiceField(label='')
+	course_id.widget = forms.HiddenInput()
+
 class EditCourse(forms.ModelForm):
+	subject = forms.ChoiceField(label='Subject', choices=SUBJECTS)
+	grade = forms.ChoiceField(label='Grade', choices = GRADES)
 	class Meta:
 		model = Course
 		widgets = { 'owner': forms.HiddenInput(), 'start_date': SelectDateWidget(years=range(2015,2011,-1)), 'end_date': SelectDateWidget(years=range(2015,2011,-1)) }

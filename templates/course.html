@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load staticfiles %}
+{% load dictionary_extras %}
 <!DOCTYPE html>
 {% block content %}
 {% for course in userCourses %}
@@ -82,15 +83,22 @@
   </div>
 </div>
 {% endif %}
-{% if groupsAdded %}
-<div class="modal" id="deleteCourse">
+{% if addCourseSecondStep %}
+<div class="modal" id="second">
   <div class="modal-header">
     <a class="close" type="button" href="/courses/">x</a>
-    <h3>Add standards to course</h3>
+    <h3>Synced standards to course</h3>
   </div>
   <div class="modal-body">
         We have synced a set of standards based on criteria from your Course
-        <a class="btn btn-primary" type="button" href="/courses/">OK</a>
+	{% for group in groupsAdded %}
+		<h4>{{ group.name }}</h4>
+		{% for standard in groupsAdded|access:group %}
+			{{ standard.numbering }}.{{standard.description}}
+			<br><br>
+		{% endfor %}
+        {% endfor %}
+	<a class="btn btn-primary" type="button" href="/courses/">OK</a>
       </p>
     </form>
   </div>

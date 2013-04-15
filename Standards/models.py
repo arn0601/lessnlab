@@ -12,7 +12,4 @@ class Standard(models.Model):
 	department = models.CharField(max_length=32)
 	subject = models.CharField(max_length=32)
 	grade = models.CharField(max_length=32)
-
-
-	
-	
+	numbering = models.CharField(max_length=32)

@@ -14,6 +14,7 @@ class Command(NoArgsCommand):
 	sg.grade = '8'
 	sg.creation_date = datetime.datetime.today()
 	sg.save()
+	i=1
 	for line in slist:
 		divided = line.split(';')
 		dept = divided[0]
@@ -29,8 +30,9 @@ class Command(NoArgsCommand):
 		s.department = dept
 		s.subject = ''
 		s.grade = grade
+		s.numbering = str(i)
 		s.save()
 		sg.standard.add(s)
-	
+		i = i+1
 
 

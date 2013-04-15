@@ -260,6 +260,7 @@ def addCourse(request):
 			groups_added = addCourseStandards(course, teacher)
 			base_dict = base_methods.createBaseDict(request)
 			base_dict['groupsAdded'] = groups_added
+			base_dict['addCourseSecondStep'] = True
 			return render_to_response('course.html', base_dict)
 		else:
 			print addCourseForm.errors
@@ -268,15 +269,19 @@ def addCourse(request):
 def addCourseStandards(course, teacher):
 	groups = StandardGrouping.objects.filter(subject=course.subject).filter(grade=course.grade)
 	groups_to_render = []
-        groups_add = False;
+        groups_add = {};
 	
 	for group in groups:
 		for standard in group.standard.all():
 			print standard.owner_type, teacher.user_school_state
 			if standard.owner_type == teacher.user_school_state:
 				course.standard_grouping.add(group)
-				groups_add = True
 				break
+	for group in course.standard_grouping.all():
+		slist = []
+		for standard in group.standard.all():
+			slist.append(standard)
+		groups_add[group] = slist
 	return groups_add
 
 @csrf_exempt
