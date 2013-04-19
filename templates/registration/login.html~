@@ -142,7 +142,11 @@
    </div>
    <div class="push">
    </div>
-	{% include "footer.html" %}
+    <div class="footer">
+		<div class="span12">
+			<small>Created by <a href="#">LessnLab Inc.</a>, Copyright 2013. All Rights Reserved.</small>
+		</div>
+	</div>
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

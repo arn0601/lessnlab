@@ -83,11 +83,13 @@ def createBaseDict(request):
                 standards_list = getStandardsList(course, user)
 	
 	uname = request.user.username
-
+	firstname = user.user_firstname
+	lastname = user.user_lastname
+	fullname = firstname + " " + lastname
 	unitAddForm.fields['standards'].choices = standards_list
 	
 	#return (stuff for function, stuff to render)
-	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'standardlist':standards_list, 'sectionAddForm':sectionAddForm}
+	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': fullname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'standardlist':standards_list, 'sectionAddForm':sectionAddForm}
 
 def getLessonSpecificInfo(lesson):
 	lesson_sections = Section.objects.filter(lesson=lesson)
