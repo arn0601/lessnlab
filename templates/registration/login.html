@@ -41,7 +41,7 @@
         padding-top:10px;
         background-color: white;
         border: none;
-        color: black;
+        color: #c8c8c8;
         height:5%;
         opacity:1.5;
         vertical-align: middle;
@@ -104,7 +104,7 @@
   </head>
   <body>
   <div class="page-header">
-    <h4>Welcome to LessnLab</h4>
+    <h4>LessnLab</h4>
   </div>
   <div class="container-fluid">
   <div class="row-fluid">
@@ -132,9 +132,9 @@
 	<div class="loginlinks">
            <span><a href="{% url auth_password_reset %}">Forgot Password?</a></span>
            <span class="logindivider">|</span>
-           <span> <a href="{% url accounts.views.registerTeacher%}">Register Teacher</a> </span>
-        <span class="logindivider">|</span>
-           <span> <a href="{% url accounts.views.registerStudent%}">Register Student</a> </span>
+           <span> <a href="{% url accounts.views.registerTeacher%}">Create Account</a> </span>
+        <!-- <span class="logindivider">|</span>
+           <span> <a href="{% url accounts.views.registerStudent%}">Student</a> </span>-->
        </div>
       </form>
     </div>
