@@ -27,7 +27,7 @@
       
       .push {
       	
-      	height: 10em;
+      	height: 100%;
       
       }
       
@@ -112,7 +112,7 @@
   </div>
    <div class="push">
    </div> -->
-  <div class="span10">
+  <div class="span12">
 {% csrf_token %}
       <form class="form-signin" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
         <h3 class="form-signin-heading">Sign In</h3>
@@ -141,8 +141,7 @@
     </div>
     </div>
    </div>
-   <div class="push">
-   </div>
+   <div class="push"></div>
     <div class="footer">
 		<div class="span12">
 			<small>A product of <a href="#">LessnLab Inc.</a>, Copyright 2013. All Rights Reserved.</small>
