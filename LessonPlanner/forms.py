@@ -6,44 +6,50 @@ import custom_widgets
 class AddCourse(forms.ModelForm):
 	class Meta:
 		model = Course
-		widgets = { 'owner': forms.HiddenInput(), 'start_date': SelectDateWidget(years=range(2000,1939,-1)), 'end_date': SelectDateWidget(years=range(2000,1939,-1)) }
+		widgets = { 'owner': forms.HiddenInput(), 'start_date': SelectDateWidget(years=range(2015,2011,-1)), 'end_date': SelectDateWidget(years=range(2015,2011,-1)) }
+		exclude = ['standard_grouping']
 
 class EditCourse(forms.ModelForm):
 	class Meta:
 		model = Course
-		widgets = { 'owner': forms.HiddenInput(), 'start_date': SelectDateWidget(years=range(2000,1939,-1)), 'end_date': SelectDateWidget(years=range(2000,1939,-1)) }
+		widgets = { 'owner': forms.HiddenInput(), 'start_date': SelectDateWidget(years=range(2015,2011,-1)), 'end_date': SelectDateWidget(years=range(2015,2011,-1)) }
+		exclude = ['standard_grouping']
 
 class DeleteCourse(forms.Form):
-        course_id = forms.CharField(label="")
-        course_id.widget = forms.HiddenInput()
+	course_id = forms.CharField(label="")
+	course_id.widget = forms.HiddenInput()
 
 class AddUnitForm(forms.ModelForm):
 	class Meta:
 		model = Unit
-		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': SelectDateWidget(years=range(2000,1939,-1)), 'end_date': SelectDateWidget(years=range(2000,1939,-1)), 'parent_unit': forms.HiddenInput() }
+		exclude = ['standards']
+		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': SelectDateWidget(years=range(2015,2011,-1)), 'end_date': SelectDateWidget(years=range(2015,2011,-1)), 'parent_unit': forms.HiddenInput() }
 
 class EditUnit(forms.ModelForm):
 	class Meta:
 		model = Unit
-		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': SelectDateWidget(years=range(2000,1939,-1)), 'end_date': SelectDateWidget(years=range(2000,1939,-1)), 'parent_unit': forms.HiddenInput() }
+		exclude = ['standards']
+		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': SelectDateWidget(years=range(2015,2011,-1)), 'end_date': SelectDateWidget(years=range(2015,2011,-1)), 'parent_unit': forms.HiddenInput() }
 
 class DeleteUnit(forms.Form):
-        unit_id = forms.CharField(label="")
-        unit_id.widget = forms.HiddenInput()
+	unit_id = forms.CharField(label="")
+	unit_id.widget = forms.HiddenInput()
 
 class AddLessonForm(forms.ModelForm):
 	class Meta:
 		model = Lesson
+		exclude = ['standards','objectives']
 		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput() }
 
 class EditLesson(forms.ModelForm):
 	class Meta:
 		model = Lesson
+		exclude = ['standards', 'objectives']
 		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput() }
 
 class DeleteLesson(forms.Form):
-        lesson_id = forms.CharField(label="")
-        lesson_id.widget = forms.HiddenInput()
+	lesson_id = forms.CharField(label="")
+	lesson_id.widget = forms.HiddenInput()
 
 class AddSectionForm(forms.ModelForm):
 	class Meta:
@@ -55,8 +61,8 @@ class DeleteSection(forms.Form):
 	section_id.widget = forms.HiddenInput()
 
 class DeleteContent(forms.Form):
-        content_id = forms.CharField(label="")
-        content_id.widget = forms.HiddenInput()
+	content_id = forms.CharField(label="")
+	content_id.widget = forms.HiddenInput()
 
 
 class AddContentForm(forms.Form):
@@ -98,4 +104,19 @@ class AddAssessmentContent(AddContentForm):
         	    # generate extra fields in the number specified via extra_fields
 	            	self.fields['extra_field_{index}'.format(index=index)] = forms.CharField(label='extra_field_{index}'.format(index=index),required=False)
 
+class UnitStandardsForm(forms.Form):
+	unit_id = forms.CharField(label='')
+	unit_id.widget = forms.HiddenInput()
+	standards = forms.MultipleChoiceField(label='Select Unit Standards')
 
+
+class LessonStandardsForm(forms.Form):
+	lesson_id = forms.CharField(label='')
+	lesson_id.widget = forms.HiddenInput()
+	standards = forms.MultipleChoiceField(label='Select Unit Standards')
+
+class LessonObjectivesForm(forms.Form):
+	lesson_id = forms.CharField(label='')
+	lesson_id.widget = forms.HiddenInput()
+	standards = forms.ChoiceField(label='Select Standard')
+	description = forms.CharField(label='Objective description')

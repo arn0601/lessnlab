@@ -1,7 +1,7 @@
 from django.db import models
 from Standards.models import Standard
 from accounts.models import TeacherProfile
-from LessonPlanner.models import Course
+from LessonPlanner.models import *
 # Create your models here.
 
 class Objective(models.Model):
@@ -9,8 +9,6 @@ class Objective(models.Model):
 	standard = models.ForeignKey('Standards.Standard')
 	owner = models.ForeignKey('accounts.TeacherProfile')
 	creation_date = models.DateField()
-	parent_objective = models.ForeignKey('self')
-	children_objectives = models.ManyToManyField('self')
-	description = models.TextField()
-	rating = models.PositiveIntegerField()
-
+	parent_objective = models.ForeignKey('self', null=True, blank=True)
+	children_objectives = models.ManyToManyField('self', null=True, blank=True)
+	rating = models.PositiveIntegerField(null=True, blank=True)

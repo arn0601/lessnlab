@@ -32,7 +32,7 @@
       }
       
       .logindivider{
-        color: #f5f5f5;
+        color: #c8c8c8;
       }
       
       .page-header {
@@ -43,7 +43,7 @@
         border: none;
         color: black;
         height:5%;
-        opacity:.95;
+        opacity:1.5;
         vertical-align: middle;
         	-webkit-box-shadow: 0 8px 6px -6px black;
 	   -moz-box-shadow: 0 5px 5px -6px #c8c8c8;
@@ -56,11 +56,10 @@
 			 	border-top-width:1px;
 				border-top-style:solid;
 				border-top-color:#c8c8c8;
-				height: 5em;
-				padding: 10px;
+				padding-bottom: 15px;
 				vertical-align: middle;
-				opacity:.8;
-				text-align: center;
+                height: 5em;
+				opacity:1.5;
 				color: #c8c8c8;
 				
 			 }
@@ -108,15 +107,14 @@
   </div>
   <div class="container-fluid">
   <div class="row-fluid">
-  <div class="span8">
-  	
-  </div>
+  <!--<div class="span8">
+  </div> -->
    <div class="push">
    </div>
-  <div class="span4 pull-right">
+  <div class="span12">
 {% csrf_token %}
       <form class="form-signin" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
-        <h3 class="form-signin-heading">Sign In</h3>
+        <h3 class="form-signin-heading">Login</h3>
         <input type="text" class="input-block-level" name="username" placeholder="Username" value={{ username }}>
         <input type="password" class="input-block-level" name="password" placeholder="Password">
 	{{ errors }}
@@ -126,23 +124,57 @@
             <input type="checkbox" value="remember-me"> Remember me
         </label>
         <div class="loginlinks">
-            <button class="btn btn-primary" type="submit">Sign in</button>
+            <button class="btn btn-success" type="submit">Login</button>
         </div>
         <hr/>
 	<div class="loginlinks">
-           <span><a href="{% url auth_password_reset %}">Forgot Password?</a></span>
+           <span> <a href="{% url accounts.views.registerTeacher%}">Create An Account</a> </span>
            <span class="logindivider">|</span>
-           <span> <a href="{% url accounts.views.registerTeacher%}">Register Teacher</a> </span>
-        <span class="logindivider">|</span>
-           <span> <a href="{% url accounts.views.registerStudent%}">Register Student</a> </span>
+           <span><a href="{% url auth_password_reset %}">Forgot Password?</a></span>
+         
+          
+        <!-- <span class="logindivider">|</span>
+           <span> <a href="{% url accounts.views.registerStudent%}">Student</a> </span>-->
        </div>
       </form>
     </div>
     </div>
    </div>
+<<<<<<< HEAD
    <div class="push">
    </div>
 	{% include "footer.html" %}
+=======
+   <div class="push"></div>
+    <div class="footer">
+        <div class="rowfluid">
+        <div class="span6">
+            <h6>LessnLab</h6>
+            <div class="rowfluid">
+                <small><a href="#">About</a></small>
+            </div>
+            <div class="rowfluid">
+                <small><a href="#">Contact</a></small>
+            </div>
+        </div>
+        <div class="span6">
+            <h6>Connect</h6>
+            <div class="rowfluid">
+                <small><a href="#">Twitter</a></small>
+            </div>
+            <div class="rowfluid">
+                <small><a href="#">Facebook</a></small>
+            </div>
+        </div>
+        </div>
+        <div class="rowfluid">
+            <div class="span12">
+                <small>LessnLab Inc., Copyright 2013. All Rights Reserved</small>
+            </div>
+        </div>
+    </div>
+	</div>
+>>>>>>> 1c3265ce16916a9f60e1dd60e03f65ce0ceb7643
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->

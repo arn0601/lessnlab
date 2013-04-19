@@ -1,7 +1,9 @@
 from django.db import models
 from accounts.models import TeacherProfile
 from Standards.models import Standard
+from Objectives.models import Objective
 
+SUBJECTS = (("AP Chemistry", "AP Chemistry"), ("IB Chemistry", "IB Chemistry"))
 
 SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
 
@@ -25,10 +27,13 @@ class Course(models.Model):
 	grade = models.CharField(max_length=16)
 	start_date = models.DateField()
 	end_date = models.DateField()
+	standard_grouping = models.ManyToManyField('StandardGrouping', blank=True, null=True)
 
-class StandardsGroup(models.Model):
-	course = models.ForeignKey('Course')
-	standard = models.ForeignKey('Standards.Standard')
+class StandardGrouping(models.Model):
+	name = models.CharField(max_length=64)
+	subject = models.CharField(max_length=32)
+	grade = models.CharField(max_length=32)
+	standard = models.ManyToManyField('Standards.Standard')
 	creation_date = models.DateField()
 
 class Unit(models.Model):
@@ -42,11 +47,6 @@ class Unit(models.Model):
 	start_date = models.DateField()
 	end_date = models.DateField()
 
-class ObjectivesGroup(models.Model):
-	unit = models.ForeignKey('Unit')
-	objective = models.ForeignKey('Objectives.Objective')	
-	creation_date = models.DateField()
-
 # Create your models here.
 class Lesson(models.Model):
 	name = models.CharField(max_length=30)
@@ -55,6 +55,7 @@ class Lesson(models.Model):
 	tags = models.TextField()
 	description = models.TextField()
 	standards = models.ManyToManyField('Standards.Standard', blank=True)
+	objectives = models.ManyToManyField('Objectives.Objective', blank=True)
 
 class Section(models.Model):
 	lesson = models.ForeignKey(Lesson)

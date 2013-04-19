@@ -80,7 +80,6 @@ def createBaseDict(request):
 	#check course
 	if ( course ):
         	user_units =  Unit.objects.filter(course=course)
-                standards_list = getStandardsList(course, user)
 	
 	uname = request.user.username
 	firstname = user.user_firstname
@@ -89,7 +88,8 @@ def createBaseDict(request):
 	unitAddForm.fields['standards'].choices = standards_list
 	
 	#return (stuff for function, stuff to render)
-	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': fullname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'standardlist':standards_list, 'sectionAddForm':sectionAddForm}
+	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': fullname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'sectionAddForm':sectionAddForm}
+	
 
 def getLessonSpecificInfo(lesson):
 	lesson_sections = Section.objects.filter(lesson=lesson)
@@ -165,7 +165,6 @@ def getAddContentForms(section_id):
 
 	return content_form_dict
 
-
 def getSectionMapping():
 	section_mapping = {}
 	for sec in SECTIONTYPE:
@@ -181,7 +180,6 @@ def returnBlankForms():
 	addUnitForm.fields['course'].label=''
 	addUnitForm.fields['parent_unit'].label=''
 	addUnitForm.fields['parent_unit'].initial = None
-	addUnitForm.fields['standards'].initial = None
 	addLessonForm = AddLessonForm()
 	addLessonForm.fields['unit'].label=''
 	addLessonForm.fields['owner'].label=''
