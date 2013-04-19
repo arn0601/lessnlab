@@ -32,7 +32,7 @@
       }
       
       .logindivider{
-        color: #f5f5f5;
+        color: #c8c8c8;
       }
       
       .page-header {
@@ -104,12 +104,11 @@
   </head>
   <body>
   <div class="page-header">
-    <h4>LessnLab</h4>
+    <h4>Welcome to Lessn Labs</h4>
   </div>
   <div class="container-fluid">
   <div class="row-fluid">
   <div class="span8">
-  	
   </div>
    <div class="push">
    </div>
@@ -130,9 +129,11 @@
         </div>
         <hr/>
 	<div class="loginlinks">
-           <span><a href="{% url auth_password_reset %}">Forgot Password?</a></span>
+           <span> <a href="{% url accounts.views.registerTeacher%}">Create An Account</a> </span>
            <span class="logindivider">|</span>
-           <span> <a href="{% url accounts.views.registerTeacher%}">Create Account</a> </span>
+           <span><a href="{% url auth_password_reset %}">Forgot Password?</a></span>
+         
+          
         <!-- <span class="logindivider">|</span>
            <span> <a href="{% url accounts.views.registerStudent%}">Student</a> </span>-->
        </div>
