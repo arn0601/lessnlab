@@ -85,7 +85,6 @@ def createBaseDict(request):
 	firstname = user.user_firstname
 	lastname = user.user_lastname
 	fullname = firstname + " " + lastname
-	unitAddForm.fields['standards'].choices = standards_list
 	
 	#return (stuff for function, stuff to render)
 	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': fullname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'sectionAddForm':sectionAddForm}
