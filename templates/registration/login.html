@@ -27,7 +27,7 @@
       
       .push {
       	
-      	height: 15em;
+      	height: 20em;
       
       }
       
@@ -115,7 +115,7 @@
   <div class="span12">
 {% csrf_token %}
       <form class="form-signin" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
-        <h3 class="form-signin-heading">Login to Lessn Lab</h3>
+        <h3 class="form-signin-heading">Login</h3>
         <input type="text" class="input-block-level" name="username" placeholder="Username" value={{ username }}>
         <input type="password" class="input-block-level" name="password" placeholder="Password">
 	{{ errors }}
