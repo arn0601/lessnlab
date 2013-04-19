@@ -58,7 +58,7 @@
 				border-top-color:#c8c8c8;
 				padding-bottom: 15px;
 				vertical-align: middle;
-                height: 5em;
+                height: 7em;
 				opacity:1.5;
 				color: #c8c8c8;
 				
@@ -111,7 +111,7 @@
   </div> -->
    <div class="push">
    </div>
-  <div class="span12">
+  <div>
 {% csrf_token %}
       <form class="form-signin" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
         <h3 class="form-signin-heading">Login</h3>
