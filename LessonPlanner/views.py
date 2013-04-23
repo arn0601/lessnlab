@@ -96,9 +96,9 @@ def showLesson(request):
 	request.session['last_page'] = '/lessons/?unit_id='+str(base_dict['unit'].id)
 	return render_to_response('lesson.html', base_dict)
 
-
+#this function is used when creating objectives to select the initial standard
 @csrf_exempt
-def requestLessonObjectives(request):
+def getLessonStandards(request):
 	if request.method == 'POST':
 		lesson_id = request.POST['lesson_id']
 		try:
@@ -106,44 +106,84 @@ def requestLessonObjectives(request):
 			teacher = TeacherProfile.objects.get(user=request.user)
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
-		
-		print "here reaquesting lesson"
 		standard_list = []
 		for standard in lesson.standards.all():
 			standard_list.append((standard.id, standard.description))
-		form = LessonObjectivesForm()
-		form.fields['standards'].choices = standard_list
+		form = SelectStandardsForm()
+		form.fields['standard'].choices = standard_list
 		form.fields['lesson_id'].initial = lesson_id
 		base_dict = base_methods.createBaseDict(request)
-		base_dict['lessonObjectivesForm'] = form
-		base_dict['addingLessonObjectives'] = True
+		base_dict['selectStandardsForm'] = form
+		base_dict['selectingStandard'] = True
 		return render_to_response('lesson.html', base_dict)
+
+#this returns the form to add objectives
+@csrf_exempt
+def createLessonObjectives(request):
+	if request.method == 'POST':
+		standards_form = SelectStandardsForm(data=request.POST)
+		try:
+			lesson = Lesson.objects.get(id=standards_form.data['lesson_id'])
+		except:
+			return HttpResponseRedirect(lastPageToRedirect(request))
+		standard_list = []
+		for standard in lesson.standards.all():
+			standard_list.append((standard.id,standard.description))
+		standards_form.fields['standard'].choices = standard_list	
+		if standards_form.is_valid():
+			try:
+				s = Standard.objects.get(id=standards_form.cleaned_data['standard'])
+			except:
+				print "standard not found"
+				return HttpResponseRedirect(lastPageToRedirect(request))
+			best_objectives = Objective.objects.filter(standard=s)[:5]
+			obj_list = []
+			for obj in best_objectives:
+				obj_list.append((obj.id, obj.description))
+			next_form = CreateObjectivesForm()
+			next_form.fields['created'].choices = obj_list
+			next_form.fields['standard_id'].initial = standards_form.cleaned_data['standard']
+			next_form.fields['lesson_id'].initial = standards_form.cleaned_data['lesson_id']
+			base_dict = base_methods.createBaseDict(request)
+			base_dict['createObjectivesForm'] = next_form
+			base_dict['creatingObjectives'] = True
+			return render_to_response('lesson.html',base_dict)
+		else:
+			print standards_form.errors
+	return HttpResponseRedirect(lastPageToRedirect(request))
 
 @csrf_exempt
 def addLessonObjectives(request):
 	print "adding lesson objectives"
 	if request.method == 'POST':
-		form = LessonObjectivesForm(data=request.POST)
+		form = CreateObjectivesForm(data=request.POST)
 		try:
 			lesson = Lesson.objects.get(id=int(form.data['lesson_id']))
+			standard = Standard.objects.get(id=int(form.data['standard_id']))
 			teacher = TeacherProfile.objects.get(user=request.user)
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
 		
-		standard_list = []
-		for standard in lesson.standards.all():
-			standard_list.append((standard.id, standard.description))
-		form.fields['standards'].choices = standard_list
 		if form.is_valid():
-			sid = form.cleaned_data['standards']
-			s = Standard.objects.get(id=sid)
-			o = Objective()
-			o.description = form.cleaned_data['description']
-			o.standard = s
-			o.creation_date = datetime.today()
-			o.owner = teacher
-			o.save()
-			lesson.objectives.add(o)
+			already_created = form.cleaned_data['created']
+			for obj_id in already_created:
+				old_o = Objective.objects.get(id=obj_id)
+				new_o = Objective()
+				new_o.description = old_o.description
+				new_o.standard = old_o.standard
+				new_o.owner = teacher
+				new_o.creation_date = datetime.today()
+				new_o.save()
+				lesson.objectives.add(new_o)
+			new_count = form.cleaned_data['new_objectives_count']
+			for index in range(0,int(new_count)):
+				new_o = Objective()
+				new_o.description = form.data['new_objective_{index}'.format(index=index)]
+				new_o.standard = standard
+				new_o.owner = teacher
+				new_o.creation_date = datetime.today()
+				new_o.save()
+				lesson.objectives.add(new_o)
 		else:
 			print form.errors
 		return HttpResponseRedirect(lastPageToRedirect(request))				
@@ -644,4 +684,28 @@ def getStandardsFromGroup(request):
 		return render_to_response('course.html', base_dict)
 	return HttpResponseRedirect('/courses/')
 
-
+@csrf_exempt
+def standardsSearch(request):
+	base_dict = base_methods.createBaseDict(request)
+	if request.method == 'POST':
+		groups = []
+		form = StandardsSearchForm(data=request.POST)
+		if form.is_valid():
+			qset = StandardGrouping.objects.filter(subject=form.cleaned_data['subject'])
+			if form.cleaned_data['grade'] != '':
+				qset = qset.filter(grade=form.cleaned_data['grade'])
+			for group in qset:
+				for standard in group.standard.all():
+					if standard.owner_type == form.cleaned_data['state']:
+						groups.append( group)
+						break
+			base_dict['searchedStandards'] = groups
+			base_dict['returnResults'] = True
+			return render_to_response('standards_search.html', base_dict)
+		else:
+			return HttpResponseRedirect('/standardsSearch/')
+	else:
+		standardsSearchForm = StandardsSearchForm()
+		base_dict['standardsSearchForm'] = StandardsSearchForm()
+		base_dict['searchingStandards'] = True
+		return render_to_response('standards_search.html', base_dict)

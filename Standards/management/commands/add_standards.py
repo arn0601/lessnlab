@@ -12,6 +12,7 @@ class Command(NoArgsCommand):
 	sg.name = '8th Grade Math - MO'
 	sg.subject = 'Mathematics'
 	sg.grade = '8'
+	sg.state = 'MO'
 	sg.creation_date = datetime.datetime.today()
 	sg.save()
 	i=1

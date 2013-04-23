@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 # Create your models here.
 import extra_methods
+from Rating.models import Rating
 
 STATE_CHOICES = [('', 'None'),('PA','Pennsylvania'), ('MO', 'Missouri'), ('NY', 'New York')]
 
@@ -21,6 +22,9 @@ class UserProfile(models.Model):
 class TeacherProfile(UserProfile):
         teacher_code = models.CharField(max_length=32)
 	
+class TeacherRating(Rating):
+	teacher = models.ForeignKey('TeacherProfile')
+
 class StudentProfile(UserProfile):
 	dummy = models.CharField(max_length=32)
 

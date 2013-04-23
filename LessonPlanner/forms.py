@@ -1,6 +1,7 @@
 from django import forms
 from django.forms.extras.widgets import SelectDateWidget
 from LessonPlanner.models import *
+from Standards.models import STATE_CHOICES
 import custom_widgets 
 
 SUBJECTS = [('Mathematics','Mathematics'),('Science','Science'),('Social Studies','Social Studies')]
@@ -131,8 +132,27 @@ class LessonStandardsForm(forms.Form):
 	lesson_id.widget = forms.HiddenInput()
 	standards = forms.MultipleChoiceField(label='Select Unit Standards')
 
-class LessonObjectivesForm(forms.Form):
+class SelectStandardsForm(forms.Form):
 	lesson_id = forms.CharField(label='')
 	lesson_id.widget = forms.HiddenInput()
-	standards = forms.ChoiceField(label='Select Standard')
-	description = forms.CharField(label='Objective description')
+	standard = forms.ChoiceField(label='Select Standard')
+	
+class CreateObjectivesForm(forms.Form):
+	lesson_id = forms.CharField(label='')
+	lesson_id.widget = forms.HiddenInput()
+	standard_id = forms.CharField(label='')
+	standard_id.widget = forms.HiddenInput()
+	created = forms.MultipleChoiceField(label='Choose from created objectives', required=False)
+	new_objectives_count = forms.CharField(label='', widget=forms.HiddenInput())
+
+	def __init__(self, *args, **kwargs):
+		extra_fields = kwargs.pop('extra', 0)
+		super(CreateObjectivesForm, self).__init__(*args, **kwargs)
+		self.fields['new_objectives_count'].initial = extra_fields
+		for index in range(int(extra_fields)):
+			self.fields['new_objective_{index}'.format(index=index)] = forms.CharField(label='New Objective {index}'.format(index=index),required=False)
+
+class StandardsSearchForm(forms.Form):
+	state = forms.ChoiceField(label='State', choices=STATE_CHOICES)
+	subject = forms.ChoiceField(label='Subject', choices=SUBJECTS)
+	grade = forms.ChoiceField(label='Grade', choices=GRADES)
