@@ -83,6 +83,17 @@
 	</body>
 <!-- Javascript -->
 <script>
+
+	$('.row .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+    $collapse.collapse('toggle');
+		if(this.innerHTML.indexOf("View") >= 0)
+			this.innerHTML = "Hide Answer &laquo;";
+		else
+			this.innerHTML = "View Answer &raquo;";
+});
 	
 	
 

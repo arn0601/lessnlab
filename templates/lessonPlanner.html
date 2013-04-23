@@ -88,9 +88,15 @@
 							Question: {{ r.question }}
 						</div>
 						<div>
-							{% with ans=assessment_dict|access:content.id|access:r %}
-								Answer: {{ ans.answer }}
-							{% endwith %}
+							<div class="row" style="margin-left:0px">
+						    <div class="span4 collapse-group">
+					        <p class="collapse">
+								{% with ans=assessment_dict|access:content.id|access:r %}
+										Answer: {{ ans.answer }}
+							{% endwith %} </p>
+        					<p><a class="btn" href="#">View Answer &raquo;</a></p>
+    						</div>
+							</div>
 						</div>
 					{% endfor %}
 				
