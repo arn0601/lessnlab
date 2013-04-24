@@ -156,3 +156,11 @@ class StandardsSearchForm(forms.Form):
 	state = forms.ChoiceField(label='State', choices=STATE_CHOICES)
 	subject = forms.ChoiceField(label='Subject', choices=SUBJECTS)
 	grade = forms.ChoiceField(label='Grade', choices=GRADES)
+
+class TeacherRequestForm(forms.Form):
+	email = forms.CharField(label='Teacher Email')
+
+class CourseRequestForm(forms.Form):
+	teacher_id = forms.CharField(label='')
+	teacher_id.widget = forms.HiddenInput()
+	courses = forms.MultipleChoiceField(label='Choose courses')

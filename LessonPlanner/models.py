@@ -1,5 +1,5 @@
 from django.db import models
-from accounts.models import TeacherProfile
+from accounts.models import TeacherProfile, StudentProfile
 from Standards.models import Standard
 from Objectives.models import Objective
 from Rating.models import Rating
@@ -31,6 +31,12 @@ class Course(models.Model):
 	start_date = models.DateField()
 	end_date = models.DateField()
 	standard_grouping = models.ManyToManyField('StandardGrouping', blank=True, null=True)
+
+class CourseStudents(models.Model):
+	course = models.ForeignKey('Course')
+	student = models.ForeignKey('accounts.StudentProfile')
+	registered = models.BooleanField()
+	approved = models.BooleanField()
 
 class CourseRating(Rating):
 	course = models.ForeignKey('Course')

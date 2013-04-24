@@ -14,6 +14,7 @@ from datetime import datetime
 from django.utils.timezone import utc
 import simplejson
 import base_methods 
+from django.contrib.auth.models import User
 
 
 #show the units for a specific course
@@ -27,10 +28,13 @@ def showUnits(request):
                 return DeleteUnitRequest(request, base_dict['unit'].id)
 	
 	#return from base
-
+	user = TeacherProfile.objects.filter(user=request.user)
 	request.session['last_page'] = '/units/?course_id='+str(base_dict['course'].id)
 	
-	return render_to_response('unit.html', base_dict)
+	if user and len(user) > 0:
+		return render_to_response('unit.html', base_dict)
+	else:
+		return HttpResponseRedirect('/studentCourses/')
 
 #show the lessons of a unit
 
@@ -94,7 +98,11 @@ def showLesson(request):
                 return DeleteLessonRequest(request, base_dict['lesson'].id)
 
 	request.session['last_page'] = '/lessons/?unit_id='+str(base_dict['unit'].id)
-	return render_to_response('lesson.html', base_dict)
+	user = TeacherProfile.objects.filter(user=request.user)
+	if user and len(user) > 0:
+		return render_to_response('lesson.html', base_dict)
+	else:
+		return HttpResponseRedirect('/studentCourses/')
 
 #this function is used when creating objectives to select the initial standard
 @csrf_exempt
@@ -115,6 +123,7 @@ def getLessonStandards(request):
 		base_dict = base_methods.createBaseDict(request)
 		base_dict['selectStandardsForm'] = form
 		base_dict['selectingStandard'] = True
+		
 		return render_to_response('lesson.html', base_dict)
 
 #this returns the form to add objectives
@@ -252,8 +261,11 @@ def showLessonPlanner(request):
 	base_dict['deleteSectionForm'] = delete_section_form
 	base_dict['deleteContentForm'] = delete_content_form
 	request.session['last_page'] = '/lessonPlanner/?lesson_id='+str(base_dict['lesson'].id)
-	
-	return render_to_response('lessonPlanner.html', base_dict)
+	user = TeacherProfile.objects.filter(user=request.user)
+	if user and len(user) > 0:
+		return render_to_response('lessonPlanner.html', base_dict)
+	else:
+		return HttpResponseRedirect('/studentCourses/')
 
 def lastPageToView(request):
 	if request.session['last_page'] == 'courses':
@@ -264,6 +276,8 @@ def lastPageToView(request):
 		return request.session['last_page']
 	elif 'lessonPlanner' in request.session['last_page']:
 		return request.session['last_page']
+	elif 'studentCourses' in request.session['last_page']:
+		return showStudentCourses(request)
 	return courses(request)
 	
 def lastPageToRedirect(request):
@@ -275,6 +289,8 @@ def lastPageToRedirect(request):
                 return request.session['last_page']
 	elif 'lessonPlanner' in request.session['last_page']:
                 return request.session['last_page']
+	elif 'studentCourses' in request.session['last_page']:
+		return '/studentCourses/'
 	return '/courses/'
 
 @csrf_exempt
@@ -288,7 +304,12 @@ def courses(request):
                 return DeleteCourseRequest(request, base_dict['course'].id)
 	
 	request.session['last_page'] = 'courses'
-	return render_to_response('course.html', base_dict)
+	
+	user = TeacherProfile.objects.filter(user=request.user)
+	if user and len(user) > 0:
+		return render_to_response('course.html', base_dict)
+	else:
+		return HttpResponseRedirect('/studentCourses/')
 
 @csrf_exempt
 def addCourse(request):
@@ -653,6 +674,81 @@ def deleteLessonData(lessonForm, request_user):
                 Lesson.objects.get(id=lessonForm.data['lesson_id']).delete()
                 return True;
         return False;
+
+
+def manageStudents(request):
+	base_dict = base_methods.createBaseDict(request)
+	#get courses with students
+	course_students = {}
+	for course in base_dict['userCourses']:
+		cs_list = CourseStudents.objects.filter(course=course)
+		
+		student_list = [cs.student for cs in cs_list]
+		course_students[course] = student_list
+	base_dict['courseStudents'] = course_students
+	print course_students
+	return render_to_response('manage_students.html', base_dict)
+
+@csrf_exempt
+def studentRequestCourse(request):
+	base_dict = base_methods.createStudentDict(request)
+	teacher_request = TeacherRequestForm(data=request.POST)
+	if teacher_request.is_valid():
+		generic_user = User.objects.get(email=teacher_request.data['email'])
+		teacher = TeacherProfile.objects.get(user=generic_user)
+		course_request = CourseRequestForm()
+		courses = Course.objects.filter(owner=teacher)
+		course_list = []
+		for course in courses:
+			course_list.append((course.id, course.name))
+		course_request.fields['courses'].choices = course_list
+		course_request.fields['teacher_id'].initial = teacher.id
+		base_dict['teacherCoursesRequestForm'] = course_request
+		base_dict['coursesWereRequested'] = True
+		return render_to_response('student_course.html', base_dict)
+	else:
+		return HttpResponseRedirect(lastPageToRedirect(request))
+
+@csrf_exempt
+def studentAddCourse(request):
+	courseRequestForm = CourseRequestForm(data=request.POST)
+	teacher_id = courseRequestForm.data['teacher_id']
+	try:
+		teacher = TeacherProfile.objects.get(id=teacher_id)
+		student = StudentProfile.objects.get(user=request.user)
+	except:
+		return HttpResponseRedirect('/studentCourses/')
+	courses = Course.objects.filter(owner=teacher)
+	course_list = []
+	for course in courses:
+		course_list.append((course.id, course.name))
+	courseRequestForm.fields['courses'].choices = course_list
+	if courseRequestForm.is_valid():
+		try:
+			teacher = TeacherProfile.objects.get(id=courseRequestForm.data['teacher_id'])
+			print teacher
+			for course_id in courseRequestForm.cleaned_data['courses']:
+				course = Course.objects.get(owner=teacher, id=course_id)
+				print course
+				cs = CourseStudents()
+				cs.course = course
+				cs.student = student
+				cs.approved = False
+				cs.save()
+				print CourseStudents.objects.all()
+				return HttpResponseRedirect('/studentCourses/')
+		except:
+			print "here again", courseRequestForm.data['teacher_id']
+			return HttpResponseRedirect(lastPageToRedirect(request))
+	else:	
+		print courseRequestForm.errors
+		return HttpResponseRedirect(lastPageToRedirect(request))
+
+def studentShowCourses(request):
+	base_dict = base_methods.createStudentDict(request)
+	request.session['last_page'] = 'studentCourses'
+	return render_to_response('student_course.html', base_dict)
+
 
 def deleteSectionData(sectionForm, request_user):
 	if 'section_id' in sectionForm.data:
