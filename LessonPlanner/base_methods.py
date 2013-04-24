@@ -22,6 +22,7 @@ def createStudentDict(request):
 		user = StudentProfile.objects.get(user=request.user)
         except StudentProfile.DoesNotExist:
 		print 'Student Does No Exist for ' + str(request.user.id)
+		logout(request)
 		return None
 
 	#get all courses associated with the user
@@ -88,6 +89,7 @@ def createBaseDict(request):
         	lessonAddForm.fields['owner'].initial = user
 	except TeacherProfile.DoesNotExist:
 		user = StudentProfile.objects.get(user=request.user)
+		logout(request)
 		return None
 	#get all courses associated with the user
 	user_courses =  Course.objects.filter(owner=user)
