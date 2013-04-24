@@ -93,7 +93,7 @@
 <div class="container">
     <form class="form-signin form-horizontal" action="{% url registration.views.register %}" method="post">
     {% csrf_token %}
-    <h4 class="form-signin-heading">Reg Info</h4>
+    <h4 class="form-signin-heading">Sign Up For LessnLab</h4>
     {% for field in form %}
         <div class="control-group">
 	{{ field.errors.as_text }}

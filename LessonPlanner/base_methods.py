@@ -146,10 +146,13 @@ def createBaseDict(request):
         	user_units =  Unit.objects.filter(course=course)
 	
 	uname = request.user.username
-
+	firstname = user.user_firstname
+	lastname = user.user_lastname
+	fullname = firstname + " " + lastname
 	
 	#return (stuff for function, stuff to render)
-	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'sectionAddForm':sectionAddForm}
+	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': fullname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'sectionAddForm':sectionAddForm}
+	
 
 def getLessonSpecificInfo(lesson):
 	lesson_sections = Section.objects.filter(lesson=lesson)

@@ -92,9 +92,9 @@ class AddTextContent(AddContentForm):
 	text = forms.CharField(label="Text", max_length=256, widget=forms.Textarea)
 
 class AddOnlineVideoContent(AddContentForm):
-	link = forms.CharField(label="Link",required=False)
+	link = forms.CharField(label="Add a Link:",required=False)
 	recommended_links = custom_widgets.MyCheckboxSelectMultiple(attrs={'class': 'myclass'})
-	rl = forms.MultipleChoiceField(label="Add Recommended Videos:",widget=recommended_links,choices=(('http://www.youtube.com/embed/ImAMVqA6mug','0'),('http://www.youtube.com/embed/ImAMVqA6mug','1')),required=False)
+	rl = forms.MultipleChoiceField(label="Add/Search Videos:",widget=recommended_links,required=False,choices=[('0',u'https://www.youtube.com/watch?feature=player_embedded&v=IFKnq9QM6_A')])
 
 
 class AddOnlineArticleContent(AddContentForm):
@@ -105,7 +105,7 @@ class AddTeacherNoteContent(AddContentForm):
 
 class AddAdministratorNoteContent(AddContentForm):
         text = forms.CharField(label="Text", max_length=256, widget=forms.Textarea)
-
+	
 class AddOnlinePictureContent(AddContentForm):
         link = forms.CharField(label="Link")
 

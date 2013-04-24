@@ -1,7 +1,18 @@
+<script src="http://code.jquery.com/jquery.js"></script>
+<script>
+
+function imgError(image){
+    image.onerror = "";
+    image.src = "/static/defaultPic.jpg";
+    return true;
+}
+
+</script>
+
 <div class="span2 rightunitbox" id="leftnav">
 	<div class="row-fluid">
 		<div class="span8 profileImageBox">
-			<img class="img-rounded profileImage" src="/static/{{username}}.jpg"/>
+			<img class="img-rounded profileImage" onerror="imgError(this);" src="/static/{{username}}.jpg"/>
 			<h5>{{fullname}}</h5>
 		</div>	
 	</div>
@@ -18,13 +29,7 @@
 				<li><a href="/units/?course_id={{ course.id }}">{{ course.subject }}</a></li>
 				{% endfor %}
 		</ul>
-<!--
-		<ul class="nav nav-list">
-				<li class="nav-header">Tools</li>
-				<li><a href="#">Manage Students</a></li>
-				<li><a href="#">Manage Courses</a></li>
-				<li><a href="#addCourse" data-toggle="modal">Add Course</a></li>
-		</ul>
--->
 	</div>
 </div>
+	
+

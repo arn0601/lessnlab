@@ -12,10 +12,47 @@
 		<link rel="stylesheet" href="/static/bootstrap-image-gallery.css">	
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 		<script src="/static/bootstrap.js"></script>
+		  <script src="/static/jQuery.jQTubeUtil.js"></script>
 		<script type="text/javascript"> <!-- scroll jquery -->
 			function goToByScroll(id){
 	 			$('html,body').animate({scrollTop: $("#"+id).offset().top - 100},1500);
-		}
+			}
+			function getVideoIDfromLink(url)
+			{
+					var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+					var match = url.match(regExp);
+					if (match&&match[2].length==11){
+							return match[2];
+					}else{
+							//error
+					}
+			};
+
+			function getVideoHtmlbyLink(video_link,div_id)
+			{
+				video_id = getVideoIDfromLink(video_link);
+				return getVideoHtmlbyID(video_id,div_id);
+			};
+
+			function getVideoHtmlbyID(video_id,div_id)
+			{
+				jQTubeUtil.video(video_id,function(response)
+				{
+					var video = response.videos[0];
+					jQuery("#"+div_id).html(getVideoHtml(video));
+				});
+			};
+
+			function getVideoHtml(video)
+			{
+				var title = video.title.substring(0,32);
+				var description = video.description.substring(0,32);
+				var video_id = video.videoId;
+				var url = "http://www.youtube.com/watch?feature=player_embedded&v=" + video_id;
+				return "<div style='width:330px;'> <div style='width:175px; float:right'> <b>Title: </b> <a href='" + url + "' > "  + title + "</a><div> <b> Description: </b>" + description +"</div> </div> <div onclick='onVidImgClick(this)' > <img src='http://img.youtube.com/vi/" + video_id + "/1.jpg' alt='splash' width='120px' height='90px' style='cursor: pointer' style='display:inline'/ ></div> <div style='display: none'>   <iframe width='200px' height='150px' temp='http://www.youtube.com/embed/" + video_id + "?autoplay=1'> </iframe></div>";
+
+			};
+
 		</script>
   </head>
 
@@ -47,7 +84,61 @@
 <!-- Javascript -->
 <script>
 
-form_count = $("[name=extra_field_count]").val();
+	$('.row .btn').on('click', function(e) {
+    e.preventDefault();
+    var $this = $(this);
+    var $collapse = $this.closest('.collapse-group').find('.collapse');
+    $collapse.collapse('toggle');
+		if(this.innerHTML.indexOf("View") >= 0)
+			this.innerHTML = "Hide Answer &laquo;";
+		else
+			this.innerHTML = "View Answer &raquo;";
+});
+	
+	
+
+	function doBasicSearch(){
+		jQuery("#basic_search_response_processing").show();
+		jQTubeUtil.search(jQuery('[name=free_text_1]').val(), function(response){
+			var html = "";
+			for(v in response.videos){
+				var video = response.videos[v];
+				html += 
+		" <li class='row-fluid' style='display:block; margin-bottom: 15px;'><div style='display:inline; vertical-align: middle'><input style='margin-right:10px; margin-top:50px; float:left' name='rl' type='checkbox' class='myclass' value='http://www.youtube.com/embed/?v=" + video.videoId + "' id='id_rl_0'> ";
+
+				html += getVideoHtml(video);
+				html += "</div></li>"
+
+			}
+			jQuery("#basic_search_response_itemsPerPage").html(response.itemsPerPage);
+			jQuery("#basic_search_response_searchURL").html(response.searchURL);
+			jQuery("#basic_search_response_startIndex").html(response.startIndex);
+			jQuery("#basic_search_response_totalResults").html(response.totalResults);
+			jQuery("#basic_search_response_version").html(response.version);
+			jQuery("#basic_search_response").html(html);
+			jQuery("#basic_search_response_processing").hide();
+		});
+	};
+
+	function onVidImgClick(el)
+	{
+		actualNextSibling(el).style.display='inline';
+		el.style.display='none';
+		var iframe = actualNextSibling(el).children[0];
+		var url = iframe.getAttribute("temp");
+		iframe.setAttribute("src",url);
+		el.parentNode.style.width='400px';
+		el.parentNode.children[0].style.display='none';
+	};
+
+
+  function actualNextSibling(el) {    // needed to smooth out default firefox/IE behavior
+      do { el = el.nextSibling } while (el && el.nodeType !== 1);
+          return el;
+  };
+
+
+	form_count = $("[name=extra_field_count]").val();
 
 	$("#addMC").click (function(){
 		var form = document.getElementsByName("c_Assessment");
@@ -92,6 +183,10 @@ form_count = $("[name=extra_field_count]").val();
 	});
 
    $(".content_show").click(function(){  
+		jQuery('[name=free_text_1]').val("");
+		
+
+
 		var sid = $(this).data('sectionid'); 
 		var ct = $(this).data('contenttype'); 
 		var x=document.getElementsByTagName("form");
@@ -104,13 +199,6 @@ form_count = $("[name=extra_field_count]").val();
 				{			
 					x[i].section_id.value=sid;
 					var a = x[i];
-					var iframes = a.getElementsByTagName("iframe");
-					for(var p=0;p<iframes.length;p++)
-					{
-						var iframe = iframes[p];
-						var url = iframe.getAttribute("temp");
-						iframe.setAttribute("src",url);
-					}
 				}
 			}
 		}		

@@ -101,6 +101,11 @@
 				border-right-style: solid;
 				padding-left: 10px;
 				}
+			#addContentOnlineVideo
+			{
+				width: 850px;
+				margin: 0 0 0 -400px;
+			}
 			.leftunitbox {
                                 height: 20%px;
                                 width: 100%;

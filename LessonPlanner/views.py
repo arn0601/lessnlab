@@ -16,6 +16,7 @@ import simplejson
 import base_methods 
 from django.contrib.auth.models import User
 
+import urlparse
 
 #show the units for a specific course
 @csrf_exempt
@@ -495,13 +496,28 @@ def addContent(request):
                         return HttpResponseRedirect(lastPageToRedirect(request))
 	return HttpResponseRedirect(lastPageToView(request))
 
+def cleanVideoLink(link):
+	if "youtube" in link:
+		url_data = urlparse.urlparse(link)
+		query = urlparse.parse_qs(url_data.query)
+		return "http://youtube.com/embed/"+query["v"][0]
+	elif "vimeo" in link:
+		url_data = urlparse.urlparse(link)
+		embed_code = urlparse.urlparse(link).path.lstrip("/")
+		return "http://player.vimeo.com/video/" + embed_code
+
+
 def saveVideoContent(contentForm, request):
        	online_video_form = AddOnlineVideoContent(data=request.POST)
+	myDict = dict(request.POST.iterlists())
+	for c in myDict['rl']:
+		online_video_form.fields["rl"].choices.append((c,c))
 	if online_video_form.is_valid():
 		content = OnlineVideoContent()
-		if content.link != "":
+		if online_video_form.data["link"] != "":
 			content = OnlineVideoContent()
-			content.link = online_video_form.data['link']
+			content.link = cleanVideoLink(online_video_form.data['link'])
+			print content.link
 			section = Section.objects.get(id=int(contentForm.data['section_id']))
                         content.section = section
                         content.creation_date=datetime.now()
@@ -510,7 +526,7 @@ def saveVideoContent(contentForm, request):
 			content.save()
 		for link in online_video_form.cleaned_data['rl']:
 			content = OnlineVideoContent()
-			content.link = link
+			content.link = cleanVideoLink(link)
                         section = Section.objects.get(id=int(contentForm.data['section_id']))
                         content.section = section
                         content.creation_date=datetime.now()
