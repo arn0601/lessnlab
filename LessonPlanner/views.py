@@ -113,10 +113,6 @@ def getLessonStandards(request):
 			teacher = TeacherProfile.objects.get(user=request.user)
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
-<<<<<<< HEAD
-		
-=======
->>>>>>> 8e1c4954d24d14fb9003394cde05be4d371ba7f5
 		standard_list = []
 		for standard in lesson.standards.all():
 			standard_list.append((standard.id, standard.description))
