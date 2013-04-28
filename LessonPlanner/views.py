@@ -44,7 +44,6 @@ def requestUnitStandards(request):
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
 		
-		print "here requesting unit"
 		course = unit.course
 		standard_list = []
 		for group in course.standard_grouping.all():
@@ -60,7 +59,6 @@ def requestUnitStandards(request):
 
 @csrf_exempt
 def addUnitStandards(request):
-	print "adding unit standards"
 	if request.method == 'POST':
 		form = UnitStandardsForm(data=request.POST)
 		try:
@@ -107,7 +105,6 @@ def requestLessonObjectives(request):
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
 		
-		print "here reaquesting lesson"
 		standard_list = []
 		for standard in lesson.standards.all():
 			standard_list.append((standard.id, standard.description))
@@ -121,7 +118,6 @@ def requestLessonObjectives(request):
 
 @csrf_exempt
 def addLessonObjectives(request):
-	print "adding lesson objectives"
 	if request.method == 'POST':
 		form = LessonObjectivesForm(data=request.POST)
 		try:
@@ -159,7 +155,6 @@ def requestLessonStandards(request):
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
 		
-		print "here reaquesting lesson"
 		unit = lesson.unit
 		standard_list = []
 		for standard in unit.standards.all():
@@ -407,7 +402,6 @@ def addContent(request):
 		contentForm = AddContentForm(data=request.POST)
 		content_type = contentForm.data['content_type']
 		if content_type == "OnlineVideo":
-			print "ONLINE VIDEO"
 			success = saveVideoContent(contentForm, request)
 			if success:
 				return HttpResponseRedirect(lastPageToRedirect(request))
@@ -421,11 +415,13 @@ def addContent(request):
 			content.placement = getMaxCount(section)+1
 			content.save()
 			if fields != None:
-				for q,a in fields.items():
+				for qa in fields:
+					(q,ans) = qa
 					q.assessment = content
 					q.save()
-					a.question = q
-					a.save()
+					for a in ans:
+						a.question = q
+						a.save()
                         return HttpResponseRedirect(lastPageToRedirect(request))
 	return HttpResponseRedirect(lastPageToView(request))
 
@@ -471,6 +467,14 @@ def saveVideoContent(contentForm, request):
         return (False, None, None)
 
 
+def slicedict(s, d):
+    return {k:v for k,v in d.iteritems() if s in k}
+
+def sortedDictValues(adict):
+    items = adict.items()
+    items.sort()
+    return [(key,value) for key, value in items]
+
 def saveContent(contentForm, request):
 	if contentForm.is_valid():
 		content_type = contentForm.data['content_type']
@@ -514,20 +518,45 @@ def saveContent(contentForm, request):
                         if assessment_form.is_valid():
                                 content = AssessmentContent()
                                 content.title = assessment_form.data['title']
-				fields = assessment_form.data['extra_field_count']
-				questionAnswerMap = {}
-				for index in range(0,int(fields),2):
-					qData = assessment_form.data['extra_field_{index}'.format(index=index)]
-					aData = assessment_form.data['extra_field_{index}'.format(index=index+1)]
-					user = TeacherProfile.objects.get(user=request.user)
+				questionAnswerList = []
+				allq = sortedDictValues(slicedict("question",assessment_form.data))
+				user = TeacherProfile.objects.get(user=request.user)
+				
+				for question in allq:
+					(key, value) = question
+					attrs = key.split('_')
+					if len(attrs) != 3:
+						print "Invalid Key:",key
+						continue
+					qtype = attrs[1]
+					formnum = attrs[2]
 					q = Question()
-					q.question = qData
+					q.placement = formnum
+					q.question = value
 					q.owner = user
-					a = FreeResponseAnswer()
-					a.answer = aData
-					a.owner = user
-					questionAnswerMap[q] = a
-                                return (True, content,questionAnswerMap)
+					ansKey = "answer_"+qtype+"_"+formnum
+					allans = slicedict(ansKey,assessment_form.data)
+					allCheckedAns = slicedict("answer_cb_"+formnum,assessment_form.data)
+					allCheckAnsList = []
+					for a in allCheckedAns:
+						allCheckAnsList.append(a.split('_')[3])
+					print allCheckedAns
+					print allCheckAnsList
+					allAnswers = []
+					for akey,avalue in allans.items():
+						a = Answer
+						if qtype == 'fr':
+							a = FreeResponseAnswer()
+						elif qtype == 'mc':
+							a = MultipleChoiceAnswer()
+							if str(akey.split('_')[3]) in allCheckAnsList:
+								a.is_checked = True;
+						a.answer = avalue
+	                                        a.owner = user
+						allAnswers.append(a)
+					questionAnswerList.append((q,allAnswers))
+                                return (True, content,questionAnswerList)
+
 			print assessment_form.errors
                         return (False, None, None)
 	return (False, None, None);

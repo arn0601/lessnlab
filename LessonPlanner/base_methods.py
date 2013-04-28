@@ -116,8 +116,11 @@ def getLessonSpecificInfo(lesson):
 				questions = Question.objects.filter(assessment = content.assessmentcontent)
 				question_answer_map = {}
 				for q in questions:
-					a = FreeResponseAnswer.objects.get(question = q)
-					question_answer_map[q] = a
+					question_answer_map[q] = []
+					frans = [FreeResponseAnswer.objects.filter(question = q)]
+					question_answer_map[q]=frans
+					mcans = [MultipleChoiceAnswer.objects.filter(question = q)]
+					question_answer_map[q]+=mcans
 				assessment_dict[content.assessmentcontent.id] = question_answer_map
 		section_dict[section] = content_list
 	add_content_form_dict = getAddContentForms(str(-1))

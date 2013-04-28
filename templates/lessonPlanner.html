@@ -37,7 +37,7 @@
 		</div>
 	</div>
 
-	{% for section, section_placement in sections|sort_sections %}
+	{% for section, section_placement in sections|sort_placement %}
 		<div class="sectionheader" id="{{ section.id }}">
 			{% with section.name as user_key %}
 			{{ section_types|access:user_key }} -  {{ section.description }}				
@@ -45,7 +45,7 @@
 						class="btn btn-primary btn-mini delete_section" href="#" style="right: 2%; position: absolute;">Delete Section</a>	
 			{% endwith %}
 		</div>	
-		{% for content, content_placement in sections|access:section|sort_content %}
+		{% for content, content_placement in sections|access:section|sort_placement %}
 			<p/>
 			<div class="well">
 			<div style="position:absolute; right: 2%">
@@ -82,17 +82,30 @@
 			{% elif content.content_type == "Assessment" %}
 				<div>	
 					<h6> Assessment - {{ content.title }} </h6>
-					{% for r in assessment_dict|access:content.id %}
-						
+					{% for q,placement in assessment_dict|access:content.id|sort_placement %}
 						<div>
-							Question: {{ r.question }}
+							Question: {{ q.question }}
 						</div>
 						<div>
 							<div class="row" style="margin-left:0px">
 						    <div class="span4 collapse-group">
 					        <p class="collapse">
-								{% with ans=assessment_dict|access:content.id|access:r %}
-										Answer: {{ ans.answer }}
+								{% with ans=assessment_dict|access:content.id|access:q %}
+									{% for a in ans.0 %}
+										Answer: {{  a.answer }}
+									{% endfor %}
+									
+									
+									{% for a in ans.1 %}
+										{% if forloop.first %}
+										Choices: <br>
+										{% endif %}
+										
+										<input type="checkbox" value = "{{ a.answer }}" 
+										{% if a.is_checked %}
+										Checked 
+										{% endif %} > {{ a.answer }} <br>									
+									{% endfor %}
 							{% endwith %} </p>
         					<p><a class="btn" href="#">View Answer &raquo;</a></p>
     						</div>
