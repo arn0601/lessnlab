@@ -12,11 +12,73 @@ from django.core import serializers
 from accounts.models import TeacherProfile, StudentProfile
 import simplejson
 
-def getStandardsList(course, user):
-	slist = Standard.objects.filter(department=course.department, owner_type=user.user_school_state)
-	s_choices = [(s.id, s.description) for s in slist]
-	return s_choices	
+def returnStudentForms():
+	teacherRequestForm = TeacherRequestForm()
+	return (teacherRequestForm)
 
+def createStudentDict(request):
+	(teacherRequestForm) = returnStudentForms()
+	try:
+		user = StudentProfile.objects.get(user=request.user)
+        except StudentProfile.DoesNotExist:
+		print 'Student Does No Exist for ' + str(request.user.id)
+		logout(request)
+		return None
+
+	#get all courses associated with the user
+	courses = CourseStudents.objects.filter(student=user, approved=True)
+	
+	###################################
+	#get the lesson
+	###################################
+	lesson = None
+	lesson_id = request.GET.get('lesson_id')
+	if ( not lesson_id == None ):
+		lesson = Lesson.objects.get(id=lesson_id)
+
+	####################################
+	#get the unit
+	####################################
+
+	unit = None
+	user_lessons = None
+
+	#if we have lesson, get unit:
+	if ( lesson ):
+		unit = lesson.unit
+	
+	#get unit id
+	unit_id = request.GET.get('unit_id')
+	if ( not unit_id == None ):
+		unit = Unit.objects.get(id=unit_id)
+	##########################################
+	#get the course
+	##############################################	
+	course = None
+	user_units = None
+	#if we have a unit get a course, and get the lesson for the unit
+	if ( unit ):
+		user_lessons = Lesson.objects.filter(unit=unit)
+		course = unit.course
+
+	#get the course id and course
+	course_id = request.GET.get('course_id')
+	if ( not course_id == None ):
+		course = Course.objects.get(id=course_id)
+	
+	#check course
+	if ( course ):
+        	user_units =  Unit.objects.filter(course=course)
+		try:
+			allowed = CourseStudents.objects.get(course=course, student=user, allowed=True)
+		except:
+			print 'Student not allowed to access course'
+			return HttpResponseRedirect('/studentCourses/');
+	
+	uname = request.user.username
+
+	#return (stuff for function, stuff to render)
+	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'teacherRequestForm': teacherRequestForm, 'coursesWereRequested': 0}
 
 def createBaseDict(request):
 	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm) = returnBlankForms()
@@ -27,6 +89,8 @@ def createBaseDict(request):
         	lessonAddForm.fields['owner'].initial = user
 	except TeacherProfile.DoesNotExist:
 		user = StudentProfile.objects.get(user=request.user)
+		logout(request)
+		return None
 	#get all courses associated with the user
 	user_courses =  Course.objects.filter(owner=user)
 	

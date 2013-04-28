@@ -13,11 +13,11 @@
 				
 		<p><b>Standards for this Lesson: </b> 
 	<br>	{% for standard in lesson.standards.all %}
-			{{ standard.description }}
+			{{ standard.description }}<br>
 		{% endfor %}
 		<p><b>Objectives for this Lesson: </b> 
 	<br>	{% for objective in lesson.objectives.all %}
-			{{ objective.description }}
+			{{ objective.description }}<br>
 		{% endfor %}
     <br><br>
 	<a class="btn btn-primary btn-small" type="button" href="?lesson_id={{ lesson.id }}&action=Edit">Edit</a>
@@ -134,16 +134,16 @@
 </div>
 {% endif %}
 
-{% if addingLessonObjectives %}
-<div class="modal" id="addingLessonObjectives">
+{% if selectingStandard %}
+<div class="modal" id="selectingStandard">
   <div class="modal-header">
     <a class="close" type="button" href="/courses/">x</a>
-    <h3>Add standards to lesson</h3>
+    <h3>Select Lesson Standard</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url addLessonObjectives %}" name="add_lesson_objectives">
+    <form method="post" action="{% url createLessonObjectives %}" name="create_lesson_objectives">
         {% csrf_token %}
-        {% for field in lessonObjectivesForm %}
+        {% for field in selectStandardsForm %}
         <div class="control-group">
          <label class="control-label">{{ field.label_tag }}</label>
             <div class="controls">
@@ -159,12 +159,60 @@
   </div>
 </div>
 {% endif %}
+
+{% if creatingObjectives %}
+<div class="modal" id="addingLessonObjectives">
+  <div class="modal-header">
+    <a class="close" type="button" href="/courses/">x</a>
+    <h3>Add Objectives to lesson</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url addLessonObjectives %}" name="add_lesson_objectives">
+        {% csrf_token %}
+        {% for field in createObjectivesForm %}
+        <div class="control-group">
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     
+     <button type="button" id="addObjective" onClick="addObj()"  class="btn btn-primary">Add objective</button>
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn btn-primary" type="button" href="/courses/">Cancel</a>
+      </p>
+    </form>
+  </div>
+</div>
+{% endif %}
 <script type="text/javascript"> <!-- scroll jquery -->
+	
+	new_objectives_count = $("[name=new_objectives_count]").val();
+	
+	function addObj () {
+		var form = document.getElementsByName("createObjectivesForm");
+		textbox = document.createElement('input');
+		textbox.name = 'new_objective_' + new_objectives_count;
+		new_objectives_count ++; 
+	
+		div = document.createElement('div');
+		textbox.type = 'text';		
+
+  		var reper = document.getElementById('addObjective');
+ 	 	var parinte = reper.parentNode;
+
+		parinte.insertBefore(textbox, reper);
+		parinte.insertBefore(div, reper);		
+		
+    		$("[name=new_objectives_count]").val(new_objectives_count);
+
+	}
 	function requestLessonObjectives(id){
 
 		var f = document.createElement("form");
 		f.setAttribute('method',"post");
-		f.setAttribute('action',"{% url LessonPlanner.views.requestLessonObjectives %}");
+		f.setAttribute('action',"{% url getLessonStandards %}");
 		var i = document.createElement("input");
 		i.setAttribute('type',"hidden");
 		i.setAttribute('value', id );

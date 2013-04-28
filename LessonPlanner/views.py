@@ -14,6 +14,8 @@ from datetime import datetime
 from django.utils.timezone import utc
 import simplejson
 import base_methods 
+from django.contrib.auth.models import User
+
 import urlparse
 
 #show the units for a specific course
@@ -27,10 +29,13 @@ def showUnits(request):
                 return DeleteUnitRequest(request, base_dict['unit'].id)
 	
 	#return from base
-
+	user = TeacherProfile.objects.filter(user=request.user)
 	request.session['last_page'] = '/units/?course_id='+str(base_dict['course'].id)
 	
-	return render_to_response('unit.html', base_dict)
+	if user and len(user) > 0:
+		return render_to_response('unit.html', base_dict)
+	else:
+		return HttpResponseRedirect('/studentCourses/')
 
 #show the lessons of a unit
 
@@ -92,11 +97,15 @@ def showLesson(request):
                 return DeleteLessonRequest(request, base_dict['lesson'].id)
 
 	request.session['last_page'] = '/lessons/?unit_id='+str(base_dict['unit'].id)
-	return render_to_response('lesson.html', base_dict)
+	user = TeacherProfile.objects.filter(user=request.user)
+	if user and len(user) > 0:
+		return render_to_response('lesson.html', base_dict)
+	else:
+		return HttpResponseRedirect('/studentCourses/')
 
-
+#this function is used when creating objectives to select the initial standard
 @csrf_exempt
-def requestLessonObjectives(request):
+def getLessonStandards(request):
 	if request.method == 'POST':
 		lesson_id = request.POST['lesson_id']
 		try:
@@ -104,42 +113,88 @@ def requestLessonObjectives(request):
 			teacher = TeacherProfile.objects.get(user=request.user)
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
+<<<<<<< HEAD
 		
+=======
+>>>>>>> 8e1c4954d24d14fb9003394cde05be4d371ba7f5
 		standard_list = []
 		for standard in lesson.standards.all():
 			standard_list.append((standard.id, standard.description))
-		form = LessonObjectivesForm()
-		form.fields['standards'].choices = standard_list
+		form = SelectStandardsForm()
+		form.fields['standard'].choices = standard_list
 		form.fields['lesson_id'].initial = lesson_id
 		base_dict = base_methods.createBaseDict(request)
-		base_dict['lessonObjectivesForm'] = form
-		base_dict['addingLessonObjectives'] = True
+		base_dict['selectStandardsForm'] = form
+		base_dict['selectingStandard'] = True
+		
 		return render_to_response('lesson.html', base_dict)
+
+#this returns the form to add objectives
+@csrf_exempt
+def createLessonObjectives(request):
+	if request.method == 'POST':
+		standards_form = SelectStandardsForm(data=request.POST)
+		try:
+			lesson = Lesson.objects.get(id=standards_form.data['lesson_id'])
+		except:
+			return HttpResponseRedirect(lastPageToRedirect(request))
+		standard_list = []
+		for standard in lesson.standards.all():
+			standard_list.append((standard.id,standard.description))
+		standards_form.fields['standard'].choices = standard_list	
+		if standards_form.is_valid():
+			try:
+				s = Standard.objects.get(id=standards_form.cleaned_data['standard'])
+			except:
+				print "standard not found"
+				return HttpResponseRedirect(lastPageToRedirect(request))
+			best_objectives = Objective.objects.filter(standard=s)[:5]
+			obj_list = []
+			for obj in best_objectives:
+				obj_list.append((obj.id, obj.description))
+			next_form = CreateObjectivesForm()
+			next_form.fields['created'].choices = obj_list
+			next_form.fields['standard_id'].initial = standards_form.cleaned_data['standard']
+			next_form.fields['lesson_id'].initial = standards_form.cleaned_data['lesson_id']
+			base_dict = base_methods.createBaseDict(request)
+			base_dict['createObjectivesForm'] = next_form
+			base_dict['creatingObjectives'] = True
+			return render_to_response('lesson.html',base_dict)
+		else:
+			print standards_form.errors
+	return HttpResponseRedirect(lastPageToRedirect(request))
 
 @csrf_exempt
 def addLessonObjectives(request):
 	if request.method == 'POST':
-		form = LessonObjectivesForm(data=request.POST)
+		form = CreateObjectivesForm(data=request.POST)
 		try:
 			lesson = Lesson.objects.get(id=int(form.data['lesson_id']))
+			standard = Standard.objects.get(id=int(form.data['standard_id']))
 			teacher = TeacherProfile.objects.get(user=request.user)
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
 		
-		standard_list = []
-		for standard in lesson.standards.all():
-			standard_list.append((standard.id, standard.description))
-		form.fields['standards'].choices = standard_list
 		if form.is_valid():
-			sid = form.cleaned_data['standards']
-			s = Standard.objects.get(id=sid)
-			o = Objective()
-			o.description = form.cleaned_data['description']
-			o.standard = s
-			o.creation_date = datetime.today()
-			o.owner = teacher
-			o.save()
-			lesson.objectives.add(o)
+			already_created = form.cleaned_data['created']
+			for obj_id in already_created:
+				old_o = Objective.objects.get(id=obj_id)
+				new_o = Objective()
+				new_o.description = old_o.description
+				new_o.standard = old_o.standard
+				new_o.owner = teacher
+				new_o.creation_date = datetime.today()
+				new_o.save()
+				lesson.objectives.add(new_o)
+			new_count = form.cleaned_data['new_objectives_count']
+			for index in range(0,int(new_count)):
+				new_o = Objective()
+				new_o.description = form.data['new_objective_{index}'.format(index=index)]
+				new_o.standard = standard
+				new_o.owner = teacher
+				new_o.creation_date = datetime.today()
+				new_o.save()
+				lesson.objectives.add(new_o)
 		else:
 			print form.errors
 		return HttpResponseRedirect(lastPageToRedirect(request))				
@@ -207,8 +262,11 @@ def showLessonPlanner(request):
 	base_dict['deleteSectionForm'] = delete_section_form
 	base_dict['deleteContentForm'] = delete_content_form
 	request.session['last_page'] = '/lessonPlanner/?lesson_id='+str(base_dict['lesson'].id)
-	
-	return render_to_response('lessonPlanner.html', base_dict)
+	user = TeacherProfile.objects.filter(user=request.user)
+	if user and len(user) > 0:
+		return render_to_response('lessonPlanner.html', base_dict)
+	else:
+		return HttpResponseRedirect('/studentCourses/')
 
 def lastPageToView(request):
 	if request.session['last_page'] == 'courses':
@@ -219,6 +277,8 @@ def lastPageToView(request):
 		return request.session['last_page']
 	elif 'lessonPlanner' in request.session['last_page']:
 		return request.session['last_page']
+	elif 'studentCourses' in request.session['last_page']:
+		return showStudentCourses(request)
 	return courses(request)
 	
 def lastPageToRedirect(request):
@@ -230,6 +290,8 @@ def lastPageToRedirect(request):
                 return request.session['last_page']
 	elif 'lessonPlanner' in request.session['last_page']:
                 return request.session['last_page']
+	elif 'studentCourses' in request.session['last_page']:
+		return '/studentCourses/'
 	return '/courses/'
 
 @csrf_exempt
@@ -243,7 +305,12 @@ def courses(request):
                 return DeleteCourseRequest(request, base_dict['course'].id)
 	
 	request.session['last_page'] = 'courses'
-	return render_to_response('course.html', base_dict)
+	
+	user = TeacherProfile.objects.filter(user=request.user)
+	if user and len(user) > 0:
+		return render_to_response('course.html', base_dict)
+	else:
+		return HttpResponseRedirect('/studentCourses/')
 
 @csrf_exempt
 def addCourse(request):
@@ -255,6 +322,7 @@ def addCourse(request):
 			groups_added = addCourseStandards(course, teacher)
 			base_dict = base_methods.createBaseDict(request)
 			base_dict['groupsAdded'] = groups_added
+			base_dict['addCourseSecondStep'] = True
 			return render_to_response('course.html', base_dict)
 		else:
 			print addCourseForm.errors
@@ -263,15 +331,19 @@ def addCourse(request):
 def addCourseStandards(course, teacher):
 	groups = StandardGrouping.objects.filter(subject=course.subject).filter(grade=course.grade)
 	groups_to_render = []
-        groups_add = False;
+        groups_add = {};
 	
 	for group in groups:
 		for standard in group.standard.all():
 			print standard.owner_type, teacher.user_school_state
 			if standard.owner_type == teacher.user_school_state:
 				course.standard_grouping.add(group)
-				groups_add = True
 				break
+	for group in course.standard_grouping.all():
+		slist = []
+		for standard in group.standard.all():
+			slist.append(standard)
+		groups_add[group] = slist
 	return groups_add
 
 @csrf_exempt
@@ -653,6 +725,81 @@ def deleteLessonData(lessonForm, request_user):
                 return True;
         return False;
 
+
+def manageStudents(request):
+	base_dict = base_methods.createBaseDict(request)
+	#get courses with students
+	course_students = {}
+	for course in base_dict['userCourses']:
+		cs_list = CourseStudents.objects.filter(course=course)
+		
+		student_list = [cs.student for cs in cs_list]
+		course_students[course] = student_list
+	base_dict['courseStudents'] = course_students
+	print course_students
+	return render_to_response('manage_students.html', base_dict)
+
+@csrf_exempt
+def studentRequestCourse(request):
+	base_dict = base_methods.createStudentDict(request)
+	teacher_request = TeacherRequestForm(data=request.POST)
+	if teacher_request.is_valid():
+		generic_user = User.objects.get(email=teacher_request.data['email'])
+		teacher = TeacherProfile.objects.get(user=generic_user)
+		course_request = CourseRequestForm()
+		courses = Course.objects.filter(owner=teacher)
+		course_list = []
+		for course in courses:
+			course_list.append((course.id, course.name))
+		course_request.fields['courses'].choices = course_list
+		course_request.fields['teacher_id'].initial = teacher.id
+		base_dict['teacherCoursesRequestForm'] = course_request
+		base_dict['coursesWereRequested'] = True
+		return render_to_response('student_course.html', base_dict)
+	else:
+		return HttpResponseRedirect(lastPageToRedirect(request))
+
+@csrf_exempt
+def studentAddCourse(request):
+	courseRequestForm = CourseRequestForm(data=request.POST)
+	teacher_id = courseRequestForm.data['teacher_id']
+	try:
+		teacher = TeacherProfile.objects.get(id=teacher_id)
+		student = StudentProfile.objects.get(user=request.user)
+	except:
+		return HttpResponseRedirect('/studentCourses/')
+	courses = Course.objects.filter(owner=teacher)
+	course_list = []
+	for course in courses:
+		course_list.append((course.id, course.name))
+	courseRequestForm.fields['courses'].choices = course_list
+	if courseRequestForm.is_valid():
+		try:
+			teacher = TeacherProfile.objects.get(id=courseRequestForm.data['teacher_id'])
+			print teacher
+			for course_id in courseRequestForm.cleaned_data['courses']:
+				course = Course.objects.get(owner=teacher, id=course_id)
+				print course
+				cs = CourseStudents()
+				cs.course = course
+				cs.student = student
+				cs.approved = False
+				cs.save()
+				print CourseStudents.objects.all()
+				return HttpResponseRedirect('/studentCourses/')
+		except:
+			print "here again", courseRequestForm.data['teacher_id']
+			return HttpResponseRedirect(lastPageToRedirect(request))
+	else:	
+		print courseRequestForm.errors
+		return HttpResponseRedirect(lastPageToRedirect(request))
+
+def studentShowCourses(request):
+	base_dict = base_methods.createStudentDict(request)
+	request.session['last_page'] = 'studentCourses'
+	return render_to_response('student_course.html', base_dict)
+
+
 def deleteSectionData(sectionForm, request_user):
 	if 'section_id' in sectionForm.data:
 		Section.objects.get(id=sectionForm.data['section_id']).delete()
@@ -683,4 +830,28 @@ def getStandardsFromGroup(request):
 		return render_to_response('course.html', base_dict)
 	return HttpResponseRedirect('/courses/')
 
-
+@csrf_exempt
+def standardsSearch(request):
+	base_dict = base_methods.createBaseDict(request)
+	if request.method == 'POST':
+		groups = []
+		form = StandardsSearchForm(data=request.POST)
+		if form.is_valid():
+			qset = StandardGrouping.objects.filter(subject=form.cleaned_data['subject'])
+			if form.cleaned_data['grade'] != '':
+				qset = qset.filter(grade=form.cleaned_data['grade'])
+			for group in qset:
+				for standard in group.standard.all():
+					if standard.owner_type == form.cleaned_data['state']:
+						groups.append( group)
+						break
+			base_dict['searchedStandards'] = groups
+			base_dict['returnResults'] = True
+			return render_to_response('standards_search.html', base_dict)
+		else:
+			return HttpResponseRedirect('/standardsSearch/')
+	else:
+		standardsSearchForm = StandardsSearchForm()
+		base_dict['standardsSearchForm'] = StandardsSearchForm()
+		base_dict['searchingStandards'] = True
+		return render_to_response('standards_search.html', base_dict)
