@@ -139,18 +139,87 @@
 
 
 	form_count = $("[name=extra_field_count]").val();
+	ansID_count = 0;
 
 	$("#addMC").click (function(){
-		var form = document.getElementsByName("c_Assessment");
-		form.append('<input type=text / >');
-		alert("Add mc");
+		var label,label2,div,textbox,answerbox;
+		var qaDiv = document.createElement('div');
+		qaDiv.className = "well";
+		qaDiv.id = "qa" + form_count;
+		qaDiv.innerHTML = "<div style='position:relative; float:right;'><a onclick='deleteQuestion(" + form_count + ")' class='btn btn-primary btn-mini'>x</a></div>"
+
+		label = document.createElement('label');
+		label.className ="control-label";
+		label2 = document.createElement('label');
+		label.className ="control-label";
+		label.appendChild(document.createTextNode('Question: '));
+	
+		textbox = document.createElement('input');
+		textbox.name = form_count+'question_mc_' + form_count;
+		textbox.type = 'text';		
+		idAns = "answer_mc_" + form_count + "_" + + ansID_count;
+		label2.appendChild(document.createTextNode('Answer:'));
+		addAnswerButton = document.createElement('div')
+		addAnswerButton.innerHTML = 
+			"<a onclick='addMCAnswer(" + form_count + ")' class='btn btn-primary btn-mini'>Add</a>"
+		label2.appendChild(addAnswerButton);
+		
+		mc = document.createElement('div');
+		mc.id = "answer_mc_" + form_count;
+		mc.innerHTML = 
+			"<div  id='" + idAns +"'><input type='checkbox' style='margin-right:10px;' name='extra_field_" + 
+			form_count + "' value=''>" + "<input type='textbox' name='"+ idAns+"' style='margin-right:10px; / >" +
+			"<div  style='position:relative; float:right;><a onclick='deleteMCAnswer(" + idAns + ")' class='btn btn-primary btn-mini'>x</a></div>" + 
+			"</input></div>"
+
+		form_count ++; 
+
+		qaDiv.appendChild(label);
+		qaDiv.appendChild(textbox);
+		qaDiv.appendChild(label2);
+		qaDiv.appendChild(mc);
+			
+  	var parinte = document.getElementById('assess_q');
+  	parinte.appendChild(qaDiv);		
+    $("[name=extra_field_count]").val(form_count);
+		$("[name=ans_id_count]").val(ansID_count);
+
 	});
+
+	function addMCAnswer(formCount)
+	{
+		ansID_count++;
+		newAns = document.createElement('div');
+		idAns = "answer_mc_" + formCount + "_" + ansID_count;
+		idCb = "answer_cb_" + formCount + "_" + ansID_count;
+		newAns.id = idAns;
+		newAns.style.marginTop = "10px";
+		newAns.innerHTML = 
+		"<input type='checkbox' style='margin-right:10px;' name='" + 
+			idCb + "' value=''>" + "<input type='textbox' name='"+idAns+"' style='margin-right:10px; / >" +
+			"<div  style='position:relative; float:right;><a onclick='deleteMCAnswer(" + idAns + ")' class='btn btn-primary btn-mini'>x</a></div>" + 
+			"</input>"
+		$("#answer_mc_" + formCount)[0].appendChild(newAns);
+		$("[name=ans_id_count]").val(ansID_count);
+	}
+	function deleteMCAnswer(ansID)
+	{
+		$(ansID).remove()
+	};
+
+	function deleteQuestion(formNumber)
+	{
+		$('#qa' + formNumber).remove()
+	};
 
 
 	$("#addFR").click (function(){
-		var form = document.getElementsByName("c_Assessment");
-
 		var label,label2,div,textbox,answerbox;
+		var qaDiv = document.createElement('div');
+		qaDiv.className = "well";
+		qaDiv.id = "qa" + form_count;
+		qaDiv.innerHTML = "<div style='position:relative; float:right;'><a onclick='deleteQuestion(" + form_count + ")' class='btn btn-primary btn-mini'>x</a></div>"
+
 		label = document.createElement('label');
 		label.className ="control-label";
 		label2 = document.createElement('label');
@@ -159,34 +228,28 @@
 		label2.appendChild(document.createTextNode('Answer:'));
 
 		textbox = document.createElement('input');
-		textbox.name = 'extra_field_' + form_count;
-		form_count ++; 
+		textbox.name = form_count+'question_fr_' + form_count;
+		textbox.type = 'text';		
 	
 		answerbox = document.createElement('textarea');
-		answerbox.name = 'extra_field_' + form_count;
+		answerbox.name = 'answer_fr_' + form_count + "_0";
 		form_count ++; 
 
-		div = document.createElement('div');
-		textbox.type = 'text';		
-
-  		var reper = document.getElementById('addFR');
- 	 	var parinte = reper.parentNode;
-
-  		parinte.insertBefore(label, reper);
-		parinte.insertBefore(textbox, reper);
-		parinte.insertBefore(label2, reper);
-		parinte.insertBefore(answerbox, reper);
-		parinte.insertBefore(div, reper);		
-		
-    		$("[name=extra_field_count]").val(form_count);
+		qaDiv.appendChild(label);
+		qaDiv.appendChild(textbox);
+		qaDiv.appendChild(label2);
+		qaDiv.appendChild(answerbox);
+	
+  	var parinte = document.getElementById('assess_q');
+  	parinte.appendChild(qaDiv);		
+    $("[name=extra_field_count]").val(form_count);
 
 	});
 
    $(".content_show").click(function(){  
 		jQuery('[name=free_text_1]').val("");
+		jQuery('[id=assess_q]')[0].innerHTML = "";
 		
-
-
 		var sid = $(this).data('sectionid'); 
 		var ct = $(this).data('contenttype'); 
 		var x=document.getElementsByTagName("form");

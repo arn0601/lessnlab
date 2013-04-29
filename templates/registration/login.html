@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height:100%">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -61,6 +61,9 @@
                 height: 7em;
 				opacity:1.5;
 				color: #c8c8c8;
+				position: fixed;
+				bottom: 0px;
+				width: 100%;
 				
 			 }
 
@@ -107,11 +110,9 @@
   </div>
   <div class="container-fluid">
   <div class="row-fluid">
-  <!--<div class="span8">
-  </div> -->
-   <div class="push">
+
    </div>
-  <div>
+  <div style="top: 20%; left: 35%; position: fixed;">
 {% csrf_token %}
       <form class="form-signin" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
         <h3 class="form-signin-heading">Login</h3>
@@ -143,7 +144,7 @@
     </div>
     </div>
    </div>
-   <div class="push"></div>
+
     <div class="footer">
         <div class="rowfluid">
         <div class="span3">

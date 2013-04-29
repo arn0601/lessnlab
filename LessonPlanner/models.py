@@ -116,6 +116,7 @@ class AssessmentContent(Content):
 
 class Question(models.Model):
 	question = models.CharField(max_length=256)
+	placement = models.IntegerField()
 	assessment =  models.ForeignKey(AssessmentContent)
 	
 class Answer(models.Model):
@@ -125,7 +126,9 @@ class Answer(models.Model):
 class FreeResponseAnswer(Answer):
 	answer = models.CharField(max_length=256)
 
-
+class MultipleChoiceAnswer(Answer):
+	answer = models.CharField(max_length=256)
+	is_checked = models.BooleanField(default=False)
 	
 	
 

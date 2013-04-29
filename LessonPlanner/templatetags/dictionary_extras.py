@@ -17,19 +17,10 @@ def access(value, arg):
 	
 	return value.get(arg)
 
-@register.filter(name='sort_sections')
-def sort_sections(value):
-	l = []
-	for key in value.keys():
-		l.append((key, key.placement))
-	sorted(l, key = lambda x: x[1])
-	return l
-
-@register.filter(name='sort_content')
-def sort_content(value):
+@register.filter(name='sort_placement')
+def sort_placement(value):
         l = []
         for key in value:
                 l.append((key, key.placement))
-        sorted(l, key = lambda x: x[1])
-        return l
-
+        l.sort(key=lambda x: x[1])
+        return  l
