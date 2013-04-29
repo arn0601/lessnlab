@@ -502,6 +502,7 @@ def cleanVideoLink(link):
 		url_data = urlparse.urlparse(link)
 		embed_code = urlparse.urlparse(link).path.lstrip("/")
 		return "http://player.vimeo.com/video/" + embed_code
+	return link
 
 
 def saveVideoContent(contentForm, request):
@@ -523,6 +524,7 @@ def saveVideoContent(contentForm, request):
 			content.save()
 		for link in online_video_form.cleaned_data['rl']:
 			content = OnlineVideoContent()
+			print "link", online_video_form.cleaned_data
 			content.link = cleanVideoLink(link)
                         section = Section.objects.get(id=int(contentForm.data['section_id']))
                         content.section = section

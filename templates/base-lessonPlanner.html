@@ -158,6 +158,7 @@
 		textbox.name = form_count+'question_mc_' + form_count;
 		textbox.type = 'text';		
 		idAns = "answer_mc_" + form_count + "_" + + ansID_count;
+   	idCb = "answer_cb_" + form_count + "_" + ansID_count;
 		label2.appendChild(document.createTextNode('Answer:'));
 		addAnswerButton = document.createElement('div')
 		addAnswerButton.innerHTML = 
@@ -167,8 +168,8 @@
 		mc = document.createElement('div');
 		mc.id = "answer_mc_" + form_count;
 		mc.innerHTML = 
-			"<div  id='" + idAns +"'><input type='checkbox' style='margin-right:10px;' name='extra_field_" + 
-			form_count + "' value=''>" + "<input type='textbox' name='"+ idAns+"' style='margin-right:10px; / >" +
+			"<div  id='" + idAns +"'><input type='checkbox' style='margin-right:10px;' name=" 
+			idCb + "' value=''>" + "<input type='textbox' name='"+ idAns+"' style='margin-right:10px; / >" +
 			"<div  style='position:relative; float:right;><a onclick='deleteMCAnswer(" + idAns + ")' class='btn btn-primary btn-mini'>x</a></div>" + 
 			"</input></div>"
 
