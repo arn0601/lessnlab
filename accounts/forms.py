@@ -11,7 +11,8 @@ class UserProfileRegistrationForm(RegistrationForm):
 	school = forms.CharField(required=True, label="School")
 	school_district = forms.CharField(required=True, label="School District")
 	school_state = forms.ChoiceField(required=True, choices=STATE_CHOICES, label="School State")
-	user_type = forms.ChoiceField(label="User Type", choices=USERTYPES, required=True)
+	user_type = forms.CharField(label="")
+	user_type.widget = forms.HiddenInput()
 
 	def isTeacher():
 		return False;
@@ -33,6 +34,10 @@ class UserProfileRegistrationForm(RegistrationForm):
 class TeacherRegistrationForm(UserProfileRegistrationForm):
 	teacher_code = forms.CharField(required=True, label="Teacher Code")
 
+	def __init__(self, *args, **kwargs):
+		super(TeacherRegistrationForm, self).__init__(*args, **kwargs)
+		self.fields['user_type'].initial='Teacher'
+
 	def clean(self):
 		from accounts.models import TeacherProfile
 		cleaned_data = super(TeacherRegistrationForm, self).clean()
@@ -44,3 +49,8 @@ class TeacherRegistrationForm(UserProfileRegistrationForm):
 		print 'asdasd'
 		return cleaned_data
 
+class StudentRegistrationForm(UserProfileRegistrationForm):
+	def __init__(self, *args, **kwargs):
+		print "initing"
+		super(StudentRegistrationForm, self).__init__(*args, **kwargs)
+		self.fields['user_type'].initial='Student'

@@ -11,6 +11,7 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
 from accounts.models import TeacherProfile, StudentProfile
 import simplejson
+from django.contrib.auth import logout
 
 def returnStudentForms():
 	teacherRequestForm = TeacherRequestForm()
@@ -19,12 +20,16 @@ def returnStudentForms():
 def createStudentDict(request):
 	(teacherRequestForm) = returnStudentForms()
 	try:
+		print request.user
 		user = StudentProfile.objects.get(user=request.user)
-        except StudentProfile.DoesNotExist:
+        except:
 		print 'Student Does No Exist for ' + str(request.user.id)
-		logout(request)
-		return None
-
+		try:
+			user = TeacherProfile.objects.get(user=request.user)
+			return None
+		except: 
+			logout(request)
+			return None
 	#get all courses associated with the user
 	courses = CourseStudents.objects.filter(student=user, approved=True)
 	
@@ -88,9 +93,11 @@ def createBaseDict(request):
         	unitAddForm.fields['owner'].initial = user
         	lessonAddForm.fields['owner'].initial = user
 	except TeacherProfile.DoesNotExist:
-		user = StudentProfile.objects.get(user=request.user)
-		logout(request)
-		return None
+		try:
+			user = StudentProfile.objects.get(user=request.user)
+			return None
+		except:
+			logout(request)
 	#get all courses associated with the user
 	user_courses =  Course.objects.filter(owner=user)
 	

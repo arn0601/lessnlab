@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load dictionary_extras %}
+<!DOCTYPE html>
+{% block content %}
+
+         <div class="noborderunitbox" id="u1">
+	<h4> {{ standard.numbering }}.{{ standard.description  }} </h4>
+	<h5> Top Objectives associated with this standard </h5>
+	{% for objective in objectives %}
+	
+		{{ objective.description }}
+	
+	{% endfor %}
+	<h5> Top lessons that use this standard </h5>
+	<h5> Assessments that teach to this standard </h5>
+	</div>
+
+
+{% endblock %}
