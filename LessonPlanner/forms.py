@@ -6,7 +6,7 @@ import custom_widgets
 
 SUBJECTS = [('Mathematics','Mathematics'),('Science','Science'),('Social Studies','Social Studies')]
 SUBJECTS_STRING = '[' + ",".join(["\"%s\"" % s for (s, s2) in SUBJECTS]) + ']'
-GRADES = [('7','7'),('8','8'),('9','9'),('Junior High','Junior High')]
+GRADES = [('6','6'),('7','7'),('8','8'),('9','9'),('Junior High','Junior High')]
 GRADES_STRING = '[' + ",".join(["\"%s\"" % s for (s, s2) in GRADES]) + ']'
 
 class AddCourse(forms.ModelForm):
