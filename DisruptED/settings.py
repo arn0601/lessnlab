@@ -169,7 +169,7 @@ LOGGING = {
 }
 
 import dj_database_url
-DATABASES['default'] =  dj_database_url.config()
+#DATABASES['default'] =  dj_database_url.config()
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 
@@ -179,4 +179,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 LOGIN_URL = "/login/"
-LOGIN_EXEMPT_URLS = ( r'^accounts/registerTeacher/', )
+LOGIN_EXEMPT_URLS = ( r'^accounts/registerTeacher/', r'^accounts/registerStudent/')

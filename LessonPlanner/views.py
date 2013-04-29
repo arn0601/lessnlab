@@ -31,12 +31,7 @@ def showUnits(request):
 	#return from base
 	user = TeacherProfile.objects.filter(user=request.user)
 	request.session['last_page'] = '/units/?course_id='+str(base_dict['course'].id)
-	
-	if user and len(user) > 0:
-		return render_to_response('unit.html', base_dict)
-	else:
-		return HttpResponseRedirect('/studentCourses/')
-
+	return render_to_response("unit.html", base_dict)	
 #show the lessons of a unit
 
 @csrf_exempt
@@ -99,12 +94,8 @@ def showLesson(request):
                 return DeleteLessonRequest(request, base_dict['lesson'].id)
 
 	request.session['last_page'] = '/lessons/?unit_id='+str(base_dict['unit'].id)
-	user = TeacherProfile.objects.filter(user=request.user)
-	if user and len(user) > 0:
-		return render_to_response('lesson.html', base_dict)
-	else:
-		return HttpResponseRedirect('/studentCourses/')
-
+	return render_to_response("lesson.html", base_dict)
+	
 #this function is used when creating objectives to select the initial standard
 @csrf_exempt
 def getLessonStandards(request):
@@ -263,10 +254,7 @@ def showLessonPlanner(request):
 	base_dict['deleteContentForm'] = delete_content_form
 	request.session['last_page'] = '/lessonPlanner/?lesson_id='+str(base_dict['lesson'].id)
 	user = TeacherProfile.objects.filter(user=request.user)
-	if user and len(user) > 0:
-		return render_to_response('lessonPlanner.html', base_dict)
-	else:
-		return HttpResponseRedirect('/studentCourses/')
+	return render_to_response('lessonPlanner.html', base_dict)
 
 def lastPageToView(request):
 	if request.session['last_page'] == 'courses':
@@ -297,7 +285,8 @@ def lastPageToRedirect(request):
 @csrf_exempt
 def courses(request):
 	base_dict = base_methods.createBaseDict(request)
-
+	if base_dict == None:
+		return HttpResponseRedirect('/studentCourses/')
 	action = request.GET.get('action')
 	if action == "Edit":
 		return EditCourseRequest(request, base_dict['course'].id)
@@ -305,12 +294,7 @@ def courses(request):
                 return DeleteCourseRequest(request, base_dict['course'].id)
 	
 	request.session['last_page'] = 'courses'
-	
-	user = TeacherProfile.objects.filter(user=request.user)
-	if user and len(user) > 0:
-		return render_to_response('course.html', base_dict)
-	else:
-		return HttpResponseRedirect('/studentCourses/')
+	return render_to_response('course.html', base_dict)	
 
 @csrf_exempt
 def addCourse(request):
@@ -699,7 +683,9 @@ def manageStudents(request):
 	for course in base_dict['userCourses']:
 		cs_list = CourseStudents.objects.filter(course=course)
 		
-		student_list = [cs.student for cs in cs_list]
+		student_list = [cs for cs in cs_list]
+		for s in student_list:
+			print "First",s.student.user
 		course_students[course] = student_list
 	base_dict['courseStudents'] = course_students
 	print course_students
@@ -745,7 +731,9 @@ def studentAddCourse(request):
 			print teacher
 			for course_id in courseRequestForm.cleaned_data['courses']:
 				course = Course.objects.get(owner=teacher, id=course_id)
-				print course
+				cs_exists = CourseStudents.objects.filter(student=student, course=course)
+				if cs_exists and len(cs_exists) > 0:
+					return HttpResponseRedirect('/studentCourses/')
 				cs = CourseStudents()
 				cs.course = course
 				cs.student = student
@@ -762,6 +750,8 @@ def studentAddCourse(request):
 
 def studentShowCourses(request):
 	base_dict = base_methods.createStudentDict(request)
+	if base_dict == None:
+		return HttpResponseRedirect('/courses/')
 	request.session['last_page'] = 'studentCourses'
 	return render_to_response('student_course.html', base_dict)
 
@@ -821,3 +811,30 @@ def standardsSearch(request):
 		base_dict['standardsSearchForm'] = StandardsSearchForm()
 		base_dict['searchingStandards'] = True
 		return render_to_response('standards_search.html', base_dict)
+
+@csrf_exempt
+def manageCourseStudents(request):
+	if request.method == 'POST':
+		print request.POST
+		cid = request.POST['course_id']
+		try:
+			course = Course.objects.get(id=cid)
+		except:
+			return HttpResponseRedirect('/courses/')
+		students = request.POST.getlist('students')
+		for sid in students:
+			print sid
+			try:
+				user = User.objects.get(id=sid)
+				s = StudentProfile.objects.get(user=user)
+				print s
+				cs = CourseStudents.objects.get(course=course, student=s)
+				print cs
+				cs.approved=True
+				print cs.id
+				cs.save()
+			except:
+				continue	
+		return HttpResponseRedirect('/manageStudents/')
+	else:
+		return HttpResponseRedirect('/manageStudents/')

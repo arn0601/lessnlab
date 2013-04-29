@@ -128,8 +128,11 @@
         </div>
         <hr/>
 	<div class="loginlinks">
-           <span> <a href="{% url accounts.views.registerTeacher%}">Create An Account</a> </span>
+           <span> <a href="{% url accounts.views.registerTeacher%}">Register as a Teacher</a> </span>
            <span class="logindivider">|</span>
+	   <span> <a href="{% url accounts.views.registerStudent%}">Register as a Student</a> </span>
+           <span class="logindivider">|</span>
+
            <span><a href="{% url auth_password_reset %}">Forgot Password?</a></span>
          
           
