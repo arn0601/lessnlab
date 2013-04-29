@@ -13,7 +13,7 @@ class MyCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
 	final_attrs["style"]="margin-right:10px"
 	output = [u'<div> ']
 	output.append(u'<div class="span5 noborderunitbox" style="float:left">')
-	output.append(u'Recommended Vidoes:')
+	output.append(u'Recommended Videos:')
   	str_values = set([force_unicode(v) for v in value])
 #	print "chocies",choices,"asd",self.choices
 	for i, (option_value, option_label) in enumerate(self.choices):
@@ -27,7 +27,7 @@ class MyCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
 
             cb = forms.CheckboxInput(final_attrs, check_test=lambda value: value in str_values)
             option_value = option_value
-            rendered_cb = cb.render(name, option_value)
+            rendered_cb = cb.render(name, option_label)
 	    url = option_label	
 	    output.append("<li style='display:table-row'><div style='display: table-cell; vertical-align: middle'>%s </div>" % (rendered_cb))
 	    vid_html = '''<div style='margin-bottom:10px' id='rec''' + str(i) + ''''>
