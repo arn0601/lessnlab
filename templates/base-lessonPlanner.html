@@ -159,6 +159,7 @@
 		textbox.type = 'text';		
 		idAns = "answer_mc_" + form_count + "_" + + ansID_count;
    	idCb = "answer_cb_" + form_count + "_" + ansID_count;
+		idDiv = "answer_dv_" + form_count + "_" + ansID_count;
 		label2.appendChild(document.createTextNode('Answer:'));
 		addAnswerButton = document.createElement('div')
 		addAnswerButton.innerHTML = 
@@ -168,9 +169,9 @@
 		mc = document.createElement('div');
 		mc.id = "answer_mc_" + form_count;
 		mc.innerHTML = 
-			"<div  id='" + idAns +"'><input type='checkbox' style='margin-right:10px;' name=" 
+			"<div  id='" + idDiv +"'><input type='checkbox' style='margin-right:10px;' name='" +
 			idCb + "' value=''>" + "<input type='textbox' name='"+ idAns+"' style='margin-right:10px; / >" +
-			"<div  style='position:relative; float:right;><a onclick='deleteMCAnswer(" + idAns + ")' class='btn btn-primary btn-mini'>x</a></div>" + 
+			"<div  style='position:relative; float:right;><a onclick='deleteMCAnswer(" + idDiv + ")' class='btn btn-primary btn-mini'>x</a></div>" + 
 			"</input></div>"
 
 		form_count ++; 
@@ -193,19 +194,20 @@
 		newAns = document.createElement('div');
 		idAns = "answer_mc_" + formCount + "_" + ansID_count;
 		idCb = "answer_cb_" + formCount + "_" + ansID_count;
-		newAns.id = idAns;
+		idDiv = "answer_dv_" + formCount + "_" + ansID_count;
+		newAns.id = idDiv;
 		newAns.style.marginTop = "10px";
 		newAns.innerHTML = 
 		"<input type='checkbox' style='margin-right:10px;' name='" + 
 			idCb + "' value=''>" + "<input type='textbox' name='"+idAns+"' style='margin-right:10px; / >" +
-			"<div  style='position:relative; float:right;><a onclick='deleteMCAnswer(" + idAns + ")' class='btn btn-primary btn-mini'>x</a></div>" + 
+			"<div  style='position:relative; float:right;><a onclick='deleteMCAnswer(" + idDiv + ")' class='btn btn-primary btn-mini'>x</a></div>" + 
 			"</input>"
 		$("#answer_mc_" + formCount)[0].appendChild(newAns);
 		$("[name=ans_id_count]").val(ansID_count);
 	}
-	function deleteMCAnswer(ansID)
+	function deleteMCAnswer(idDiv)
 	{
-		$(ansID).remove()
+		$(idDiv).remove()
 	};
 
 	function deleteQuestion(formNumber)
