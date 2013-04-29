@@ -18,6 +18,9 @@ from django.contrib.auth.models import User
 
 import urlparse
 
+def landing(request):
+	return render_to_response('landing.html', {})
+
 #show the units for a specific course
 @csrf_exempt
 def showUnits(request):
