@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.extras.widgets import SelectDateWidget
 from LessonPlanner.models import *
-from Standards.models import STATE_CHOICES
+from Standards.models import STATE_CHOICES, STATES_STRING
 import custom_widgets 
 
 SUBJECTS = [('Mathematics','Mathematics'),('Science','Science'),('Social Studies','Social Studies')]
@@ -164,3 +164,4 @@ class CourseRequestForm(forms.Form):
 	teacher_id = forms.CharField(label='')
 	teacher_id.widget = forms.HiddenInput()
 	courses = forms.MultipleChoiceField(label='Choose courses')
+

@@ -2,6 +2,7 @@ from django.db import models
 
 STATE_CHOICES = [('', 'None'),('PA','Pennsylvania'), ('MO', 'Missouri'), ('NY', 'New York')]
 
+STATES_STRING = '[' + ",".join(["\"%s\"" % s for (s, s2) in STATE_CHOICES]) + ']'
 
 
 class Standard(models.Model):

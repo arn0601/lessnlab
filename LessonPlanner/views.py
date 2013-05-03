@@ -873,3 +873,4 @@ def manageCourseStudents(request):
 		return HttpResponseRedirect('/manageStudents/')
 	else:
 		return HttpResponseRedirect('/manageStudents/')
+
