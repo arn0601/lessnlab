@@ -112,7 +112,7 @@
 		<div style="height: 100%">
 			{% include "navbar.html" %}
 			<div class="row-fluid" style="position: relative; height: 100%">
-				<div class="span2 noborderunitbox" id="leftnav">
+				<div class="span2 noborderunitbox" id="leftnav" style="position:fixed">
 					<ul class="nav nav-pills nav-stacked">
 						<li>
 							<a href="javascript:void(0)" id="leftNav0" onClick="goToByScroll('overview')">Overview</a>
@@ -130,7 +130,7 @@
 					</ul>
 					<a class="btn btn-primary btn-small" type="button" href="#addSection" data-toggle="modal">Add Section</a>
 				</div>
-				<div class="span10 leftunitbox" id="content" style="margin-left: 0px;">
+				<div class="span10 leftunitbox" id="content" style="margin-left: 11.2pc;">
 	      	{% block content %}{% endblock %}
 				</div>
 			</div>
