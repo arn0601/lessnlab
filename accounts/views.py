@@ -3,19 +3,16 @@ from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect
-
 from django.shortcuts import redirect
 from django.template import RequestContext
-
 from registration.backends import get_backend
-
 from django.contrib.auth import logout
-
-def logout_view(request):
-    logout(request)
-
-
 from django.contrib.auth.decorators import login_required
+
+@csrf_exempt
+def logout_user(request):
+	logout(request)	
+	return HttpResponseRedirect('/login/')
 
 @csrf_exempt
 def login_user(request):

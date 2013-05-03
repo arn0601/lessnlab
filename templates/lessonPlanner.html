@@ -2,150 +2,154 @@
 {% extends "base-lessonPlanner.html" %}
 {% load dictionary_extras %}
 {% block content %}
-<div class="noborderunitbox">
-	<div class="sectionheader" id="overview">
-		Lesson Overview
-	</div>
-	<div class="overviewsectionnav">					
-		<div class="span4">
-			<b>{{ lesson.name }}</b> in the <a href="/lessons/?unit_id={{ unit.id }}"> {{ unit.name }}</a>
+<div class="noborderunitbox" id="allSections">
+	<div id="section0">
+		<div class="sectionheader" >
+			Lesson Overview
 		</div>
-		<div class="span5">
-			<b>Aligns to Standard(s): </b> <a href="#">3.1.a</a>, <a href="#">3.1.b</a>
-		</div>
-		<div class="span3">
-			<b>Written By: </b><a href="#">{{ fullname }}</a>
-		</div>
-	</div>
-	<div>
-		<div class="span12 well">
-			<h5>Lesson Description</h5>
-			<p> 
-				{{ lesson.description }}
-			</p>
-			<button class="btn btn-primary btn-mini">Edit Description</button>
-		</div>
-	</div>
-	<div>
-		<div class="span12 well">
-			<h5>Lesson Objectives</h5>
-			<ul>
-				<li>SWBAT define three causes of the Civil War</li>
-			</ul>
-			<button class="btn btn-primary btn-mini">Add Objectives</button>
-			<button class="btn btn-mini">Delete Objectives</button>
-		</div>
-	</div>
-
-	{% for section, section_placement in sections|sort_placement %}
-		<div class="sectionheader" id="{{ section.id }}">
-			{% with section.name as user_key %}
-			{{ section_types|access:user_key }} -  {{ section.description }}				
-				<a id="delete_section" data-sectionid="{{ section.id }}" 
-						class="btn btn-primary btn-mini delete_section" href="#" style="right: 2%; position: absolute;">Delete Section</a>	
-			{% endwith %}
-		</div>	
-		{% for content, content_placement in sections|access:section|sort_placement %}
-			<p/>
-			<div class="well">
-			<div style="position:absolute; right: 2%">
-				
-				{% if not forloop.last %}
-					<a class="btn btn-primary btn-mini" style="" type="button" 
-						href="?content_id={{ content.id }}&action=Edit">&#x25BC;</a>
-				{% endif %}
-
-				{% if not forloop.first %}
-				<a class="btn btn-primary btn-mini" style="" type="button" 
-										href="?content_id={{ content.id }}&action=Edit"> <b>&#x25B2; </b> </a>
-				{% endif %}
-
-				<a class="btn btn-primary btn-mini" style="" type="button" 
-						href="?content_id={{ content.id }}&action=Edit">Edit</a>
-
-				<a id="delete_content" data-contentid="{{ content.id }}" 	
-					class="btn btn-primary btn-mini delete_content" style="" href="#">x</a>
-				
+		<div class="overviewsectionnav">					
+			<div class="span4">
+				<b>{{ lesson.name }}</b> in the <a href="/lessons/?unit_id={{ unit.id }}"> {{ unit.name }}</a>
 			</div>
-			{% if content.content_type == "OnlineVideo" %}
-			<div id="{{content.id }}_content">
-				<script type="text/javascript">
-					document.getElementById("{{content.id }}_content").innerHTML = getVideoHtmlbyLink( "{{ content.link }}","{{content.id }}_content");
-
-				</script>
+			<div class="span5">
+				<b>Aligns to Standard(s): </b> <a href="#">3.1.a</a>, <a href="#">3.1.b</a>
 			</div>
-			<!--	<iframe width="300" height="300" src="{{ content.link }}"> </iframe>-->
-			{% elif content.content_type == "Text" %}
-				<div>	{{ content.text }} </div>
-			{% elif content.content_type == "PowerPoint" %}			
-				<iframe src="http://docs.google.com/gview?url={{ content.link }}" style="width:300px; height:300px;" frameborder="0"></iframe>
-			{% elif content.content_type == "Assessment" %}
-				<div>	
-					<h6> Assessment - {{ content.title }} </h6>
-					{% for q,placement in assessment_dict|access:content.id|sort_placement %}
-						<div>
-							Question: {{ q.question }}
-						</div>
-						<div>
-							<div class="row" style="margin-left:0px">
-						    <div class="span4 collapse-group">
-					        <p class="collapse">
-								{% with ans=assessment_dict|access:content.id|access:q %}
-									{% for a in ans.0 %}
-										Answer: {{  a.answer }}
-									{% endfor %}
-									
-									
-									{% for a in ans.1 %}
-										{% if forloop.first %}
-										Choices: <br>
-										{% endif %}
-										
-										<input type="checkbox" value = "{{ a.answer }}" 
-										{% if a.is_checked %}
-										Checked 
-										{% endif %} > {{ a.answer }} <br>									
-									{% endfor %}
-							{% endwith %} </p>
-        					<p><a class="btn" href="#">View Answer &raquo;</a></p>
-    						</div>
-							</div>
-						</div>
-					{% endfor %}
-				
-				</div>		
-			{% else %}
-					OTHER CONTENT - Need to define template
-			{% endif %}
-			
-			
-			</div>			
-		{% endfor %}
-
-		<div class="sectionnav" style="bottom-border: 1px">
-			<div class="span2">
-					<h5>Add Content</h5>
+			<div class="span3">
+				<b>Written By: </b><a href="#">{{ fullname }}</a>
 			</div>
-			<div class="span10">
-				<ul class="nav nav-pills">						  
-					{% for dropdown_header in dropdown_order %}
-					<li class="dropup">
-					 	<a class="dropdown-toggle ddt" data-toggle="dropdown" href="#">
-									{{ dropdown_header }}
-					 		<b class="caret"></b>
-						</a>
-						<ul class=" mymenu dropdown-menu pull-up showContent " class="btn btn-primary btn-small announce">			
-							{% for dropdown_header_dict in section_content_forms|access:dropdown_header %}
-							<li><a href="#" class="content_show" data-sectionid="{{ section.id }}" 
-									data-contenttype="{{ dropdown_header_dict }}">{{ dropdown_header_dict }}</a></li>   							
-							{% endfor %}
-						</ul>
-					</li>
-					{% endfor %}
+		</div>
+		<div>
+			<div class="span12 well">
+				<h5>Lesson Description</h5>
+				<p> 
+					{{ lesson.description }}
+				</p>
+				<button class="btn btn-primary btn-mini">Edit Description</button>
+			</div>
+		</div>
+		<div>
+			<div class="span12 well">
+				<h5>Lesson Objectives</h5>
+				<ul>
+					<li>SWBAT define three causes of the Civil War</li>
 				</ul>
-			</div> 
+				<button class="btn btn-primary btn-mini">Add Objectives</button>
+				<button class="btn btn-mini">Delete Objectives</button>
+			</div>
 		</div>
-	
+	</div>
+	{% for section, section_placement in sections|sort_placement %}
+		<div id="section{{ section.id }}">
+			<div class="sectionheader" id="{{ section.id }}">
+				{% with section.name as user_key %}
+		
+				<h3> {{ section.description }} </h3>
+				<a id="delete_section" data-sectionid="{{ section.id }}" 
+							class="btn btn-primary btn-mini delete_section" href="#" style="right: 2%; float:right">Delete Section</a>	
+				<h4> {{ section_types|access:user_key }} </h4>  
+				{% endwith %}
+			</div>	
+			{% for content, content_placement in sections|access:section|sort_placement %}
+				<p/>
+				<div class="well">
+					<div style="position:absolute; right: 2%">
+				
+						{% if not forloop.last %}
+							<a class="btn btn-primary btn-mini" style="" type="button" 
+								href="?content_id={{ content.id }}&action=Edit">&#x25BC;</a>
+						{% endif %}
+
+						{% if not forloop.first %}
+						<a class="btn btn-primary btn-mini" style="" type="button" 
+												href="?content_id={{ content.id }}&action=Edit"> <b>&#x25B2; </b> </a>
+						{% endif %}
+
+						<a class="btn btn-primary btn-mini" style="" type="button" 
+								href="?content_id={{ content.id }}&action=Edit">Edit</a>
+
+						<a id="delete_content" data-contentid="{{ content.id }}" 	
+							class="btn btn-primary btn-mini delete_content" style="" href="#">x</a>
+				
+					</div>
+				{% if content.content_type == "OnlineVideo" %}
+				<div id="{{content.id }}_content">
+					<script type="text/javascript">
+						document.getElementById("{{content.id }}_content").innerHTML = getVideoHtmlbyLink( "{{ content.link }}","{{content.id }}_content");
+
+					</script>
+				</div>
+				<!--	<iframe width="300" height="300" src="{{ content.link }}"> </iframe>-->
+				{% elif content.content_type == "Text" %}
+					<div>	{{ content.text }} </div>
+				{% elif content.content_type == "PowerPoint" %}			
+					<iframe src="http://docs.google.com/gview?url={{ content.link }}" style="width:300px; height:300px;" frameborder="0"></iframe>
+				{% elif content.content_type == "Assessment" %}
+					<div>	
+						<h6> Assessment - {{ content.title }} </h6>
+						{% for q,placement in assessment_dict|access:content.id|sort_placement %}
+							<div>
+								Question: {{ q.question }}
+							</div>
+							<div>
+								<div class="row" style="margin-left:0px">
+								  <div class="span4 collapse-group">
+							      <p class="collapse">
+									{% with ans=assessment_dict|access:content.id|access:q %}
+										{% for a in ans.0 %}
+											Answer: {{  a.answer }}
+										{% endfor %}
+									
+									
+										{% for a in ans.1 %}
+											{% if forloop.first %}
+											Choices: <br>
+											{% endif %}
+										
+											<input type="checkbox" value = "{{ a.answer }}" 
+											{% if a.is_checked %}
+											Checked 
+											{% endif %} > {{ a.answer }} <br>									
+										{% endfor %}
+								{% endwith %} </p>
+		      					<p><a class="btn" href="#">View Answer &raquo;</a></p>
+		  						</div>
+								</div>
+							</div>
+						{% endfor %}
+				
+					</div>		
+				{% else %}
+						OTHER CONTENT - Need to define template
+				{% endif %}
+			
+			
+				</div>			
+			{% endfor %}
+
+			<div class="sectionnav" style="bottom-border: 1px">
+				<div class="span2">
+						<h5>Add Content</h5>
+				</div>
+				<div class="span10">
+					<ul class="nav nav-pills">						  
+						{% for dropdown_header in dropdown_order %}
+						<li class="dropup">
+						 	<a class="dropdown-toggle ddt" data-toggle="dropdown" href="#">
+										{{ dropdown_header }}
+						 		<b class="caret"></b>
+							</a>
+							<ul class=" mymenu dropdown-menu pull-up showContent " class="btn btn-primary btn-small announce">			
+								{% for dropdown_header_dict in section_content_forms|access:dropdown_header %}
+								<li><a href="#" class="content_show" data-sectionid="{{ section.id }}" 
+										data-contenttype="{{ dropdown_header_dict }}">{{ dropdown_header_dict }}</a></li>   							
+								{% endfor %}
+							</ul>
+						</li>
+						{% endfor %}
+					</ul>
+				</div> 
+			</div>
+		</div>
 	{% endfor %}	
 	</div>
 </div>

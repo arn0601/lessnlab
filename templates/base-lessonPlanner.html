@@ -11,8 +11,60 @@
 		<link rel="stylesheet" href="http://blueimp.github.com/cdn/css/bootstrap.min.css">
 		<link rel="stylesheet" href="/static/bootstrap-image-gallery.css">	
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-		<script src="/static/bootstrap.js"></script>
-		  <script src="/static/jQuery.jQTubeUtil.js"></script>
+	
+		<script src="/static/jQuery.jQTubeUtil.js"></script>
+  	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	<script src="/static/bootstrap.js"></script>
+
+<style>
+  </style>
+<script>
+  $(function() {
+    $( "#sortable" ).sortable({
+			start: function(event, ui) {
+            var start_pos = ui.item.index();
+            ui.item.data('start_pos', start_pos);
+      },
+			stop: function( event, ui ) 
+			{
+				var start =  ui.item.data('start_pos') + 1;
+				var final = ui.item.index() + 1;
+			
+				a = $("#allSections")[0];
+					
+				div1 = $(a.children[start])
+				div2 = $(a.children[final])
+
+				tdiv1 = div1.clone();
+				tdiv2 = div2.clone();
+
+				if(!div2.is(':empty'))
+				{
+					div1.replaceWith(tdiv2);
+					div2.replaceWith(tdiv1);
+				}
+				
+				var stringData = start + "," + final;
+				$.ajax({ // create an AJAX call...
+            data: {
+					    start : start,
+					    final : final
+						},
+            type: "POST", // GET or POST
+            url: "/changeSectionPlacement/?lesson_id={{lesson.id}}", // the file to call
+            success: function(response) { // on success..
+                 // update the DIV
+        		}
+        });
+					
+			
+
+			}
+			});
+    $( "#sortable" ).disableSelection();
+  });
+  </script>
 		<script type="text/javascript"> <!-- scroll jquery -->
 			function goToByScroll(id){
 	 			$('html,body').animate({scrollTop: $("#"+id).offset().top - 100},1500);
@@ -61,12 +113,17 @@
 			{% include "navbar.html" %}
 			<div class="row-fluid" style="position: relative; height: 100%">
 				<div class="span2 noborderunitbox" id="leftnav">
-					<ul class="nav nav-pills nav-stacked" id="navbar">
-						<li><a href="javascript:void(0)" onClick="goToByScroll('overview')">Overview</a></li>
-						{% for section, content_list in sections.items %}
+					<ul class="nav nav-pills nav-stacked">
+						<li>
+							<a href="javascript:void(0)" id="leftNav0" onClick="goToByScroll('overview')">Overview</a>
+					  </li>
+					</ul>
+					<ul class="nav nav-pills nav-stacked" id="sortable">
+						
+						{% for section, section_placement in sections|sort_placement %}
 				 		{% with section.name as user_key %}
-							<li><a href="javascript:void(0)" onClick="goToByScroll('{{ section.id }}')">
-								{{ section_types|access:user_key }} - {{ section.description }}
+							<li><a href="javascript:void(0)" id="leftNav{{ section.id }}" onClick="goToByScroll('{{ section.id }}')">
+								{{ section_types|access:user_key }}
 						 </a></li>
 	 					{% endwith %}
 						{% endfor %}

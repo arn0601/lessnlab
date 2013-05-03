@@ -19,6 +19,40 @@ from django.contrib.auth.models import User
 import urlparse
 
 #show the units for a specific course
+
+@csrf_exempt
+def changeSectionPlacement(request):
+	print request.POST
+	base_dict = base_methods.createBaseDict(request)
+	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
+	sectionList = lesson_info['sections'].keys()
+	print sectionList
+	l = []
+	for sec in sectionList:
+		print "Appeinding",sec.placement
+		l.append((sec, sec.placement))
+        l.sort(key=lambda x: x[1])
+
+	start=int(request.POST["start"])-1
+	final=int(request.POST["final"])-1
+	print "asd"
+	a1 = l[start]
+	print "qweqew"
+	del l[start]
+	print a1,final
+	l.insert(final,a1)
+	print "123123"
+	counter = 0
+	for sec in l:
+		print sec
+		sec[0].placement = counter
+		sec[0].save()	
+		counter = counter + 1
+	return HttpResponse('')
+
+
+
+
 @csrf_exempt
 def showUnits(request):
 	base_dict = base_methods.createBaseDict(request)

@@ -1,13 +1,15 @@
 from django import forms
 from registration.forms import *
 from registration.models import RegistrationProfile
+import custom_widgets
 
 USERTYPES = [('Teacher','Teacher'),('Student','Student')]
 STATE_CHOICES = [('', 'None'),('PA','Pennsylvania'), ('MO', 'Missouri'), ('NY', 'New York')]
 class UserProfileRegistrationForm(RegistrationForm):
 	first_name = forms.CharField(required=True, label="First Name")
 	last_name = forms.CharField(required=True, label="Last Name")
-	birthdate = forms.DateField(required=True, label="Date of Birth")
+	dateWidget = custom_widgets.CalendarDateSelectField()
+	birthdate = forms.CharField(required=True, label="Date of Birth",widget=dateWidget)
 	school = forms.CharField(required=True, label="School")
 	school_district = forms.CharField(required=True, label="School District")
 	school_state = forms.ChoiceField(required=True, choices=STATE_CHOICES, label="School State")
