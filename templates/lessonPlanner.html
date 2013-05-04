@@ -3,11 +3,11 @@
 {% load dictionary_extras %}
 {% block content %}
 <div class="noborderunitbox" id="allSections">
-	<div id="section0">
+	<div id="section0" class="row-fluid">
 		<div class="sectionheader" >
 			Lesson Overview
 		</div>
-		<div class="overviewsectionnav">					
+		<div class="overviewsectionnav row-fluid">					
 			<div class="span4">
 				<b>{{ lesson.name }}</b> in the <a href="/lessons/?unit_id={{ unit.id }}"> {{ unit.name }}</a>
 			</div>
@@ -39,14 +39,16 @@
 		</div>
 	</div>
 	{% for section, section_placement in sections|sort_placement %}
-		<div id="section{{ section.id }}">
+		<div id="section{{ section.id }}" class="" style="
+    	background: #E6E6FF; padding: 12px; padding-right:5px; margin: 5px; margin-right: 0px; margin-bottom:20px
+		">
 			<div class="sectionheader" id="{{ section.id }}">
 				{% with section.name as user_key %}
 		
-				<h3> {{ section.description }} </h3>
-				<a id="delete_section" data-sectionid="{{ section.id }}" 
+				 {{ section.description }} 
+				<a id="delete_section{{ section.id }}" data-sectionid="{{ section.id }}" 
 							class="btn btn-primary btn-mini delete_section" href="#" style="right: 2%; float:right">Delete Section</a>	
-				<h4> {{ section_types|access:user_key }} </h4>  
+				<h6> {{ section_types|access:user_key }} </h6>  
 				{% endwith %}
 			</div>	
 			{% for content, content_placement in sections|access:section|sort_placement %}
@@ -67,7 +69,7 @@
 						<a class="btn btn-primary btn-mini" style="" type="button" 
 								href="?content_id={{ content.id }}&action=Edit">Edit</a>
 
-						<a id="delete_content" data-contentid="{{ content.id }}" 	
+						<a id="delete_content{{ content.id }}" data-contentid="{{ content.id }}" 	
 							class="btn btn-primary btn-mini delete_content" style="" href="#">x</a>
 				
 					</div>
@@ -126,7 +128,7 @@
 				</div>			
 			{% endfor %}
 
-			<div class="sectionnav" style="bottom-border: 1px">
+			<div class="sectionnav row-fluid" style="bottom-border: 1px">
 				<div class="span2">
 						<h5>Add Content</h5>
 				</div>
