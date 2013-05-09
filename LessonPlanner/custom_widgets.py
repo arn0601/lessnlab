@@ -49,7 +49,7 @@ class MyCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
   margin-bottom:10px;">
 				Search
 </div>
-<div id="basic_search_response_processing" class="inline-notifier" 					style="display: none;">				<img src="/images/loader.gif">
+<div id="basic_search_response_processing" class="inline-notifier" 					style="display: none;">				<img src="/static/loading.gif">
 		</div>
 		</button>
 

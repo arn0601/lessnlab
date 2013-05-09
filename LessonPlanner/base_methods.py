@@ -182,6 +182,8 @@ def getLessonSpecificInfo(lesson):
 				content_list.append(content.teachernotecontent)
 			elif (content.content_type == 'AdministratorNote'):
 				content_list.append(content.administratornotecontent)
+			elif (content.content_type == 'PowerPoint'):
+                                content_list.append(content.powerpointcontent)
  			elif (content.content_type == 'Assessment'):
                                 content_list.append(content.assessmentcontent)
 				questions = Question.objects.filter(assessment = content.assessmentcontent)
@@ -205,6 +207,11 @@ def getAddContentForms(section_id):
 	online_video_form.fields['content_type'].initial = 'OnlineVideo'
 	online_video_form.fields['section_id'].initial = section_id
 	content_form_dict['Media']["OnlineVideo"] = online_video_form
+	
+	power_point_form = AddPowerPointContent()
+        power_point_form.fields['content_type'].initial = 'PowerPoint'
+        power_point_form.fields['section_id'].initial = section_id
+        content_form_dict['Media']["PowerPoint"] = power_point_form
 	
 	online_picture_form = AddOnlinePictureContent()
 	online_picture_form.fields['content_type'].initial = 'OnlinePicture'

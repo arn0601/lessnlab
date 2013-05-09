@@ -82,11 +82,12 @@
 				</div>
 				<!--	<iframe width="300" height="300" src="{{ content.link }}"> </iframe>-->
 				{% elif content.content_type == "Text" %}
-					<div>	{{ content.text }} </div>
-				{% elif content.content_type == "PowerPoint" %}			
-					<iframe src="http://docs.google.com/gview?url={{ content.link }}" style="width:300px; height:300px;" frameborder="0"></iframe>
+					<div id="{{content.id }}_content">	{{ content.text }} </div>
+				{% elif content.content_type == "PowerPoint" %}		
+					<div id="loadImg"><div><img src="/static/loading.gif" /></div></div>	
+					<iframe src="http://docs.google.com/gview?url={{ content.link }}&embedded=true" style="width:500px; height:300px;" onload="document.getElementById('loadImg').style.display='none'"; frameborder="0"></iframe>
 				{% elif content.content_type == "Assessment" %}
-					<div>	
+					<div id="{{content.id }}_content">	
 						<h6> Assessment - {{ content.title }} </h6>
 						{% for q,placement in assessment_dict|access:content.id|sort_placement %}
 							<div>

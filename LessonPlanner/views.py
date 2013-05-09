@@ -583,6 +583,14 @@ def saveContent(contentForm, request):
 				content.link = online_article_form.data['link']
 				return (True, content, None)
 			return (False, None, None)
+		if (content_type == 'PowerPoint'):
+                        powerpoint_form = AddPowerPointContent(data=request.POST)
+                        if powerpoint_form.is_valid():
+                                content = PowerPointContent()
+                                content.link = powerpoint_form.data['link']
+				print "Added PP"
+                                return (True, content, None)
+                        return (False, None, None)	
 		if (content_type == 'Text'):
 			text_form = AddTextContent(data=request.POST)
 			if text_form.is_valid():
