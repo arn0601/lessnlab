@@ -53,20 +53,15 @@ $(function() {
 				var start =  ui.item.data('start_pos') + 1;
 				var final = ui.item.index() + 1;
 			
-				a = $("#allSections")[0];
-					
-				div1 = $(a.children[start])
-				div2 = $(a.children[final])
+				a = $("#allSections")[0];							
+				div1 = a.children[start];
+				div2 = a.children[final];
 
-				tdiv1 = div1.clone();
-				tdiv2 = div2.clone();
+				if(start > final)
+					a.insertBefore(div1,div2);
+				else
+					insertAfter(div2,div1);
 
-				if(!div2.is(':empty'))
-				{
-					div1.replaceWith(tdiv2);
-					div2.replaceWith(tdiv1);
-				}
-				
 				var stringData = start + "," + final;
 				$.ajax({ // create an AJAX call...
             data: {
@@ -83,6 +78,9 @@ $(function() {
 		});
     $( "#sortable" ).disableSelection();
   });
+	function insertAfter(referenceNode, newNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextElementSibling);
+	}
   </script>
 		<script type="text/javascript"> <!-- scroll jquery -->
 			function goToByScroll(id){

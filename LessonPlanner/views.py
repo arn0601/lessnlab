@@ -38,13 +38,10 @@ def changeSectionPlacement(request):
 
 	start=int(request.POST["start"])-1
 	final=int(request.POST["final"])-1
-	print "asd"
 	a1 = l[start]
-	print "qweqew"
 	del l[start]
 	print a1,final
 	l.insert(final,a1)
-	print "123123"
 	counter = 0
 	for sec in l:
 		print sec
