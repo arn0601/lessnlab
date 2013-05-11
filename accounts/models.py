@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 from django.db.models.signals import post_save
 # Create your models here.
 import extra_methods
+from Standards.models import State
 from Rating.models import Rating
 
-STATE_CHOICES = [('', 'None'),('PA','Pennsylvania'), ('MO', 'Missouri'), ('NY', 'New York')]
 
 USERTYPES = [('Teacher','Teacher'),('Student','Student')]
 
@@ -16,7 +16,7 @@ class UserProfile(models.Model):
         user_dob = models.DateField()
 	user_school_name = models.CharField(max_length=32)
 	user_school_district = models.CharField(max_length=32)
-        user_school_state = models.CharField(max_length=32, choices=STATE_CHOICES, default='')
+        user_school_state = models.ForeignKey('Standards.State')
 	user_type = models.CharField(max_length=32, choices=USERTYPES)
 
 class TeacherProfile(UserProfile):
