@@ -3,12 +3,14 @@ from registration.forms import *
 from registration.models import RegistrationProfile
 from Standards.models import State
 
+import custom_widgets
 
 USERTYPES = [('Teacher','Teacher'),('Student','Student')]
 class UserProfileRegistrationForm(RegistrationForm):
 	first_name = forms.CharField(required=True, label="First Name")
 	last_name = forms.CharField(required=True, label="Last Name")
-	birthdate = forms.DateField(required=True, label="Date of Birth")
+	dateWidget = custom_widgets.CalendarDateSelectField()
+	birthdate = forms.CharField(required=True, label="Date of Birth",widget=dateWidget)
 	school = forms.CharField(required=True, label="School")
 	school_district = forms.CharField(required=True, label="School District")
 	school_state = forms.ModelChoiceField(label='State', queryset=State.objects.all())

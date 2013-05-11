@@ -22,6 +22,37 @@ def landing(request):
 	return render_to_response('landing.html', {})
 
 #show the units for a specific course
+
+@csrf_exempt
+def changeSectionPlacement(request):
+	print request.POST
+	base_dict = base_methods.createBaseDict(request)
+	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
+	sectionList = lesson_info['sections'].keys()
+	print sectionList
+	l = []
+	for sec in sectionList:
+		print "Appeinding",sec.placement
+		l.append((sec, sec.placement))
+        l.sort(key=lambda x: x[1])
+
+	start=int(request.POST["start"])-1
+	final=int(request.POST["final"])-1
+	a1 = l[start]
+	del l[start]
+	print a1,final
+	l.insert(final,a1)
+	counter = 0
+	for sec in l:
+		print sec
+		sec[0].placement = counter
+		sec[0].save()	
+		counter = counter + 1
+	return HttpResponse('')
+
+
+
+
 @csrf_exempt
 def showUnits(request):
 	base_dict = base_methods.createBaseDict(request)
@@ -557,6 +588,14 @@ def saveContent(contentForm, request):
 				content.link = online_article_form.data['link']
 				return (True, content, None)
 			return (False, None, None)
+		if (content_type == 'PowerPoint'):
+                        powerpoint_form = AddPowerPointContent(data=request.POST)
+                        if powerpoint_form.is_valid():
+                                content = PowerPointContent()
+                                content.link = powerpoint_form.data['link']
+				print "Added PP"
+                                return (True, content, None)
+                        return (False, None, None)	
 		if (content_type == 'Text'):
 			text_form = AddTextContent(data=request.POST)
 			if text_form.is_valid():

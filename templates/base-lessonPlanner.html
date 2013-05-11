@@ -9,10 +9,79 @@
 		<link href="/static/bootstrap.css" rel="stylesheet" media="screen">
 		<link href="/static/styles.css" rel="stylesheet" media="screen">
 		<link rel="stylesheet" href="http://blueimp.github.com/cdn/css/bootstrap.min.css">
-		<link rel="stylesheet" href="/static/bootstrap-image-gallery.css">	
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	
+		<script src="/static/jQuery.jQTubeUtil.js"></script>
+  	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 		<script src="/static/bootstrap.js"></script>
-		  <script src="/static/jQuery.jQTubeUtil.js"></script>
+
+		<style>
+			.portlet { margin: 0 1em 1em 0; }
+			.portlet-header { margin: 0.3em;  padding-left: 0.2em; }
+			.portlet-header .ui-icon { float: right; }
+			.portlet-content { padding: 0.4em; }
+			.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 50px !important; }
+			.ui-sortable-placeholder * { visibility: hidden; }
+  	</style>
+	<script>
+$(function() {
+    $( ".portlet" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
+      .find( ".portlet-header" )
+        .addClass( "ui-widget-header ui-corner-all" )
+        .prepend( "<span class='ui-icon ui-icon-plusthick'></span>")
+        .end()
+      .find( ".portlet-content" )
+			.hide();
+ 
+    $( ".portlet-header .ui-icon" ).click(function() {
+      $( this ).toggleClass( "ui-icon-plusthick" ).toggleClass( "ui-icon-minusthick" );
+      $( this ).parents( ".portlet:first" ).find( ".portlet-content" ).toggle();
+    });
+ });
+
+
+  $(function() {
+    $( "#sortable" ).sortable({
+			start: function(event, ui) {
+            var start_pos = ui.item.index();
+            ui.item.data('start_pos', start_pos);
+      },
+			stop: function( event, ui ) 
+			{
+				var start =  ui.item.data('start_pos') + 1;
+				var final = ui.item.index() + 1;
+			
+				a = $("#allSections")[0];							
+				div1 = a.children[start];
+				div2 = a.children[final];
+
+				if(start > final)
+					a.insertBefore(div1,div2);
+				else
+					insertAfter(div2,div1);
+
+				var stringData = start + "," + final;
+				$.ajax({ // create an AJAX call...
+            data: {
+					    start : start,
+					    final : final
+									},
+            type: "POST", // GET or POST
+            url: "/changeSectionPlacement/?lesson_id={{lesson.id}}", // the file to call
+            success: function(response) { // on success..
+                 // update the DIV
+        		}
+        });
+			}
+		});
+    $( "#sortable" ).disableSelection();
+  });
+	function insertAfter(referenceNode, newNode) {
+    referenceNode.parentNode.insertBefore(newNode, referenceNode.nextElementSibling);
+	}
+  </script>
 		<script type="text/javascript"> <!-- scroll jquery -->
 			function goToByScroll(id){
 	 			$('html,body').animate({scrollTop: $("#"+id).offset().top - 100},1500);
@@ -49,7 +118,7 @@
 				var description = video.description.substring(0,32);
 				var video_id = video.videoId;
 				var url = "http://www.youtube.com/watch?feature=player_embedded&v=" + video_id;
-				return "<div style='width:330px;'> <div style='width:175px; float:right'> <b>Title: </b> <a href='" + url + "' > "  + title + "</a><div> <b> Description: </b>" + description +"</div> </div> <div onclick='onVidImgClick(this)' > <img src='http://img.youtube.com/vi/" + video_id + "/1.jpg' alt='splash' width='120px' height='90px' style='cursor: pointer' style='display:inline'/ ></div> <div style='display: none'>   <iframe width='200px' height='150px' temp='http://www.youtube.com/embed/" + video_id + "?autoplay=1'> </iframe></div>";
+				return "<div style='width:330px;'> <div style='width:175px; float:right'> <b>Title: </b> <a href='" + url + "' > "  + title + "</a><div> <b> Description: </b>" + description +"</div> </div> <div onclick='onVidImgClick(this)' > <img src='http://img.youtube.com/vi/" + video_id + "/1.jpg' alt='splash' width='120px' height='90px' style='cursor: pointer' style='display:inline'/ ></div> <div style='display: none'>   <iframe width='200px' height='150px' temp='http://www.youtube.com/embed/" + video_id + "?autoplay=0'> </iframe></div>";
 
 			};
 
@@ -60,20 +129,36 @@
 		<div style="height: 100%">
 			{% include "navbar.html" %}
 			<div class="row-fluid" style="position: relative; height: 100%">
-				<div class="span2 noborderunitbox" id="leftnav">
-					<ul class="nav nav-pills nav-stacked" id="navbar">
-						<li><a href="javascript:void(0)" onClick="goToByScroll('overview')">Overview</a></li>
-						{% for section, content_list in sections.items %}
+				<div class="span2 noborderunitbox" id="leftnav" style="position:fixed">
+					<ul class="nav nav-pills nav-stacked">
+						<li>
+							<a href="javascript:void(0)" id="leftNav0" onClick="goToByScroll('overview')">Overview</a>
+					  </li>
+					</ul>
+					<ul class="nav nav-pills nav-stacked" id="sortable">
+						
+						{% for section, section_placement in sections|sort_placement %}
 				 		{% with section.name as user_key %}
-							<li><a href="javascript:void(0)" onClick="goToByScroll('{{ section.id }}')">
-								{{ section_types|access:user_key }} - {{ section.description }}
-						 </a></li>
+						<div class="portlet">
+							<div class="portlet-header"><a href="javascript:void(0)" 
+								id="leftNav{{ section.id }}" onClick="goToByScroll('{{ section.id }}')">{{ section_types|access:user_key }}</a>
+							</div>
+    					<div class="portlet-content">
+								<ul class="nav nav-pills nav-stacked">
+									{% for content, content_placement in sections|access:section|sort_placement %}
+										<li><a href="javascript:void(0)" id="leftNav{{ section.id }}" onClick="goToByScroll('{{content.id }}_content')">
+										{{ content.content_type }}
+										 </a></li>
+												
+								{% endfor %}
+							</div>
+						</div>
 	 					{% endwith %}
 						{% endfor %}
 					</ul>
 					<a class="btn btn-primary btn-small" type="button" href="#addSection" data-toggle="modal">Add Section</a>
 				</div>
-				<div class="span10 leftunitbox" id="content" style="margin-left: 0px;">
+				<div class="span10 leftunitbox" id="content" style="margin-left: 11.2pc;">
 	      	{% block content %}{% endblock %}
 				</div>
 			</div>
@@ -84,7 +169,9 @@
 <!-- Javascript -->
 <script>
 
-	$('.row .btn').on('click', function(e) {
+	$(function(){
+    $(document).on('click', '.row .btn', function(e){ 
+	
     e.preventDefault();
     var $this = $(this);
     var $collapse = $this.closest('.collapse-group').find('.collapse');
@@ -94,12 +181,13 @@
 		else
 			this.innerHTML = "View Answer &raquo;";
 });
+});
 	
 	
 
 	function doBasicSearch(){
 		jQuery("#basic_search_response_processing").show();
-		jQTubeUtil.search(jQuery('[name=free_text_1]').val(), function(response){
+		jQTubeUtil.search({"q":jQuery('[name=free_text_1]').val(), "orderby":"relevance"}, function(response){
 			var html = "";
 			for(v in response.videos){
 				var video = response.videos[v];
@@ -249,7 +337,8 @@
 
 	});
 
-   $(".content_show").click(function(){  
+	$(function(){
+    $(document).on('click', '.content_show', function(){  
 		jQuery('[name=free_text_1]').val("");
 		jQuery('[id=assess_q]')[0].innerHTML = "";
 		
@@ -270,8 +359,10 @@
 		}		
 		$('#addContent'+ct).modal('show');
    });
+});
 
-	 $(".content_close").click(function(){  
+	$(function(){
+    $(document).on('click', '.content_close', function(){ 
 		var x=document.getElementsByTagName("form");
 		for(var i=0;i<x.length;i++)
 		{
@@ -284,10 +375,12 @@
 			}
 		}		
    });
+});
 
 
 
-	$(".delete_section").click(function(){  
+	$(function(){
+    $(document).on('click', '.delete_section', function(){  
 		
 		var sid = $(this).data('sectionid');
 		var x=document.getElementsByTagName("form");
@@ -300,8 +393,12 @@
             }
     }
     $('#deleteSection').modal('show');
+
 	});
-	$(".delete_content").click(function(){ 
+});
+
+	$(function(){
+    $(document).on('click', '.delete_content', function(){ 
 	
 		var cid = $(this).data('contentid');
 		var x=document.getElementsByTagName("form");
@@ -315,7 +412,9 @@
       }
     }
     $('#deleteContent').modal('show');
+
 	});
+});
 
 $('.ddt').click(function(){
 	

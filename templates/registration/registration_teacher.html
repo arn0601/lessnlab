@@ -9,6 +9,25 @@
 
     <!-- Le styles -->
     <link href="/static/bootstrap.css" rel="stylesheet">
+<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	<script>
+		  $(function() {
+		  $( "#id_birthdate" ).datepicker({
+				changeMonth: true,
+		    changeYear: true,
+				 maxDate: new Date(1997, 12 - 1, 31),
+		  	minDate: "-100Y",
+		  	yearRange: "-100:-16",
+				monthRange: "-12:12",
+				dateFormat: "yy-mm-dd"
+	});
+		});
+	</script>
+
     <style type="text/css">
       body {
         padding-top: 0px;
