@@ -37,6 +37,20 @@
 				<button class="btn btn-mini">Delete Objectives</button>
 			</div>
 		</div>
+		<div>
+			<div class="span12 well">
+				<h5>Lesson Standards</h5>
+				<ul>
+				{% for standard in standard_list%}
+				
+					<li>standard.1</li>
+				
+				{% endfor %}
+				</ul>
+				<button class="btn btn-primary btn-mini">Add Standards</button>
+				<button class="btn btn-mini">Delete Standards</button>
+			</div>
+		</div>
 	</div>
 	{% for section, section_placement in sections|sort_placement %}
 		<div id="section{{ section.id }}" class="" style="
@@ -84,8 +98,11 @@
 				{% elif content.content_type == "Text" %}
 					<div id="{{content.id }}_content">	{{ content.text }} </div>
 				{% elif content.content_type == "PowerPoint" %}		
-					<div id="loadImg"><div><img src="/static/loading.gif" /></div></div>	
+
+					<div id="{{content.id }}_content">
+										<div id="loadImg"><img src="/static/loading.gif" /></div>	
 					<iframe src="http://docs.google.com/gview?url={{ content.link }}&embedded=true" style="width:500px; height:300px;" onload="document.getElementById('loadImg').style.display='none'"; frameborder="0"></iframe>
+				</div>
 				{% elif content.content_type == "Assessment" %}
 					<div id="{{content.id }}_content">	
 						<h6> Assessment - {{ content.title }} </h6>

@@ -166,6 +166,10 @@ def getLessonSpecificInfo(lesson):
 	section_dict = {}
 	assessment_dict = {}
 	add_content_form_dict = {}
+	standard_list = []
+	for standard in lesson.standards.all():
+        	standard_list.append((standard.id, standard.description))
+
 	for section in lesson_sections:
 		content_list = []
 		section_content = Content.objects.filter(section=section)
@@ -197,7 +201,7 @@ def getLessonSpecificInfo(lesson):
 				assessment_dict[content.assessmentcontent.id] = question_answer_map
 		section_dict[section] = content_list
 	add_content_form_dict = getAddContentForms(str(-1))
-	return { 'sections' : section_dict,  'assessment_dict':assessment_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
+	return { 'standard_list' : standard_list,'sections' : section_dict,  'assessment_dict':assessment_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
 
 def getAddContentForms(section_id):
 	
