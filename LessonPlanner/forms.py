@@ -66,13 +66,13 @@ class AddUnitForm(forms.ModelForm):
 	class Meta:
 		model = Unit
 		exclude = ['standards']
-		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': custom_widgets.CalendarDateSelectField(), 'end_date': custom_widgets.CalendarDateSelectField(), 'parent_unit': forms.HiddenInput() }
+		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_start_date'}), 'end_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_end_date'}), 'parent_unit': forms.HiddenInput() }
 
 class EditUnit(forms.ModelForm):
 	class Meta:
 		model = Unit
 		exclude = ['standards']
-		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': custom_widgets.CalendarDateSelectField(), 'end_date': custom_widgets.CalendarDateSelectField(), 'parent_unit': forms.HiddenInput() }
+		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_start_date'}), 'end_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_end_date'}), 'parent_unit': forms.HiddenInput() }
 
 class DeleteUnit(forms.Form):
 	unit_id = forms.CharField(label="")
