@@ -11,9 +11,6 @@
 			<div class="span4">
 				<b>{{ lesson.name }}</b> in the <a href="/lessons/?unit_id={{ unit.id }}"> {{ unit.name }}</a>
 			</div>
-			<div class="span5">
-				<b>Aligns to Standard(s): </b> <a href="#">3.1.a</a>, <a href="#">3.1.b</a>
-			</div>
 			<div class="span3">
 				<b>Written By: </b><a href="#">{{ fullname }}</a>
 			</div>
@@ -31,7 +28,9 @@
 			<div class="span12 well">
 				<h5>Lesson Objectives</h5>
 				<ul>
-					<li>SWBAT define three causes of the Civil War</li>
+				{% for objective in objective_list%}
+					<li>{{ objective.1 }}</li>
+				{% endfor %}
 				</ul>
 				<button class="btn btn-primary btn-mini">Add Objectives</button>
 				<button class="btn btn-mini">Delete Objectives</button>
@@ -42,9 +41,7 @@
 				<h5>Lesson Standards</h5>
 				<ul>
 				{% for standard in standard_list%}
-				
-					<li>standard.1</li>
-				
+					<li>{{ standard.1 }}</li>
 				{% endfor %}
 				</ul>
 				<button class="btn btn-primary btn-mini">Add Standards</button>

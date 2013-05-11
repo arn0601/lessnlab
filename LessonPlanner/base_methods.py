@@ -166,13 +166,21 @@ def getLessonSpecificInfo(lesson):
 	assessment_dict = {}
 	add_content_form_dict = {}
 	standard_list = []
+	objective_list = []
+	content_objs = {}
 	for standard in lesson.standards.all():
         	standard_list.append((standard.id, standard.description))
-
+	for objective in lesson.objectives.all():
+                objective_list.append((objective.id, objective.description))
 	for section in lesson_sections:
 		content_list = []
 		section_content = Content.objects.filter(section=section)
 		for content in section_content:
+			content_objs = content.objectives.all()
+			contentobjs_list = []
+			for c_o in content_objs:
+				contentobjs_list.append((objective.id, objective.description))
+			content_objs[content.id] = contentobjs_list	
 			if (content.content_type == 'Text'):
 				content_list.append(content.textcontent)
 			elif (content.content_type == 'OnlineVideo'):
@@ -200,7 +208,7 @@ def getLessonSpecificInfo(lesson):
 				assessment_dict[content.assessmentcontent.id] = question_answer_map
 		section_dict[section] = content_list
 	add_content_form_dict = getAddContentForms(str(-1))
-	return { 'standard_list' : standard_list,'sections' : section_dict,  'assessment_dict':assessment_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
+	return { 'content_objs' : content_objs, 'standard_list' : standard_list,'objective_list' : objective_list,'sections' : section_dict,  'assessment_dict':assessment_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
 
 def getAddContentForms(section_id):
 	
