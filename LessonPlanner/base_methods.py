@@ -176,9 +176,9 @@ def getLessonSpecificInfo(lesson):
 		content_list = []
 		section_content = Content.objects.filter(section=section)
 		for content in section_content:
-			content_objs = content.objectives.all()
+			content_objs_m2m = content.objectives.all()
 			contentobjs_list = []
-			for c_o in content_objs:
+			for c_o in content_objs_m2m:
 				contentobjs_list.append((objective.id, objective.description))
 			content_objs[content.id] = contentobjs_list	
 			if (content.content_type == 'Text'):
