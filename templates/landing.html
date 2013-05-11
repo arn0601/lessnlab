@@ -35,6 +35,13 @@
         color: #c8c8c8;
       }
       
+      .landing-content { 
+      	
+      	text-align: center;
+      	margin: 20px
+      
+      }
+      
       .page-header {
         margin-top:0px;
         padding-left: 75px;
@@ -107,22 +114,25 @@
   </head>
   <body>
   <div class="page-header row-fluid">
-  	<div class="span3">
+  	<div class="span2">
     	<h4>Welcome to LessnLab</h4>
     </div>
-    <div class="span2">
-    	<h5><a href="{% url accounts.views.login_user %}"> Login </a></h5>   
+    <div class="span1">
+    	<h5><a href="{% url accounts.views.login_user %}"> Log In </a></h5>   
     </div>
   </div>
   <div class="container-fluid"> 
-  	<div class="form-signin">
-
 		<div class="row-fluid">
-			
-			<h5>For Teachers</h5>
-			<h5>For Parents</h5>
-			<h5>For Schools</h5>
-			
+		
+			<div class="span4 form-signin landing-content">
+				<h5>For Teachers</h5>
+			</div>
+			<div class="span4 form-signin landing-content">
+				<h5>For Parents</h5>
+			</div>
+			<div class="span4 form-signin landing-content">
+				<h5>For Schools</h5>
+			</div>
 		</div>
 		
 		<div class="row-fluid">
