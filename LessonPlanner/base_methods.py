@@ -108,9 +108,12 @@ def createBaseDict(request):
 	lesson_id = request.GET.get('lesson_id')
 	if ( not lesson_id == None ):
 		lesson = Lesson.objects.get(id=lesson_id)
-		lessonAddForm.fields['unit'].initial = lesson.unit
-                unitAddForm.fields['course'].initial = lesson.unit.course
-		sectionAddForm.fields['lesson'].initial = lesson
+		if lesson.owner == user:
+			lessonAddForm.fields['unit'].initial = lesson.unit
+        	        unitAddForm.fields['course'].initial = lesson.unit.course
+			sectionAddForm.fields['lesson'].initial = lesson
+		else:
+			lesson = None
 	#####################################
 	#get the unit
 	####################################
@@ -126,8 +129,11 @@ def createBaseDict(request):
 	unit_id = request.GET.get('unit_id')
 	if ( not unit_id == None ):
 		unit = Unit.objects.get(id=unit_id)
-		lessonAddForm.fields['unit'].initial = unit
-		unitAddForm.fields['course'].initial = unit.course
+		if unit.owner == user:
+			lessonAddForm.fields['unit'].initial = unit
+			unitAddForm.fields['course'].initial = unit.course
+		else:
+			unit = None
 	##########################################
 	#get the course
 	##############################################	
@@ -145,8 +151,10 @@ def createBaseDict(request):
 	course_id = request.GET.get('course_id')
 	if ( not course_id == None ):
 		course = Course.objects.get(id=course_id)
-		unitAddForm.fields['course'].initial = course
-	
+		if (course.owner == user):
+			unitAddForm.fields['course'].initial = course
+		else:
+			course = None
 	#check course
 	if ( course ):
         	user_units =  Unit.objects.filter(course=course)

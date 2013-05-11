@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load dictionary_extras %}
+<!DOCTYPE html>
+{% block content %}
+
+         <div class="container" id="u1" style="margin-bottom: 60px;">
+	<h4> Details for {{ unit.name }}</h4>
+	
+	<div class="row-fluid">
+	Course : {{ unit.course.name }} <br>
+	Author :  {{ unit.owner.user_firstname }} {{ unit.owner.user_lastname }} <br>
+	Unit Length : {{ unit_length.0 }} weeks,  {{ unit_length.1 }} days
+	</div>
+	<hr />
+	<div class="row-fluid">
+	<h5> Standards taught in this unit </h5>
+	<table class="table table-hover table-striped table-bordered">
+	<thead> <tr> <th> # </th> <th> Type </th> {% if has_state %} <th> State </th> {% endif %}  <th> Grade </th> <th> Subject </th> <th> Content </th> </tr> </thead>
+		{% for standards in unitStandards %}
+	<tr> <td><b> {{ standards.numbering }}</b> </td> <td> {{ standards.standard_type.value }} </td> {% if has_state %} <td> {{ standards.state.value }} </td> {% endif %}<td> {{ standards.grade.value }} </td> <td> {{ standards.subject.value }} </td> <td> <a href="/standard/?standard_id={{ standards.id }}">{{ standards.description }}</a> </td> </tr>
+		{% endfor %}
+	</table>
+	</div>
+	<hr />
+	<div class="row-fluid">
+	<h5> Lessons taught in this unit </h5>
+	<table class="table table-hover table-striped table-bordered">
+	<thead> <tr> <th> Name </th> <th> Description </th>  <th> Rating </th> </tr> </thead>
+		{% for lesson,rating in unitLessons %}
+			<tr> <td> {{ lesson.name }} </td> <td> {{ lesson.description }} </td> <td> {{ rating }} </td> </tr>
+		{% endfor %}
+	</table>
+	</div>
+	<hr />
+	<div class="row-fluid">
+	<h5> Unit statistics </h5>
+	</div>
+	
+</div>
+
+
+
+{% endblock %}

@@ -21,6 +21,7 @@ class Tag(models.Model):
 
 class Course(models.Model):
 	name = models.CharField(max_length=32)
+	#description = models.TextField()
 	owner = models.ForeignKey('accounts.TeacherProfile')
 	department = models.CharField(max_length=32)
 	subject = models.ForeignKey('Standards.Subject')

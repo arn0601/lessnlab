@@ -53,6 +53,8 @@ urlpatterns = patterns('',
     url(r'^manageCourseStudents/$', 'LessonPlanner.views.manageCourseStudents', name='manageCourseStudents'),
     url(r'^createLessonObjectives/$', 'LessonPlanner.views.createLessonObjectives', name='createLessonObjectives'),
     (r'^units/$', 'LessonPlanner.views.showUnits'),
+    url(r'^unitView/$', 'LessonPlanner.views.publicUnitView', name='publicUnitView'),
+    url(r'^courseView/$', 'LessonPlanner.views.publicCourseView', name='publicCourseView'),
     url(r'^standardsSearch/$', 'LessonPlanner.views.standardsSearch', name='standardsSearch'),
     url(r'^media/(?P<path>.*)$', 'django.views.static.serve', {
            'document_root': settings.MEDIA_ROOT,
