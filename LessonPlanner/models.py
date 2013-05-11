@@ -1,11 +1,10 @@
 from django.db import models
 from accounts.models import TeacherProfile, StudentProfile
-from Standards.models import Standard
+from Standards.models import *
 from Objectives.models import Objective
 from Rating.models import Rating
 
 
-STATE_CHOICES = [('', 'None'),('PA','Pennsylvania'), ('MO', 'Missouri'), ('NY', 'New York')]
 SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
 
 CONTENTTYPE = (('Text','Text'),('OnlineVideo','OnlineVideo'),('OnlineArticle','OnlineArticle'),('OnlinePicture','OnlinePicture'),('TeacherNote','TeacherNote'),('AdministratorNote','AdministratorNote'),('Assessment','Assessment'))
@@ -13,8 +12,6 @@ CONTENTTYPE = (('Text','Text'),('OnlineVideo','OnlineVideo'),('OnlineArticle','O
 ASSESSMENTTYPE = ((1, 'Quiz'), (2, 'Unit Test'), (3, 'Complex Performance Task'), (4, 'Peer Eval'), (5, 'Presentation/Project'), (6, 'Other'))
 
 LESSONPLANNER_DROPDOWN_ORDER = ['General', 'Media', 'Checks for Understanding', 'Activity', 'Assessment']
-
-
 
 class AssessmentType(models.Model):
 	assessment_type = models.CharField(max_length=32, choices = ASSESSMENTTYPE)
@@ -26,8 +23,8 @@ class Course(models.Model):
 	name = models.CharField(max_length=32)
 	owner = models.ForeignKey('accounts.TeacherProfile')
 	department = models.CharField(max_length=32)
-	subject = models.CharField(max_length=32)
-	grade = models.CharField(max_length=16)
+	subject = models.ForeignKey('Standards.Subject')
+	grade = models.ForeignKey('Standards.Grade')
 	start_date = models.DateField()
 	end_date = models.DateField()
 	standard_grouping = models.ManyToManyField('StandardGrouping', blank=True, null=True)
@@ -43,11 +40,19 @@ class CourseRating(Rating):
 
 class StandardGrouping(models.Model):
 	name = models.CharField(max_length=64)
-	subject = models.CharField(max_length=32)
-	grade = models.CharField(max_length=32)
-	state = models.CharField(max_length=32, choices=STATE_CHOICES, null=True, blank=True)
+	subject = models.ForeignKey('Standards.Subject')
+	grade = models.ForeignKey('Standards.Grade')
+	standard_type = models.ForeignKey('Standards.StandardType')
+	state = models.ForeignKey('Standards.State', null=True, blank=True)
 	standard = models.ManyToManyField('Standards.Standard')
-	creation_date = models.DateField()
+	creation_date = models.DateField(null=True)
+	prebuilt = models.BooleanField()
+
+class StandardAnalysis(models.Model):
+	teacher = models.ForeignKey('accounts.TeacherProfile')
+	standard = models.ForeignKey('Standards.Standard')
+	analysis = models.TextField()
+	rating = models.IntegerField()
 
 class Unit(models.Model):
 	name = models.CharField(max_length=32)
@@ -88,6 +93,7 @@ class Content(models.Model):
 	creation_date = models.DateTimeField()
 	placement = models.IntegerField()
 	content_type = models.CharField(choices=CONTENTTYPE, max_length=32)
+	objectives = models.ManyToManyField('Objectives.Objective', blank=True, null=True)
 
 class ContentRating(Rating):
 	content = models.ForeignKey('Content')

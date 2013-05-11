@@ -3,7 +3,7 @@ from django.template import RequestContext
 from LessonPlanner.models import Lesson,Course,Unit,Section
 from LessonPlanner.models import *
 from LessonPlanner.forms import *
-from Standards.models import Standard
+from Standards.models import *
 from Objectives.models import Objective
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
@@ -298,7 +298,7 @@ def courses(request):
 @csrf_exempt
 def addCourse(request):
 	if request.method == 'POST':
-		addCourseForm = AddCourse(request.POST)
+		addCourseForm = AddCourse(data=request.POST)
 		if addCourseForm.is_valid():
 			course = addCourseForm.save()
 			teacher = TeacherProfile.objects.get(user=request.user)
@@ -312,16 +312,24 @@ def addCourse(request):
 	return HttpResponseRedirect(lastPageToRedirect(request))
 
 def addCourseStandards(course, teacher):
-	groups = StandardGrouping.objects.filter(subject=course.subject).filter(grade=course.grade)
+	standards = Standard.objects.filter(subject=course.subject).filter(grade=course.grade)
 	groups_to_render = []
         groups_add = {};
+	print standards
 	
-	for group in groups:
-		for standard in group.standard.all():
-			print standard.owner_type, teacher.user_school_state
-			if standard.owner_type == teacher.user_school_state:
-				course.standard_grouping.add(group)
-				break
+	for standard in standards:
+		good_standard = False
+		if standard.standard_type == 'State':
+			if (standard.state == teacher.state):
+				good_standard=True
+		else:
+			good_standard=True
+		print good_standard
+		if good_standard:
+			for sg in standard.standardgrouping_set.all():
+				if sg.prebuilt==True:
+					course.standard_grouping.add(sg)
+		
 	for group in course.standard_grouping.all():
 		slist = []
 		for standard in group.standard.all():
@@ -824,28 +832,36 @@ def getStandardsFromGroup(request):
 @csrf_exempt
 def standardsSearch(request):
 	base_dict = base_methods.createBaseDict(request)
+	base_dict['standardsSearchForm'] = StandardsSearchForm()
 	if request.method == 'POST':
-		groups = []
+		standards = []
 		form = StandardsSearchForm(data=request.POST)
 		if form.is_valid():
-			qset = StandardGrouping.objects.filter(subject=form.cleaned_data['subject'])
-			if form.cleaned_data['grade'] != '':
-				qset = qset.filter(grade=form.cleaned_data['grade'])
-			for group in qset:
-				for standard in group.standard.all():
-					if standard.owner_type == form.cleaned_data['state']:
-						groups.append( group)
-						break
-			base_dict['searchedStandards'] = groups
+			has_state = False
+			g = form.cleaned_data['grade']
+			grade = Grade.objects.get(value=g)
+			subject = Subject.objects.get(value=form.cleaned_data['subject'])
+			standard_type = StandardType.objects.get(value=form.cleaned_data['standard_type'])
+			qset = Standard.objects.filter(subject=subject,grade=grade,standard_type=standard_type)
+			if ( form.cleaned_data['standard_type'] == 'State'):
+				state = State.objects.get(value=form.cleaned_data['state'])
+				qset.filter(state=state)
+			for standard in qset:
+				if standard.state != None:
+					has_state=True
+				standards.append(standard)
+						
+			standards.sort(key=lambda x: (int(x.numbering) if x.numbering.isdigit() else x.numbering))
+			base_dict['standard_type'] = form.cleaned_data['standard_type']
+			base_dict['state'] = form.cleaned_data['state']
+			base_dict['searchedStandards'] = standards
+			base_dict['standardsSearchForm'] = form
 			base_dict['returnResults'] = True
+			base_dict['has_state'] = has_state
 			return render_to_response('standards_search.html', base_dict)
 		else:
 			return HttpResponseRedirect('/standardsSearch/')
-	else:
-		standardsSearchForm = StandardsSearchForm()
-		base_dict['standardsSearchForm'] = StandardsSearchForm()
-		base_dict['searchingStandards'] = True
-		return render_to_response('standards_search.html', base_dict)
+	return render_to_response('standards_search.html', base_dict)
 
 @csrf_exempt
 def manageCourseStudents(request):

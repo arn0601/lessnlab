@@ -32,7 +32,6 @@ def createStudentDict(request):
 			return None
 	#get all courses associated with the user
 	courses = CourseStudents.objects.filter(student=user, approved=True)
-	
 	###################################
 	#get the lesson
 	###################################

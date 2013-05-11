@@ -1,23 +1,36 @@
 from django import forms
 from django.forms.extras.widgets import SelectDateWidget
 from LessonPlanner.models import *
-from Standards.models import STATE_CHOICES, STATES_STRING
+from Standards.models import *
 import custom_widgets 
 
-SUBJECTS = [('Mathematics','Mathematics'),('Science','Science'),('Social Studies','Social Studies')]
+SUBJECTS = [('Mathematics','Mathematics'),('Science','Science'),('English','English')]
 SUBJECTS_STRING = '[' + ",".join(["\"%s\"" % s for (s, s2) in SUBJECTS]) + ']'
-GRADES = [('6','6'),('7','7'),('8','8'),('9','9'),('Junior High','Junior High')]
+GRADES = [('K','K'),('1','1'),('2','2'),('3','3'),('4','4'),('5','5'),('6','6'),('7','7'),('8','8'),('9','9'),('10','10'),('11','11'),('12','12')]
 GRADES_STRING = '[' + ",".join(["\"%s\"" % s for (s, s2) in GRADES]) + ']'
 
+def createChoices(className):
+	choices = [(c.value,c.value) for c in className.objects.all()]
+        choices.insert(0,('',''))
+	return choices
+
+def createDataSource(className):
+	return '[' + ",".join(["\"%s\"" % c.value for c in className.objects.all()]) + ']'
+
+def getInstanceFromField(className, field):
+	v, created = className.objects.get_or_create(value=field)
+	return v	
+
+def createInputWidget(className):
+	return forms.TextInput(attrs={'data-provide':'typeahead', 'data-source': createDataSource(className), 'autocomplete':'off' })
+	
+
 class AddCourse(forms.ModelForm):
-	subject = forms.ChoiceField(label='Subject', choices=SUBJECTS)
-	subject.widget = forms.TextInput(attrs={'data-provide':'typeahead', 'data-source': SUBJECTS_STRING, 'autocomplete':'off' })
-	grade = forms.ChoiceField(label='Grade', choices = GRADES)
-	grade.widget = forms.TextInput(attrs={'data-provide':'typeahead', 'data-source': GRADES_STRING, 'autocomplete':'off' })
 	class Meta:
 		model = Course
 		widgets = { 'owner': forms.HiddenInput(), 'start_date': SelectDateWidget(years=range(2015,2011,-1)), 'end_date': SelectDateWidget(years=range(2015,2011,-1)) }
 		exclude = ['standard_grouping']
+
 
 class AddGroups(forms.Form):
 	groups = forms.MultipleChoiceField(label='Standards groups')
@@ -25,11 +38,24 @@ class AddGroups(forms.Form):
 	course_id.widget = forms.HiddenInput()
 
 class EditCourse(forms.ModelForm):
-	subject = forms.ChoiceField(label='Subject', choices=SUBJECTS)
-	grade = forms.ChoiceField(label='Grade', choices = GRADES)
+	def __init__(self, *args, **kwargs):
+		super(EditCourse, self).__init__(*args,**kwargs)
+
+	
+		self.fields['grade'].choices = createChoices(Grade)
+		self.fields['grade'].widget = createInputWidget(Grade)
+
+		self.fields['subject'].choices = createChoices(Subject)
+		self.fields['subject'].widget = createInputWidget(Subject)
+
+	def save(self):
+		self.instance.grade = getInstanceFromField(Grade, self.cleaned_data['grade'])
+		self.instance.subject = getInstanceFromField(Subject, self.cleaned_data['subject'])
+		return super(EditCourse, self).save()
+	
 	class Meta:
 		model = Course
-		widgets = { 'owner': forms.HiddenInput(), 'start_date': SelectDateWidget(years=range(2015,2011,-1)), 'end_date': SelectDateWidget(years=range(2015,2011,-1)) }
+		widgets = {  'owner': forms.HiddenInput(), 'start_date': SelectDateWidget(years=range(2015,2011,-1)), 'end_date': SelectDateWidget(years=range(2015,2011,-1)) }
 		exclude = ['standard_grouping']
 
 class DeleteCourse(forms.Form):
@@ -153,9 +179,26 @@ class CreateObjectivesForm(forms.Form):
 			self.fields['new_objective_{index}'.format(index=index)] = forms.CharField(label='New Objective {index}'.format(index=index),required=False)
 
 class StandardsSearchForm(forms.Form):
-	state = forms.ChoiceField(label='State', choices=STATE_CHOICES)
-	subject = forms.ChoiceField(label='Subject', choices=SUBJECTS)
-	grade = forms.ChoiceField(label='Grade', choices=GRADES)
+	
+	standard_type = forms.ChoiceField(label='Type', widget=forms.Select(attrs={'style': 'width: 150px'}))
+	state = forms.ChoiceField(label='State', required=False, widget=forms.Select(attrs={'style': 'width: 150px'}))
+	grade = forms.ChoiceField(label='Grade', widget=forms.Select(attrs={'style': 'width: 50px'}))
+	subject = forms.ChoiceField(label='Subject', widget=forms.Select(attrs={'style': 'width: 150px'}))
+
+	def __init__(self, *args, **kwargs):
+		
+		super(StandardsSearchForm, self).__init__(*args,**kwargs)
+		self.fields['grade'].choices = createChoices(Grade)
+		self.fields['grade'].initial = ''
+
+		self.fields['subject'].choices = createChoices(Subject)
+		self.fields['subject'].initial = ''
+
+		self.fields['state'].choices = createChoices(State)
+		self.fields['state'].initial = ''
+
+		self.fields['standard_type'].choices = createChoices(StandardType)
+		self.fields['standard_type'].initial = ''
 
 class TeacherRequestForm(forms.Form):
 	email = forms.CharField(label='Teacher Email')

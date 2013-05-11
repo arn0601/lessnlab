@@ -1,39 +1,44 @@
 from django.core.management.base import NoArgsCommand
 from django.template import Template, Context
 from django.conf import settings
-from Standards.models import Standard
+from Standards.models import *
 from LessonPlanner.models import StandardGrouping
+import sys,traceback
 import datetime
+import csv
 
 class Command(NoArgsCommand):
-    def handle_noargs(self, **options):
-	slist = ['Mathematics;8;Generalize patterns represented graphically or numerically with words or symbolic rules, using explicit notation;', 'Mathematics;8;Compare and contrast various forms of representations of patterns;', 'Mathematics;8;Identify functions as linear or nonlinear from tables, graphs or equations;', 'Mathematics;8;Use symbolic algebra to represent and solve problems that involve linear relationships;', 'Mathematics;8;Use properties to generate equivalent forms for simple algebraic expressions that include all rationals;', 'Mathematics;8;Model and solve problems, using multiple representations such as graphs, tables, and linear equations;', 'Mathematics;8;Analyze the nature of changes (including slope an intercepts) in quantities in linear relationships;']
-	sg = StandardGrouping()
-	sg.name = '8th Grade Math - MO'
-	sg.subject = 'Mathematics'
-	sg.grade = '8'
-	sg.state = 'MO'
-	sg.creation_date = datetime.datetime.today()
-	sg.save()
-	i=1
-	for line in slist:
-		divided = line.split(';')
-		dept = divided[0]
-		grade = divided[1]
-		desc = divided[2]
-		s = Standard()
-		s.name = 'S' + str(s.id)
-		s.owner_type = 'MO'
-		s.description = desc
-		s.creation_date= datetime.datetime.today()
-		s.start_date = datetime.datetime.today()
-		s.expiration_date = datetime.datetime.max
-		s.department = dept
-		s.subject = ''
-		s.grade = grade
-		s.numbering = str(i)
-		s.save()
-		sg.standard.add(s)
-		i = i+1
-
-
+	def handle_noargs(self, **options):
+		f = open('standards.csv', 'r')
+		try:
+			reader = csv.reader(f)
+			rownum = 0
+			header = []
+			for row in reader:
+				if rownum==0:
+					rownum+=1
+					header=row
+				else:
+					rownum+=1
+					grade = row[0]
+					stype = row[3]
+					state = row[2]
+					subject = row[4]
+					description = row[7]
+					standard = Standard()
+					standard.standard_type = StandardType.objects.get(value=stype)
+					if (stype == 'State'):
+						standard.state = State.objects.get(value=state)
+					standard.description = description
+					standard.creation_date = datetime.datetime.today()
+					standard.expiration_date = datetime.datetime.today()
+					standard.start_date = datetime.datetime.today()
+					standard.department = Subject.objects.get(value=subject)
+					standard.subject = Subject.objects.get(value=subject)
+					standard.grade = Grade.objects.get(value=grade)
+					standard.numbering = rownum
+					standard.save()
+					sg, created = StandardGrouping.objects.get_or_create(subject=standard.subject, grade=standard.grade, standard_type=standard.standard_type, state=standard.state, prebuilt=True)
+					sg.standard.add(standard)
+		except:
+			traceback.print_exc(file=sys.stdout)

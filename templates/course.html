@@ -22,7 +22,7 @@
 	{{ course.end_date }}
         <p><b>Standards Groups in Course</b>
         {% for group in course.standard_grouping.all %}
-		<p> <a onClick="getCourseStandardsFromGroup('{{ group.id }}')"> {{ group.name }} </a> </p>
+		<p> <a onClick="getCourseStandardsFromGroup('{{ group.id }}')"> {{ group.subject.value }} Standards, Grade {{ group.grade.value }}  for {{ group.standard_type.value}}:{{ group.state.value }} </a> </p>
 	{% endfor %} 
 	</p>
 	<a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Edit">Edit</a>
