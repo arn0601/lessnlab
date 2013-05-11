@@ -4,17 +4,49 @@
 <!DOCTYPE html>
 {% block content %}
 
-         <div class="noborderunitbox" id="u1">
-	<h4> {{ standard.numbering }}.{{ standard.description  }} </h4>
-	<h5> Top Objectives associated with this standard </h5>
-	{% for objective in objectives %}
-	
-		{{ objective.description }}
-	
-	{% endfor %}
-	<h5> Top lessons that use this standard </h5>
-	<h5> Assessments that teach to this standard </h5>
+         <div class="container" id="u1">
+	<h4> Details for {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} {{ standard.standard_type.value }} {% endif %} Standard {{ standard.numbering }}</h4>
+	<div class="row-fluid">
+	<p>{{ standard.description  }}</p>
 	</div>
+	<hr />
+	<div class="row-fluid">
+	<h5> At a Glance </h5>
+	<!-- add a glance details - state, type etc -->
+	<div class="span2"> <p><strong> #</strong> </p> <p> {{ standard.numbering }} </p> </div>
+	<div class="span2"> <p> <strong> Type </strong> </p> <p> {{ standard.standard_type.value }} </p> </div>
+	<div class="span2"> <p> <strong > State </strong>  </p> <p> {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} N/A {% endif %} </p> </div>
+	<div class="span2"> <p> <strong> Subject </strong> </p> <p> {{ standard.subject.value }} </p> </div>
+	<div class="span2"> <p> <strong> Grade </strong> </p> <p> {{ standard.grade.value }} </p> </div>
+	</div>
+	<hr />
+	<div class="row-fluid">
+	<h5> Standard Guidance </h5>
+	This is where the guidnace and analysis for teh standard goes
+	</div>
+	<hr />
+	<div class="row-fluid">
+	<h5> Courses Teaching this Standard </h5>
+	<table class="table table-hover table-striped table-bordered">
+	<thead> <tr> <th> Name </th> <th> Subject </th> <th> Grade </th> <th> Author </th> <th> Rating </th> </tr> </thead>
+	{% for course in standardCourses %}
+	<tr> <td> {{ course.name }} </td> <td> {{ course.subject.value }} </td> <td> {{ course.grade }} </td> <td> {{ course.owner.user_firstname }} {{ course.owner.user_lastname }} </td> <td> {{ standardCourses|access:course }} </td> </tr>
+	{% endfor %}
+	</table>
+	</div>
+	<hr />
+	 <div class="row-fluid">
+	<h5> Objectives associated with this standard </h5>
+	<table class="table table-hover table-striped table-bordered">
+	<thead> <tr> <th> Description </th> <th> Author </th> <th> Rating </th> </tr> </thead>
+	{% for objective in standardObjectives %}
+	<tr> <td> {{ objective.description }} </td> <td> {{ objective.owner.user_firstname }} {{ objective.owner.user_lastname }}  </td> <td> {{ standardObjectives|access:objective }} </td> </tr>
+	{% endfor %}
+	</table>
+	</div> 
+	
+</div>
+
 
 
 {% endblock %}

@@ -13,13 +13,13 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', #django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.postgresql_psycopg2', #django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
 
 
 
 
-        'NAME': 'django',                      # Or path to database file if using sqlite3.
-        'USER': 'admin',                      # Not used with sqlite3.
+        'NAME': 'lab',                      # Or path to database file if using sqlite3.
+        'USER': 'dab',                      # Not used with sqlite3.
         'PASSWORD': 'admin',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
@@ -169,7 +169,7 @@ LOGGING = {
 }
 
 import dj_database_url
-DATABASES['default'] =  dj_database_url.config()
+#DATABASES['default'] =  dj_database_url.config()
 
 AUTH_PROFILE_MODULE = 'accounts.UserProfile'
 

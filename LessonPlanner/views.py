@@ -4,7 +4,7 @@ from LessonPlanner.models import Lesson,Course,Unit,Section
 from LessonPlanner.models import *
 from LessonPlanner.forms import *
 from Standards.models import *
-from Objectives.models import Objective
+from Objectives.models import Objective, ObjectiveRating
 from django.shortcuts import render_to_response
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect
@@ -929,3 +929,35 @@ def manageCourseStudents(request):
 	else:
 		return HttpResponseRedirect('/manageStudents/')
 
+def getStandard(request):
+	if request.method == 'GET':
+		standard_id = request.GET['standard_id']
+		try:
+			s = Standard.objects.get(id=standard_id)
+		except:
+			return HttpResponseRedirect('/courses/')
+		standard_groupings = s.standardgrouping_set.all()
+		courses = {}
+		for sg in standard_groupings:
+			for course in sg.course_set.all():
+				courses[course] = 0
+		for course in courses:
+			ratings = CourseRating.objects.filter(course=course)
+			rating_list = [rating.value for rating in ratings]
+			course_rating = 0
+			if ( len(rating_list) > 0 ):
+				course_rating = reduce(lambda x, y: x+y, rating_list)/float(len(rating_list))
+			courses[course] = course_rating
+		objectives = Objective.objects.filter(standard=s)
+		objective_dict = {}
+		for objective in objectives:
+			ratings= ObjectiveRating.objects.filter(objective=objective)
+			rating_list = [rating.value for rating in ratings]
+			objective_rating = 0
+			if (len(rating_list) > 0):
+				objective_rating = reduce(lambda x, y: x+y, rating_list)/float(len(rating_list))
+			objective_dict[objective] = objective_rating
+			
+		return render_to_response('standard_view.html', { 'standardCourses': courses, 'standard':s, 'objectives':objectives, 'standardObjectives': objective_dict })
+
+	return HttpResponseRedirect('/courses/')
