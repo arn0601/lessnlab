@@ -57,6 +57,7 @@
 				border-top-style:solid;
 				border-top-color:#c8c8c8;
 				padding-bottom: 15px;
+				padding-left: 70px;
 				vertical-align: middle;
                 height: 7em;
 				opacity:1.5;
@@ -105,14 +106,18 @@
     <!-- Fav and touch icons -->
   </head>
   <body>
-  <div class="page-header">
+  <div class="page-header row-fluid">
+  <div class="span2">
     <a href="{% url LessonPlanner.views.landing %}" style="color: #000000"><h4>Welcome to LessnLab</h4></a>
+  </div>
+  <div class="span1">
+    	<h5><a href="{% url accounts.views.login_user %}"> Log In </a></h5>  
+  </div>
   </div>
   <div class="container-fluid">
   <div class="row-fluid">
-
    </div>
-  <div style="top: 20%; left: 35%; position: fixed;">
+  <div style="top: 20%; left: 40%; position: fixed;">
 {% csrf_token %}
       <form class="form-signin" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
         <h3 class="form-signin-heading">Login</h3>
@@ -146,37 +151,37 @@
    </div>
 
     <div class="footer">
-        <div class="rowfluid">
+        <div class="row-fluid">
         <div class="span3">
             <h6>Company</h6>
-            <div class="rowfluid">
+            <div class="row-fluid">
                 <small><a href="#">About</a></small>
             </div>
-            <div class="rowfluid">
+            <div class="row-fluid">
                 <small><a href="#">Contact</a></small>
             </div>
         </div>
         <div class="span3">
             <h6>Connect</h6>
-            <div class="rowfluid">
+            <div class="row-fluid">
                 <small><a href="#">Twitter</a></small>
             </div>
-            <div class="rowfluid">
+            <div class="rowf-luid">
                 <small><a href="#">Facebook</a></small>
             </div>
         </div>
         <div class="span3">
             <h6>Product</h6>
-            <div class="rowfluid">
+            <div class="row-fluid">
                 <small><a href="#">LessnLab</a></small>
             </div>
-            <div class="rowfluid">
+            <div class="row-fluid">
                 <small><a href="#">Terms</a></small>
             </div>
         </div>
         <div class="span3">
         	<h6>Created By <a href="#">LessnLab Inc.</a></h6>
-        	<div class="rowfluid">
+        	<div class="row-fluid">
         	<small>Copyright 2013. All Rights Reserved.</small>
         	</div>
         </div>
