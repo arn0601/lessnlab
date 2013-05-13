@@ -179,4 +179,4 @@ EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 LOGIN_URL = "/login/"
-LOGIN_EXEMPT_URLS = ( r'^accounts/registerTeacher/', )
+LOGIN_EXEMPT_URLS = ( r'^accounts/registerTeacher/', r'^$' )
