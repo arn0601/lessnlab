@@ -23,10 +23,29 @@ body {
         color: #c8c8c8;
       }
       
+.navlink {
+
+	border-style: solid;
+	border-color: #c8c8c8;
+	border-width: 1px;
+
+
+}
+
+.navlinkselected {
+
+	border-style: solid;
+	border-color: #c8c8c8;
+	border-width: 1px;
+	background-color: #c8c8c8;
+	opacity: .8; 
+	color: black;
+
+}
 
 .page-header {
         margin-top:0px;
-        padding-left: 75px;
+        padding-left: 70px;
         padding-top:10px;
         background-color: white;
         border: none;
