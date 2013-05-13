@@ -23,13 +23,6 @@ body {
         color: #c8c8c8;
       }
       
-    
-.main-content {
-      
-      	padding-left: 220px;
-      	padding-right: 130px;
-      
-      }
 
 .page-header {
         margin-top:0px;
@@ -55,6 +48,7 @@ body {
 				padding-bottom: 15px;
 				padding-left: 70px;
 				vertical-align: middle;
+				text-align: left;
                 height: 7em;
 				opacity:1.5;
 				color: #c8c8c8;
