@@ -18,6 +18,9 @@ from django.contrib.auth.models import User
 
 import urlparse
 
+def team(request):
+        return render_to_response('team.html', {})
+
 def landing(request):
 	return render_to_response('landing.html', {})
 
