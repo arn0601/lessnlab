@@ -13,6 +13,10 @@ body {
 
 }
 
+.bodycontent {
+		padding-left: 8%;
+}
+
 #fixed_header {
 	
 		height: 300px;
