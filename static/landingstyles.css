@@ -48,6 +48,8 @@ body {
         padding-top:10px;
         background-color: white;
         border: none;
+        position: fixed;
+        top: 0px;
         color: black;
         height:5%;
         opacity: 1.5;
@@ -64,16 +66,22 @@ body {
 				border-top-style:solid;
 				border-top-color:#c8c8c8;
 				padding-bottom: 15px;
-				padding-left: 100px;
 				vertical-align: middle;
-                height: 6em;
+                height: 3em;
 				opacity:1.5;
 				color: #c8c8c8;
-				position: fixed;
-				bottom: 0px;
 				width: 100%;
 				
 			 }
+
+
+.separate {
+
+				border-right-width:1px;
+				border-right-style:solid;
+				border-right-color:#c8c8c8;
+
+}
 
 .form-signin {
         max-width: 300px;
