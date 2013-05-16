@@ -68,7 +68,17 @@ body {
 				border-right-style:solid;
 				border-right-color:#c8c8c8;
 				padding: 10px;
-				height: 60px;
+				text-align: center;
+}
+
+
+.foot_separate {
+
+				border-right-width:1px;
+				border-right-style:solid;
+				border-right-color:#c8c8c8;
+				padding: 10px;
+				height: 50px;
 				text-align: center;
 }
 
