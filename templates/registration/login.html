@@ -32,9 +32,7 @@
     </div>
   </div>
   <div class="container-fluid">
-  <div class="row">
-   </div>
-  <div style="top: 20%; left: 40%; position: fixed;">
+  <div style="top: 20%; left: 40%; position: relative;">
 {% csrf_token %}
       <form class="form-signin" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
         <h3 class="form-signin-heading">Login</h3>
@@ -71,13 +69,13 @@
         	<div class="span1 offset2 separate">
         		<a href="#">About</a>
         	</div>
-        	<div class="span1 offset2 separate">
+        	<div class="span1 separate">
         		<a href="#">Connect</a>
         	</div>
-        	<div class="span1 offset2 separate">
+        	<div class="span1 separate">
         		<a href="#">Press</a>
         	</div>
-        	<div class="span1 offset2 separate">
+        	<div class="span1 separate">
         		<a href="#">Terms</a>
         	</div>
         </div>

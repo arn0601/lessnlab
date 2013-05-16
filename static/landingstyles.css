@@ -47,9 +47,12 @@ body {
         margin-top:0px;
         padding-top:10px;
         background-color: white;
+        width: 100%;
+        position: fixed;
+        top: 0px;
         border: none;
         color: black;
-        height:5%;
+        height:100px;
         opacity: 1.5;
         vertical-align: middle;
         	-webkit-box-shadow: 0 8px 6px -6px black;
@@ -63,7 +66,6 @@ body {
 			 	border-top-width:1px;
 				border-top-style:solid;
 				border-top-color:#c8c8c8;
-				padding-bottom: 15px;
 				vertical-align: middle;
                 height: 3em;
 				opacity:1.5;
