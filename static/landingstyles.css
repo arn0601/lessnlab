@@ -9,7 +9,7 @@ body {
 		padding-bottom: 60px;
 		padding-top: 140px;
 		text-align: center;
-		width: 1200px;
+		width: 100%;
 
 }
 
@@ -57,7 +57,7 @@ body {
 				height: 60px;
 				text-align: center;
 				bottom: 0;
-				opacity: .6;
+				opacity: .9;
 				color: #c8c8c8;
 				width: 100%;
 				
