@@ -24,7 +24,9 @@ body {
 
 .page-header {
         margin-top:0px;
-        padding-top:10px;
+        padding-top:15px;
+        position: fixed;
+        top: 0px;
         background-color: white;
         border: none;
         color: black;
