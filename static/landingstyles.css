@@ -7,7 +7,7 @@ body {
 #body {
 	
 		padding-bottom: 60px;
-		margin-top: 60px;
+		padding-top: 60px;
 		width: 80%;
 
 }
@@ -65,7 +65,7 @@ body {
 				border-right-width:1px;
 				border-right-style:solid;
 				border-right-color:#c8c8c8;
-				color: #c8c8c8;
+				padding: 10px;
 				text-align: center;
 }
 
