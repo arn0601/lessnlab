@@ -50,7 +50,6 @@ body {
         width: 100%;
         border: none;
         color: black;
-        height:100px;
         opacity: 1.5;
         vertical-align: middle;
         	-webkit-box-shadow: 0 8px 6px -6px black;
@@ -68,6 +67,7 @@ body {
                 height: 3em;
 				opacity:1.5;
 				color: #c8c8c8;
+				text-align: center;
 				width: 100%;
 				
 			 }
@@ -78,7 +78,6 @@ body {
 				border-right-width:1px;
 				border-right-style:solid;
 				border-right-color:#c8c8c8;
-				text-align: center;
 				color: #c8c8c8;
 
 }
