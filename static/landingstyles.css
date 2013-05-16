@@ -62,11 +62,10 @@ body {
 				border-top-style:solid;
 				border-top-color:#c8c8c8;
 				vertical-align: middle;
-				position: relative;
+				position: fixed;
 				top: 100%;
 				padding-top: 1em;
 				padding-bottom: 1em;
-                height: 3em;
 				opacity:1.5;
 				color: #c8c8c8;
 				text-align: center;
