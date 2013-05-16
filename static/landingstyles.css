@@ -7,14 +7,15 @@ body {
 #body {
 	
 		padding-bottom: 60px;
+		padding-top: 140px;
 		text-align: center;
-		background-color: white;
 		width: 100%;
 
 }
 
 .bodycontent {
 		padding-left: 8%;
+		background-color: white;
 }
 
 #fixed_header {
