@@ -5,6 +5,12 @@ body {
         background-image: url('/static/test2.jpg')
       }
 
+#body {
+	
+		padding-bottom: 60px;
+
+}
+
 .loginlinks {
       
         text-align: center;
@@ -38,19 +44,15 @@ body {
       }
     
 .footer {
-			 
 			 	background-color: white;
 			 	border-top-width:1px;
 				border-top-style:solid;
 				border-top-color:#c8c8c8;
-				vertical-align: middle;
-				position: fixed:
-				top: 100%;
-				padding-top: 1em;
-				padding-bottom: 1em;
+				position: absolute;
+				height: 60px;
+				bottom: 0;
 				opacity:1.5;
 				color: #c8c8c8;
-				text-align: center;
 				width: 100%;
 				
 			 }
