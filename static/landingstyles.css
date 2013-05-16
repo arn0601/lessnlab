@@ -21,26 +21,6 @@ body {
 .logindivider{
         color: #c8c8c8;
       }
-      
-.navlink {
-
-	border-style: solid;
-	border-color: #c8c8c8;
-	border-width: 1px;
-
-
-}
-
-.navlinkselected {
-
-	border-style: solid;
-	border-color: #c8c8c8;
-	border-width: 1px;
-	background-color: #c8c8c8;
-	opacity: .8; 
-	color: black;
-
-}
 
 .page-header {
         margin-top:0px;
@@ -80,7 +60,6 @@ body {
 				border-right-style:solid;
 				border-right-color:#c8c8c8;
 				color: #c8c8c8;
-				margin: 0px;
 }
 
 .form-signin {
