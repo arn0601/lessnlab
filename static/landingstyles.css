@@ -9,6 +9,7 @@ body {
 		padding-bottom: 60px;
 		padding-top: 140px;
 		text-align: center;
+		background-color: white;
 		width: 100%;
 
 }
@@ -70,13 +71,6 @@ body {
 				text-align: center;
 }
 
-
-.foot_separate {
-
-				border-right-width:1px;
-				border-right-style:solid;
-				border-right-color:#c8c8c8;
-}
 
 .form-signin {
         max-width: 300px;
