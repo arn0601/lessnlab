@@ -48,8 +48,6 @@ body {
         padding-top:10px;
         background-color: white;
         border: none;
-        position: fixed;
-        top: 0px;
         color: black;
         height:5%;
         opacity: 1.5;
@@ -80,6 +78,8 @@ body {
 				border-right-width:1px;
 				border-right-style:solid;
 				border-right-color:#c8c8c8;
+				text-align: center;
+				color: #c8c8c8;
 
 }
 
