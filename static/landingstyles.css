@@ -62,8 +62,8 @@ body {
 				border-top-style:solid;
 				border-top-color:#c8c8c8;
 				vertical-align: middle;
-				position: fixed;
-				top: 100%;
+				position: fixed:
+				top: 500px;
 				padding-top: 1em;
 				padding-bottom: 1em;
 				opacity:1.5;
