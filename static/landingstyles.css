@@ -7,16 +7,30 @@ body {
 #body {
 	
 		padding-bottom: 60px;
-		padding-top: 140px;
+		padding-top: 80px;
 		text-align: center;
 		width: 100%;
 
 }
 
 .bodycontent {
+
 		padding-top: 40px;
 		padding-bottom: 40px;
 		background-color: white;
+		border-bottom-color: green;
+		border-bottom-style: solid;
+		border-bottom-width: 1px
+		border-top-color: green;
+		border-top-style: solid;
+		border-top-width: 1px
+		
+		}
+		
+.modulecontent {
+
+		color: #c8c8c8;
+
 }
 .bodycontentnobackground {
 		padding-top: 40px;
