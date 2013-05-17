@@ -128,7 +128,7 @@ body {
         vertical-align: middle;
         	-webkit-box-shadow: 0 8px 6px -6px black;
 	   -moz-box-shadow: 0 5px 5px -6px #c8c8c8;
-	        box-shadow: 0 5px 5px -6px #c8c8c8;
+	        box-shadow: 0 5px 5px -5px #c8c8c8;
       }
     
 .footer {
