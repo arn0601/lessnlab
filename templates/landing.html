@@ -28,6 +28,14 @@
 	
 	
 	</style> 
+	<script>
+	
+	 function goToByScroll(id)
+    {
+ 			$('html,body').animate({scrollTop: $("#"+id).offset(500) - 400.top},1000);
+	}
+	
+	</script>
   </head>
   <body>
   <div class="page-header row">
@@ -120,13 +128,6 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/static/bootstrap.js">
-    
-    function goToByScroll(id)
-    {
- 			$('html,body').animate({scrollTop: $("#"+id).offset(500) - 1000.top},1000);
-	}
-    
-    </script>
+    <script src="/static/bootstrap.js"></script>
   </body>
 </html>
