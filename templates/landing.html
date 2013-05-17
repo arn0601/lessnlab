@@ -45,13 +45,13 @@
     	<h4>LessnLab</h4>
     </div>
     <div class="span1 navlinks">
-    	<h5><a href="javascript:void(0)" onclick="goToByScroll('who')">Product</a></h5>   
+    	<h5><a href="javascript:void(0)" onclick="goToByScroll('product')">Product</a></h5>   
     </div>
     <div class="span1 navlinks">
-    	<h5><a href="#">Team</a></h5>
+    	<h5><a href="javascript:void(0)" onclick="goToByScroll('team')">Team</a></h5>
     </div>
      <div class="span1 navlinks">
-    	<h5><a href="#">Learn</a></h5>
+    	<h5><a href="javascript:void(0)" onclick="goToByScroll('contact')">Contact</a></h5>
     </div>
     <div class="span2 offset8 navlinks" id="loginbutton">
     	<a href="{% url accounts.views.login_user %}"><button class="btn-primary">Log In</button></a>
@@ -67,7 +67,7 @@
   		<div class="span6">
   		</div>
   	</div> 
-	<div class="row bodycontent" id="who">
+	<div class="row bodycontent" id="product">
 			<div class="row secondheader">
 				<div class="span12 offset2">
 					<h3>We Think We're Onto Something</h3>
@@ -97,7 +97,37 @@
 			</div>
 			</div>
 		</div>
-		<div class="row bodycontentnobackground">
+		<div class="row bodycontent" id="team">
+			<div class="row secondheader">
+				<div class="span12 offset2">
+					<h3>Here's Our Founding Team</h3>
+				</div>
+			</div>
+			<div class="row centercontent modulecontent">
+			<div class="span4 separate">
+				<p class="moduleheader">Zain</p>
+				<hr/>
+				<img class="img-rounded" src="static/zain.jpg">
+				<hr/>
+				<p>Zain loves all things education. As a former teacher, he saw an opportunity to simplify teachers' lives and came up with LessnLab. He is a graduate of Cornell University.</p>
+			</div>
+			<div class="span4 separate">
+				<p class="moduleheader">Deepak<p>
+				<hr/>
+				<img class="img-rounded" src="static/dheadshot.jpg">
+				<hr/>
+				<p>Deepak is a back-end wiz and loves solving difficult problems. He has a Masters in Computer Science from Cornell University.</p>
+			</div>
+			<div class="span4 separate">
+				<p class="moduleheader">Aman</p>
+				<hr/>
+				<img class="img-rounded" src="static/aheadshot">
+				<hr/>
+				<p>Aman can do it all, front-end, back-end and everything in the middle. He has a Computer Science degree from The University of Pennsylvania.</p>
+			</div>
+			</div>
+		</div>
+		<div class="row bodycontentnobackground" id="contact">
 			<div class="row centercontent">
 			<div class="span12 separate">
 				<h3>Want to Learn More?</h3>
