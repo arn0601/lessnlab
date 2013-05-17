@@ -28,13 +28,12 @@
 	
 	
 	</style> 
-	<script>
+	<script type="text/javascript">
 	
-	 function goToByScroll(id)
-    {
- 			$('html,body').animate({scrollTop: $("#"+id).offset(500) - 400.top},1000);
-	}
-	
+		function goToByScroll(id){
+	 			$('html,body').animate({scrollTop: $("#"+id).offset().top - 100},1500);
+			}
+			
 	</script>
   </head>
   <body>
