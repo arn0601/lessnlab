@@ -98,7 +98,8 @@ body {
 
 		padding-top: 5px;
 		color: white;
-		padding-left: 25px;
+		position: absolute;
+		left: 49%;
 		
 	
 }
