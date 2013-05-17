@@ -65,11 +65,18 @@ body {
 	
 		height: 300px;
 		padding-left: 21px;
+		padding-top: 90px;
 		text-align: left;
 		color: white;
 		width: 100%;
 		background-color: none;
 
+}
+
+#loginbutton {
+
+		padding-top: 5px;
+	
 }
 
 #logoborder {
