@@ -122,8 +122,9 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="/static/bootstrap.js">
     
-    function goToByScroll(id){
- 			$('html,body').animate({scrollTop: $("#"+id).offset().top},1000);
+    function goToByScroll(id)
+    {
+ 			$('html,body').animate({scrollTop: $("#"+id).offset(500) - 1000.top},1000);
 	}
     
     </script>
