@@ -1,7 +1,6 @@
 body {
         padding-top: 0px;
         background-color: #efefef;
-        background-image: url('/static/parthenon.jpg')
       }
 
 #body {
@@ -88,9 +87,10 @@ body {
 		padding-left: 21px;
 		padding-top: 90px;
 		text-align: left;
-		color: white;
+		color: black;
 		width: 100%;
 		background-color: none;
+		background-image: url('/static/parthenon.jpg')
 
 }
 
