@@ -34,7 +34,7 @@
 	<script type="text/javascript">
 	
 		function goToByScroll(id){
-	 			$('html,body').animate({scrollTop: $("#"+id).offset().top},4000);
+	 			$('html,body').animate({scrollTop: $("#"+id).offset().top},400);
 			}
 			
 	</script>
@@ -54,7 +54,7 @@
     	<h5><a href="#">When</a></h5>
     </div>
     <div class="span2 offset8" id="loginbutton">
-    	<a href="{% url accounts.views.login_user %}"><button class="btn-primary">Log In</button></a>   
+    	<button class="btn-primary"><a href="{% url accounts.views.login_user %}">Log In</a></button> 
     </div>
   </div>
   <div class="container" id="body">
@@ -62,7 +62,7 @@
   		<div class="span6 offset2">		
   				<h2>Welcome to LessnLab </h2>
   				<h3 id="subheader">We're Closing the Loop In Education</h3>
-  				<a href="#"><button class="btn-success btn-large">Find Out How</button></a>
+  				<button class="btn-success btn-large"><a href="#">Find Out How</a></button>
   		</div> 
   		<div class="span6">
   		</div>
