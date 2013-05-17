@@ -35,7 +35,7 @@
     	<h4>LessnLab</h4>
     </div>
     <div class="span1">
-    	<h5><a href="#">Who</a></h5>   
+    	<h5><a href="javascript:void(0)" onclick="goToByScroll('who')">Who</a></h5>   
     </div>
     <div class="span1">
     	<h5><a href="#">What</a></h5>
@@ -58,28 +58,28 @@
   		</div>
   	</div> 
 	<div class="row bodycontent">
-			<div class="row secondheader">
+			<div class="row secondheader" id="who">
 				<div class="span12 offset2">
 					<h3>Who Uses LessnLab?</h3>
 				</div>
 			</div>
 			<div class="row centercontent modulecontent">
 			<div class="span4 separate">
-				<h4 class="moduleheader">Teachers</h4>
+				<p class="moduleheader">Teachers</p>
 				<hr/>
 				<img src="static/science.png">
 				<hr/>
 				<p>Create, deliver and assess your lessons from within our intelligent ecosystem</p>
 			</div>
 			<div class="span4 separate">
-				<h4 class="moduleheader">Parents</h4>
+				<p class="moduleheader">Parents<p>
 				<hr/>
 				<img src="static/calculator.png">
 				<hr/>
 				<p>Keep track of what your student learns and how she performs when you want</p>
 			</div>
 			<div class="span4 separate">
-				<h4 class="moduleheader">Schools</h4>
+				<p class="moduleheader">Schools</p>
 				<hr/>
 				<img src="static/mortarboard.png">
 				<hr/>
@@ -120,6 +120,12 @@
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/static/bootstrap.js"></script>
+    <script src="/static/bootstrap.js">
+    
+    function goToByScroll(id){
+ 			$('html,body').animate({scrollTop: $("#"+id).offset().top},1000);
+	}
+    
+    </script>
   </body>
 </html>
