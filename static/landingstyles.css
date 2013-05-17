@@ -14,10 +14,15 @@ body {
 }
 
 .bodycontent {
-		padding-left: 12%;
 		padding-top: 40px;
 		padding-bottom: 40px;
 		background-color: white;
+}
+
+.centercontent {
+
+	padding-left: 12%;
+
 }
 
 #fixed_header {
