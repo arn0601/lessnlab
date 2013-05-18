@@ -164,10 +164,10 @@
 	</div>
 	<div class="modal hide" id="login">
   	<div class="modal-header">
-  		<h4>Login</h4>
   	  <button type="button" class="close" data-dismiss="modal">x</button>
-  </div>
-  <div class="modal-body">
+  	  <h4>Login</h4>
+  	</div>
+  <div class="modal-body loginmodal">
     {% csrf_token %}
       <form method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
         <input type="text" class="input-block-level" name="username" placeholder="Username" value={{ username }}>
@@ -181,11 +181,10 @@
         </div>
         <hr/>
 	<div class="loginlinks">
-           <span> <a href="{% url accounts.views.registerTeacher%}">Register as a Teacher</a> </span>
+           <span><a class="btn-primary btn-small" href="{% url accounts.views.registerTeacher%}">Register as a Teacher</a> </span>
            <span class="logindivider">|</span>
-	   <span> <a href="{% url accounts.views.registerStudent%}">Register as a Student</a> </span>
-           <span class="logindivider">|</span>
-           <span><a href="{% url auth_password_reset %}">Forgot Password?</a></span>
+	   	   <span> <a class="btn-primary btn-small" href="{% url accounts.views.registerStudent%}">Register as a Student</a> </span>
+           <p><a href="{% url auth_password_reset %}">Forgot Password?</a></p>
        </div>
       </form>
   </div>
