@@ -62,7 +62,10 @@
     	<h5><a href="javascript:void(0)" onclick="goToByScroll('contact')">Contact</a></h5>
     </div>
     <div class="span2 offset7 navlinks" id="loginbutton">
-    	<a class="btn btn-primary btn-small" type="button" href="#login" data-toggle="modal">Login</a>
+    	<a class="btn btn-success btn-small" type="button" href="#login" data-toggle="modal">Login</a>
+    </div>
+    <div class="span2 offset7 navlinks" id="registerbutton">
+    	<a class="btn btn-primary btn-small" type="button" href="#register" data-toggle="modal">Register</a>
     </div>
   </div>
   <div class="container" id="body">
@@ -162,6 +165,7 @@
         </div>
     </div>
 	</div>
+	<!-- login modal -->
 	<div class="modal hide bottomborder" id="login">
   	<div class="modal-header modalheaderspacing">
   	  <button type="button" class="close" data-dismiss="modal">x</button>
@@ -191,6 +195,37 @@
       </form>
   </div>
 </div>
+<!-- teacher register modal -->
+<div class="modal hide bottomborder" id="login">
+  	<div class="modal-header modalheaderspacing">
+  	  <button type="button" class="close" data-dismiss="modal">x</button>
+  	  <p class="modaltitle">Create a LessnLab Account</p>
+  	</div>
+  <div class="modal-body loginmodal">
+    {% csrf_token %}
+    {{ errors }}
+      <form class="loginform" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
+        <input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt;" name="username" placeholder="Username" value={{ username }}>
+        <input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt;" name="password" placeholder="Password">
+        <div class="row loginlinks">
+        	<div class="span2" style="padding-top: 7px;">
+        		<a href="{% url auth_password_reset %}">Forgot Password?</a>
+        	</div>
+        	<div class="span2">
+            	<button class="btn btn-success" type="submit">Login</button>
+            </div>
+        </div>
+        <hr/>
+	<div class="loginlinks">
+		<p class="modaltitlelevel2">Don't Have An Account? Create One</p>
+           <a class="btn btn-primary btn-small" href="{% url accounts.views.registerTeacher%}">Teacher</a>
+           <span> | </span>
+	   	 	<a class="btn btn-primary btn-small" href="{% url accounts.views.registerStudent%}">Student</a>
+       </div>
+      </form>
+  </div>
+</div>
+	
 	
 	
     <!-- Le javascript
