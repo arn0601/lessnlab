@@ -205,18 +205,18 @@
     <form class="form-signin form-horizontal" action="" method="post">
     	<div class="container">
     		<div class="row">
-    			<div class="span6"> 
+    			<div class="span4 offset4"> 
     				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="first_name" placeholder="First Name">
     			</div>
-    			<div class="span6"> 
+    			<div class="span4 offset8"> 
     				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="last_name" placeholder="Last Name">
     			</div>
     		</div>
     		<div class="row">
-    			<div class="span6">
+    			<div class="span4 offset4">
     				<input type="email" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="email" placeholder="Email Address">
     			</div>
-    			<div class="span6">
+    			<div class="span4 offset8">
     				<select name="school_state">
                     <option selected value="">Choose Your Teaching State</option>
 					<option value="AL">Alabama</option>
@@ -273,27 +273,27 @@
     			</div>
     		</div>
     		<div class="row">
-    			<div class="span12">
+    			<div class="span4 offset4">
     				<input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password1" placeholder="Enter A Password">
     			</div>
     		</div>
     		<div class="row">
-    			<div class="span12">
+    			<div class="span4 offset4">
     				<input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password2" placeholder="Confirm Password">
     			</div>
     		</div>
     		<div class="row">
-    			<div class="span12">
+    			<div class="span4 offset4">
     				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="teacher_code" placeholder="Registration Code">
     			</div>
     		</div>	
     {% csrf_token %}
     <!-- username, email, password1, password2, first_name, last_name, school_state, teacher_code -->
     		<div class="row">
-    			<div class="span6">
+    			<div class="span4 offset4">
                 	<button type="submit" class="btn btn-primary btn-small buttonPadding">Create Account</input>
             	</div>
-            	<div class="span6">
+            	<div class="span4 offset8">
                 	<button type="reset" class="btn btn-primary btn">Cancel</input>
                 </div>
             </div>
