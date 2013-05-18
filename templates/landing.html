@@ -164,7 +164,7 @@
 	</div>
 	<div class="modal hide" id="login">
   	<div class="modal-header">
-  	  <button type="button" class="modalclose" data-dismiss="modal">Close</button>
+  	  <button type="button" class="close" data-dismiss="modal">x</button>
   	  <p class="modaltitle">Log in to your LessnLab Account</p>
   	</div>
   <div class="modal-body loginmodal">
@@ -176,10 +176,13 @@
         <label class="checkbox">
             <input type="checkbox" value="remember-me">Remember me
         </label>
-        <div class="loginlinks">
-            <button class="btn btn-success" type="submit">Login</button>
-            <br/>
-            <p><a href="{% url auth_password_reset %}">Forgot Password?</a></p>
+        <div class="row loginlinks">
+        	<div class="span2">
+        		<a href="{% url auth_password_reset %}">Forgot Password?</a>
+        	</div>
+        	<div class="span3 offset 4">
+            	<button class="btn btn-success btn-large" type="submit">Login</button>
+            </div>
         </div>
         <hr/>
 	<div class="loginlinks">
