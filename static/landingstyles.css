@@ -136,7 +136,6 @@ body {
 .logintextbox {
 
 		height: 50px;
-		font-size: 16px;
 
 }
 
@@ -144,20 +143,28 @@ body {
 
 	
 		font-family: sans-serif;
-		font-size: 18pt;
+		font-size: 16pt;
+		margin-top: 7px;
 		color: #c8c8c8;
-	
-
 
 }
- 
-modalclose {
 
-		font-size: 10pt;
+.modaltitlelevel2 {
+
 		font-family: sans-serif;
+		font-size: 16pt;
+		margin-bottom: 5px;
+		color: #c8c8c8;
 
-}    
-      
+}
+
+modalheaderspacing {
+
+		padding-top: 20px;
+		margin-bottom: 10px;
+
+}
+     
 .push {
       	
       	height: 10em;
