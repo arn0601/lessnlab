@@ -164,12 +164,12 @@
 	</div>
 	<div class="modal hide" id="login">
   	<div class="modal-header">
+  		<h4>Login</h4>
   	  <button type="button" class="close" data-dismiss="modal">x</button>
   </div>
   <div class="modal-body">
     {% csrf_token %}
-      <form class="form-signin" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
-        <h3 class="form-signin-heading">Login</h3>
+      <form method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
         <input type="text" class="input-block-level" name="username" placeholder="Username" value={{ username }}>
         <input type="password" class="input-block-level" name="password" placeholder="Password">
 	{{ errors }}
