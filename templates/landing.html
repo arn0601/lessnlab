@@ -162,7 +162,7 @@
         </div>
     </div>
 	</div>
-	<div class="modal hide" id="login">
+	<div class="modal hide bottomborder" id="login">
   	<div class="modal-header modalheaderspacing">
   	  <button type="button" class="close" data-dismiss="modal">x</button>
   	  <p class="modaltitle">Log in to your LessnLab Account</p>
@@ -171,8 +171,8 @@
     {% csrf_token %}
     {{ errors }}
       <form class="loginform" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
-        <input type="text" class="logintextbox input-block-level" style="height: 40px; color: #c8c8c8; font-size: 12pt;" name="username" placeholder="Username" value={{ username }}>
-        <input type="password" class="logintextbox input-block-level" style="height: 40px; color: #c8c8c8; font-size: 12pt;" name="password" placeholder="Password">
+        <input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt;" name="username" placeholder="Username" value={{ username }}>
+        <input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt;" name="password" placeholder="Password">
         <div class="row loginlinks">
         	<div class="span2" style="padding-top: 7px;">
         		<a href="{% url auth_password_reset %}">Forgot Password?</a>
@@ -184,9 +184,9 @@
         <hr/>
 	<div class="loginlinks">
 		<p class="modaltitlelevel2">Don't Have An Account? Create One</p>
-           <a class="btn btn-primary" href="{% url accounts.views.registerTeacher%}">Teacher</a>
-           <span class="logindivider"> | </span>
-	   	 	<a class="btn btn-primary" href="{% url accounts.views.registerStudent%}">Student</a>
+           <a class="btn btn-primary btn-small" href="{% url accounts.views.registerTeacher%}">Teacher</a>
+           <span> | </span>
+	   	 	<a class="btn btn-primary btn-small" href="{% url accounts.views.registerStudent%}">Student</a>
        </div>
       </form>
   </div>
