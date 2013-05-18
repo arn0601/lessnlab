@@ -170,8 +170,8 @@
   <div class="modal-body loginmodal">
     {% csrf_token %}
       <form class="loginform" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
-        <input type="text" class="logintextbox input-block-level" style="height: 50px; color: #c8c8c8; font-size: 12pt;" name="username" placeholder="Username" value={{ username }}>
-        <input type="password" class="logintextbox input-block-level" style="height: 50px; color: #c8c8c8; font-size: 12pt;" name="password" placeholder="Password">
+        <input type="text" class="logintextbox input-block-level" style="height: 40px; color: #c8c8c8; font-size: 12pt;" name="username" placeholder="Username" value={{ username }}>
+        <input type="password" class="logintextbox input-block-level" style="height: 40px; color: #c8c8c8; font-size: 12pt;" name="password" placeholder="Password">
 	{{ errors }}
         <label class="checkbox">
             <input type="checkbox" value="remember-me">Remember me
@@ -187,9 +187,9 @@
         <hr/>
 	<div class="loginlinks">
 		<p class="modaltitlelevel2">Don't Have An Account? Create One</p>
-           <a class="btn btn-primary btn-small" href="{% url accounts.views.registerTeacher%}">Teacher</a>
+           <a class="btn btn-primary" href="{% url accounts.views.registerTeacher%}">Teacher</a>
            <span class="logindivider"> | </span>
-	   	 	<a class="btn btn-primary btn-small" href="{% url accounts.views.registerStudent%}">Student</a>
+	   	 	<a class="btn btn-primary" href="{% url accounts.views.registerStudent%}">Student</a>
        </div>
       </form>
   </div>
