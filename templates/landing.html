@@ -170,17 +170,17 @@
   <div class="modal-body loginmodal">
     {% csrf_token %}
       <form class="loginform" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
-        <input type="text" class="logintextbox input-block-level" style="height: 50px;" name="username" placeholder="Username" value={{ username }}>
-        <input type="password" class="logintextbox input-block-level" style="height: 50px;" name="password" placeholder="Password">
+        <input type="text" class="logintextbox input-block-level" style="height: 50px; color: #c8c8c8; font-size: 14pt;" name="username" placeholder="Username" value={{ username }}>
+        <input type="password" class="logintextbox input-block-level" style="height: 50px; color: #c8c8c8; font-size: 14pt;" name="password" placeholder="Password">
 	{{ errors }}
         <label class="checkbox">
             <input type="checkbox" value="remember-me">Remember me
         </label>
         <div class="row loginlinks">
-        	<div class="span4">
+        	<div class="span2">
         		<a href="{% url auth_password_reset %}">Forgot Password?</a>
         	</div>
-        	<div class="span2">
+        	<div class="span2 offset2">
             	<button class="btn btn-success" type="submit">Login</button>
             </div>
         </div>
