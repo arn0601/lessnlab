@@ -99,10 +99,21 @@ body {
 		padding-top: 5px;
 		color: white;
 		position: absolute;
+		left: 44%;
+		
+	
+}
+
+#registerbutton {
+
+		padding-top: 5px;
+		color: white;
+		position: absolute;
 		left: 49%;
 		
 	
 }
+
 
 #logoborder {
 
