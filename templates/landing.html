@@ -175,8 +175,8 @@
     {% csrf_token %}
     {{ errors }}
       <form class="loginform" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
-        <input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt;" name="username" placeholder="Username" value={{ username }}>
-        <input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt;" name="password" placeholder="Password">
+        <input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="username" placeholder="Username" value={{ username }}>
+        <input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password" placeholder="Password">
         <div class="row loginlinks">
         	<div class="span2" style="padding-top: 7px;">
         		<a href="{% url auth_password_reset %}">Forgot Password?</a>
@@ -205,8 +205,8 @@
     {% csrf_token %}
     {{ errors }}
       <form class="loginform" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
-        <input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt;" name="username" placeholder="Username" value={{ username }}>
-        <input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt;" name="password" placeholder="Password">
+        <input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="username" placeholder="Username" value={{ username }}>
+        <input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password" placeholder="Password">
         <div class="row loginlinks">
         	<div class="span2" style="padding-top: 7px;">
         		<a href="{% url auth_password_reset %}">Forgot Password?</a>
