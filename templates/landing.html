@@ -62,7 +62,7 @@
     	<h5><a href="javascript:void(0)" onclick="goToByScroll('contact')">Contact</a></h5>
     </div>
     <div class="span2 offset7 navlinks" id="loginbutton">
-    	<a href="{% url accounts.views.login_user %}"><button class="btn-primary">Log In</button></a>
+    	<a class="btn btn-primary btn-small" type="button" href="#login" data-toggle="modal">Login</a>
     </div>
   </div>
   <div class="container" id="body">
@@ -162,6 +162,36 @@
         </div>
     </div>
 	</div>
+	<div class="modal hide" id="login">
+  	<div class="modal-header">
+  	  <button type="button" class="close" data-dismiss="modal">x</button>
+  </div>
+  <div class="modal-body">
+    {% csrf_token %}
+      <form class="form-signin" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
+        <h3 class="form-signin-heading">Login</h3>
+        <input type="text" class="input-block-level" name="username" placeholder="Username" value={{ username }}>
+        <input type="password" class="input-block-level" name="password" placeholder="Password">
+	{{ errors }}
+        <label class="checkbox">
+            <input type="checkbox" value="remember-me">Remember me
+        </label>
+        <div class="loginlinks">
+            <button class="btn btn-success" type="submit">Login</button>
+        </div>
+        <hr/>
+	<div class="loginlinks">
+           <span> <a href="{% url accounts.views.registerTeacher%}">Register as a Teacher</a> </span>
+           <span class="logindivider">|</span>
+	   <span> <a href="{% url accounts.views.registerStudent%}">Register as a Student</a> </span>
+           <span class="logindivider">|</span>
+           <span><a href="{% url auth_password_reset %}">Forgot Password?</a></span>
+       </div>
+      </form>
+  </div>
+</div>
+	
+	
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
