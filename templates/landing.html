@@ -204,7 +204,7 @@
   <div class="modal-body loginmodal">
     <form class="form-signin form-horizontal" action="{% url registration.views.register %}" method="post">
     {% csrf_token %}
-    {% for field in form %}
+    {% for field in teacherRegistrationForm %}
         <div class="control-group">
 	{{ field.errors.as_text }}
          <label class="control-label">{{ field.label_tag }}</label>

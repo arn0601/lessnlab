@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
 from accounts.models import TeacherProfile
+from accounts.forms import TeacherRegistrationForm
 from datetime import datetime
 from django.utils.timezone import utc
 import simplejson
@@ -22,7 +23,8 @@ def team(request):
         return render_to_response('team.html', {})
 
 def landing(request):
-	return render_to_response('landing.html', {})
+	teacher_registration_form = TeacherRegistrationForm()
+	return render_to_response('landing.html', {'teacherRegistrationForm': teacher_registration_form})
 
 #show the units for a specific course
 
