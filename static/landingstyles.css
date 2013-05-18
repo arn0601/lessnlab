@@ -132,6 +132,31 @@ body {
 		color: #c8c8c8;
 
 }
+
+.logintextbox {
+
+		height: 50px;
+		font-size: 16px;
+
+}
+
+.modaltitle {
+
+	
+		font-family: sans-serif;
+		font-size: 20pt;
+		color: #c8c8c8;
+	
+
+
+}
+ 
+modalclose {
+
+		font-size: 10pt;
+		font-family: sans-serif;
+
+}    
       
 .push {
       	

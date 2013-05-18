@@ -164,14 +164,14 @@
 	</div>
 	<div class="modal hide" id="login">
   	<div class="modal-header">
-  	  <button type="button" class="close" data-dismiss="modal">x</button>
-  	  <h3>Sign In</h3>
+  	  <button type="button" class="modalclose" data-dismiss="modal">Close</button>
+  	  <p class="modaltitle">Log in to your LessnLab Account</p>
   	</div>
   <div class="modal-body loginmodal">
     {% csrf_token %}
       <form class="loginform" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
-        <input type="text" class="input-block-level" name="username" placeholder="Username" value={{ username }}>
-        <input type="password" class="input-block-level" name="password" placeholder="Password">
+        <input type="text" class="input-block-level logintextbox" name="username" placeholder="Username" value={{ username }}>
+        <input type="password" class="input-block-level logintextbox" name="password" placeholder="Password">
 	{{ errors }}
         <label class="checkbox">
             <input type="checkbox" value="remember-me">Remember me
