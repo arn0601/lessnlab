@@ -104,6 +104,15 @@ body {
 	
 }
 
+.register {
+
+	padding-left: 35px;
+	padding-right: 30px;
+	padding-top: 15px;
+	width: 470px;
+
+}
+
 #registerbutton {
 
 		padding-top: 5px;
