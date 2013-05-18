@@ -196,33 +196,23 @@
   </div>
 </div>
 <!-- teacher register modal -->
-<div class="modal hide bottomborder" id="login">
+<div class="modal hide bottomborder" id="register">
   	<div class="modal-header modalheaderspacing">
   	  <button type="button" class="close" data-dismiss="modal">x</button>
-  	  <p class="modaltitle">Create a LessnLab Account</p>
+  	  <p class="modaltitle">Create Your LessnLab Account</p>
   	</div>
   <div class="modal-body loginmodal">
+    <form class="form-signin form-horizontal" action="{% url registration.views.register %}" method="post">
     {% csrf_token %}
-    {{ errors }}
-      <form class="loginform" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
-        <input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="username" placeholder="Username" value={{ username }}>
-        <input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password" placeholder="Password">
-        <div class="row loginlinks">
-        	<div class="span2" style="padding-top: 7px;">
-        		<a href="{% url auth_password_reset %}">Forgot Password?</a>
-        	</div>
-        	<div class="span2">
-            	<button class="btn btn-success" type="submit">Login</button>
+    {% for field in form %}
+        <div class="control-group">
+	{{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
             </div>
         </div>
-        <hr/>
-	<div class="loginlinks">
-		<p class="modaltitlelevel2">Don't Have An Account? Create One</p>
-           <a class="btn btn-primary btn-small" href="{% url accounts.views.registerTeacher%}">Teacher</a>
-           <span> | </span>
-	   	 	<a class="btn btn-primary btn-small" href="{% url accounts.views.registerStudent%}">Student</a>
-       </div>
-      </form>
+    {% endfor %}
   </div>
 </div>
 	
