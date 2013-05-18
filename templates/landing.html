@@ -165,7 +165,7 @@
 	<div class="modal hide" id="login">
   	<div class="modal-header">
   	  <button type="button" class="close" data-dismiss="modal">x</button>
-  	  <h4>Login</h4>
+  	  <h3>Login</h3>
   	</div>
   <div class="modal-body loginmodal">
     {% csrf_token %}
@@ -179,12 +179,13 @@
         <div class="loginlinks">
             <button class="btn btn-success" type="submit">Login</button>
         </div>
+        <p><a href="{% url auth_password_reset %}">Forgot Password?</a></p>
         <hr/>
 	<div class="loginlinks">
-           <span><a class="btn-primary btn-small" href="{% url accounts.views.registerTeacher%}">Register as a Teacher</a> </span>
+		<h4>Create An Account</h4>
+           <span><a class="btn-primary" href="{% url accounts.views.registerTeacher%}">Teacher</a> </span>
            <span class="logindivider">|</span>
-	   	   <span> <a class="btn-primary btn-small" href="{% url accounts.views.registerStudent%}">Register as a Student</a> </span>
-           <p><a href="{% url auth_password_reset %}">Forgot Password?</a></p>
+	   	   <span> <a class="btn-primary" href="{% url accounts.views.registerStudent%}">Student</a> </span>
        </div>
       </form>
   </div>
