@@ -113,7 +113,8 @@ body {
 
 .loginlinks {
       
-        text-align: center;
+        text-align: left;
+        font-size: 10pt;
       
       }
 
