@@ -1,0 +1,281 @@
+body {
+        padding-top: 0px;
+        background-color: #efefef;
+      }
+
+#body {
+	
+		padding-bottom: 60px;
+		padding-top: 60px;
+		text-align: center;
+		width: 100%;
+
+}
+
+.bodycontent {
+
+		padding-top: 100px;
+		padding-bottom: 110px;
+		background-color: white;
+		border-top-color: #c8c8c8;
+		border-top-style: solid;
+		border-top-width: 1px;
+	
+			}
+			
+#copyright {
+
+
+		font-size: 10pt;
+		color: #c8c8c8;
+		font-weight: strong;
+
+}
+			
+.alt {
+
+
+		background-color: whitesmoke;
+
+}
+		
+.modulecontent {
+
+		color: #c8c8c8;
+
+}
+
+.navlinks {
+
+		text-align: center;
+
+
+}
+
+.moduleheader {
+
+		font-size: 14pt;
+		font-family: sans-serif;
+		font-weight: strong;
+
+
+}
+.bodycontentnobackground {
+		padding-top: 230px;
+		padding-bottom: 230px;
+		color: white;
+}
+
+.bottomborder {
+
+	
+		border-bottom-width: 1px;
+		border-bottom-color: #c8c8c8;
+		border-bottom-style: inset;
+
+}
+
+.centercontent {
+
+	padding-left: 14%;
+
+}
+
+#fixed_header {
+	
+		height: 300px;
+		padding-left: 21px;
+		padding-top: 90px;
+		text-align: left;
+		color: black;
+		width: 100%;
+		background-color: none;
+		background-image: url('/static/parthenon.jpg')
+
+}
+
+#loginbutton {
+
+		padding-top: 5px;
+		color: white;
+		position: absolute;
+		left: 44%;
+		
+	
+}
+
+.register {
+
+	padding-left: 35px;
+	padding-right: 30px;
+	padding-top: 15px;
+	width: 470px;
+
+}
+
+#registerbutton {
+
+		padding-top: 5px;
+		color: white;
+		position: absolute;
+		left: 49%;
+		
+	
+}
+
+
+#logoborder {
+
+	border-right-style: inset;
+	border-right-width: 1px;
+
+}
+
+.loginlinks {
+      
+        text-align: center;
+        font-size: 10pt;
+      
+      }
+
+.loginmodal {
+
+
+		padding-top: 20px;
+		padding-left: 120px;
+		padding-right: 120px;
+	
+
+}
+
+.loginform {
+
+		font-family: sans-serif;
+		font-size: 12pt;
+		color: #c8c8c8;
+
+}
+
+.logintextbox {
+
+		height: 50px;
+
+}
+
+.modaltitle {
+
+	
+		font-family: sans-serif;
+		font-size: 14pt;
+		margin-top: 7px;
+		color: #c8c8c8;
+
+}
+
+.modaltitlelevel2 {
+
+		font-family: sans-serif;
+		font-size: 10pt;
+		margin-bottom: 14px;
+		color: #c8c8c8;
+
+}
+
+modalheaderspacing {
+
+		padding-top: 20px;
+		margin-bottom: 10px;
+
+}
+
+.bottomborder {
+
+		border-bottom-width: 4px;
+		border-bottom-style: solid;
+		border-bottom-color: #c8c8c8;
+
+}    
+.push {
+      	
+      	height: 10em;
+      
+      }
+      
+.logindivider{
+        color: #c8c8c8;
+      }
+
+.page-header {
+        margin-top:0px;
+        height: 40px;
+        padding-top: 15px;
+        position: fixed;
+        top: 0px;
+        width: 100%;
+        background-color: white;
+        border: none;
+        color: black;
+        opacity: 1.5;
+        vertical-align: middle;
+        	-webkit-box-shadow: 0 8px 6px -6px black;
+	   -moz-box-shadow: 0 5px 5px -6px #c8c8c8;
+	        box-shadow: 0 5px 5px -5px #c8c8c8;
+      }
+    
+.footer {
+			 	background-color: white;
+			 	border-top-width:1px;
+				border-top-style:solid;
+				border-top-color:#c8c8c8;
+				padding-top: 12px;
+				position: fixed;
+				height: 50px;
+				text-align: center;
+				bottom: 0;
+				opacity: .98;
+				color: #c8c8c8;
+				width: 100%;
+				
+			 }
+
+
+.separate {
+
+				padding: 10px;
+				text-align: center;
+}
+
+.secondheader {
+
+			text-align: left;
+			padding-left: 41px;
+
+}
+
+
+.form-signin {
+        max-width: 300px;
+        padding: 19px 29px 29px;
+        background-color: white;
+        opacity: .9;
+        border: 1px solid #e5e5e5;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      }
+      
+.form-signin .form-signin-heading,
+      .form-signin .checkbox {
+        margin-bottom: 10px;
+      }
+
+.form-signin input[type="text"],
+      .form-signin input[type="password"] {
+        font-size: 16px;
+        height: auto;
+        margin-bottom: 15px;
+        padding: 7px 9px;
+      }

@@ -9,108 +9,10 @@
 
     <!-- Le styles -->
     <link href="/static/bootstrap.css" rel="stylesheet">
-    <style type="text/css">
-      body {
-        padding-top: 0px;
-        padding-bottom: 0px;
-        background-color: #efefef;
-        height:100%;
-        background-image: url('/static/test2.jpg')
-      }
-      
-      .loginlinks {
-      
-        text-align: center;
-      
-      }
-      
-      
-      .push {
-      	
-      	height: 10em;
-      
-      }
-      
-      .logindivider{
-        color: #c8c8c8;
-      }
-      
-      .landing-content { 
-      	
-      	text-align: center;
-      	margin: 20px
-      
-      }
-      
-      .main-content {
-      
-      	padding-left: 220px;
-      	padding-right: 150px;
-      
-      }
-      
-      .page-header {
-        margin-top:0px;
-        padding-left: 75px;
-        padding-top:10px;
-        background-color: white;
-        border: none;
-        color: black;
-        height:5%;
-        opacity:1.5;
-        vertical-align: middle;
-        	-webkit-box-shadow: 0 8px 6px -6px black;
-	   -moz-box-shadow: 0 5px 5px -6px #c8c8c8;
-	        box-shadow: 0 5px 5px -6px #c8c8c8;
-      }
-    
-     .footer {
-			 
-			 	background-color: white;
-			 	border-top-width:1px;
-				border-top-style:solid;
-				border-top-color:#c8c8c8;
-				padding-bottom: 15px;
-				padding-left: 70px;
-				vertical-align: middle;
-                height: 7em;
-				opacity:1.5;
-				color: #c8c8c8;
-				position: fixed;
-				bottom: 0px;
-				width: 100%;
-				
-			 }
-
-      .form-signin {
-        max-width: 300px;
-        padding: 19px 29px 29px;
-        margin: 0 auto 20px;
-        background-color: white;
-        opacity: .95;
-        border: 1px solid #e5e5e5;
-        -webkit-border-radius: 5px;
-           -moz-border-radius: 5px;
-                border-radius: 5px;
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
-                box-shadow: 0 1px 2px rgba(0,0,0,.05);
-      }
-      .form-signin .form-signin-heading,
-      .form-signin .checkbox {
-        margin-bottom: 10px;
-      }
-      .form-signin input[type="text"],
-      .form-signin input[type="password"] {
-        font-size: 16px;
-        height: auto;
-        margin-bottom: 15px;
-        padding: 7px 9px;
-      }
-      
-
-    </style>
-    <link href="/static/bootstrap-responsive.css" rel="stylesheet">
+	<script src="/static/jQuery.jQTubeUtil.js"></script>
+  	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+    <link href="/static/landingstyles.css" rel="stylesheet">
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
     <!--[if lt IE 9]>
@@ -118,78 +20,291 @@
     <![endif]-->
 
     <!-- Fav and touch icons -->
+
+	<style>
+	
+		#subheader {
+		
+			color: #c8c8c8;
+		
+		}
+		
+		#teamphotos {
+		
+			height: 140px;
+			width: 140px;
+			
+		
+		}
+	
+	
+	</style> 
+	<script type="text/javascript">
+	
+		function goToByScroll(id){
+	 			$('html,body').animate({scrollTop: $("#"+id).offset().top - 50},1000);
+			}
+			
+	</script>
   </head>
   <body>
-  <div class="page-header row-fluid">
-  	<div class="span2">
-    	<h4>Welcome to LessnLab</h4>
+  <div class="page-header row">
+  	<div class="span2 offset2" id="logoborder">
+    	<h4>LessnLab</h4>
     </div>
-    <div class="span1">
-    	<h5><a href="{% url accounts.views.login_user %}"> Log In </a></h5>   
+    <div class="span1 navlinks">
+    	<h5><a href="javascript:void(0)" onclick="goToByScroll('product')">Product</a></h5>   
+    </div>
+    <div class="span1 navlinks">
+    	<h5><a href="javascript:void(0)" onclick="goToByScroll('team')">Team</a></h5>
+    </div>
+     <div class="span1 navlinks">
+    	<h5><a href="javascript:void(0)" onclick="goToByScroll('contact')">Contact</a></h5>
+    </div>
+    <div class="span2 offset7 navlinks" id="loginbutton">
+    	<a class="btn btn-success btn-small" type="button" href="#login" data-toggle="modal">Login</a>
+    </div>
+    <div class="span2 offset7 navlinks" id="registerbutton">
+    	<a class="btn btn-primary btn-small" type="button" href="#register" data-toggle="modal">Sign Up</a>
     </div>
   </div>
-  	<div class="container-fluid main-content">
-	<div class="row-fluid">
-			<div class="span4 form-signin landing-content">
-				<h3>Teachers</h3>
+  <div class="container" id="body">
+    <div class="row" id="fixed_header">
+  		<div class="span6 offset2">		
+  				<h2>Welcome to LessnLab </h2>
+  				<h3 id="subheader">We Think We're Onto Something</h3>
+  				<a href="javascript:void(0)" onclick="goToByScroll('product')" class="btn btn-success btn-large">Find Out What</a>
+  		</div> 
+  		<div class="span6">
+  		</div>
+  	</div> 
+	<div class="row bodycontent" id="product">
+			<div class="row secondheader">
+				<div class="span12 offset2">
+					<h3>We're Closing the Loop In Education</h3>
+				</div>
+			</div>
+			<div class="row centercontent modulecontent">
+			<div class="span4 separate">
+				<p class="moduleheader">For Teachers</p>
+				<hr/>
 				<img src="static/science.png">
 				<hr/>
-				<p>Create, deliver and assess your lessons from within a single ecosystem</p>
+				<p>Create, deliver and assess your lessons from within our intelligent ecosystem</p>
 			</div>
-			<div class="span4 form-signin landing-content">
-				<h3>Parents</h3>
+			<div class="span4 separate">
+				<p class="moduleheader">For Parents<p>
+				<hr/>
 				<img src="static/calculator.png">
 				<hr/>
-				<p>Keep track of your students' academic learning and progress whenever you want</p>
+				<p>Keep track of what your student learns and how she performs when you want</p>
 			</div>
-			<div class="span4 form-signin landing-content">
-				<h3>Schools</h3>
+			<div class="span4 separate">
+				<p class="moduleheader">For Schools</p>
+				<hr/>
 				<img src="static/mortarboard.png">
 				<hr/>
-				<p>Monitor what your teachers are teaching and what your students are learning</p>
+				<p>Get on-demand insights and guidance on your teachers' and students' performance</p>
+			</div>
+			</div>
+		</div>
+		<div class="row bodycontent alt" id="team">
+			<div class="row secondheader">
+				<div class="span12 offset2">
+					<h3>Meet Our Team</h3>
+				</div>
+			</div>
+			<div class="row centercontent modulecontent">
+			<div class="span4 separate">
+				<p class="moduleheader">Zain</p>
+				<h4>Co-Founder</h4>
+				<hr/>
+				<img class="img-rounded" id="teamphotos" src="static/zheadshot.jpg">
+				<hr/>
+				<p>As a former teacher, Zain saw an opportunity to simplify teachers' lives and came up with LessnLab. He is a graduate of Cornell University.</p>
+			</div>
+			<div class="span4 separate">
+				<p class="moduleheader">Deepak<p>
+				<h4>Co-Founder</h4>
+				<hr/>
+				<img class="img-rounded" id="teamphotos" src="static/dheadshot.jpg">
+				<hr/>
+				<p>Deepak is a back-end wiz and loves solving complex and difficult problems. He has a Masters in Computer Science from Cornell University.</p>
+			</div>
+			<div class="span4 separate">
+				<p class="moduleheader">Aman</p>
+				<h4>Co-Founder</h4>
+				<hr/>
+				<img class="img-rounded" id="teamphotos" src="static/aheadshot.png">
+				<hr/>
+				<p>Aman can do it all, front-end, back-end and everything in the middle. He has a Computer Science degree from The University of Pennsylvania.</p>
+			</div>
+			</div>
+		</div>
+		<div class="row bodycontent" id="contact">
+			<div class="row centercontent">
+			<div class="span12 separate">
+				<h3>Want to Learn More?</h3>
+				<hr/>
+				<a class="btn btn-success btn-large" href="mailto:lessnlabs@gmail.com">Contact Us</a>
+			</div>
 			</div>
 		</div>
   	</div>
-  </div>
-  </div>
-  <div class="footer">
-        <div class="row-fluid">
-        <div class="span3">
-            <h6>Company</h6>
-            <div class="row-fluid">
-                <small><a href="#">About</a></small>
-            </div>
-            <div class="row-fluid">
-                <small><a href="#">Contact</a></small>
-            </div>
-        </div>
-        <div class="span3">
-            <h6>Connect</h6>
-            <div class="row-fluid">
-                <small><a href="#">Twitter</a></small>
-            </div>
-            <div class="row-fluid">
-                <small><a href="#">Facebook</a></small>
-            </div>
-        </div>
-        <div class="span3">
-            <h6>Product</h6>
-            <div class="row-fluid">
-                <small><a href="#">LessnLab</a></small>
-            </div>
-            <div class="row-fluid">
-                <small><a href="#">Terms</a></small>
-            </div>
-        </div>
-        <div class="span3">
-        	<h6>Created By LessnLab Inc.</h6>
-        	<div class="row-fluid">
-        	<small>Copyright 2013. All Rights Reserved.</small>
+  	<div class="footer text-center">
+        <div class="row">
+        	<div class="span3 separate offset2" id="copyright">
+        		Copyright 2013. LessnLab Inc.
         	</div>
-        </div>
+        	<div class="span1 separate">
+        		<a href="#">Press</a>
+        	</div>
+        	<div class="span1 separate">
+        		<a href="#">Terms</a>
+        	</div>
         </div>
     </div>
 	</div>
+	<!-- login modal -->
+	<div class="modal hide fade bottomborder" id="login">
+  	<div class="modal-header modalheaderspacing">
+  	  <button type="button" class="close" data-dismiss="modal">x</button>
+  	  <p class="modaltitle">Log in to your LessnLab Account</p>
+  	</div>
+  <div class="modal-body loginmodal">
+    {% csrf_token %}
+    {{ errors }}
+      <form class="loginform" method="post" action="{% url accounts.views.login_user %}"> {% csrf_token %}      
+        <input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="username" placeholder="Username" value={{ username }}>
+        <input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password" placeholder="Password">
+        <div class="row loginlinks">
+        	<div class="span2" style="padding-top: 7px;">
+        		<a href="{% url auth_password_reset %}">Forgot Password?</a>
+        	</div>
+        	<div class="span2">
+            	<button class="btn btn-success" type="submit">Login</button>
+            </div>
+        </div>
+        <hr/>
+	<div class="loginlinks">
+		<p class="modaltitlelevel2">Don't Have An Account? Create One</p>
+           <a class="btn btn-primary btn-small" href="{% url accounts.views.registerTeacher%}">Teacher</a>
+           <span> | </span>
+	   	 	<a class="btn btn-primary btn-small" href="{% url accounts.views.registerStudent%}">Student</a>
+       </div>
+      </form>
+  </div>
+</div>
+<!-- teacher register modal -->
+<div class="modal hide fade bottomborder" id="register">
+  	<div class="modal-header modalheaderspacing">
+  	  <button type="button" class="close" data-dismiss="modal">x</button>
+  	  <p class="modaltitle">Create Your LessnLab Account</p>
+  	</div>
+  <div class="modal-body">
+    <form action="" method="post">
+    	<div class="container register">
+    		<div class="row">
+    			<div class="span3"> 
+    				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="first_name" placeholder="First Name">
+    			</div>
+    			<div class="span3"> 
+    				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="last_name" placeholder="Last Name">
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="span3">
+    				<input type="email" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="email" placeholder="Email Address">
+    			</div>
+    			<div class="span3" style="padding-top: 7px;">
+    				<select name="school_state">
+                    <option selected value="">Choose Your Teaching State</option>
+					<option value="AL">Alabama</option>
+					<option value="AK">Alaska</option>
+					<option value="AZ">Arizona</option>
+<option value="AR">Arkansas</option>
+<option value="CA">California</option>
+<option value="CO">Colorado</option>
+<option value="CT">Connecticut</option>
+<option value="DE">Delaware</option>
+<option value="FL">Florida</option>
+<option value="GA">Georgia</option>
+<option value="HI">Hawaii</option>
+<option value="ID">Idaho</option>
+<option value="IL">Illinois</option>
+<option value="IN">Indiana</option>
+<option value="IA">Iowa</option>
+<option value="KS">Kansas</option>
+<option value="KY">Kentucky</option>
+<option value="LA">Louisiana</option>
+<option value="ME">Maine</option>
+<option value="MD">Maryland</option>
+<option value="MA">Massachusetts</option>
+<option value="MI">Michigan</option>
+<option value="MN">Minnesota</option>
+<option value="MS">Mississippi</option>
+<option value="MO">Missouri</option>
+<option value="MT">Montana</option>
+<option value="NE">Nebraska</option>
+<option value="NV">Nevada</option>
+<option value="NH">New Hampshire</option>
+<option value="NJ">New Jersey</option>
+<option value="NM">New Mexico</option>
+<option value="NY">New York</option>
+<option value="NC">North Carolina</option>
+<option value="ND">North Dakota</option>
+<option value="OH">Ohio</option>
+<option value="OK">Oklahoma</option>
+<option value="OR">Oregon</option>
+<option value="PA">Pennsylvania</option>
+<option value="RI">Rhode Island</option>
+<option value="SC">South Carolina</option>
+<option value="SD">South Dakota</option>
+<option value="TN">Tennessee</option>
+<option value="TX">Texas</option>
+<option value="UT">Utah</option>
+<option value="VT">Vermont</option>
+<option value="VA">Virginia</option>
+<option value="WA">Washington</option>
+<option value="WV">West Virginia</option>
+<option value="WI">Wisconsin</option>
+<option value="WY">Wyoming</option>
+                </select>
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="span6">
+    				<input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password1" placeholder="Enter A Password">
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="span6">
+    				<input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password2" placeholder="Confirm Password">
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="span6">
+    				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="teacher_code" placeholder="Registration Code">
+    			</div>
+    		</div>	
+    {% csrf_token %}
+    <!-- username, email, password1, password2, first_name, last_name, school_state, teacher_code -->
+    		<hr/>
+    		<div class="row">
+    			<div class="span1 offset2" style="margin-right: 5px;">
+                	<button type="submit" class="btn btn-primary">Register</input>
+            	</div>
+            	<div class="span1">
+                	<button type="reset" class="btn btn-primary">Cancel</input>
+                </div>
+            </div>
+        </div>
+    </form>
+  </div>
+</div>
+	
+	
+	
     <!-- Le javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
