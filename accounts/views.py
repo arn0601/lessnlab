@@ -32,7 +32,7 @@ def login_user(request):
         		return render_to_response('registration/login.html', {'errors':error, 'username':username, 'password':password})
 			# Return an 'invalid login' error message.
 	else:
-		return render_to_response('registration/login.html')
+		return HttpResponseRedirect('/')
 
 
 def registerStudent(request, backend, success_url=None, form_class=None,
@@ -88,7 +88,7 @@ def registerTeacher(request, backend, success_url=None, form_class=None,
             else:
                 return redirect(success_url)
     else:
-        form = form_class()
+        return HttpResponseRedirect('/')
     
     if extra_context is None:
         extra_context = {}
