@@ -67,6 +67,7 @@ def registerStudent(request, backend, success_url=None, form_class=None,
                               {'form': form},
                               context_instance=context)
 
+@csrf_exempt
 def registerTeacher(request, backend, success_url=None, form_class=None,
              disallowed_url='registration_disallowed',
              template_name='registration/registration_form.html',
