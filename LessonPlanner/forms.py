@@ -29,7 +29,7 @@ class AddCourse(forms.ModelForm):
 	class Meta:
 		model = Course
 		widgets = { 'owner': forms.HiddenInput(), 'start_date': custom_widgets.CalendarDateSelectField(), 'end_date': custom_widgets.CalendarDateSelectField() }
-		exclude = ['standard_grouping']
+		exclude = ['standard_grouping', 'cumulative_rating', 'number_raters']
 
 
 class AddGroups(forms.Form):
@@ -56,7 +56,7 @@ class EditCourse(forms.ModelForm):
 	class Meta:
 		model = Course
 		widgets = {  'owner': forms.HiddenInput(), 'start_date': custom_widgets.CalendarDateSelectField(), 'end_date': custom_widgets.CalendarDateSelectField() }
-		exclude = ['standard_grouping']
+		exclude = ['standard_grouping', 'cumulative_rating', 'number_raters']
 
 class DeleteCourse(forms.Form):
 	course_id = forms.CharField(label="")
@@ -65,13 +65,13 @@ class DeleteCourse(forms.Form):
 class AddUnitForm(forms.ModelForm):
 	class Meta:
 		model = Unit
-		exclude = ['standards']
+		exclude = ['standards', 'cumulative_rating', 'number_raters']
 		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_start_date'}), 'end_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_end_date'}), 'parent_unit': forms.HiddenInput() }
 
 class EditUnit(forms.ModelForm):
 	class Meta:
 		model = Unit
-		exclude = ['standards']
+		exclude = ['standards', 'cumulative_rating', 'number_raters']
 		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_start_date'}), 'end_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_end_date'}), 'parent_unit': forms.HiddenInput() }
 
 class DeleteUnit(forms.Form):
@@ -81,13 +81,13 @@ class DeleteUnit(forms.Form):
 class AddLessonForm(forms.ModelForm):
 	class Meta:
 		model = Lesson
-		exclude = ['standards','objectives']
+		exclude = ['standards','objectives', 'cumulative_rating', 'number_raters']
 		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput() }
 
 class EditLesson(forms.ModelForm):
 	class Meta:
 		model = Lesson
-		exclude = ['standards', 'objectives']
+		exclude = ['standards', 'objectives', 'cumulative_rating', 'number_raters']
 		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput() }
 
 class DeleteLesson(forms.Form):
@@ -210,3 +210,8 @@ class CourseRequestForm(forms.Form):
 	teacher_id.widget = forms.HiddenInput()
 	courses = forms.MultipleChoiceField(label='Choose courses')
 
+class StandardAnalysisForm(forms.Form):
+	standard_id = forms.CharField(label='')
+	standard_id.widget = forms.HiddenInput()
+	analysis = forms.CharField(label='Guidance')
+	analysis.widget = forms.Textarea()

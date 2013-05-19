@@ -12,7 +12,7 @@ from django.contrib.auth.decorators import login_required
 @csrf_exempt
 def logout_user(request):
 	logout(request)	
-	return HttpResponseRedirect('/login/')
+	return HttpResponseRedirect('/')
 
 @csrf_exempt
 def login_user(request):

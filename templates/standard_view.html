@@ -4,49 +4,120 @@
 <!DOCTYPE html>
 {% block content %}
 
-         <div class="container" id="u1">
-	<h4> Details for {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} {{ standard.standard_type.value }} {% endif %} Standard {{ standard.numbering }}</h4>
-	<div class="row-fluid">
-	<p>{{ standard.description  }}</p>
-	</div>
-	<hr />
-	<div class="row-fluid">
-	<h5> At a Glance </h5>
+        <div class="container" id="u1" class="content_div" style="margin-bottom:60px">
+		<h4> Details for {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} {{ standard.standard_type.value }} {% endif %} Standard {{ standard.numbering }}</h4>
+		<div class="row-fluid">
+			<p>{{ standard.description  }}</p>
+		</div>
+		<hr />
+		<div class="row-fluid">
+			<h5> At a Glance </h5>
 	<!-- add a glance details - state, type etc -->
-	<div class="span2"> <p><strong> #</strong> </p> <p> {{ standard.numbering }} </p> </div>
-	<div class="span2"> <p> <strong> Type </strong> </p> <p> {{ standard.standard_type.value }} </p> </div>
-	<div class="span2"> <p> <strong > State </strong>  </p> <p> {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} N/A {% endif %} </p> </div>
-	<div class="span2"> <p> <strong> Subject </strong> </p> <p> {{ standard.subject.value }} </p> </div>
-	<div class="span2"> <p> <strong> Grade </strong> </p> <p> {{ standard.grade.value }} </p> </div>
-	</div>
-	<hr />
-	<div class="row-fluid">
-	<h5> Standard Guidance </h5>
-	This is where the guidnace and analysis for teh standard goes
-	</div>
-	<hr />
-	<div class="row-fluid">
-	<h5> Courses Teaching this Standard </h5>
-	<table class="table table-hover table-striped table-bordered">
-	<thead> <tr> <th> Name </th> <th> Subject </th> <th> Grade </th> <th> Author </th> <th> Rating </th> </tr> </thead>
-	{% for course in standardCourses %}
-	<tr> <td> <a href="/courseView/?course_id={{ course.id }}">{{ course.name }} </a></td> <td> {{ course.subject.value }} </td> <td> {{ course.grade }} </td> <td> {{ course.owner.user_firstname }} {{ course.owner.user_lastname }} </td> <td> {{ standardCourses|access:course }} </td> </tr>
-	{% endfor %}
-	</table>
-	</div>
-	<hr />
-	 <div class="row-fluid">
-	<h5> Objectives associated with this standard </h5>
-	<table class="table table-hover table-striped table-bordered">
-	<thead> <tr> <th> Description </th> <th> Author </th> <th> Rating </th> </tr> </thead>
-	{% for objective in standardObjectives %}
-	<tr> <td> {{ objective.description }} </td> <td> {{ objective.owner.user_firstname }} {{ objective.owner.user_lastname }}  </td> <td> {{ standardObjectives|access:objective }} </td> </tr>
-	{% endfor %}
-	</table>
-	</div> 
+			<div class="span2"> <p><strong> #</strong> </p> <p> {{ standard.numbering }} </p> </div>
+			<div class="span2"> <p> <strong> Type </strong> </p> <p> {{ standard.standard_type.value }} </p> </div>
+			<div class="span2"> <p> <strong > State </strong>  </p> <p> {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} N/A {% endif %} </p> </div>
+			<div class="span2"> <p> <strong> Subject </strong> </p> <p> {{ standard.subject.value }} </p> </div>
+			<div class="span2"> <p> <strong> Grade </strong> </p> <p> {{ standard.grade.value }} </p> </div>
+		</div>
+		<hr />
+		<div class="row-fluid">
+			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#standard_guidance"></i>
+			<b> Standard Guidance </b>
+			<div id="standard_guidance" class="collapse in">
+			  	<p><a href="#addStandardAnalysis" data-toggle="modal">Add Analysis for this Standard</a></p>
+				<table class="table table-hover table-striped table-bordered">
+					<thead> <tr> <th> Analysis </th> <th> Teacher </th> <th> Usefulness </th> </thead>
+					{% for sa in analysis %}
+						<tr> <td>  {{ sa.analysis }} </td> <td> {{ sa.teacher.user_firstname }} {{ sa.teacher.user_lastname }}  </td> <td id="cum_rating-{{ sa.id }}"> {{ sa.cumulative_rating }} </td> <td> 
+						{% for r in ratingOptions %}
+							<input id="rating-{{ r }}-{{ sa.id }}" type="radio" onClick="rateIt('{{ sa.id }}','{{ r }}','{{ user_id }}')"> 
+						{% endfor %}
+						</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+		<hr />
+		<div class="row-fluid">
+			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#courses_taught"></i>
+			<b> Courses Teaching this Standard </b>
+			<div id="courses_taught" class="collapse in">
+				<table class="table table-hover table-striped table-bordered">
+				<thead> <tr> <th> Name </th> <th> Subject </th> <th> Grade </th> <th> Author </th> <th> Rating </th> </tr> </thead>
+				{% for course in standardCourses %}
+					<tr> <td> <a href="/courseView/?course_id={{ course.id }}">{{ course.name }} </a></td> <td> {{ course.subject.value }} </td> <td> {{ course.grade }} </td> <td> {{ course.owner.user_firstname }} {{ course.owner.user_lastname }} </td> <td> {{ standardCourses|access:course }} </td> </tr>
+				{% endfor %}
+				</table>
+			</div>
+		</div>
+		<hr />
+		 <div class="row-fluid">
+			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#objectives_associated"></i>
+			<b> Objectives associated with this standard </b>
+			<div id="objectives_associated" class="collapse in">
+				<table class="table table-hover table-striped table-bordered">
+				<thead> <tr> <th> Description </th> <th> Author </th> <th> Rating </th> </tr> </thead>
+				{% for objective in standardObjectives %}
+					<tr> <td> {{ objective.description }} </td> <td> {{ objective.owner.user_firstname }} {{ objective.owner.user_lastname }}  </td> <td> {{ standardObjectives|access:objective }} </td> </tr>
+				{% endfor %}
+				</table>
+			</div>
+		</div> 
 	
+	</div>
+
+
+<div class="modal hide" id="addStandardAnalysis">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add Analysis for Standard {{ standard.numbering }} </h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addStandardAnalysis %}" name="login_form">
+	{% csrf_token %}
+	{% for field in standardAnalysisForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+   		</div>
+    {% endfor %}
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+		<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+      </p>
+    </form>
+  </div>
 </div>
 
+<script type="text/javascript"> <!-- scroll jquery -->
 
+	function rateIt(id, rating, user_id) {
+		for(var i=1; i< Number(rating); i++) {
+			var button = document.getElementById("rating-"+i+"-"+id);
+			button.checked=true;
+                }
+		for(var i=Number(rating)+1; i<=5; i++) {
+			var button = document.getElementById("rating-"+i+"-"+id);
+			button.checked=false;
+		}
+		$.ajax({
+
+			data: {
+				rating : rating,
+				id : id,
+				user_id : user_id
+			},
+			type: "POST",
+			url: "/rateAnalysis/",
+			success: function(response) {
+				var el = document.getElementById("cum_rating-"+id)
+				el.innerHTML = response
+			}
+		});
+	}	
+
+</script>
 
 {% endblock %}
