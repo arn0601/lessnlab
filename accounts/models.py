@@ -13,9 +13,9 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 	user_firstname = models.CharField(max_length=32)
 	user_lastname = models.CharField(max_length=32)
-        user_dob = models.DateField()
-	user_school_name = models.CharField(max_length=32)
-	user_school_district = models.CharField(max_length=32)
+        user_dob = models.DateField(null=True, blank=True)
+	user_school_name = models.CharField(max_length=32, null=True, blank=True)
+	user_school_district = models.CharField(max_length=32, null=True, blank=True)
         user_school_state = models.ForeignKey('Standards.State')
 	user_type = models.CharField(max_length=32, choices=USERTYPES)
 

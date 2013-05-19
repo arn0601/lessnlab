@@ -9,11 +9,11 @@ USERTYPES = [('Teacher','Teacher'),('Student','Student')]
 class UserProfileRegistrationForm(RegistrationForm):
 	first_name = forms.CharField(required=True, label="First Name")
 	last_name = forms.CharField(required=True, label="Last Name")
-	dateWidget = custom_widgets.CalendarDateSelectField()
-	birthdate = forms.CharField(required=True, label="Date of Birth",widget=dateWidget)
-	school = forms.CharField(required=True, label="School")
-	school_district = forms.CharField(required=True, label="School District")
-	school_state = forms.ModelChoiceField(label='State', queryset=State.objects.all())
+	#dateWidget = custom_widgets.CalendarDateSelectField()
+	#birthdate = forms.CharField(required=True, label="Date of Birth",widget=dateWidget)
+	#school = forms.CharField(required=True, label="School")
+	#school_district = forms.CharField(required=True, label="School District")
+	school_state = forms.TextField(label='State')
 	user_type = forms.CharField(label="")
 	user_type.widget = forms.HiddenInput()
 
