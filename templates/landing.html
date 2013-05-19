@@ -279,6 +279,12 @@
     		</div>
     		<div class="row">
     			<div class="span6">
+    				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="username" placeholder="Enter a Username">
+    				<input type="hidden" name="user_type" value="Teacher">
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="span6">
     				<input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password1" placeholder="Enter A Password">
     			</div>
     		</div>
@@ -294,7 +300,6 @@
     		</div>	
     {% csrf_token %}
     <!-- username, email, password1, password2, first_name, last_name, school_state, teacher_code -->
-    		<hr/>
     		<div class="row">
     			<div class="span1 offset2" style="margin-right: 5px;">
                 	<button type="submit" class="btn btn-primary">Register</input>
