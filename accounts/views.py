@@ -68,6 +68,14 @@ def registerStudent(request, backend, success_url=None, form_class=None,
                               context_instance=context)
 
 @csrf_exempt
+def validateRegisterTeacher(request):
+    form = TeacherRegistrationForm(request)
+    if form.is_valid():
+        return HttpResponse('true')
+    else:
+        return HttpResponse('false,'+
+
+@csrf_exempt
 def registerTeacher(request, backend, success_url=None, form_class=None,
              disallowed_url='registration_disallowed',
              template_name='registration/registration_form.html',
@@ -98,5 +106,5 @@ def registerTeacher(request, backend, success_url=None, form_class=None,
 
     print form.fields['user_type'].initial
     return render_to_response(template_name,
-                              {'form': form},
+                              `{'form': form},
                               context_instance=context)
