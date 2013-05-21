@@ -8,8 +8,10 @@ function imgError(image){
 
 <div class="span3" id="leftnav">
 	<div class="row">
-		<div class="span8 profileImageBox">
+		<div class="span4 profileImageBox">
 			<img class="img-rounded profileImage" onerror="imgError(this);" src="/static/{{username}}.jpg"/>
+		</div>
+		<div class="span8">
 			<h5>{{fullname}}</h5>
 		</div>	
 	</div>
