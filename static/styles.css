@@ -1,10 +1,9 @@
- 
 			body {
 				
 				height:100%;
 			}
 	
-		   .navtitle{
+		   	.navtitle{
 		   		  padding-left: 10px;
 				  color: efefef;
 		    }
@@ -21,20 +20,17 @@
 			 	width: 60px;
 			 }
 			 
-			 .profileImageBox {
-			 	
-			 	padding-left:10px;
-			 	padding-top:10px;
-			 
-			 }
 			 
 			 div #middlecontent{
 				height: 100%;
 			 }
 			 
-			 div #leftnav {
+			#leftnav {
 			 
 				height: 100%;
+				border-right-color: #c8c8c8;
+				border-right-width: 1px;
+				border-right-style: solid;
 			
 			 }
 			 
@@ -74,6 +70,12 @@
 			 	border-left-style: solid;
 			 	padding-left: 10px;
 			 }
+			 
+			
+			 
+			 
+			 
+			 
 			.noborderunitbox {
 
                                 height:20%px;
@@ -129,12 +131,15 @@
 			} 
 			 .footer {
 			 
-			 	background-color: #efefef;
-			 	border-top-width:1px;
-				border-top-style:solid;
-				border-top-color:#c8c8c8;
+			 	background-color: whitesmoke;
+				border-top-width: 1px;
+				border-top-style: solid;
+				border-top-color: #c8c8c8;
 				height: 50px;
+				width: 100%;
+				color: #c8c8c8;
 				padding: 0px;
+				text-align: center;
 				vertical-align: middle;
 				position: fixed;
 				bottom: 0;
