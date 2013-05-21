@@ -178,5 +178,5 @@ ACCOUNT_ACTIVATION_DAYS=3
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
-LOGIN_URL = "/login/"
-LOGIN_EXEMPT_URLS = ( r'^accounts/registerTeacher/', r'^$',r'^team/' )
+LOGIN_URL = "/"
+LOGIN_EXEMPT_URLS = ( r'^accounts/registerTeacher/', r'^$',r'^team/', r'^accounts/validateRegisterTeacher/' )
