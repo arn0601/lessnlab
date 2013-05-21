@@ -172,37 +172,9 @@
     </div>
 	</div>
 	<!-- login modal -->
-	<div class="modal hide fade bottomborder" id="login">
-  	<div class="modal-header modalheaderspacing">
-  	  <button type="button" class="close" data-dismiss="modal">x</button>
-  	  <p class="modaltitle">Log in to your LessnLab Account</p>
-  	</div>
-  <div class="modal-body loginmodal">
-    {% csrf_token %}
-    {{ errors }}
-      <form class="loginform" method="post" action="{% url accounts.views.login_user %}" id="login_modal"> {% csrf_token %}
-        <input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="username" placeholder="Username" value={{ username }}>
-        <input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password" placeholder="Password">
-        <div class="row loginlinks">
-        	<div class="span2" style="padding-top: 7px;">
-        		<a href="{% url auth_password_reset %}">Forgot Password?</a>
-        	</div>
-        	<div class="span2">
-            	<button class="btn btn-success" type="button" onClick="login_form()">Login</button>
-            </div>
-        </div>
-        <hr/>
-	<div class="loginlinks">
-		<p class="modaltitlelevel2">Don't Have An Account? Create One</p>
-           <a class="btn btn-primary btn-small" href="{% url accounts.views.registerTeacher%}">Teacher</a>
-           <span> | </span>
-	   	 	<a class="btn btn-primary btn-small" href="{% url accounts.views.registerStudent%}">Student</a>
-       </div>
-      </form>
-  </div>
-</div>
+        {% include "login_modal.html" %}
 <!-- teacher register modal -->
-	{% include teacher_registration_modal.html %}
+	{% include "teacher_registration_modal.html" %}
 	
 	
     <!-- Le javascript

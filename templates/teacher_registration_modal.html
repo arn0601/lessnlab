@@ -1,6 +1,6 @@
 
 <div class="modal hide fade bottomborder" id="register">
-  	<div class="modal-header modalheaderspacing">
+  	<div class="modal-header modalheaderspacing" id="register_header">
   	  <button type="button" class="close" data-dismiss="modal">x</button>
   	  <p class="modaltitle">Create Your LessnLab Account</p>
   	</div>
@@ -114,14 +114,19 @@
 <script type="text/javascript"> <!-- scroll jquery -->
 
 	function registerTeacher() {
-		var form = document.getElementById('register_teacher');
-		formString = form.serialize();
+		formString = $("#register_teacher").serialize();
 		$.ajax( {
 			type: "POST",
 			data: formString,
-			url: {% accounts.views.validateRegisterTeacher %}
+			url: "{% url accounts.views.validateRegisterTeacher %}",
 			success: function(response) {
-				form.submit();
+				if (response == "") {
+					$("#register_teacher").submit();
+				}
+				else {
+					var modal = document.getElementById('register_header');
+					modal.innerHTML+=response;
+				}
 			}
 		});
 	
