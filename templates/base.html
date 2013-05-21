@@ -14,17 +14,16 @@
   </head>
   <body style="padding-top:40px; padding-bottom:50px;">
   {% include "navbar.html" %}
-		<div class="container" style="padding-left: 20px; width: 100%;">
+		<div class="container" style="padding-left: 20px; width: 100%; height: 100%;">
 			<div class="row" style="height: 100%">
 				{% include "leftnav.html" %}
 				<div class="span9" id="content" style="margin-left: 0px;">
 		    	{% block content %}{% endblock %}
 				</div>
 			</div>
-			
+			{% include "footer.html" %}
 			{% include "modals.html" %}
 		<div>
-		{% include "footer.html" %}
 	</body>
 	<script src="/static/bootstrap.js"> </script>
 
