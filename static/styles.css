@@ -131,12 +131,15 @@
 			} 
 			 .footer {
 			 
-			 	background-color: #efefef;
-			 	border-top-width:1px;
-				border-top-style:solid;
-				border-top-color:#c8c8c8;
+			 	background-color: whitesmoke;
+				border-top-width: 1px;
+				border-top-style: solid;
+				border-top-color: #c8c8c8;
 				height: 50px;
+				width: 100%;
+				color: #c8c8c8;
 				padding: 0px;
+				text-align: center;
 				vertical-align: middle;
 				position: fixed;
 				bottom: 0;
