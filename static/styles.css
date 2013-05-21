@@ -6,6 +6,7 @@
 			 .page-wrapper {
 			 
 			 	width: 100%;
+			 	padding-left: 20px;
 			
 			 }
 			 
@@ -26,18 +27,12 @@
 			 	width: 60px;
 			 }
 			 
-			 .profileImageBox {
-			 	
-			 	padding-left:10px;
-			 	padding-top:10px;
-			 
-			 }
 			 
 			 div #middlecontent{
 				height: 100%;
 			 }
 			 
-			 div #leftnav {
+			#leftnav {
 			 
 				height: 100%;
 				border-right-color: #c8c8c8;
