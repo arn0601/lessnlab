@@ -19,6 +19,7 @@ def validateLoginArgs(request):
 		username = request.POST['username']
     		password = request.POST['password']
 	    	user = authenticate(username=username, password=password)
+		return user
 	else:
 		return None
 
