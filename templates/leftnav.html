@@ -7,23 +7,17 @@ function imgError(image){
 </script>
 
 <div class="span2" id="leftnav">
-	<div class="row" style="padding-top: 15px; text-align: center;">
-		<div class="span3">
-			<img class="img-rounded profileImage" onerror="imgError(this);" src="/static/{{username}}.jpg"/>
-		</div>
-	</div>
 	<div class="row" style="padding-top: 5px;">
 		<ul class="nav nav-list">
-				<li class="nav-header">Favorites</li>
-				<li><a href="/courses/">Home</a></li>
-				<li><a href="/standardsSearch/">Standards Search</a></li>
-  				<li><a href="/manageStudents/">Manage Students</a></li>
-		</ul>
-		<ul class="nav nav-list">
-				<li class="nav-header">Courses</li>
+				<li class="nav-header">My Courses</li>
 				{% for course in userCourses %}  
 				<li><a href="/units/?course_id={{ course.id }}">{{ course.subject }}</a></li>
 				{% endfor %}
+		</ul>
+		<ul class="nav nav-list">
+				<li class="nav-header">Favorites</li>
+				<li><a href="/standardsSearch/">Standards Search</a></li>
+  				<li><a href="/manageStudents/">Manage Students</a></li>
 		</ul>
 	</div>
 </div>
