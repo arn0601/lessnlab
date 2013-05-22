@@ -79,6 +79,7 @@ def validateRegisterTeacher(request):
 
 @csrf_exempt
 def validateLogin(request):
+	print request.POST
 	user = validateLoginArgs(request)
 	if user is not None:
 		return HttpResponse('')

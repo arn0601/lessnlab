@@ -33,14 +33,14 @@
 <script type="text/javascript"> <!-- scroll jquery -->
 
 	function login_form() {
-		formString = $("#login").serialize();
+		var formString = $("#login_form").serialize();
 		$.ajax( {
 			type: "POST",
 			data: formString,
 			url: "{% url accounts.views.validateLogin %}",
 			success: function(response) {
 				if (response == "") {
-					form.submit();
+					$("#login_form").submit();
 				}
 				else {
 					header = document.getElementById("login_header")
