@@ -9,6 +9,19 @@
 				  color: efefef;
 		    }
 			
+			.basecontent {
+			
+				border-left-color: #c8c8c8;
+				border-left-style: dotted;
+				border-left-width: 1px;
+				border-right-color: #c8c8c8;
+				border-right-style: dotted;
+				border-right-width: 1px;
+				width: 70%;
+				height: 100%;
+			
+			}
+			
 			.course {
 					padding: 10px;
 					text-align:left;
