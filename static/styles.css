@@ -17,8 +17,7 @@
 				border-right-color: #c8c8c8;
 				border-right-style: dotted;
 				border-right-width: 1px;
-				width: 70%;
-				height: 100%;
+				background-color:white;
 			
 			}
 			
@@ -44,7 +43,8 @@
 				height: 100%;
 				border-right-color: #c8c8c8;
 				border-right-width: 1px;
-				border-right-style: solid;
+				border-right-style: dotted;
+				padding-top: 5px;
 			
 			 }
 			 
