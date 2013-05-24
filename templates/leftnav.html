@@ -4,6 +4,10 @@ function imgError(image){
     image.src = "/static/defaultPic.jpg";
     return true;
 }
+
+jQuery(function ($) {
+	$("a").tooltip()})
+	
 </script>
 
 <div class="span2" id="leftnav">
@@ -11,7 +15,7 @@ function imgError(image){
 		<ul class="nav nav-list">
 				<li class="nav-header">My Courses</li>
 				{% for course in userCourses %}  
-				<li><a data-toggle="tooltip" title="Course Description: {{ course.description }}" href="/units/?course_id={{ course.id }}">{{ course.name }}</a></li>
+				<li><a href="/units/?course_id={{ course.id }}" rel="tooltip" data-placement="right" title="Course Description: {{ course.description }}" >{{ course.name }}</a></li>
 				{% endfor %}
 		</ul>
 		<ul class="nav nav-list">
