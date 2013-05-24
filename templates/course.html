@@ -6,14 +6,14 @@
 {% for course in userCourses %}
 <div class="container coursebox" style="width: 100%;">
 <div class="row">
-	<div class="span4">
+	<div class="span3">
         <a class="courseboxtitle" href="/units/?course_id={{ course.id }}" >{{ course.name }}</a>
     </div>
-    <div class="span1 offset5">
+    <div class="span1 offset5" style="text-align: right;">
     	<a href="?course_id={{ course.id }}&action=Edit"><small>Edit</small></a>
     </div>
     <div class="span1">
-    	 <a class="close" href="?course_id={{ course.id }}&action=Delete"><small>X</small></a>
+    	 <a class="close" href="?course_id={{ course.id }}&action=Delete"><small>x</small></a>
     </div>
 </div>
 <div class="row courseboxsubtext">
