@@ -4,18 +4,30 @@
 <!DOCTYPE html>
 {% block content %}
 {% for course in userCourses %}
-
-         <div class="coursebox" id="u1">
-        <a href="/units/?course_id={{ course.id }}" ><h4>{{ course.name }}</h4></a>
+<div class="container coursebox">
+<div class="row">
+	<div class="span12">
+        <a class="courseboxtitle" href="/units/?course_id={{ course.id }}" >{{ course.name }}</a>
+    </div>
+</div>
+<div class="row">
+    <div class="span2">
+    	<h5>Written By {{fullname}}</h5    
+    </div>
+    <div class="span2">
+    	<h5>Grade {{ course.grade }}</h5  
+    </div>
+     <div class="span2">
+    	<h5>Taught From {{ course.start_date }} to {{ course.end_date }} </h5  
+    </div>
+</div>
+        <hr/>
 	 <p><b>Subject:</b>
 	{{ course.subject }}
 	</p>
 	<p><b>Department:</b>
         {{ course.department }}
 	</p>
-        <p><b>Grade:</b>
-        {{ course.grade }}
-        </p>
 	<p><b>Start Date</b>
 	{{ course.start_date }}
 	<p><b>End Date</b>
@@ -26,9 +38,10 @@
 	{% endfor %} 
 	</p>
 	<!-- TODO remove this as a get -->
-	<a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Edit">Edit</a>
-        <a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Delete">Delete</a>
-        </div>
+		<a class="btn btn-success btn-small" type="button" href="/units/?course_id={{ course.id }}">View Course</a>
+		<a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Edit">Edit Details</a>
+        <a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Delete">Delete Course</a>
+    </div>
 {% endfor %}
 
 {% if showEditCourse %}
