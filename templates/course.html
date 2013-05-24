@@ -11,17 +11,19 @@
     </div>
 </div>
 <div class="row">
-    <div class="span2">
+    <div class="span4">
     	<h5>Written By {{fullname}}</h5    
     </div>
-    <div class="span2">
+    <div class="span3">
     	<h5>Grade {{ course.grade }}</h5  
     </div>
-     <div class="span2">
+     <div class="span3">
     	<h5>Taught From {{ course.start_date }} to {{ course.end_date }} </h5  
     </div>
 </div>
         <hr/>
+<div class="row">
+	<div class="span10">
 	 <p><b>Subject:</b>
 	{{ course.subject }}
 	</p>
@@ -42,6 +44,8 @@
 		<a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Edit">Edit Details</a>
         <a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Delete">Delete Course</a>
     </div>
+</div>
+</div> <!-- Course box -->
 {% endfor %}
 
 {% if showEditCourse %}
