@@ -357,6 +357,8 @@ $(function() {
 				}
 			}
 		}		
+		if(ct=="Activity")
+			ct = "ActivityOverride"
 		$('#addContent'+ct).modal('show');
    });
 });
@@ -416,15 +418,66 @@ $(function() {
 	});
 });
 
-$('.ddt').click(function(){
+	$(function(){
+    $(document).on('click', '.search_activity', function(){ 
 	
-	//	if( ('.mymenu').height().replace('px','') > 98)  
-	//	$('.mymenu').removeClass('.dropdown'); 
-	//	$('.mymenu').addClass('.dropup');
-}
-);
+		$.ajax({
+			data: {type:'Individual'},
+			dataType:'html',
+			type: "POST", // GET or POST
+      url: {% url LessonPlanner.views.search_activity_ajax_view %}, // the file to call
+			success : function(data, status, xhr){
+		      $('#activity_searchModal').html(data);
+ 					$('#activity_searchModal').modal('show');
+					$('#addContentActivityOverride').modal('hide');
+         }
+			});
+	 });
+});
 
 
 	</script>
+
+
+
+
+{% include "ActivitySearchModal.html" %}
+
+{% include "ActivityViewModal.html" %}
+
+
+<div class="ActivityModal modal hide" id="addContentActivityOverride">
+	<div class="modal-header">
+		<button type="button" class="close content_close" data-dismiss="modal">x</button>
+	    	<h3>Add Content - Activity</h3>
+	</div>
+	 <div class="modal-body">
+		<div>
+			<div id="Search">
+
+				<label>Type</label>
+				<input style=" display:inline-block; width:150px" type="text" name="type_input">
+				<label>Objective</label>
+				<input style=" display:inline-block; width:150px" type="text" name="objective_input">
+				<label>Length</label>
+				<input style=" display:inline-block; width:150px" type="text" name="length_input">
+
+				<button type="button" class="btn btn-primary search_activity">Search</button>
+			</div>
+
+			<div id="Recommend">
+			</div>
+    		<form id="content_form" method="post" action="{% url LessonPlanner.views.addContent %}" name="c_{{ type }}">
+			<p>
+			
+			</p>
+		     	<p>
+				<button type="submit" class="btn btn-primary">Submit</button>
+				<button type="button" data-dismiss="modal" class="btn btn-primary content_close">Cancel</button>
+			</p>
+		</form>
+  		</div>
+	</div>
+</div>
 
 </html>

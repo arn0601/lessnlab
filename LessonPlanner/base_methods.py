@@ -214,6 +214,8 @@ def getLessonSpecificInfo(lesson):
 					mcans = [MultipleChoiceAnswer.objects.filter(question = q)]
 					question_answer_map[q]+=mcans
 				assessment_dict[content.assessmentcontent.id] = question_answer_map
+			elif (content.content_type == 'Activity'):
+                                content_list.append(content.activitycontent)
 		section_dict[section] = content_list
 	add_content_form_dict = getAddContentForms(str(-1))
 	return { 'content_objs' : content_objs, 'standard_list' : standard_list,'objective_list' : objective_list,'sections' : section_dict,  'assessment_dict':assessment_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
@@ -231,6 +233,11 @@ def getAddContentForms(section_id):
         power_point_form.fields['content_type'].initial = 'PowerPoint'
         power_point_form.fields['section_id'].initial = section_id
         content_form_dict['Media']["PowerPoint"] = power_point_form
+	
+	activity_form = AddActivityContent()
+        activity_form.fields['content_type'].initial = 'Activity'
+        activity_form.fields['section_id'].initial = section_id
+        content_form_dict['Activity']["Activity"] = activity_form
 	
 	online_picture_form = AddOnlinePictureContent()
 	online_picture_form.fields['content_type'].initial = 'OnlinePicture'

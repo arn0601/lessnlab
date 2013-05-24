@@ -122,6 +122,15 @@ class AddOnlineVideoContent(AddContentForm):
 	recommended_links = custom_widgets.MyCheckboxSelectMultiple(attrs={'class': 'myclass'})
 	rl = forms.MultipleChoiceField(label="Add/Search Videos:",widget=recommended_links,required=False,choices=[('0',u'https://www.youtube.com/watch?feature=player_embedded&v=IFKnq9QM6_A')])
 
+class AddActivityContent(forms.ModelForm):
+	section_id = forms.CharField(label="")
+	class Meta:
+                model = ActivityContent
+                
+		widgets = { 'content_type': forms.HiddenInput() , 'section_id': forms.HiddenInput() , 'owner': forms.HiddenInput() }	
+
+
+
 class AddPowerPointContent(AddContentForm):
         link = forms.CharField(label="Link")
 

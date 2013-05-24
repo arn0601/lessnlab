@@ -7,7 +7,7 @@ from Rating.models import Rating
 
 SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
 
-CONTENTTYPE = (('Text','Text'),('OnlineVideo','OnlineVideo'),('OnlineArticle','OnlineArticle'),('OnlinePicture','OnlinePicture'),('TeacherNote','TeacherNote'),('AdministratorNote','AdministratorNote'),('Assessment','Assessment'),('PowerPoint','PowerPoint'))
+CONTENTTYPE = (('Text','Text'),('OnlineVideo','OnlineVideo'),('OnlineArticle','OnlineArticle'),('OnlinePicture','OnlinePicture'),('TeacherNote','TeacherNote'),('AdministratorNote','AdministratorNote'),('Assessment','Assessment'),('PowerPoint','PowerPoint'),('Activity','Activity'))
 
 ASSESSMENTTYPE = ((1, 'Quiz'), (2, 'Unit Test'), (3, 'Complex Performance Task'), (4, 'Peer Eval'), (5, 'Presentation/Project'), (6, 'Other'))
 
@@ -105,6 +105,14 @@ class TextContent(Content):
 
 class PowerPointContent(Content):
         link = models.CharField(max_length=256)
+
+class ActivityContent(Content):
+	name = models.CharField(max_length=30)
+        description = models.TextField()
+	activity_type = models.CharField(max_length=30)
+	instructions = models.TextField()
+	length = models.FloatField()
+	materials = models.TextField()
 
 class OnlineVideoContent(Content):
 	link = models.CharField(max_length=256)
