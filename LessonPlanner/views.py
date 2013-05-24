@@ -15,9 +15,35 @@ from datetime import datetime
 from django.utils.timezone import utc
 import simplejson
 import base_methods 
+from ajax_helpers import render_block_to_string
+from django.template import loader,Context
 from django.contrib.auth.models import User
 import sys, traceback
 import urlparse
+
+
+@csrf_exempt
+def activity_add(request):
+	return HttpResponse("")
+
+
+@csrf_exempt
+def activity_ajax_view(request):
+	context = Context({'activityForm': AddActivityContent()})
+	print AddActivityContent()
+	print context
+	return_str = render_block_to_string('ActivityViewModal.html', 'results', context)
+	return HttpResponse(return_str)
+
+@csrf_exempt
+def search_activity_ajax_view(request):
+	# some random context
+	context = Context({'items': range(100)})
+	# passing the template_name + block_name + context
+	return_str = render_block_to_string('ActivitySearchModal.html', 'results', context)
+	return HttpResponse(return_str)
+
+
 
 def team(request):
         return render_to_response('team.html', {})
@@ -30,14 +56,11 @@ def landing(request):
 
 @csrf_exempt
 def changeSectionPlacement(request):
-	print request.POST
 	base_dict = base_methods.createBaseDict(request)
 	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
 	sectionList = lesson_info['sections'].keys()
-	print sectionList
 	l = []
 	for sec in sectionList:
-		print "Appeinding",sec.placement
 		l.append((sec, sec.placement))
         l.sort(key=lambda x: x[1])
 
@@ -45,18 +68,13 @@ def changeSectionPlacement(request):
 	final=int(request.POST["final"])-1
 	a1 = l[start]
 	del l[start]
-	print a1,final
 	l.insert(final,a1)
 	counter = 0
 	for sec in l:
-		print sec
 		sec[0].placement = counter
 		sec[0].save()	
 		counter = counter + 1
 	return HttpResponse('')
-
-
-
 
 @csrf_exempt
 def showUnits(request):

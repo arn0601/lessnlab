@@ -114,7 +114,7 @@
 <script type="text/javascript"> <!-- scroll jquery -->
 
 	function registerTeacher() {
-		formString = $("#register_teacher").serialize();
+		var formString = $("#register_teacher").serialize();
 		$.ajax( {
 			type: "POST",
 			data: formString,
