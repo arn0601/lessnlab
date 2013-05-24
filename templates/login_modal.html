@@ -3,7 +3,10 @@
   	<div class="modal-header modalheaderspacing" id="login_header">
   	  <button type="reset" class="close" data-dismiss="modal">x</button>
   	  <p class="modaltitle">Log in to your LessnLab Account</p>
+			<div id="login_errors">
+		</div>
   	</div>
+	
   <div class="modal-body loginmodal">
     {% csrf_token %}
     {{ errors }}
@@ -43,8 +46,8 @@
 					$("#login_form").submit();
 				}
 				else {
-					header = document.getElementById("login_header")
-					header.innerHTML += response;
+					header = document.getElementById("login_errors")
+					header.innerHTML = response;
 				}
 			}
 		});
