@@ -18,7 +18,7 @@
 </div>
 <div class="row courseboxsubtext">
     <div class="span2">
-    	<p><b>Written By: </b><a href="#">{{fullname}}</a></p> 
+    	<p><b>Created By: </b><a href="#">{{fullname}}</a></p> 
     </div>
     <div class="span1">
     	<p><b>Grade:</b> {{ course.grade }}</p>
@@ -30,6 +30,7 @@
     	<p><a class="btn btn-primary btn-small" data-loading-text="Loading..." onClick="getCourseStandardsFromGroup('{{ group.id }}')">View Standards</a></p>
     </div>
 </div>
+<!-- We need to come up with a better way of showing these standards, it should only show one link regardless of the number of standards groups that are synced -zp -->
 <div class="row">
 	<div class="span10">
         <p><b>Standards Groups in Course</b>
