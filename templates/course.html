@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 {% block content %}
 {% for course in userCourses %}
-<div class="container coursebox">
+<div class="container coursebox" style="width: auto;">
 <div class="row">
 	<div class="span10">
         <a class="courseboxtitle" href="/units/?course_id={{ course.id }}" >{{ course.name }}</a>
@@ -17,25 +17,22 @@
     <div class="span1">
     	<p><b>Grade:</b> {{ course.grade }}</p>
     </div>
+    <div class="span1">
+    	<p><b>Subject:</b> {{ course.subject }}</p>
+    </div>
      <div class="span4">
     	<p><b>Course Dates:</b> {{ course.start_date }} to {{ course.end_date }}</p>
+    </div>
+    <div class="span2">
+    	<p><a class="btn btn-info btn-small" onClick="getCourseStandardsFromGroup('{{ group.id }}')"> View Course Standards</a></p>
     </div>
 </div>
 <div class="row">
 	<div class="span10">
-	 <p><b>Subject:</b>
-	{{ course.subject }}
-	</p>
-	<p><b>Department:</b>
-        {{ course.department }}
-	</p>
-	<p><b>Start Date</b>
-	{{ course.start_date }}
-	<p><b>End Date</b>
-	{{ course.end_date }}
         <p><b>Standards Groups in Course</b>
         {% for group in course.standard_grouping.all %}
-		<p> <a onClick="getCourseStandardsFromGroup('{{ group.id }}')"> {{ group.subject.value }} Standards, Grade {{ group.grade.value }}  for {{ group.standard_type.value}}:{{ group.state.value }} </a> </p>
+		<p> <a onClick="getCourseStandardsFromGroup('{{ group.id }}')"> {{ group.subject.value }} Standards, Grade {{ group.grade.value }}  for {{ group.standard_type.value}}:{{ group.state.value }} 
+		</a> </p>
 	{% endfor %} 
 	</p>
 	<!-- TODO remove this as a get -->
