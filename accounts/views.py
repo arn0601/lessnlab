@@ -2,37 +2,37 @@
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import redirect
 from django.template import RequestContext
 from registration.backends import get_backend
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
-
+from accounts.forms import *
 @csrf_exempt
 def logout_user(request):
 	logout(request)	
-	return HttpResponseRedirect('/login/')
+	return HttpResponseRedirect('/')
 
-@csrf_exempt
-def login_user(request):
+def validateLoginArgs(request):
 	if request.POST:
 		username = request.POST['username']
     		password = request.POST['password']
 	    	user = authenticate(username=username, password=password)
-        	if user is not None:
-        		if user.is_active:
-            			login(request, user)
-				return HttpResponseRedirect('/courses/')
+		return user
+	else:
+		return None
+
+@csrf_exempt
+def login_user(request):
+	user = validateLoginArgs(request)
+       	if user is not None:
+       		if user.is_active:
+      			login(request, user)
+			return HttpResponseRedirect('/courses/')
         		
             			# Return a 'disabled account' error message
-    		else:
-			error = "Invalid User Credentials"
-                        print 'invalid cred'
-        		return render_to_response('registration/login.html', {'errors':error, 'username':username, 'password':password})
-			# Return an 'invalid login' error message.
-	else:
-		return render_to_response('registration/login.html')
+	return HttpResponseRedirect('/')
 
 
 def registerStudent(request, backend, success_url=None, form_class=None,
@@ -67,6 +67,26 @@ def registerStudent(request, backend, success_url=None, form_class=None,
                               {'form': form},
                               context_instance=context)
 
+@csrf_exempt
+def validateRegisterTeacher(request):
+    print request.POST
+    form = TeacherRegistrationForm(data=request.POST)
+    if form.is_valid():
+        return HttpResponse('')
+    else:
+	print form.errors
+        return render_to_response('form_errors.html', { 'form' : form })
+
+@csrf_exempt
+def validateLogin(request):
+	print request.POST
+	user = validateLoginArgs(request)
+	if user is not None:
+		return HttpResponse('')
+	else:
+		return HttpResponse('Invalid Login Credentials')
+
+@csrf_exempt
 def registerTeacher(request, backend, success_url=None, form_class=None,
              disallowed_url='registration_disallowed',
              template_name='registration/registration_form.html',
@@ -87,7 +107,7 @@ def registerTeacher(request, backend, success_url=None, form_class=None,
             else:
                 return redirect(success_url)
     else:
-        form = form_class()
+        return HttpResponseRedirect('/')
     
     if extra_context is None:
         extra_context = {}

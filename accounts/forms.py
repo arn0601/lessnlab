@@ -9,11 +9,11 @@ USERTYPES = [('Teacher','Teacher'),('Student','Student')]
 class UserProfileRegistrationForm(RegistrationForm):
 	first_name = forms.CharField(required=True, label="First Name")
 	last_name = forms.CharField(required=True, label="Last Name")
-	dateWidget = custom_widgets.CalendarDateSelectField()
-	birthdate = forms.CharField(required=True, label="Date of Birth",widget=dateWidget)
-	school = forms.CharField(required=True, label="School")
-	school_district = forms.CharField(required=True, label="School District")
-	school_state = forms.ModelChoiceField(label='State', queryset=State.objects.all())
+	#dateWidget = custom_widgets.CalendarDateSelectField()
+	#birthdate = forms.CharField(required=True, label="Date of Birth",widget=dateWidget)
+	#school = forms.CharField(required=True, label="School")
+	#school_district = forms.CharField(required=True, label="School District")
+	school_state = forms.CharField(label='State')
 	user_type = forms.CharField(label="")
 	user_type.widget = forms.HiddenInput()
 
@@ -39,7 +39,9 @@ class TeacherRegistrationForm(UserProfileRegistrationForm):
 	def clean(self):
 		from accounts.models import TeacherProfile
 		cleaned_data = super(TeacherRegistrationForm, self).clean()
-		u = TeacherProfile.objects.filter(user_school_state=cleaned_data['school_state']).filter(teacher_code=cleaned_data['teacher_code'])
+		val = cleaned_data['school_state']
+		state = State.objects.get(value=cleaned_data['school_state'])
+		u = TeacherProfile.objects.filter(user_school_state=state).filter(teacher_code=cleaned_data['teacher_code'])
 		if u:
 			raise forms.ValidationError('Teacher code for state already in use')
 		return cleaned_data

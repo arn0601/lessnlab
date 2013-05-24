@@ -12,18 +12,19 @@
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>	
   </head>
-  <body style="padding-top:40px; padding-bottom:50px;">
-		<div style="height: 100%">
-			{% include "navbar.html" %}
-			<div class="row-fluid" style="position: relative; height: 100%">
+  <body style="padding-bottom:50px;">
+		<div class="container basecontent" style="padding-top: 42px; width: 85%; height: 100%;">
+		 {% include "navbar.html" %}
+			<div class="row" style="height: 100%; padding-left: 20px;">
 				{% include "leftnav.html" %}
-				<div class="span10" id="content" style="margin-left: 0px;">
+				<div class="span10" id="content" style="margin-left: 5px; padding-top: 5px;">
 		    	{% block content %}{% endblock %}
 				</div>
 			</div>
+			
+		</div>
 			{% include "footer.html" %}
 			{% include "modals.html" %}
-		<div>
 	</body>
 	<script src="/static/bootstrap.js"> </script>
 

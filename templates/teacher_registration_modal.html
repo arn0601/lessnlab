@@ -1,0 +1,136 @@
+
+<div class="modal hide fade bottomborder" id="register">
+  	<div class="modal-header modalheaderspacing" id="register_header">
+  	  <button type="button" class="close" data-dismiss="modal">x</button>
+  	  <p class="modaltitle">Create Your LessnLab Account</p>
+  	</div>
+  <div class="modal-body">
+    <form action="{% url accounts.views.registerTeacher %}" method="post" id="register_teacher">
+    	<div class="container register">
+    		<div class="row">
+    			<div class="span3"> 
+    				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="first_name" placeholder="First Name">
+    			</div>
+    			<div class="span3"> 
+    				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="last_name" placeholder="Last Name">
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="span3">
+    				<input type="email" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="email" placeholder="Email Address">
+    			</div>
+    			<div class="span3" style="padding-top: 7px;">
+    				<select name="school_state">
+                    <option selected value="">Choose Your Teaching State</option>
+					<option value="AL">Alabama</option>
+					<option value="AK">Alaska</option>
+					<option value="AZ">Arizona</option>
+<option value="AR">Arkansas</option>
+<option value="CA">California</option>
+<option value="CO">Colorado</option>
+<option value="CT">Connecticut</option>
+<option value="DE">Delaware</option>
+<option value="FL">Florida</option>
+<option value="GA">Georgia</option>
+<option value="HI">Hawaii</option>
+<option value="ID">Idaho</option>
+<option value="IL">Illinois</option>
+<option value="IN">Indiana</option>
+<option value="IA">Iowa</option>
+<option value="KS">Kansas</option>
+<option value="KY">Kentucky</option>
+<option value="LA">Louisiana</option>
+<option value="ME">Maine</option>
+<option value="MD">Maryland</option>
+<option value="MA">Massachusetts</option>
+<option value="MI">Michigan</option>
+<option value="MN">Minnesota</option>
+<option value="MS">Mississippi</option>
+<option value="Missouri">Missouri</option>
+<option value="MT">Montana</option>
+<option value="NE">Nebraska</option>
+<option value="NV">Nevada</option>
+<option value="NH">New Hampshire</option>
+<option value="NJ">New Jersey</option>
+<option value="NM">New Mexico</option>
+<option value="NY">New York</option>
+<option value="NC">North Carolina</option>
+<option value="ND">North Dakota</option>
+<option value="OH">Ohio</option>
+<option value="OK">Oklahoma</option>
+<option value="OR">Oregon</option>
+<option value="PA">Pennsylvania</option>
+<option value="RI">Rhode Island</option>
+<option value="SC">South Carolina</option>
+<option value="SD">South Dakota</option>
+<option value="TN">Tennessee</option>
+<option value="TX">Texas</option>
+<option value="UT">Utah</option>
+<option value="VT">Vermont</option>
+<option value="VA">Virginia</option>
+<option value="WA">Washington</option>
+<option value="WV">West Virginia</option>
+<option value="WI">Wisconsin</option>
+<option value="WY">Wyoming</option>
+                </select>
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="span6">
+    				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="username" placeholder="Enter a Username">
+    				<input type="hidden" name="user_type" value="Teacher">
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="span6">
+    				<input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password1" placeholder="Enter A Password">
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="span6">
+    				<input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password2" placeholder="Confirm Password">
+    			</div>
+    		</div>
+    		<div class="row">
+    			<div class="span6">
+    				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="teacher_code" placeholder="Registration Code">
+    			</div>
+    		</div>	
+    {% csrf_token %}
+    <!-- username, email, password1, password2, first_name, last_name, school_state, teacher_code -->
+    		<div class="row">
+    			<div class="span1 offset2" style="margin-right: 5px;">
+                	<button type="button" onClick="registerTeacher()" class="btn btn-primary">Register</input>
+            	</div>
+            	<div class="span1">
+                	<button type="reset" class="btn btn-primary" data-dismiss="modal">Cancel</input>
+                </div>
+            </div>
+        </div>
+    </form>
+  </div>
+<div>
+
+<script type="text/javascript"> <!-- scroll jquery -->
+
+	function registerTeacher() {
+		formString = $("#register_teacher").serialize();
+		$.ajax( {
+			type: "POST",
+			data: formString,
+			url: "{% url accounts.views.validateRegisterTeacher %}",
+			success: function(response) {
+				if (response == "") {
+					$("#register_teacher").submit();
+				}
+				else {
+					var modal = document.getElementById('register_header');
+					modal.innerHTML+=response;
+				}
+			}
+		});
+	
+	}
+
+</script>
+

@@ -2,7 +2,7 @@ from django.db import models
 from accounts.models import TeacherProfile, StudentProfile
 from Standards.models import *
 from Objectives.models import Objective
-from Rating.models import Rating
+from Rating.models import Rating, Rateable
 
 
 SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
@@ -19,7 +19,7 @@ class AssessmentType(models.Model):
 class Tag(models.Model):
 	tagname = models.CharField(max_length=32)
 
-class Course(models.Model):
+class Course(Rateable):
 	name = models.CharField(max_length=32)
 	#description = models.TextField()
 	owner = models.ForeignKey('accounts.TeacherProfile')
@@ -49,13 +49,8 @@ class StandardGrouping(models.Model):
 	creation_date = models.DateField(null=True)
 	prebuilt = models.BooleanField()
 
-class StandardAnalysis(models.Model):
-	teacher = models.ForeignKey('accounts.TeacherProfile')
-	standard = models.ForeignKey('Standards.Standard')
-	analysis = models.TextField()
-	rating = models.IntegerField()
 
-class Unit(models.Model):
+class Unit(Rateable):
 	name = models.CharField(max_length=32)
 	description = models.TextField()
 	assessment_type = models.ManyToManyField(AssessmentType, blank=True)
@@ -70,7 +65,7 @@ class UnitRating(Rating):
 	unit = models.ForeignKey('Unit')
 
 # Create your models here.
-class Lesson(models.Model):
+class Lesson(Rateable):
 	name = models.CharField(max_length=30)
 	unit = models.ForeignKey(Unit)
 	owner = models.ForeignKey('accounts.TeacherProfile')
@@ -82,14 +77,14 @@ class Lesson(models.Model):
 class LessonRating(Rating):
 	lesson = models.ForeignKey('Lesson')
 
-class Section(models.Model):
+class Section(Rateable):
 	lesson = models.ForeignKey(Lesson)
 	placement = models.IntegerField(blank=True)
 	name = models.IntegerField(max_length=32, choices=SECTIONTYPE)
 	description = models.TextField()
 	creation_date = models.DateTimeField(blank=True, null=True)	
 
-class Content(models.Model):
+class Content(Rateable):
 	section = models.ForeignKey(Section)
 	creation_date = models.DateTimeField()
 	placement = models.IntegerField()
@@ -147,10 +142,11 @@ class FreeResponseAnswer(Answer):
 class MultipleChoiceAnswer(Answer):
 	answer = models.CharField(max_length=256)
 	is_checked = models.BooleanField(default=False)
-	
-	
 
+class StandardAnalysis(Rateable):
+	teacher = models.ForeignKey('accounts.TeacherProfile')
+	standard = models.ForeignKey('Standards.Standard')
+	analysis = models.TextField(null=True, blank=True)
 
-
-
-
+class StandardAnalysisRating(Rating):
+	standard_analysis = models.ForeignKey('StandardAnalysis')

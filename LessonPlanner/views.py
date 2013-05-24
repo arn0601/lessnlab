@@ -10,6 +10,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
 from accounts.models import TeacherProfile
+from accounts.forms import TeacherRegistrationForm
 from datetime import datetime
 from django.utils.timezone import utc
 import simplejson
@@ -17,7 +18,7 @@ import base_methods
 from ajax_helpers import render_block_to_string
 from django.template import loader,Context
 from django.contrib.auth.models import User
-
+import sys, traceback
 import urlparse
 
 
@@ -48,7 +49,8 @@ def team(request):
         return render_to_response('team.html', {})
 
 def landing(request):
-	return render_to_response('landing.html', {})
+	teacher_registration_form = TeacherRegistrationForm()
+	return render_to_response('landing.html', {'teacherRegistrationForm': teacher_registration_form})
 
 #show the units for a specific course
 
@@ -886,6 +888,7 @@ def getStandardsFromGroup(request):
 		base_dict['groupStandards'] = standard_list
 		base_dict['showGroupStandards'] = True
 		base_dict['selectedGroup'] = group
+		base_dict['user_id'] = request.user.id
 		return render_to_response('course.html', base_dict)
 	return HttpResponseRedirect('/courses/')
 
@@ -952,6 +955,9 @@ def manageCourseStudents(request):
 
 def getStandard(request):
 	if request.method == 'GET':
+		base_dict = base_methods.createBaseDict(request)
+		if base_dict == None:
+			return HttpResponseRedirect('/login/')
 		standard_id = request.GET['standard_id']
 		try:
 			s = Standard.objects.get(id=standard_id)
@@ -978,8 +984,17 @@ def getStandard(request):
 			if (len(rating_list) > 0):
 				objective_rating = reduce(lambda x, y: x+y, rating_list)/float(len(rating_list))
 			objective_dict[objective] = objective_rating
-			
-		return render_to_response('standard_view.html', { 'standardCourses': courses, 'standard':s, 'objectives':objectives, 'standardObjectives': objective_dict })
+		sa = StandardAnalysis.objects.filter(standard=s).order_by('cumulative_rating')
+		base_dict['analysis'] = sa
+		base_dict['standardCourses'] = courses
+		base_dict['standard'] = s
+		base_dict['standardObjectives'] = objective_dict
+		saf = StandardAnalysisForm()
+		saf.fields['standard_id'].initial = s.id
+		base_dict['standardAnalysisForm'] = saf
+		base_dict['ratingOptions'] = (1,2,3,4,5)
+		base_dict['user_id'] = request.user.id
+		return render_to_response('standard_view.html', base_dict)
 
 	return HttpResponseRedirect('/courses/')
 
@@ -1008,6 +1023,27 @@ def publicCourseView(request):
 	base_dict['courseUnits'] = course_unit_list
 	return render_to_response('public_course_view.html',base_dict)
 
+@csrf_exempt
+def addStandardAnalysis(request):
+	if request.method == 'POST':
+		form = StandardAnalysisForm(data=request.POST)
+		if form.is_valid():
+			standard_id = form.cleaned_data['standard_id']
+			try:
+				standard = Standard.objects.get(id=standard_id)
+				teacher = TeacherProfile.objects.get(user=request.user)
+			except:
+				print 'error in addStandardAnalysis'
+				return HttpResponseRedirect('/standard/?standard_id='+str(standard_id))
+			text = form.cleaned_data['analysis']
+			sa, created = StandardAnalysis.objects.get_or_create(teacher=teacher,standard=standard)
+			sa.analysis = text
+			sa.number_raters=0
+			sa.save()
+
+	return HttpResponseRedirect('/standard/?standard_id='+str(standard_id))
+		
+
 def publicUnitView(request):
 	base_dict = base_methods.createBaseDict(request)
 	unit_id = request.GET['unit_id']
@@ -1031,3 +1067,37 @@ def publicUnitView(request):
 	base_dict['unitStandards'] = unit_standards
 	base_dict['unitLessons'] = unit_lesson_list
 	return render_to_response('public_unit_view.html',base_dict)
+
+@csrf_exempt
+def rateAnalysis(request):
+	if request.method == 'POST':
+		print request.POST
+		try:
+			user = User.objects.get(id=request.POST['user_id'])
+			teacher = TeacherProfile.objects.get(user=user)
+			sa = StandardAnalysis.objects.get(id = request.POST['id'])
+			sar, created = StandardAnalysisRating.objects.get_or_create(standard_analysis=sa, rater=teacher, rating_type='All')
+		except:
+			print traceback.format_exception(*sys.exc_info())
+			return HttpResponseRedirect('/standard/?standard_id='+str(sa.id))
+		new_rating =  int(request.POST['rating'])
+		print new_rating
+		print created
+		print sar.rating == new_rating
+		try:
+			if created:
+				sar.rating = new_rating
+				sar.save()
+				sa.cumulative_rating = (sa.cumulative_rating*sa.number_raters + sar.rating)/(sa.number_raters+1)
+				sa.number_raters+=1
+				sa.save()
+			elif (sar.rating != new_rating):
+				sa.cumulative_rating = (sa.cumulative_rating*sa.number_raters - sar.rating + new_rating)/sa.number_raters
+				sar.rating = new_rating
+				sar.save()
+				sa.save()
+		except:
+			print traceback.format_exception(*sys.exc_info())
+			
+		return HttpResponse(str(sa.cumulative_rating))
+		

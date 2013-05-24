@@ -1,4 +1,5 @@
 from django.db import models
+from Rating.models import Rating
 
 class Standard(models.Model):
 	state = models.ForeignKey('State', null=True, blank=True)
