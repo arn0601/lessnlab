@@ -111,13 +111,12 @@
 			.coursebox {
 			
                 padding-bottom: 15px;
-                vertical-align: middle;
                 font-size: 10pt;
                 padding-left: 10px;
-                border-bottom-style: solid;
-                border-bottom-color: #whitesmoke;
+                border-bottom-width: 1px;
+                border-bottom-color: #c8c8c8;
                 border-bottom-style: inset;
-                
+                color: #c8c8c8;
             }
                          
 			.rightunitbox {
