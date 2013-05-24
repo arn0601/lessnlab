@@ -12,7 +12,7 @@ function imgError(image){
 		<ul class="nav nav-list">
 				<li class="nav-header">My Courses</li>
 				{% for course in userCourses %}  
-				<li><a href="/units/?course_id={{ course.id }}" rel="tooltip" data-placement="bottom" title="Course Description: {{ course.name }}" >{{ course.name }}</a></li>
+				<li><a href="/units/?course_id={{ course.id }}" rel="tooltip" data-placement="left" title="Course Description: {{ course.name }}" >{{ course.name }}</a></li>
 				{% endfor %}
 		</ul>
 		<ul class="nav nav-list">
