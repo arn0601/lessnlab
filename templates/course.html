@@ -10,12 +10,12 @@
         <a class="courseboxtitle" href="/units/?course_id={{ course.id }}" >{{ course.name }}</a>
     </div>
 </div>
-<div class="row">
+<div class="row courseboxsubtext">
     <div class="span4">
-    	Written By {{fullname}}</h5>    
+    	<b>Written By</b><a href="#">{{fullname}}</a> |   
     </div>
     <div class="span3">
-    	<h5>Grade {{ course.grade }}</h5>  
+    	<b>Grade</b> {{ course.grade }} |
     </div>
      <div class="span3">
     	<h5>Taught From {{ course.start_date }} to {{ course.end_date }} </h5> 
