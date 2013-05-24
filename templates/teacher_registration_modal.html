@@ -3,6 +3,8 @@
   	<div class="modal-header modalheaderspacing" id="register_header">
   	  <button type="button" class="close" data-dismiss="modal">x</button>
   	  <p class="modaltitle">Create Your LessnLab Account</p>
+		<div id="register_errors">
+		</div>
   	</div>
   <div class="modal-body">
     <form action="{% url accounts.views.registerTeacher %}" method="post" id="register_teacher">
@@ -124,8 +126,8 @@
 					$("#register_teacher").submit();
 				}
 				else {
-					var modal = document.getElementById('register_header');
-					modal.innerHTML+=response;
+					var modal = document.getElementById('register_errors');
+					modal.innerHTML=response;
 				}
 			}
 		});
