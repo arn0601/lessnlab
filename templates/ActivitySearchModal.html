@@ -1,0 +1,47 @@
+<div class="ActivitySearchModal modal hide" id="activity_searchModal">
+			{% block results %}
+	<div class="modal-header">
+		<button type="button" class="close content_close" data-dismiss="modal">x</button>
+		<button type="button" onclick="gobackSearch()">Go Back</button>
+	    	<h3>Search Results </h3>
+	</div>
+
+ <div class="modal-body">
+<table class="table table-hover table-striped table-bordered">
+	<thead> <tr> <th> Type </th> <th> Objective </th>  <th> Length </th> <th> View </th> </tr> </thead>
+		<tr> <td> Individual </td> <td> Text... </td> 
+		<td> 1 Year </td> <td> <button type="button" onclick="viewActivity(1)">View</button> </td> </tr>
+		<div>
+			random info
+		</div>
+		<tr> <td> Individual </td> <td> Text... </td> 
+		<td> 1 Year </td> <td> <button type="button" onclick="viewActivity(2)">View</button> </td> </tr>
+</table>
+</div>
+			{% endblock %}	
+</div>
+
+<script>
+	function gobackSearch()
+  {
+ 					$('#activity_searchModal').modal('hide');
+					$('#addContentActivityOverride').modal('show');
+  }
+
+
+	function viewActivity(activityid)
+	{
+		$.ajax({
+			data: {activity_id:activityid},
+			dataType:'html',
+			type: "POST", // GET or POST
+      url: {% url LessonPlanner.views.activity_ajax_view %}, // the file to call
+			success : function(data, status, xhr){
+					$('#activity_viewModal').html(data);
+ 					$('#activity_viewModal').modal('show');
+					$('#activity_searchModal').modal('hide')
+				
+       }
+		});
+	};
+</script>

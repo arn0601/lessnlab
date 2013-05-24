@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Register For LessnLab</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="/static/bootstrap.css" rel="stylesheet">
+<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script>
+		  $(function() {
+		  $( "#id_birthdate" ).datepicker({
+				changeMonth: true,
+		    changeYear: true,
+				 maxDate: new Date(1997, 12 - 1, 31),
+		  	minDate: "-100Y",
+		  	yearRange: "-100:-16",
+				monthRange: "-12:12",
+				dateFormat: "yy-mm-dd"
+	});
+		});
+	</script>
+
+    <style type="text/css">
+      body {
+        padding-top: 0px;
+        padding-bottom: 0px;
+        background-color: #f5f5f5;
+      }
+      
+      .buttonPadding {
+      
+        margin-right: 20px;
+      
+      }
+      
+      .page-header {
+        margin-top:0px;
+        padding-left: 75px;
+        padding-top:20px;
+        background-color: #22347A;
+        color: white;
+      }
+      
+      .page-footer {
+        padding-left: 75px;
+        padding-top: 20px;
+        padding-bottom:100px;
+        height: 80px;
+        background-color: #f5f5f5;
+        color: grey;
+      }
+
+      .form-signin {
+        max-width: 500px;
+        padding: 19px 29px 29px;
+        margin: 0 auto 20px;
+        background-color: #fff;
+        border: 1px solid #e5e5e5;
+        text-align: left;
+        -webkit-border-radius: 5px;
+           -moz-border-radius: 5px;
+                border-radius: 5px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.05);
+                box-shadow: 0 1px 2px rgba(0,0,0,.05);
+      }
+      .form-signin .form-signin-heading,
+      .form-signin .checkbox {
+        margin-bottom: 16px;
+      }
+      .form-signin input[type="text"],
+      .form-signin input[type="password"] {
+        font-size: 12px;
+        height: auto;
+        margin-bottom: 15px;
+        padding: 7px 9px;
+      }
+
+    </style>
+    <link href="/static/bootstrap-responsive.css" rel="stylesheet">
+
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="../assets/js/html5shiv.js"></script>
+    <![endif]-->
+
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../assets/ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="../assets/ico/apple-touch-icon-114-precomposed.png">
+      <link rel="apple-touch-icon-precomposed" sizes="72x72" href="../assets/ico/apple-touch-icon-72-precomposed.png">
+                    <link rel="apple-touch-icon-precomposed" href="../assets/ico/apple-touch-icon-57-precomposed.png">
+                                   <link rel="shortcut icon" href="../assets/ico/favicon.png">
+  </head>
+
+  <body>
+<!-- Header -->  
+  <div class="page-header">
+    <h1>Welcome to LessanLab</h1>
+    <p class="lead"> Helping teachers teach, to help students learn</p>
+  </div>
+<!-- End Header -->
+
+<!-- Registration Form -->
+<div class="container">
+    <form class="form-signin form-horizontal" action="{% url accounts.views.registerTeacher %}" method="post">
+    {% csrf_token %}
+    <h4 class="form-signin-heading">Reg Info</h4>
+    {% for field in form %}
+        <div class="control-group">
+	{{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+        </div>
+    {% endfor %}
+
+    {{ form.errors.as_text }}
+ <!--       <hr/>
+        <h4 class="form-signin-heading">Basic Information</h4>
+        <div class="control-group">
+            <label class="control-label" for="inputFirstName">First Name </label>
+            <div class="controls">
+                <input type="text" id="inputFirstName" placeholder="Enter Your First Name">
+            </div>
+        </div>
+        <div class="control-group">
+         <label class="control-label" for="inputLastName">Last Name </label>
+            <div class="controls">
+                <input type="text" id="inputLastName" placeholder="Enter Your Last Name">
+            </div>
+        </div>
+        <div class="control-group">
+         <label class="control-label" for="inputEmail">School Email</label>
+            <div class="controls">
+                <input type="text" id="inputEmail" placeholder="Enter Your School Email">
+            </div>
+        </div>
+        <div class="control-group">
+         <label class="control-label" for="inputTwitter">Twitter Handle</label>
+            <div class="controls">
+                <input type="text" id="inputTwitter" placeholder="Twitter Handle">
+            </div>
+        </div>
+        <hr/>
+        <h4 class="form-signin-heading">School Information</h4>
+        <div class="control-group">
+            <label class="control-label" for="schoolName">School Name</label>
+            <div class="controls">
+                <input type="text" id="schoolName" placeholder="Your School's Name">
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="schoolState">School State</label>
+            <div class="controls">
+                <select>
+                    <option selected value="">State...</option>
+<option value="AL">Alabama</option>
+<option value="AK">Alaska</option>
+<option value="AZ">Arizona</option>
+<option value="AR">Arkansas</option>
+<option value="CA">California</option>
+<option value="CO">Colorado</option>
+<option value="CT">Connecticut</option>
+<option value="DE">Delaware</option>
+<option value="FL">Florida</option>
+<option value="GA">Georgia</option>
+<option value="HI">Hawaii</option>
+<option value="ID">Idaho</option>
+<option value="IL">Illinois</option>
+<option value="IN">Indiana</option>
+<option value="IA">Iowa</option>
+<option value="KS">Kansas</option>
+<option value="KY">Kentucky</option>
+<option value="LA">Louisiana</option>
+<option value="ME">Maine</option>
+<option value="MD">Maryland</option>
+<option value="MA">Massachusetts</option>
+<option value="MI">Michigan</option>
+<option value="MN">Minnesota</option>
+<option value="MS">Mississippi</option>
+<option value="MO">Missouri</option>
+<option value="MT">Montana</option>
+<option value="NE">Nebraska</option>
+<option value="NV">Nevada</option>
+<option value="NH">New Hampshire</option>
+<option value="NJ">New Jersey</option>
+<option value="NM">New Mexico</option>
+<option value="NY">New York</option>
+<option value="NC">North Carolina</option>
+<option value="ND">North Dakota</option>
+<option value="OH">Ohio</option>
+<option value="OK">Oklahoma</option>
+<option value="OR">Oregon</option>
+<option value="PA">Pennsylvania</option>
+<option value="RI">Rhode Island</option>
+<option value="SC">South Carolina</option>
+<option value="SD">South Dakota</option>
+<option value="TN">Tennessee</option>
+<option value="TX">Texas</option>
+<option value="UT">Utah</option>
+<option value="VT">Vermont</option>
+<option value="VA">Virginia</option>
+<option value="WA">Washington</option>
+<option value="WV">West Virginia</option>
+<option value="WI">Wisconsin</option>
+<option value="WY">Wyoming</option>
+                </select>
+            </div>
+        </div>
+         <div class="control-group">
+            <label class="control-label" for="gradeLevel">Grade Level(s) Currently Teaching</label>
+            <div class="controls">
+                <select multiple="multiple">
+                    <option>Pre-K</option>
+                    <option>Kindergarten</option>
+                    <option>1st</option>
+                    <option>2nd</option>
+                    <option>3rd</option>
+                    <option>4th</option>
+                    <option>5th</option>
+                    <option>6th</option>
+                    <option>7th</option>
+                    <option>8th</option>
+                    <option>10th</option>
+                    <option>11th</option>
+                    <option>12th</option>
+                    <option>College</option>
+                </select>
+            </div>
+        </div>
+        <hr/>
+        <h4 class="form-signin-heading">Account Information</h4>
+        <div class="control-group">
+         <label class="control-label" for="inputUserName">Username</label>
+            <div class="controls">
+                <input type="text" id="inputUserName" placeholder="Desired Username">
+            </div>
+        </div>
+        <div class="control-group">
+         <label class="control-label" for="inputPassword">Password</label>
+            <div class="controls">
+                <input type="password" id="inputPassword" placeholder="Desired Password">
+            </div>
+        </div>
+        <div class="control-group">
+         <label class="control-label" for="inputReenterPassword">Re-Enter Password</label>
+            <div class="controls">
+                <input type="password" id="inputReenterPassword" placeholder="Verify Password">
+            </div>
+        </div>
+        <hr/>-->
+        <div class="control-group">
+            <div class="controls">
+                <button type="submit" class="btn btn-large btn-primary buttonPadding">Register</input>
+                <button type="reset" class="btn btn-large">Cancel</input>
+            </div>
+        </div>
+    
+    </form>
+</div>
+<!-- End Registration Form -->
+
+    </div> <!-- /container -->
+    <hr/>
+    <div class="page-footer">
+        <p>Copyright 2013. Created by <a href="#">LessnLab Inc. </a></p>
+      </div>
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/bootstrap.js"></script>
+  </body>
+</html>

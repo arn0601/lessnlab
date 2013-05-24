@@ -21,6 +21,9 @@ class UserProfileRegistrationForm(RegistrationForm):
 		return False;
 
 	def clean(self):
+		print "cleaned",self.cleaned_data.items()
+		print self.cleaned_data
+		print "Err:R"
 		if len(self.cleaned_data['password1']) < 8:
 			raise forms.ValidationError("Password length is too short")
 		return self.cleaned_data
@@ -40,7 +43,9 @@ class TeacherRegistrationForm(UserProfileRegistrationForm):
 		from accounts.models import TeacherProfile
 		cleaned_data = super(TeacherRegistrationForm, self).clean()
 		val = cleaned_data['school_state']
+		print "asd",cleaned_data['school_state']
 		state = State.objects.get(value=cleaned_data['school_state'])
+		print "asdasd"
 		u = TeacherProfile.objects.filter(user_school_state=state).filter(teacher_code=cleaned_data['teacher_code'])
 		if u:
 			raise forms.ValidationError('Teacher code for state already in use')
