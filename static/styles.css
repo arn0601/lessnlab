@@ -3,6 +3,8 @@
 				height:100%;
 				background-image: url('/static/cream_pixels.png');
 			}
+			
+/* Navigation Bar Styles */
 	
 		   	.navtitle{
 		   		  padding-left: 10px;
@@ -10,6 +12,7 @@
 		    }
 			
 			.navheader {
+			
 				background-color: white;
         		border: none;
         		color: black;
@@ -20,6 +23,8 @@
 	       				 box-shadow: 0 5px 5px -5px #c8c8c8;
 	        
 	        }
+	        
+/* Main content styles */
 			
 			.basecontent {
 			
@@ -34,6 +39,7 @@
 			}
 			
 			.course {
+			
 					padding: 10px;
 					text-align:left;
 					background-color: 
@@ -47,7 +53,9 @@
 			 
 			 
 			 div #middlecontent{
+			 
 				height: 100%;
+				
 			 }
 			 
 			#leftnav {
@@ -100,15 +108,15 @@
 			 	padding-left: 10px;
 			 }
 			 
-			.noborderunitbox {
-
-                height:20%px;
-                width: 100%;
+			.coursebox {
+			
                 padding-bottom: 15px;
                 vertical-align: middle;
                 font-size: 10pt;
-                text-align: justify;
                 padding-left: 10px;
+                border-bottom-style: solid;
+                border-bottom-color: #whitesmoke;
+                border-bottom-style: inset;
                 
             }
                          
