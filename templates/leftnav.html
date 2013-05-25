@@ -14,11 +14,7 @@ function imgError(image){
 				{% for course in userCourses %}
 				<li><a href="/units/?course_id={{ course.id }}" rel="tooltip" data-placement="left" title="Course Description: {{ course.name }}" >{{ course.name }}</a></li>
 				{% endfor %}
-		</ul>
-		<ul class="nav nav-list">
-				<li class="nav-header">Tools</li>
-				<li><a href="/standardsSearch/">Standards Search</a></li>
-  				<li><a href="/manageStudents/">Manage Students</a></li>
+				<li><a href="#addCourse" data-toggle="modal"><small><i class="icon-plus"></i>Add Course</small></a></li>
 		</ul>
 	</div>
 </div>

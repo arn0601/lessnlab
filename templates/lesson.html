@@ -43,6 +43,7 @@
 				{% for lesson in userLessons %}
 				<li><a href="/lessonPlanner/?lesson_id={{ lesson.id }}" onclick="goToByScroll('u1')">{{ lesson.name }}</a></li>
 				{% endfor %}
+				<li><a href="#addLesson" data-toggle="modal"><small><i class="icon-plus"></i> Add Lesson</small></a></li>
 			</ul>
 		</div>
 	</div>
