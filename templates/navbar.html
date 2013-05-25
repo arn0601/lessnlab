@@ -12,12 +12,12 @@
     				 <b class="caret"></b>  
 					</a> 
 					<ul class="dropdown-menu">
-						<li><a href="/courses/">Home</a></li> 
 						<li><a href="#">Profile</a></li> 
 						<li><a href="#">Settings</a></li>
 						<li><a href="/logout/">Logout</a></li>
 					</ul> 
 			  </li>
+			  <li class="divider-vertical"></li>
 			  <li class="dropdown">  
 			 	<a href="#"  
   				 class="dropdown-toggle"  
@@ -32,7 +32,7 @@
 						{% for course in userCourses %}  
 						<li><a href="/units/?course_id={{ course.id }}">{{ course.name }}</a></li>
 						{% endfor %}
-
+				<li class="divider"></li>
   				<li><a href="#addCourse" data-toggle="modal"><i class="icon-plus"></i> Add Course</a></li>
 				</ul>  
 			</li>
@@ -49,7 +49,7 @@
 					{% for unit in userUnits %}  
 						<li><a href="/lessons/?unit_id={{ unit.id }}">{{ unit.name }}</a></li>
 					{% endfor %}
-
+						<li class="divider"></li>
 						<li><a href="#addUnit" data-toggle="modal"><i class="icon-plus"></i> Add Unit</a></li>
 					</ul>  
 		  	</li>
@@ -70,6 +70,7 @@
 						{% for lesson in userLessons %}  
 							<li><a href="/lessonPlanner/?lesson_id={{ lesson.id }}">{{ lesson.name }}</a></li>
 						{% endfor %}
+						<li class="divider"></li>
 						<li><a href="#addLesson" data-toggle="modal"><i class="icon-plus"></i> Add Lesson</a></li>	
 					</ul>  
 		  	</li>
