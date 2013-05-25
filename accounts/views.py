@@ -84,7 +84,7 @@ def validateLogin(request):
 	if user is not None:
 		return HttpResponse('')
 	else:
-		return HttpResponse('Invalid Login Credentials')
+		return HttpResponse('Incorrect Username and / or Password')
 
 @csrf_exempt
 def registerTeacher(request, backend, success_url=None, form_class=None,
