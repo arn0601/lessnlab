@@ -10,6 +10,9 @@
         <a class="courseboxtitle" href="/units/?course_id={{ course.id }}" >{{ course.name }}</a>
     </div>
     <div class="span1 offset5" style="text-align: right; width: 10px;">
+    	<a onClick="getCourseStandardsFromGroup('{{ group.id }}')"><small>View Standards</small></a>
+    </div>
+    <div class="span1" style="text-align: right; width: 10px;">
     	<a href="?course_id={{ course.id }}&action=Edit"><small>Edit</small></a>
     </div>
     <div class="span1" style="padding-top:3px; width: 28px;">
