@@ -30,7 +30,7 @@
 				</a>  
 				<ul class="dropdown-menu">
 						{% for course in userCourses %}  
-						<li><a href="/units/?course_id={{ course.id }}">{{ course.subject }}</a></li>
+						<li><a href="/units/?course_id={{ course.id }}">{{ course.name }}</a></li>
 						{% endfor %}
 
   				<li><a href="#addCourse" data-toggle="modal"><i class="icon-plus"></i> Add Course</a></li>
