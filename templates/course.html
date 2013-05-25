@@ -19,18 +19,12 @@
     	 <a class="close" rel="tooltip" data-placement="right" title="Delete Course" href="?course_id={{ course.id }}&action=Delete"><i class="icon-trash"></i></a>
     </div>
 </div>
+<div class="row">
+	<h5 class="coursesubtitle">Grade {{ course.grade }}, {{ course.subject }}</h5>
+</div>
 <div class="row courseboxsubtext">
     <div class="span2">
-    	<p><b>Created By: </b><a href="#">{{fullname}}</a></p> 
-    </div>
-    <div class="span1">
-    	<p><b>Grade:</b> {{ course.grade }}</p>
-    </div>
-    <div class="span2">
-    	<p><b>Subject:</b> {{ course.subject }}</p>
-    </div>
-    <div class="span3">
-    	<p><a class="btn btn-primary btn-small" data-loading-text="Loading..." onClick="getCourseStandardsFromGroup('{{ group.id }}')">View Standards</a></p>
+    	<p><b>Written By: </b><a href="#">{{fullname}}</a></p> 
     </div>
 </div>
 <!-- We need to come up with a better way of showing these standards, it should only show one link regardless of the number of standards groups that are synced -zp -->
