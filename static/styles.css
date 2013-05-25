@@ -50,13 +50,6 @@
 			 	width: 40px;
 			 }
 			 
-			 
-			 div #middlecontent{
-			 
-				height: 100%;
-				
-			 }
-			 
 			#leftnav {
 			 
 				height: 100%;
@@ -72,13 +65,12 @@
 			 	padding-left: 10px;
 			 
 			 }		 
-			 div #rightnav {
+			 #rightnav {
 			 
 			 	border-left-width:1px;
-				border-left-style:solid;
+				border-left-style:dotted;
 				border-left-color:#c8c8c8;
-				padding-right: 10px;
-				padding-left:10px;
+				padding-top:5px;
 			 	height: 100%;
 			 }
 			 
