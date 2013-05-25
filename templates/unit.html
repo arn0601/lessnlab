@@ -23,16 +23,21 @@
     </div>
 </div>
 <div class="row">
-	<div class="span3">
-		<h5 class="coursesubtitle">Taught from {{unit.start_date}} to {{unit.end_date}}</h5>
+	<div class="span4">
+		<h5 class="coursesubtitle">In {{unit.course.name}}</h5>
 	</div>
 </div>
 <div class="row courseboxsubtext">
     <div class="span2">
-    	<p><b>Written By: </b><a href="#">{{fullname}}</a></p> 
+    	<p><b>Created By: </b><a href="#">{{fullname}}</a></p><!-- this should link to a public profile view of the user -->
+    </div>
+    <div class="span2">
+    	<p><b>Starts: </b>{{unit.start_date}}</p>
+    </div>
+    <div class="span2">
+    	<p><b>Ends: </b>{{unit.end_date}}</p>
     </div>
 </div>
-<!-- We need to come up with a better way of showing these standards, it should only show one link regardless of the number of standards groups that are synced -zp -->
 <div class="row">
 	<div class="span10">
 		<p>
