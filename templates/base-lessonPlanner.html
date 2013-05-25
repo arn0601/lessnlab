@@ -170,7 +170,7 @@ $(function() {
 <script>
 
 	$(function(){
-    $(document).on('click', '.row .btn', function(e){ 
+    $(document).on('click', '.assessment-collapse-btn', function(e){ 
 	
     e.preventDefault();
     var $this = $(this);
@@ -445,39 +445,8 @@ $(function() {
 
 {% include "ActivityViewModal.html" %}
 
+{% include "ActivityModal.html" %}
 
-<div class="ActivityModal modal hide" id="addContentActivityOverride">
-	<div class="modal-header">
-		<button type="button" class="close content_close" data-dismiss="modal">x</button>
-	    	<h3>Add Content - Activity</h3>
-	</div>
-	 <div class="modal-body">
-		<div>
-			<div id="Search">
 
-				<label>Type</label>
-				<input style=" display:inline-block; width:150px" type="text" name="type_input">
-				<label>Objective</label>
-				<input style=" display:inline-block; width:150px" type="text" name="objective_input">
-				<label>Length</label>
-				<input style=" display:inline-block; width:150px" type="text" name="length_input">
-
-				<button type="button" class="btn btn-primary search_activity">Search</button>
-			</div>
-
-			<div id="Recommend">
-			</div>
-    		<form id="content_form" method="post" action="{% url LessonPlanner.views.addContent %}" name="c_{{ type }}">
-			<p>
-			
-			</p>
-		     	<p>
-				<button type="submit" class="btn btn-primary">Submit</button>
-				<button type="button" data-dismiss="modal" class="btn btn-primary content_close">Cancel</button>
-			</p>
-		</form>
-  		</div>
-	</div>
-</div>
 
 </html>

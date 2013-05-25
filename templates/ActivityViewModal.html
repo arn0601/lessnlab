@@ -3,7 +3,7 @@
 	<div class="modal-header">
 			<button type="button" onclick="gobackResults()">Go Back</button>
 		<button type="button" class="close content_close" data-dismiss="modal">x</button>
-	    	<h3>Search Results </h3>
+	    	<h3>Activity </h3>
 	</div>
 	<div class="modal-body">
 		Name: ACTIVITY!!
@@ -19,7 +19,7 @@
         </div>
         {% endfor %}
 		  </form>
-		<button type="button" onclick="addActivity(1,1)">Add</button>
+		<button type="button" onclick="addActivity({{activity_id}},{{content_id}})">Add</button>
 	</div>
 			{% endblock %}	
 </div>

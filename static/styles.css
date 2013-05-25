@@ -284,3 +284,8 @@
 			 		border-bottom-width: 1px;
 			 		margin-bottom: 5px;
       			}
+
+.active {
+    font-weight: bold;
+}
+

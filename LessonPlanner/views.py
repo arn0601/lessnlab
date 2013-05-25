@@ -5,7 +5,7 @@ from LessonPlanner.models import *
 from LessonPlanner.forms import *
 from Standards.models import *
 from Objectives.models import Objective, ObjectiveRating
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response,render
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
@@ -29,9 +29,8 @@ def activity_add(request):
 
 @csrf_exempt
 def activity_ajax_view(request):
+	
 	context = Context({'activityForm': AddActivityContent()})
-	print AddActivityContent()
-	print context
 	return_str = render_block_to_string('ActivityViewModal.html', 'results', context)
 	return HttpResponse(return_str)
 
@@ -46,11 +45,11 @@ def search_activity_ajax_view(request):
 
 
 def team(request):
-        return render_to_response('team.html', {})
+        return render(request,'team.html', {})
 
 def landing(request):
 	teacher_registration_form = TeacherRegistrationForm()
-	return render_to_response('landing.html', {'teacherRegistrationForm': teacher_registration_form})
+	return render(request,'landing.html', {'teacherRegistrationForm': teacher_registration_form})
 
 #show the units for a specific course
 
@@ -88,7 +87,7 @@ def showUnits(request):
 	#return from base
 	user = TeacherProfile.objects.filter(user=request.user)
 	request.session['last_page'] = '/units/?course_id='+str(base_dict['course'].id)
-	return render_to_response("unit.html", base_dict)	
+	return render(request,"unit.html", base_dict)	
 #show the lessons of a unit
 
 @csrf_exempt
@@ -112,7 +111,7 @@ def requestUnitStandards(request):
 		base_dict = base_methods.createBaseDict(request)
 		base_dict['unitStandardsForm'] = form
 		base_dict['addingUnitStandards'] = True
-		return render_to_response('unit.html', base_dict)
+		return render(request,'unit.html', base_dict)
 
 @csrf_exempt
 def addUnitStandards(request):
@@ -149,7 +148,7 @@ def showLesson(request):
                 return DeleteLessonRequest(request, base_dict['lesson'].id)
 
 	request.session['last_page'] = '/lessons/?unit_id='+str(base_dict['unit'].id)
-	return render_to_response("lesson.html", base_dict)
+	return render(request,"lesson.html", base_dict)
 	
 #this function is used when creating objectives to select the initial standard
 @csrf_exempt
@@ -171,7 +170,7 @@ def getLessonStandards(request):
 		base_dict['selectStandardsForm'] = form
 		base_dict['selectingStandard'] = True
 		
-		return render_to_response('lesson.html', base_dict)
+		return render(request,'lesson.html', base_dict)
 
 #this returns the form to add objectives
 @csrf_exempt
@@ -203,7 +202,7 @@ def createLessonObjectives(request):
 			base_dict = base_methods.createBaseDict(request)
 			base_dict['createObjectivesForm'] = next_form
 			base_dict['creatingObjectives'] = True
-			return render_to_response('lesson.html',base_dict)
+			return render(request,'lesson.html',base_dict)
 		else:
 			print standards_form.errors
 	return HttpResponseRedirect(lastPageToRedirect(request))
@@ -264,7 +263,7 @@ def requestLessonStandards(request):
 		base_dict = base_methods.createBaseDict(request)
 		base_dict['lessonStandardsForm'] = form
 		base_dict['addingLessonStandards'] = True
-		return render_to_response('lesson.html', base_dict)
+		return render(request,'lesson.html', base_dict)
 
 @csrf_exempt
 def addLessonStandards(request):
@@ -307,7 +306,7 @@ def showLessonPlanner(request):
 	base_dict['deleteContentForm'] = delete_content_form
 	request.session['last_page'] = '/lessonPlanner/?lesson_id='+str(base_dict['lesson'].id)
 	user = TeacherProfile.objects.filter(user=request.user)
-	return render_to_response('lessonPlanner.html', base_dict)
+	return render(request,'lessonPlanner.html', base_dict)
 
 def lastPageToView(request):
 	if request.session['last_page'] == 'courses':
@@ -347,7 +346,7 @@ def courses(request):
                 return DeleteCourseRequest(request, base_dict['course'].id)
 	
 	request.session['last_page'] = 'courses'
-	return render_to_response('course.html', base_dict)	
+	return render(request,'course.html', base_dict)	
 
 @csrf_exempt
 def addCourse(request):
@@ -360,7 +359,7 @@ def addCourse(request):
 			base_dict = base_methods.createBaseDict(request)
 			base_dict['groupsAdded'] = groups_added
 			base_dict['addCourseSecondStep'] = True
-			return render_to_response('course.html', base_dict)
+			return render(request,'course.html', base_dict)
 		else:
 			print addCourseForm.errors
 	return HttpResponseRedirect(lastPageToRedirect(request))
@@ -695,7 +694,7 @@ def DeleteCourseRequest(request, course_id):
         course = Course.objects.get(id=course_id)
         deleteCourseForm = DeleteCourse()
         deleteCourseForm.fields["course_id"].initial = course.id
-        return render_to_response('course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteCourseForm':deleteCourseForm,'showDeleteCourse': 1}, context_instance=RequestContext(request))
+        return render(request,'course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteCourseForm':deleteCourseForm,'showDeleteCourse': 1}, context_instance=RequestContext(request))
 
 
 def EditCourseRequest(request, course_id):
@@ -704,7 +703,7 @@ def EditCourseRequest(request, course_id):
         user_courses =  Course.objects.filter(owner=user)
 	course = Course.objects.get(id=course_id)
 	editCourseForm = EditCourse(instance=course)	
-	return render_to_response('course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'editCourseForm':editCourseForm,'showEditCourse': 1, 'selectedCourse': course_id})
+	return render(request,'course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'editCourseForm':editCourseForm,'showEditCourse': 1, 'selectedCourse': course_id})
 
 def DeleteUnitRequest(request, unitID):
         uname = request.user.username
@@ -714,7 +713,7 @@ def DeleteUnitRequest(request, unitID):
         deleteUnitForm = DeleteUnit()
         deleteUnitForm.fields["unit_id"].initial = unit.id
 	course_units =  Unit.objects.filter(course=unit.course)
-        return render_to_response('unit.html', {'course_id':unit.course.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteUnitForm':deleteUnitForm,'showDeleteUnit': 1}, context_instance=RequestContext(request))
+        return render(request,'unit.html', {'course_id':unit.course.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteUnitForm':deleteUnitForm,'showDeleteUnit': 1}, context_instance=RequestContext(request))
 
 
 def EditUnitRequest(request, unitID):
@@ -724,7 +723,7 @@ def EditUnitRequest(request, unitID):
         unit = Unit.objects.get(id=unitID)
         editUnitForm = EditUnit(instance=unit)
 	course_units =  Unit.objects.filter(course=unit.course)
-        return render_to_response('unit.html', {'course_id':unit.course.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'editUnitForm':editUnitForm,'showEditUnit': 1, 'selectedUnit':unitID})
+        return render(request,'unit.html', {'course_id':unit.course.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'editUnitForm':editUnitForm,'showEditUnit': 1, 'selectedUnit':unitID})
 
 def DeleteLessonRequest(request, lessonID):
         uname = request.user.username
@@ -734,7 +733,7 @@ def DeleteLessonRequest(request, lessonID):
         deleteLessonForm = DeleteLesson()
         deleteLessonForm.fields["lesson_id"].initial = lesson.id
 	unit_lessons =  Lesson.objects.filter(unit=lesson.unit)
-        return render_to_response('lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname, 'fullname':uname,'userLessons':unit_lessons, 'deleteLessonForm':deleteLessonForm,'showDeleteLesson': 1}, context_instance=RequestContext(request))
+        return render(request,'lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname, 'fullname':uname,'userLessons':unit_lessons, 'deleteLessonForm':deleteLessonForm,'showDeleteLesson': 1}, context_instance=RequestContext(request))
 
 
 def EditLessonRequest(request, lessonID):
@@ -745,7 +744,7 @@ def EditLessonRequest(request, lessonID):
         unit = lesson.unit
 	unit_lessons =  Lesson.objects.filter(unit=lesson.unit)
 	editLessonForm = EditLesson(instance=lesson)
-        return render_to_response('lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1, 'selectedLesson':lessonID})
+        return render(request,'lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1, 'selectedLesson':lessonID})
 
 def EditContentRequest(request, contentID):
         uname = request.user.username
@@ -759,7 +758,7 @@ def EditContentRequest(request, contentID):
         editLessonForm.fields["lesson_id"].initial = lesson.id
         editLessonForm.fields["unit_id"].initial = unit.id
         editLessonForm.fields["name"].initial = lesson.name
-        return render_to_response('lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1})
+        return render(request,'lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1})
 
 
 def deleteCourseData(courseForm, request_user):
@@ -780,7 +779,7 @@ def deleteLessonData(lessonForm, request_user):
                 return True;
         return False;
 
-
+@csrf_exempt
 def manageStudents(request):
 	base_dict = base_methods.createBaseDict(request)
 	#get courses with students
@@ -794,7 +793,7 @@ def manageStudents(request):
 		course_students[course] = student_list
 	base_dict['courseStudents'] = course_students
 	print course_students
-	return render_to_response('manage_students.html', base_dict)
+	return render(request,'manage_students.html', base_dict)
 
 @csrf_exempt
 def studentRequestCourse(request):
@@ -812,7 +811,7 @@ def studentRequestCourse(request):
 		course_request.fields['teacher_id'].initial = teacher.id
 		base_dict['teacherCoursesRequestForm'] = course_request
 		base_dict['coursesWereRequested'] = True
-		return render_to_response('student_course.html', base_dict)
+		return render(request,'student_course.html', base_dict)
 	else:
 		return HttpResponseRedirect(lastPageToRedirect(request))
 
@@ -858,7 +857,7 @@ def studentShowCourses(request):
 	if base_dict == None:
 		return HttpResponseRedirect('/courses/')
 	request.session['last_page'] = 'studentCourses'
-	return render_to_response('student_course.html', base_dict)
+	return render(request,'student_course.html', base_dict)
 
 
 def deleteSectionData(sectionForm, request_user):
@@ -889,7 +888,7 @@ def getStandardsFromGroup(request):
 		base_dict['showGroupStandards'] = True
 		base_dict['selectedGroup'] = group
 		base_dict['user_id'] = request.user.id
-		return render_to_response('course.html', base_dict)
+		return render(request,'course.html', base_dict)
 	return HttpResponseRedirect('/courses/')
 
 @csrf_exempt
@@ -921,10 +920,10 @@ def standardsSearch(request):
 			base_dict['standardsSearchForm'] = form
 			base_dict['returnResults'] = True
 			base_dict['has_state'] = has_state
-			return render_to_response('standards_search.html', base_dict)
+			return render(request,'standards_search.html', base_dict)
 		else:
 			return HttpResponseRedirect('/standardsSearch/')
-	return render_to_response('standards_search.html', base_dict)
+	return render(request,'standards_search.html', base_dict)
 
 @csrf_exempt
 def manageCourseStudents(request):
@@ -994,7 +993,7 @@ def getStandard(request):
 		base_dict['standardAnalysisForm'] = saf
 		base_dict['ratingOptions'] = (1,2,3,4,5)
 		base_dict['user_id'] = request.user.id
-		return render_to_response('standard_view.html', base_dict)
+		return render(request,'standard_view.html', base_dict)
 
 	return HttpResponseRedirect('/courses/')
 
@@ -1021,7 +1020,7 @@ def publicCourseView(request):
 			course_standards.append(standard)
 	base_dict['courseStandards'] = 	course_standards
 	base_dict['courseUnits'] = course_unit_list
-	return render_to_response('public_course_view.html',base_dict)
+	return render(request,'public_course_view.html',base_dict)
 
 @csrf_exempt
 def addStandardAnalysis(request):
@@ -1066,7 +1065,7 @@ def publicUnitView(request):
 		unit_standards.append(standard)
 	base_dict['unitStandards'] = unit_standards
 	base_dict['unitLessons'] = unit_lesson_list
-	return render_to_response('public_unit_view.html',base_dict)
+	return render(request,'public_unit_view.html',base_dict)
 
 @csrf_exempt
 def rateAnalysis(request):
