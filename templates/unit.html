@@ -7,7 +7,44 @@
 <!-- Middle column main content -->
 
 {% for unit in userUnits %}
-	<div class="coursebox" id="{{ unit.id }}">
+<div class="container coursebox" style="width: 100%;">
+<div class="row">
+	<div class="span4">
+        <a class="courseboxtitle" href="/lessons/?unit_id={{ unit.id }}" >{{ unit.name }}</a>
+    </div>
+    <div class="span1 offset3" style="text-align: right; width: 142px;">
+    	<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add the course standards this unit is aligned to" onClick="requestUnitStandards('{{ unit.id }}')')"><small>Add Standards</small></a>
+    </div>
+    <div class="span1" style="text-align: right; width: 10px;">
+    	<a href="?unit_id={{ unit.id }}&action=Edit"><small>Edit</small></a>
+    </div>
+    <div class="span1" style="padding-top:3px; width: 28px;">
+    	 <a class="close" rel="tooltip" data-placement="right" title="Delete Unit" href="?unit_id={{ unit.id }}&action=Delete"><i class="icon-trash"></i></a>
+    </div>
+</div>
+<div class="row">
+	<div class="span3">
+		<h5 class="coursesubtitle">Unit Dates: {{unit.start_date}} - {{unit.end_date}}</h5>
+	</div>
+</div>
+<div class="row courseboxsubtext">
+    <div class="span2">
+    	<p><b>Written By: </b><a href="#">{{fullname}}</a></p> 
+    </div>
+</div>
+<!-- We need to come up with a better way of showing these standards, it should only show one link regardless of the number of standards groups that are synced -zp -->
+<div class="row">
+	<div class="span10">
+		<p>
+		{{ unit.description }}
+		 </p>
+	<!-- TODO remove this as a get -->
+		<a class="btn btn-success btn-small" type="button" href="/lessons/?unit_id={{ unit.id }}">Go To Unit</a>
+    </div>
+</div>
+</div> 
+<!-- unit box -->
+	<!-- <div class="coursebox" id="{{ unit.id }}">
 	<p><a href="/lessons/?unit_id={{ unit.id }}"><h4>{{ unit.name }}</h4></a></p>
 	  
 		<p><b>Description:</b>{{ unit.description }}</p>
@@ -22,14 +59,14 @@
 	<a class="btn btn-primary btn-small" type="button" href="?unit_id={{ unit.id }}&action=Edit">Edit</a>
         <a class="btn btn-primary btn-small" type="button" href="?unit_id={{ unit.id }}&action=Delete">Delete</a>	
 	<a class="btn btn-primary btn-small" type="button" onClick="requestUnitStandards('{{ unit.id }}')" >Add Standards</a>
-</div>
+</div> -->
 {% endfor %}
 {% endblock %}
 <!-- right nav -->
 {% block rightnav %}
 	<div class="row">
 		<div class="span2">
-			<h4>Course Units</h4>
+			<h4>{{ course.name}} Units</h4>
 		</div>
 	</div>
 	<div class="row">
