@@ -18,12 +18,6 @@ function imgError(image){
 				{% endfor %}
 				<li><a href="#addCourse" data-toggle="modal"><small><i class="icon-plus"></i>Add Course</small></a></li>
 		</ul>
-		<ul class="nav nav-list">
-				<li class="nav-header">Tools</li>
-				<li><a class="{% navactive request 'standardsSearch' %}" href="{% url LessonPlanner.views.standardsSearch  %}">Standards Search</a></li>
-  				<li><a class="{% navactive request 'manageStudents' %}" href="{% url LessonPlanner.views.manageStudents  %}">Manage Students</a></li>
-
-		</ul>
 	</div>
 </div>
 	
