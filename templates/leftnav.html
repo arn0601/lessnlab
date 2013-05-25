@@ -11,15 +11,18 @@ function imgError(image){
 <div class="span2" id="leftnav">
 	<div class="row" style="padding-top: 5px;">
 		<ul class="nav nav-list">
+
 				<li class="nav-header " >My Courses</li>
 				{% for c in userCourses %}  
 				<li><a href="/units/?course_id={{ c.id }}" rel="tooltip" data-placement="left" title="Course Description: {{ course.name }}" class="{% if c.id == course.id %} active {% endif%}">{{ c.name }}</a></li>
 				{% endfor %}
+				<li><a href="#addCourse" data-toggle="modal"><small><i class="icon-plus"></i>Add Course</small></a></li>
 		</ul>
 		<ul class="nav nav-list">
 				<li class="nav-header">Tools</li>
 				<li><a class="{% navactive request 'standardsSearch' %}" href="{% url LessonPlanner.views.standardsSearch  %}">Standards Search</a></li>
   				<li><a class="{% navactive request 'manageStudents' %}" href="{% url LessonPlanner.views.manageStudents  %}">Manage Students</a></li>
+
 		</ul>
 	</div>
 </div>
