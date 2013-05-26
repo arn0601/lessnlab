@@ -6,8 +6,10 @@
 
 <!-- Middle column main content -->
 {% if userUnits|length == 0 %}
-<div class="container coursebox alert alert-info" style="width: 100%;">
+<div class="container coursebox" style="width: 100%;">
+	<div class="alert alert-info">
 		<p>There aren't any units in this course yet. <a href="#addUnit" data-toggle="modal">Add one.</a></p>
+	</div>
 </div>
 	
 {% else %} 	
@@ -96,7 +98,7 @@
 					{% for unit in userUnits %}
 					<li><a href="/lessons/?unit_id={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
 					{% endfor %}
-					<li><a href="#addUnit" data-toggle="modal"><i class="icon-plus"></i>Add Unit</a></li>
+					<li><a href="#addUnit" data-toggle="modal"><i class="icon-plus"></i>Add Another Unit</a></li>
 				{% endif %}
 				</ul>
 			</div>
