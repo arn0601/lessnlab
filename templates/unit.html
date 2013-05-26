@@ -5,7 +5,12 @@
 {% block content %}
 
 <!-- Middle column main content -->
-
+{% if userUnits|length == 0 %}
+<div class="container coursebox nounitlessonalert" style="width: 100%;">
+		<p>You haven't added any units to this {{unit.course.name}} course yet. Why don't you <a href="#addUnit" data-toggle="modal">add one.</a></p>
+</div>
+	
+{% else %} 	
 {% for unit in userUnits %}
 <div class="container coursebox" style="width: 100%;">
 <div class="row">
@@ -48,6 +53,7 @@
     </div>
 </div>
 </div> 
+{% endif %}
 <!-- unit box -->
 	<!-- <div class="coursebox" id="{{ unit.id }}">
 	<p><a href="/lessons/?unit_id={{ unit.id }}"><h4>{{ unit.name }}</h4></a></p>
@@ -74,19 +80,24 @@
 			<h4>{{ course.name}} Units</h4>
 		</div>
 	</div> -->
+	
+	<!--  RIGHT HAND NAVIGATION - This generates the right hand side naviation on the units page. Code block shows 
+	a prompt to add a unit in the course if no units are present, and otherwise shows a menu 
+	of the units that are currently in the course. -->
+	
 	<div class="row">
 		<div class="span3 nocontenttext">
-			{% if userUnits|length == 0 %}
-			<p>No units yet? <a href="#addUnit" data-toggle="modal">Add one.</a></p>
-			{% else %}
 			<ul class="nav nav-list">
 				<li class="nav-header">{{course.name}} Units</li>
-				{% for unit in userUnits %}
-				<li><a href="/lessons/?unit_id={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
-				{% endfor %}
-				<li><a href="#addUnit" data-toggle="modal"><i class="icon-plus"></i>Add Unit</a></li>
-			</ul>
-			{% endif %}
+				{% if userUnits|length == 0 %}
+					<li>No units yet? <a href="#addUnit" data-toggle="modal">Add one.</a></li>
+				{% else %}
+					{% for unit in userUnits %}
+					<li><a href="/lessons/?unit_id={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
+					{% endfor %}
+					<li><a href="#addUnit" data-toggle="modal"><i class="icon-plus"></i>Add Unit</a></li>
+				{% endif %}
+				</ul>
 			</div>
 		</div>
 {% if showEditUnit %}
