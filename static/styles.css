@@ -192,12 +192,10 @@
 				border-top-color: #c8c8c8;
 				height: 50px;
 				color: #999999;
-				padding: 0px;
+				margin-top: -50px;
 				text-align: center;
+				clear: both;
 				vertical-align: middle;
-				position: fixed;
-				width: 100%;
-				bottom: 0;
 			 }
 			 
 			 .rightnavheader{
