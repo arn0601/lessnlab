@@ -6,8 +6,8 @@
 
 <!-- Middle column main content -->
 {% if userUnits|length == 0 %}
-<div class="container coursebox nounitlessonalert" style="width: 100%;">
-		<p>You haven't added any units to this {{unit.course.name}} course yet. Why don't you <a href="#addUnit" data-toggle="modal">add one.</a></p>
+<div class="container coursebox alert alert-info" style="width: 100%;">
+		<p>There aren't any units in this course yet. <a href="#addUnit" data-toggle="modal">Add one.</a></p>
 </div>
 	
 {% else %} 	
@@ -91,7 +91,7 @@
 			<ul class="nav nav-list">
 				<li class="nav-header">{{course.name}} Units</li>
 				{% if userUnits|length == 0 %}
-					<li>No units yet? <a href="#addUnit" data-toggle="modal">Add one.</a></li>
+					<li><a href="#addUnit" data-toggle="modal">Add Your First Unit.</a></li>
 				{% else %}
 					{% for unit in userUnits %}
 					<li><a href="/lessons/?unit_id={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
