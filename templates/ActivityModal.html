@@ -1,0 +1,53 @@
+<div class="ActivityModal modal hide" id="addContentActivityOverride">
+	<div class="modal-header">
+		<button type="button" class="close content_close" data-dismiss="modal">x</button>
+	    	<h3>Add Content - Activity</h3>
+	</div>
+	 <div class="modal-body">
+		<div>
+			<div id="SearchActivities">
+
+				<label>Type</label>
+				<input style=" display:inline-block; width:150px" type="text" name="type_input">
+				<label>Objective</label>
+				<input style=" display:inline-block; width:150px" type="text" name="objective_input">
+				<label>Length</label>
+				<input style=" display:inline-block; width:150px" type="text" name="length_input">
+
+				<button type="button" class="btn btn-primary search_activity">Search</button>
+			</div>
+
+			<div id="RecommendedActivities">
+						Recommended Activities:		
+
+						None Recommended
+
+			</div>
+			<div id="NewActivity">
+				Create New Activity
+				<button type="button" class="btn btn-primary content_close" onclick="viewActivity(-1)" >Create</button>
+			</div>			
+			</p>
+		  <p>
+				<button type="button" data-dismiss="modal" class="btn btn-primary content_close">Cancel</button>
+			</p>
+  	</div>
+	</div>
+</div>
+
+<script>
+	function viewActivity(activityid)
+	{
+		$.ajax({
+			data: {activity_id:activityid},
+			dataType:'html',
+			type: "POST", // GET or POST
+      url: {% url LessonPlanner.views.activity_ajax_view %}, // the file to call
+			success : function(data, status, xhr){
+					$('#activity_viewModal').html(data);
+ 					$('#activity_viewModal').modal('show');
+					$('#addContentActivityOverride').modal('hide')		
+       }
+		});
+	};
+</script>
