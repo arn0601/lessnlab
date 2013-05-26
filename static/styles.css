@@ -84,6 +84,8 @@
 				border-left-color:#c8c8c8;
 				padding-top:5px;
 			 	height: 100%;
+			 	position: fixed;
+			 	margin-left: 784px;
 			 }
 			 
 			 div #holder {
