@@ -132,7 +132,14 @@
                 border-bottom-style: inset;
                 margin-top: 10px
                 width: 100%;
-                margin-top: 10px;
+            }
+            
+            .alertbox {
+			
+                font-size: 10pt;
+                margin-top: 10px
+                text-align: center;
+                width: 100%;
             }
             
             .courseboxtitle {
