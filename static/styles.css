@@ -31,7 +31,7 @@
 			
 			.basecontent {
 			
-				border-left-color: #999999;
+				border-left-color: #c8c8c8;
 				border-left-style: dotted;
 				border-left-width: 1px;
 				border-right-color: #c8c8c8;
@@ -195,6 +195,8 @@
 				padding: 0px;
 				text-align: center;
 				vertical-align: middle;
+				position: fixed;
+				width: 100%;
 				bottom: 0;
 			 }
 			 
