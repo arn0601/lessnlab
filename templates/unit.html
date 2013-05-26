@@ -53,7 +53,7 @@
     </div>
 </div>
 </div> 
-{% endif %}
+
 <!-- unit box -->
 	<!-- <div class="coursebox" id="{{ unit.id }}">
 	<p><a href="/lessons/?unit_id={{ unit.id }}"><h4>{{ unit.name }}</h4></a></p>
@@ -72,6 +72,7 @@
 	<a class="btn btn-primary btn-small" type="button" onClick="requestUnitStandards('{{ unit.id }}')" >Add Standards</a>
 </div> -->
 {% endfor %}
+{% endif %}
 {% endblock %}
 <!-- right nav -->
 {% block rightnav %}
