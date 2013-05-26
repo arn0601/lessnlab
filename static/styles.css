@@ -68,6 +68,7 @@
 				border-right-width: 1px;
 				border-right-style: dotted;
 				padding-top: 5px
+				position: fixed;
 			
 			 }
 			 
@@ -206,7 +207,7 @@
 			 
 			 .push {
 			 
-			 	height: 50px;
+			 	height: 55px;
 			 	clear: both;
 			 
 			 }
