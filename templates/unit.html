@@ -69,21 +69,22 @@
 {% endblock %}
 <!-- right nav -->
 {% block rightnav %}
-	<div class="row">
+	<!-- <div class="row">
 		<div class="span2">
 			<h4>{{ course.name}} Units</h4>
 		</div>
-	</div>
+	</div> -->
 	<div class="row">
-		<div class="span2">
+		<div class="span2 nocontenttext">
 			{% if userUnits|length == 0 %}
-			<div class="alert alert-info">No units created yet</div>
+			<p>No units yet? <a href="#addUnit" data-toggle="modal">Add one.</a></p>
 			{% endif %}
-			<ul>
+			<ul class="nav nav-list">
+				<li class="nav-header">{{course.name}} Units</li>
 				{% for unit in userUnits %}
 				<li><a href="/lessons/?unit_id={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
 				{% endfor %}
-				<a href="#addUnit" data-toggle="modal"><small><i class="icon-plus"></i>Add Unit</small></a></li>
+				<li><a href="#addUnit" data-toggle="modal"><small><i class="icon-plus"></i>Add Unit</small></a></li>
 			</ul>
 			</div>
 		</div>
