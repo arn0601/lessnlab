@@ -93,7 +93,7 @@
 			<ul class="nav nav-list">
 				<li class="nav-header">{{course.name}} Units</li>
 				{% if userUnits|length == 0 %}
-					<li><a href="#addUnit" data-toggle="modal">Add Your First Unit.</a></li>
+					<li><a href="#addUnit" data-toggle="modal"><i class="icon-plus"></i>Add Your First Unit.</a></li>
 				{% else %}
 					{% for unit in userUnits %}
 					<li><a href="/lessons/?unit_id={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
