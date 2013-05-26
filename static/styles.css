@@ -1,3 +1,10 @@
+			* {
+			
+				margin: 0;
+			
+			
+			}
+			
 			body {
 				
 				height:100%;
@@ -195,6 +202,13 @@
 				text-align: center;
 				vertical-align: middle;
 				position: relative;
+			 }
+			 
+			 .push {
+			 
+			 	height: 50px;
+			 	clear: both;
+			 
 			 }
 			 
 			 .rightnavheader{
