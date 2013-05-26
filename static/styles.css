@@ -85,7 +85,7 @@
 				padding-top:5px;
 			 	height: 100%;
 			 	position: fixed;
-			 	margin-left: 784px;
+			 	margin-left: 760px;
 			 }
 			 
 			 div #holder {
@@ -205,6 +205,7 @@
 				text-align: center;
 				vertical-align: middle;
 				position: relative;
+				padding-top: 25px;
 			 }
 			 
 			 .push {
