@@ -1,6 +1,6 @@
 {% load staticfiles %}
 <!DOCTYPE html>
-<html style="height:100%; position:relative;">
+<html style="height:100%;">
   <head>
     <title>LessnLab - Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,22 +12,22 @@
   <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>	
  
  </head>
-  <body style="padding-bottom:50px;">
-  <div class="container basecontent" style="padding-top: 42px; width: 1000px; height: 100%;">
+  <body>
+  <div class="container basecontent" style="padding-top: 42px; width: 1000px; margin-bottom: -50px; min-height: 100%; height: auto;">
 			{% include "navbar.html" %}
 			<div class="row" style="padding-left: 20px; height: 100%">
 				{% include "leftnav.html" %}
-				<div class="span7">
-		      {% block content %}{% endblock %}
+				<div class="span7" style="margin-left: 184px;">
+		      		{% block content %}{% endblock %}
+				</div>
+				<div class="span3" id="rightnav">
+					{%block rightnav %} {% endblock %}
+				</div>
 			</div>
-			<div class="span3" id="rightnav">
-				{%block rightnav %} {% endblock %}
-			</div>
-	
-		{% include "footer.html" %}
-		{% include "modals.html" %}
-		</div>
+			<div class="push"></div>
 	</div>
+	{% include "footer.html" %}
+	{% include "modals.html" %}
 	</body>
   
   <script src="/static/bootstrap.js"></script>

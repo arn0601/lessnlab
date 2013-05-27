@@ -1,3 +1,10 @@
+			* {
+			
+				margin: 0;
+			
+			
+			}
+			
 			body {
 				
 				height:100%;
@@ -22,6 +29,17 @@
 	       				 box-shadow: 0 5px 5px -5px #c8c8c8;
 	        
 	        }
+	        
+			.active {
+    			font-weight: bold;
+			}
+			
+			.nocontenttext {
+			
+				color: #999999;
+				font-size: 10pt;
+			
+			}
 	        
 /* Main content styles */
 			
@@ -56,7 +74,8 @@
 				border-right-color: #c8c8c8;
 				border-right-width: 1px;
 				border-right-style: dotted;
-				padding-top: 5px
+				padding-top: 5px;
+				position: fixed;
 			
 			 }
 			 
@@ -72,6 +91,8 @@
 				border-left-color:#c8c8c8;
 				padding-top:5px;
 			 	height: 100%;
+			 	position: fixed;
+			 	margin-left: 760px;
 			 }
 			 
 			 div #holder {
@@ -109,9 +130,16 @@
                 border-bottom-width: 1px;
                 border-bottom-color: #c8c8c8;
                 border-bottom-style: inset;
-                margin-top: 10px
-                width: 100%;
                 margin-top: 10px;
+                width: 100%;
+            }
+            
+            .alertbox {
+			
+                font-size: 10pt;
+                margin-top: 10px;
+                text-align: center;
+                width: 100%;
             }
             
             .courseboxtitle {
@@ -124,7 +152,7 @@
 		
 			.coursesubtitle {
 			
-				color: #c8c8c8;
+				color: #999999;
 				font-family: sans-serif;
 			
 			}
@@ -133,9 +161,22 @@
             	font-family: sans-serif;
             	font-size: 10pt;
             } 
+            
+            .nounitlessonalert {
+            
+            	background-color: #c8c8c8;
+            	text-align: center;
+            	vertical-align: middle;
+            	border-color: #999999;
+            	border-width: 1px;
+            	border-style: solid;
+            	font-size: 14pt;
+        		color: #999999;
+        	}
+        	
 			.rightunitbox {
 			
-				height: 20%px;
+				height: 20px;
 				width: 100%;
 				padding-top: 10px;
 				padding-bottom: 0px;
@@ -143,10 +184,10 @@
 				font-size: 10pt;
 				text-align: justify;
 				border-top-width: 1px;
-				border-top-color: #C8C8C8;
+				border-top-color: #c8c8c8;
 				border-top-style: solid;
 				border-right-width: 1px;
-				border-right-color: #C8C8C8;
+				border-right-color: #c8c8c8;
 				border-right-style: solid;
 				padding-left: 10px;
 				
@@ -155,7 +196,7 @@
 			
 			.leftunitbox {
                     
-                height: 20%px;
+                height: 20px;
                 width: 100%;
                 padding-top: 10px;
                 padding-bottom: 30px;
@@ -163,10 +204,10 @@
                 font-size: 10pt;
             	text-align: justify;
                 border-top-width: 1px;
-                border-top-color: #C8C8C8;
+                border-top-color: #c8c8c8;
                 border-top-style: solid;
                 border-left-width: 1px;
-                border-left-color: #C8C8C8;
+                border-left-color: #c8c8c8;
                 border-left-style: solid;
                 padding-left: 10px;
                 
@@ -187,11 +228,18 @@
 				border-top-style: solid;
 				border-top-color: #c8c8c8;
 				height: 50px;
-				color: #c8c8c8;
-				padding: 0px;
+				color: #999999;
 				text-align: center;
 				vertical-align: middle;
-				bottom: 0;
+				position: relative;
+				padding-top: 25px;
+			 }
+			 
+			 .push {
+			 
+			 	height: 55px;
+			 	clear: both;
+			 
 			 }
 			 
 			 .rightnavheader{
@@ -276,8 +324,4 @@
 			 		border-bottom-width: 1px;
 			 		margin-bottom: 5px;
       			}
-
-.active {
-    font-weight: bold;
-}
 
