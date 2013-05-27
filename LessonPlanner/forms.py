@@ -97,6 +97,7 @@ class DeleteLesson(forms.Form):
 class AddSectionForm(forms.ModelForm):
 	class Meta:
 		model = Section
+		exclude = ['standards','objectives', 'cumulative_rating', 'number_raters']
 		widgets = { 'lesson': forms.HiddenInput() , 'owner': forms.HiddenInput(), 'placement': forms.HiddenInput(), 'creation_date': forms.HiddenInput() }
 
 class DeleteSection(forms.Form):
@@ -123,11 +124,11 @@ class AddOnlineVideoContent(AddContentForm):
 	rl = forms.MultipleChoiceField(label="Add/Search Videos:",widget=recommended_links,required=False,choices=[('0',u'https://www.youtube.com/watch?feature=player_embedded&v=IFKnq9QM6_A')])
 
 class AddActivityContent(forms.ModelForm):
-	section_id = forms.CharField(label="")
+	section_id = forms.CharField(label="",widget=forms.HiddenInput())
 	class Meta:
+		exclude = ['standards','objectives', 'cumulative_rating', 'number_raters']
                 model = ActivityContent
-                
-		widgets = { 'content_type': forms.HiddenInput() , 'section_id': forms.HiddenInput() , 'owner': forms.HiddenInput() }	
+          	widgets = { 'section' : forms.HiddenInput(),  'content_type': forms.HiddenInput() , 'owner': forms.HiddenInput(), 'creation_date' : custom_widgets.CalendarDateSelectField(attrs={'id': 'activity_creation_date'})}	
 
 
 

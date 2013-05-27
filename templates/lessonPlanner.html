@@ -156,7 +156,7 @@
 						 		<b class="caret"></b>
 							</a>
 							<ul class=" mymenu dropdown-menu pull-up showContent " class="btn btn-primary btn-small announce">			
-								{% for dropdown_header_dict in section_content_forms|access:dropdown_header %}
+								{% for dropdown_header_dict in content_choices|access:dropdown_header %}
 								<li><a href="#" class="content_show" data-sectionid="{{ section.id }}" 
 										data-contenttype="{{ dropdown_header_dict }}">{{ dropdown_header_dict }}</a></li>   							
 								{% endfor %}

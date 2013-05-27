@@ -130,6 +130,7 @@
 
  {% for header,nested in section_content_forms.items  %}
  {% for type,contentAddForm in nested.items %}
+ 
 <div class="{{ type }}Modal modal hide" id="addContent{{ type }}">
 	<div class="modal-header">
 		<button type="button" class="close content_close" data-dismiss="modal">x</button>
