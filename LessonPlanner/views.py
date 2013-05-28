@@ -793,7 +793,7 @@ def manageStudents(request):
 		
 		student_list = [cs for cs in cs_list]
 		for s in student_list:
-		course_students[course] = student_list
+			course_students[course] = student_list
 	base_dict['courseStudents'] = course_students
 	return render(request,'manage_students.html', base_dict)
 
