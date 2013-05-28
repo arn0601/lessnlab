@@ -27,7 +27,7 @@
 		{% endfor %}
     <br><br>
 	<a class="btn btn-primary btn-small" type="button" href="?lesson_id={{ lesson.id }}&action=Edit">Edit</a>
-        <a class="btn btn-primary btn-small" type="button" href="?lesson_id={{ lesson.id }}&action=Delete">Delete</a>	
+  <a class="btn btn-primary btn-small" type="button" href="?lesson_id={{ lesson.id }}&action=Delete">Delete</a>	
 	<a class="btn btn-primary btn-small" type="button" onClick="requestLessonStandards('{{ lesson.id }}')" >Add Standards</a>
 	<a class="btn btn-primary btn-small" type="button" onClick="requestLessonObjectives('{{ lesson.id }}')" >Add Objectives</a>
 </div>
@@ -77,8 +77,6 @@
 		<div class="span7 pull-right">
 			<button class="btn btn-primary btn-mini" type="button">Add Unit</button>
 			<button class="btn btn-mini" type="button">Delete Unit</button>-->
-		</div>
-	</div>
 {% if showEditLesson %}
 <div class="modal" id="editLesson">
   <div class="modal-header">

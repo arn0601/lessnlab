@@ -108,6 +108,7 @@
     <h3>Add a Section</h3>
   </div>
   <div class="modal-body">
+	{% csrf_token %}
     <form method="post" action="{% url LessonPlanner.views.addSection %}" name="login_form">
         {% csrf_token %}
         {% for field in sectionAddForm %}
@@ -130,6 +131,7 @@
 
  {% for header,nested in section_content_forms.items  %}
  {% for type,contentAddForm in nested.items %}
+ 
 <div class="{{ type }}Modal modal hide" id="addContent{{ type }}">
 	<div class="modal-header">
 		<button type="button" class="close content_close" data-dismiss="modal">x</button>
