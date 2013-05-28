@@ -8,7 +8,7 @@
 {% if userLessons|length == 0 %}
 <div class="container alertbox" style="width: 100%;">
 	<div class="alert alert-info">
-		<p>There aren't any lessons in this course yet. <a href="#addLesson" data-toggle="modal">Add one.</a></p>
+		<p>There aren't any lessons in {{unit.name}} yet. <a href="#addLesson" data-toggle="modal">Add one.</a></p>
 	</div>
 </div>
 {% else %} 	
