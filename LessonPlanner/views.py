@@ -24,20 +24,32 @@ import urlparse
 
 @csrf_exempt
 def activity_add(request):
-	return HttpResponse("")
+	if request.method == 'POST':
+                addCourseForm = AddActivityContent(data=request.POST)
+		if addCourseForm.is_valid():
+			addCourseForm.save()
+		else:
+			print addCourseForm.errors
+	return HttpResponseRedirect(lastPageToView(request))
 
 
 @csrf_exempt
 def activity_ajax_view(request):
-	
-	context = Context({'activityForm': AddActivityContent()})
-	return_str = render_block_to_string('ActivityViewModal.html', 'results', context)
+	return_str = ""
+	if request.method == 'POST':
+		activity_id = request.POST.get('activity_id',-1)
+		if activity_id==-1:
+			section_id = request.POST.get('section_id',-1)		
+			placement = getMaxCount(Section.objects.get(id=section_id))+1
+			activityForm = AddActivityContent(initial={'section': section_id,'placement' : placement,'content_type':"Activity"})
+			context = Context({'activityForm': activityForm, 'activity_id':activity_id})
+			return_str = render_block_to_string('ActivityViewModal.html', 'results', context)
 	return HttpResponse(return_str)
 
 @csrf_exempt
 def search_activity_ajax_view(request):
 	# some random context
-	context = Context({'items': range(100)})
+	context = Context({'section_id'})
 	# passing the template_name + block_name + context
 	return_str = render_block_to_string('ActivitySearchModal.html', 'results', context)
 	return HttpResponse(return_str)
@@ -267,7 +279,6 @@ def requestLessonStandards(request):
 
 @csrf_exempt
 def addLessonStandards(request):
-	print "adding unit standards"
 	if request.method == 'POST':
 		form = LessonStandardsForm(data=request.POST)
 		try:
@@ -457,7 +468,6 @@ def editLesson(request):
                 lessonForm = EditLesson(request.POST, instance=lesson)
                 if lessonForm.is_valid():
 			lesson=lessonForm.save()
-			print lesson.id
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return HttpResponseRedirect(lastPageToRedirect(request))
 
@@ -563,7 +573,6 @@ def saveVideoContent(contentForm, request):
 		if online_video_form.data["link"] != "":
 			content = OnlineVideoContent()
 			content.link = cleanVideoLink(online_video_form.data['link'])
-			print content.link
 			section = Section.objects.get(id=int(contentForm.data['section_id']))
                         content.section = section
                         content.creation_date=datetime.now()
@@ -572,7 +581,6 @@ def saveVideoContent(contentForm, request):
 			content.save()
 		for link in online_video_form.cleaned_data['rl']:
 			content = OnlineVideoContent()
-			print "link", online_video_form.cleaned_data
 			content.link = cleanVideoLink(link)
                         section = Section.objects.get(id=int(contentForm.data['section_id']))
                         content.section = section
@@ -615,7 +623,6 @@ def saveContent(contentForm, request):
                         if powerpoint_form.is_valid():
                                 content = PowerPointContent()
                                 content.link = powerpoint_form.data['link']
-				print "Added PP"
                                 return (True, content, None)
                         return (False, None, None)	
 		if (content_type == 'Text'):
@@ -652,7 +659,6 @@ def saveContent(contentForm, request):
 					(key, value) = question
 					attrs = key.split('_')
 					if len(attrs) != 3:
-						print "Invalid Key:",key
 						continue
 					qtype = attrs[1]
 					formnum = attrs[2]
@@ -666,8 +672,6 @@ def saveContent(contentForm, request):
 					allCheckAnsList = []
 					for a in allCheckedAns:
 						allCheckAnsList.append(a.split('_')[3])
-					print allCheckedAns
-					print allCheckAnsList
 					allAnswers = []
 					for akey,avalue in allans.items():
 						a = Answer
@@ -789,10 +793,8 @@ def manageStudents(request):
 		
 		student_list = [cs for cs in cs_list]
 		for s in student_list:
-			print "First",s.student.user
 		course_students[course] = student_list
 	base_dict['courseStudents'] = course_students
-	print course_students
 	return render(request,'manage_students.html', base_dict)
 
 @csrf_exempt
@@ -832,7 +834,6 @@ def studentAddCourse(request):
 	if courseRequestForm.is_valid():
 		try:
 			teacher = TeacherProfile.objects.get(id=courseRequestForm.data['teacher_id'])
-			print teacher
 			for course_id in courseRequestForm.cleaned_data['courses']:
 				course = Course.objects.get(owner=teacher, id=course_id)
 				cs_exists = CourseStudents.objects.filter(student=student, course=course)
@@ -843,10 +844,8 @@ def studentAddCourse(request):
 				cs.student = student
 				cs.approved = False
 				cs.save()
-				print CourseStudents.objects.all()
 				return HttpResponseRedirect('/studentCourses/')
 		except:
-			print "here again", courseRequestForm.data['teacher_id']
 			return HttpResponseRedirect(lastPageToRedirect(request))
 	else:	
 		print courseRequestForm.errors
@@ -928,7 +927,6 @@ def standardsSearch(request):
 @csrf_exempt
 def manageCourseStudents(request):
 	if request.method == 'POST':
-		print request.POST
 		cid = request.POST['course_id']
 		try:
 			course = Course.objects.get(id=cid)
@@ -936,15 +934,11 @@ def manageCourseStudents(request):
 			return HttpResponseRedirect('/courses/')
 		students = request.POST.getlist('students')
 		for sid in students:
-			print sid
 			try:
 				user = User.objects.get(id=sid)
 				s = StudentProfile.objects.get(user=user)
-				print s
 				cs = CourseStudents.objects.get(course=course, student=s)
-				print cs
 				cs.approved=True
-				print cs.id
 				cs.save()
 			except:
 				continue	
@@ -1002,7 +996,6 @@ def publicCourseView(request):
 	course_id = request.GET['course_id']
 	course = Course.objects.get(id=course_id)
 	course_delta = (course.end_date - course.start_date)
-	print course_delta
 	base_dict['course_length']=(course_delta.days/7, course_delta.days%7)
 	course_units = Unit.objects.filter(course=course).order_by('start_date')
 	course_unit_list = []
@@ -1048,7 +1041,6 @@ def publicUnitView(request):
 	unit_id = request.GET['unit_id']
 	unit = Unit.objects.get(id=unit_id)
 	unit_delta = (unit.end_date - unit.start_date)
-	print unit_delta
 	base_dict['unit_length']=(unit_delta.days/7, unit_delta.days%7)
 	unit_lessons = Lesson.objects.filter(unit=unit)
 	unit_lesson_list = []
@@ -1059,7 +1051,6 @@ def publicUnitView(request):
 		if ( len(rating_list) > 0):
 			rating = reduce(lambda x, y: x+y, rating_list)/float(len(rating_list))
 		unit_lesson_list.append((lesson, rating))
-	print unit_lesson_list
 	unit_standards = []
 	for standard in unit.standards.all():
 		unit_standards.append(standard)
@@ -1080,9 +1071,6 @@ def rateAnalysis(request):
 			print traceback.format_exception(*sys.exc_info())
 			return HttpResponseRedirect('/standard/?standard_id='+str(sa.id))
 		new_rating =  int(request.POST['rating'])
-		print new_rating
-		print created
-		print sar.rating == new_rating
 		try:
 			if created:
 				sar.rating = new_rating

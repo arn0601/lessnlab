@@ -124,12 +124,22 @@ class AddOnlineVideoContent(AddContentForm):
 	rl = forms.MultipleChoiceField(label="Add/Search Videos:",widget=recommended_links,required=False,choices=[('0',u'https://www.youtube.com/watch?feature=player_embedded&v=IFKnq9QM6_A')])
 
 class AddActivityContent(forms.ModelForm):
-	section_id = forms.CharField(label="",widget=forms.HiddenInput())
+	section = forms.CharField(label="",widget=forms.HiddenInput())
 	class Meta:
-		exclude = ['standards','objectives', 'cumulative_rating', 'number_raters']
+		exclude = ['standards','objectives', 'cumulative_rating', 'number_raters','owner']
                 model = ActivityContent
-          	widgets = { 'section' : forms.HiddenInput(),  'content_type': forms.HiddenInput() , 'owner': forms.HiddenInput(), 'creation_date' : custom_widgets.CalendarDateSelectField(attrs={'id': 'activity_creation_date'})}	
+          	widgets = {'creation_date' : custom_widgets.CalendarDateSelectField(attrs={'id': 'activity_creation_date'}), 'placement' : forms.HiddenInput(), 'content_type': forms.HiddenInput() }	
+#	def save(self):
+ #               self.instance.section = self.cleaned_data['section']
+  #              return super(AddActivityContent, self).save()
 
+	def clean_section(self):
+		try:
+			return Section.objects.get(id=self.cleaned_data["section"])
+		except:
+			raise django.Forms.ValidationError("Section does not exist")
+		return data
+		
 
 
 class AddPowerPointContent(AddContentForm):

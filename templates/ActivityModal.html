@@ -1,9 +1,10 @@
-<div class="ActivityModal modal hide" id="addContentActivityOverride">
+<div class="ActivityModal modal hide" id="addContentActivity">
 	<div class="modal-header">
 		<button type="button" class="close content_close" data-dismiss="modal">x</button>
 	    	<h3>Add Content - Activity</h3>
 	</div>
 	 <div class="modal-body">
+		
 		<div>
 			<div id="SearchActivities">
 
@@ -16,7 +17,7 @@
 
 				<button type="button" class="btn btn-primary search_activity">Search</button>
 			</div>
-
+			
 			<div id="RecommendedActivities">
 						Recommended Activities:		
 
@@ -25,7 +26,7 @@
 			</div>
 			<div id="NewActivity">
 				Create New Activity
-				<button type="button" class="btn btn-primary content_close" onclick="viewActivity(-1)" >Create</button>
+				<button id="create_activity" type="button" class="btn btn-primary content_close" section_id="1" onclick="createActivity()" >Create</button>
 			</div>			
 			</p>
 		  <p>
@@ -36,17 +37,20 @@
 </div>
 
 <script>
-	function viewActivity(activityid)
+	function createActivity()
 	{
+
 		$.ajax({
-			data: {activity_id:activityid},
+			data: {
+				section_id : $("#create_activity")[0].attributes['section_id'].value			
+				},
 			dataType:'html',
 			type: "POST", // GET or POST
       url: {% url LessonPlanner.views.activity_ajax_view %}, // the file to call
 			success : function(data, status, xhr){
 					$('#activity_viewModal').html(data);
  					$('#activity_viewModal').modal('show');
-					$('#addContentActivityOverride').modal('hide')		
+					$('#addContentActivity').modal('hide')		
        }
 		});
 	};
