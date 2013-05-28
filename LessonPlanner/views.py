@@ -35,6 +35,26 @@ def activity_ajax_view(request):
 	return HttpResponse(return_str)
 
 @csrf_exempt
+def requestUnitStandards(request):
+	if request.method == 'POST':
+		unit_id = request.POST['unit_id']
+		try:
+			unit = Unit.objects.get(id=unit_id)
+		except:
+			return HttpResponseRedirect(lastPageToRedirect(request))
+		
+		course = unit.course
+		standard_list = []
+		for group in course.standard_grouping.all():
+			for standard in group.standard.all():
+				standard_list.append((standard.id, standard.description))
+		form = UnitStandardsForm()
+		form.fields['standards'].choices = standard_list
+		form.fields['unit_id'].initial = unit_id
+		context = Context({'unitStandardsForm': form})
+		return HttpResponse(render_block_to_string('unit_standards_modal.html', 'addStandards', context))
+
+@csrf_exempt
 def search_activity_ajax_view(request):
 	# some random context
 	context = Context({'items': range(100)})
@@ -90,28 +110,6 @@ def showUnits(request):
 	return render(request,"unit.html", base_dict)	
 #show the lessons of a unit
 
-@csrf_exempt
-def requestUnitStandards(request):
-	if request.method == 'POST':
-		unit_id = request.POST['unit_id']
-		try:
-			unit = Unit.objects.get(id=unit_id)
-			teacher = TeacherProfile.objects.get(user=request.user)
-		except:
-			return HttpResponseRedirect(lastPageToRedirect(request))
-		
-		course = unit.course
-		standard_list = []
-		for group in course.standard_grouping.all():
-			for standard in group.standard.all():
-				standard_list.append((standard.id, standard.description))
-		form = UnitStandardsForm()
-		form.fields['standards'].choices = standard_list
-		form.fields['unit_id'].initial = unit_id
-		base_dict = base_methods.createBaseDict(request)
-		base_dict['unitStandardsForm'] = form
-		base_dict['addingUnitStandards'] = True
-		return render(request,'unit.html', base_dict)
 
 @csrf_exempt
 def addUnitStandards(request):
