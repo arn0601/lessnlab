@@ -10,7 +10,9 @@
         <a class="courseboxtitle" href="/units/?course_id={{ course.id }}" >{{ course.name }}</a>
     </div>
     <div class="span1 offset3" style="text-align: right; width: 142px;">
+    	{% for group in course.standard_grouping.all %}
     	<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="View the learning standards this course is aligned to" onClick="getCourseStandardsFromGroup('{{ group.id }}')"><small>View Standards</small></a>
+		{% endfor %}
     </div>
     <div class="span1" style="text-align: right; width: 10px;">
     	<a href="?course_id={{ course.id }}&action=Edit"><small>Edit</small></a>
