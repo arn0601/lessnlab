@@ -55,21 +55,21 @@
 		</div>
 	</div> -->
 	<!-- Right hand navigation for the lessons page. Displays navigation based on the lessons in the given unit -->
-		<div class="row">
+	<div class="row">
 		<div class="span3 nocontenttext">
 			<ul class="nav nav-list" style="width: 95%;">
 				<li class="nav-header">{{unit.name}} Unit Lessons</li>
 				{% if userLessons|length == 0 %}
-					<li><a href="#addLesson" data-toggle="modal"><i class="icon-plus"></i>Add Your First Lesson</a></li>
+				<li><a href="#addLesson" data-toggle="modal"><i class="icon-plus"></i>Add Your First Lesson</a></li>
 				{% else %}
 					{% for lesson in userLessons %}
-					<li><a href="/lessonPlanner/?lesson_id={{ lesson.id }}" onclick="goToByScroll('u1')">{{ lesson.name }}</a></li>
+				<li><a href="/lessonPlanner/?lesson_id={{ lesson.id }}" onclick="goToByScroll('u1')">{{ lesson.name }}</a></li>
 					{% endfor %}
-					<li><a href="#addLesson" data-toggle="modal"><i class="icon-plus"></i>Add Another Lesson</a></li>
+				<li><a href="#addLesson" data-toggle="modal"><i class="icon-plus"></i>Add Another Lesson</a></li>
 				{% endif %}
-				</ul>
-			</div>
+			</ul>
 		</div>
+	</div>
 <!--	<div class="row-fluid">
 		<div class="span5">
 		
