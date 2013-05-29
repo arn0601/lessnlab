@@ -218,7 +218,11 @@ def getLessonSpecificInfo(lesson):
                                 content_list.append(content.activitycontent)
 		section_dict[section] = content_list
 	add_content_form_dict = getAddContentForms(str(-1))
-	return { 'content_objs' : content_objs, 'standard_list' : standard_list,'objective_list' : objective_list,'sections' : section_dict,  'assessment_dict':assessment_dict, 'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
+	return { 'content_objs' : content_objs, 'standard_list' : standard_list,'objective_list' : objective_list,'sections' : section_dict,  'assessment_dict':assessment_dict, 'content_choices':getContentChoices(),  'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
+
+def getContentChoices():
+	return {'General': ["Text"], 'Media': ["PowerPoint","OnlinePicture","OnlineArticle","OnlineVideo","TeacherNote","AdministratorNote"], 'Activity': ["Activity"], 'Checks For Understanding': {}, 'Assessment': ["Assessment"] }
+	
 
 def getAddContentForms(section_id):
 	
@@ -233,11 +237,6 @@ def getAddContentForms(section_id):
         power_point_form.fields['content_type'].initial = 'PowerPoint'
         power_point_form.fields['section_id'].initial = section_id
         content_form_dict['Media']["PowerPoint"] = power_point_form
-	
-	activity_form = AddActivityContent()
-        activity_form.fields['content_type'].initial = 'Activity'
-        activity_form.fields['section_id'].initial = section_id
-        content_form_dict['Activity']["Activity"] = activity_form
 	
 	online_picture_form = AddOnlinePictureContent()
 	online_picture_form.fields['content_type'].initial = 'OnlinePicture'

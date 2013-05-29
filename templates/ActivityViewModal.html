@@ -7,7 +7,8 @@
 	</div>
 	<div class="modal-body">
 		Name: ACTIVITY!!
-		 <form id="activityForm" name="activityForm">
+		{% csrf_token %}
+		 <form id="activityForm" action="{% url LessonPlanner.views.activity_add %}" name="c_Activity" method="post">
 		 		{% csrf_token %}
 				{% for field in activityForm %}
         <div class="control-group">
@@ -19,7 +20,7 @@
         </div>
         {% endfor %}
 		  </form>
-		<button type="button" onclick="addActivity({{activity_id}},{{content_id}})">Add</button>
+		<button type="button" onclick="addActivity()">Add</button>
 	</div>
 			{% endblock %}	
 </div>
@@ -31,19 +32,8 @@
 		$('#activity_viewModal').modal('hide');
 	};
 
-	function addActivity(activityid,contentid)
+	function addActivity()
 	{
-		activityform_data = $("#activityForm").serialize(); 
-		$.ajax({
-			data: {activity_id:activityid,
-							content_id:contentid,
-							form_data:activityform_data},
-			dataType:'html',
-			type: "POST", // GET or POST
-      url: {% url LessonPlanner.views.activity_add %}, // the file to call
-			success : function(data, status, xhr){
-					$('#activity_viewModal').modal('hide');
-     }
-		});
+		$('#activityForm').submit();
 	};
 </script>

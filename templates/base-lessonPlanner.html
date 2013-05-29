@@ -162,7 +162,7 @@ $(function() {
 	      	{% block content %}{% endblock %}
 				</div>
 			</div>
-			{% include "footer.html" %}
+		
 			{% include "modals.html" %}
 		</div>
 	</body>
@@ -350,15 +350,17 @@ $(function() {
 			var name = x[i].attributes["name"].value;
 			if(name.indexOf("c_") === 0)
 			{
-				if(name.indexOf(ct) !== -1)
+				if(name.indexOf("Activity") != -1 )
+				{
+					$('#create_activity')[0].attributes['section_id'].value = sid;
+				}
+			  else if(name.indexOf(ct) !== -1)
 				{			
-					x[i].section_id.value=sid;
-					var a = x[i];
+					x[i].section_id.value=sid;				
 				}
 			}
 		}		
-		if(ct=="Activity")
-			ct = "ActivityOverride"
+
 		$('#addContent'+ct).modal('show');
    });
 });

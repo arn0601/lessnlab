@@ -135,11 +135,17 @@
 						{% endfor %}
 				
 					</div>		
+				{% elif content.content_type == "Activity" %}
+					<h6> Activity - {{ content.name }} </h6>
+					<div id="{{content.id }}_content">	{{ content.text }} </div>
+					<div> Description - {{ content.description }} </div>
+					<div> Activity Type - {{ content.activity_type }} </div>
+					<div> Instructions - {{ content.instructions }} </div>
+					<div> Materials - {{ content.materials }} </div>
+					<div> Length - {{ content.length }} </div>					
 				{% else %}
 						OTHER CONTENT - Need to define template
 				{% endif %}
-			
-			
 				</div>			
 			{% endfor %}
 
@@ -156,7 +162,7 @@
 						 		<b class="caret"></b>
 							</a>
 							<ul class=" mymenu dropdown-menu pull-up showContent " class="btn btn-primary btn-small announce">			
-								{% for dropdown_header_dict in section_content_forms|access:dropdown_header %}
+								{% for dropdown_header_dict in content_choices|access:dropdown_header %}
 								<li><a href="#" class="content_show" data-sectionid="{{ section.id }}" 
 										data-contenttype="{{ dropdown_header_dict }}">{{ dropdown_header_dict }}</a></li>   							
 								{% endfor %}

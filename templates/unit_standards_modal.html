@@ -1,0 +1,33 @@
+<div class="modal hide" id="addingUnitStandards">
+{% block addStandards %}
+  <div class="modal-header">
+    <a class="close" type="button" onClick="hideAddingUnitStandards()">x</a>
+    <h3>Add standards to unit</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url addUnitStandards %}" name="add_unit_standards">
+        {% csrf_token %}
+        {% for field in unitStandardsForm %}
+        <div class="control-group">
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn btn-primary" type="button" href="/courses/">Cancel</a>
+      </p>
+    </form>
+  </div>
+{% endblock %}
+</div>
+
+<script type="text/javascript"> 
+
+	function hideAddingUnitStandards() {
+		$("#addingUnitStandards").modal("hide");
+	}
+
+</script>
