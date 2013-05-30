@@ -37,16 +37,16 @@
 	<div class="span2">
         <a class="courseboxtitle" href="/lessonPlanner/?lesson_id={{ lesson.id }}" >{{ lesson.name }}</a>
     </div>
-     <div class="span1 offset2" style="text-align: right; width: 142px;">
+     <div class="span1 offset1" style="text-align: right; width: 142px;">
     	<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add objectives to {{lesson.name}} lesson" onClick="requestLessonObjectives('{{ lesson.id }}')"><small>Add Objectives</small></a>
     </div>
-    <div class="span1" style="text-align: right; width: 142px;">
+    <div class="span1" style="text-align: right; width: 80px;">
     	<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add course standards to {{lesson.name}} lesson" onClick="requestLessonStandards('{{ lesson.id }}')"><small>Add Standards</small></a>
     </div>
-    <div class="span1" style="text-align: right; width: 10px;">
+    <div class="span1" style="text-align: right; width: 30px;">
     	<a href="?lesson_id={{ lesson.id }}&action=Edit"><small>Edit</small></a>
     </div>
-    <div class="span1" style="padding-top:3px; width: 28px;">
+    <div class="span1" style="padding-top:3px; width: 10px;">
     	 <a class="close" rel="tooltip" data-placement="right" title="Delete {{lesson.name}} lesson" href="?lesson_id={{ lesson.id }}&action=Delete"><i class="icon-trash"></i></a>
     </div>
 </div>
