@@ -37,7 +37,7 @@
 	<div class="span2">
         <a class="courseboxtitle" href="/lessonPlanner/?lesson_id={{ lesson.id }}" >{{ lesson.name }}</a>
     </div>
-     <div class="span1 offset1" style="text-align: right; width: 142px;">
+     <div class="span1 offset1" style="text-align: right; width: 130px;">
     	<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add objectives to {{lesson.name}} lesson" onClick="requestLessonObjectives('{{ lesson.id }}')"><small>Add Objectives</small></a>
     </div>
     <div class="span1" style="text-align: right; width: 80px;">
@@ -52,7 +52,7 @@
 </div>
 <div class="row">
 	<div class="span4">
-		<h5 class="coursesubtitle">In {{lesson.unit.name}} of <a href="/units/?course_id={{ c.id }}">{{lesson.unit.course.name}}</a> course</h5>
+		<h5 class="coursesubtitle">In {{lesson.unit.name}} of <a href="/units/?course_id={{ lesson.unit.course.id }}">{{lesson.unit.course.name}}</a></h5>
 	</div>
 </div>
 <div class="row courseboxsubtext">
