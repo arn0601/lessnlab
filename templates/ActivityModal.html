@@ -9,7 +9,11 @@
 			<div id="SearchActivities">
 
 				<label>Type</label>
-				<input style=" display:inline-block; width:150px" type="text" id="type_input">
+				<select style="width: 150px" name="activity_type" id="type_input">
+				<option value=""></option>
+				<option value="Group">Group</option>
+				<option value="Individual">Individual</option>
+				</select>
 				<label>Objective</label>
 				<input style=" display:inline-block; width:150px" type="text" id="objective_input">
 				<label>Length</label>
@@ -41,7 +45,8 @@
 			data: {
 				type : $("#type_input").val(),
 				objective : $("#objective_input").val(),
-				length : $("#length_input").val()	
+				length : $("#length_input").val(),	
+				section_id : $("#create_activity")[0].attributes['section_id'].value
 				},
 			dataType:'html',
 			type: "POST", // GET or POST

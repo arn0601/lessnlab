@@ -38,15 +38,16 @@ def activity_ajax_view(request):
 	return_str = ""
 	if request.method == 'POST':
 		activity_id = request.POST.get('activity_id',-1)
+		section_id = request.POST.get('section_id',-1)
 		if activity_id==-1:
-			section_id = request.POST.get('section_id',-1)		
 			placement = getMaxCount(Section.objects.get(id=section_id))+1
 			activityForm = AddActivityContent(initial={'section': section_id,'placement' : placement,'content_type':"Activity"})
 			context = Context({'activityForm': activityForm, 'activity_id':activity_id})
 			return_str = render_block_to_string('ActivityViewModal.html', 'results', context)
 		else:
+			placement = getMaxCount(Section.objects.get(id=section_id))+1
 			ac = ActivityContent.objects.get(id=activity_id)
-			activityForm = AddActivityContent(instance=ac)
+			activityForm = AddActivityContent(instance=ac,initial={'section': section_id,'placement' : placement,'content_type':"Activity"})
 			context = Context({'activityForm': activityForm, 'activity_id':activity_id})
 			return_str = render_block_to_string('ActivityViewModal.html', 'results', context)
 	
@@ -74,6 +75,7 @@ def requestUnitStandards(request):
 @csrf_exempt
 def search_activity_ajax_view(request):
 	if request.method == 'POST':
+		section_id = request.POST.get('section_id',-1)
 		act_type = request.POST['type']
 		act_length = request.POST['length']
 		act_obj = request.POST['objective']
@@ -84,7 +86,7 @@ def search_activity_ajax_view(request):
 		if act_length != "":
 			dataset = dataset.filter(length__contains=act_length)
 		print dataset
-		context = Context({'activities_found':dataset})
+		context = Context({'activities_found':dataset, 'section_id' : section_id})
 	# passing the template_name + block_name + context
 		return_str = render_block_to_string('ActivitySearchModal.html', 'results', context)
 		return HttpResponse(return_str)

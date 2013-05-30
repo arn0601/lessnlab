@@ -8,6 +8,8 @@ SUBJECTS = [('Mathematics','Mathematics'),('Science','Science'),('English','Engl
 SUBJECTS_STRING = '[' + ",".join(["\"%s\"" % s for (s, s2) in SUBJECTS]) + ']'
 GRADES = [('K','K'),('1','1'),('2','2'),('3','3'),('4','4'),('5','5'),('6','6'),('7','7'),('8','8'),('9','9'),('10','10'),('11','11'),('12','12')]
 GRADES_STRING = '[' + ",".join(["\"%s\"" % s for (s, s2) in GRADES]) + ']'
+ACTIVITY_TYPE = [('Group','Group'),('Individual','Individual')]
+
 
 def createChoices(className):
 	choices = [(c.value,c.value) for c in className.objects.all()]
@@ -106,6 +108,7 @@ class AddOnlineVideoContent(AddContentForm):
 
 class AddActivityContent(forms.ModelForm):
 	section = forms.CharField(label="",widget=forms.HiddenInput())
+	activity_type = forms.ChoiceField(label='Type', required=True, widget=forms.Select(attrs={'style': 'width: 150px'}))
 	class Meta:
 		exclude = ['standards','objectives', 'cumulative_rating', 'number_raters','owner']
                 model = ActivityContent
@@ -118,6 +121,7 @@ class AddActivityContent(forms.ModelForm):
 		return data
 	def __init__(self, *args, **kwargs):
                 super(AddActivityContent, self).__init__(*args, **kwargs)
+		self.fields['activity_type'].choices = ACTIVITY_TYPE
                 self.fields['placement'].label = ""
 		self.fields['content_type'].label = ""
 
