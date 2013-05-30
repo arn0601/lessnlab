@@ -38,21 +38,6 @@ class AddGroups(forms.Form):
 	course_id.widget = forms.HiddenInput()
 
 class EditCourse(forms.ModelForm):
-	def __init__(self, *args, **kwargs):
-		super(EditCourse, self).__init__(*args,**kwargs)
-
-	
-		self.fields['grade'].choices = createChoices(Grade)
-		self.fields['grade'].widget = createInputWidget(Grade)
-
-		self.fields['subject'].choices = createChoices(Subject)
-		self.fields['subject'].widget = createInputWidget(Subject)
-
-	def save(self):
-		self.instance.grade = getInstanceFromField(Grade, self.cleaned_data['grade'])
-		self.instance.subject = getInstanceFromField(Subject, self.cleaned_data['subject'])
-		return super(EditCourse, self).save()
-	
 	class Meta:
 		model = Course
 		widgets = {  'owner': forms.HiddenInput(), 'start_date': custom_widgets.CalendarDateSelectField(), 'end_date': custom_widgets.CalendarDateSelectField() }
