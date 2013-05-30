@@ -1,12 +1,11 @@
 <div class="ActivityViewModal modal hide" id="activity_viewModal">
 			{% block results %}
 	<div class="modal-header">
-			<button type="button" onclick="gobackResults()">Go Back</button>
+			<button type="button" onclick="gobackResults( {{ activity_id }})">Go Back</button>
 		<button type="button" class="close content_close" data-dismiss="modal">x</button>
 	    	<h3>Activity </h3>
 	</div>
 	<div class="modal-body">
-		Name: ACTIVITY!!
 		{% csrf_token %}
 		 <form id="activityForm" action="{% url LessonPlanner.views.activity_add %}" name="c_Activity" method="post">
 		 		{% csrf_token %}
@@ -26,9 +25,12 @@
 </div>
 
 <script>
-	function gobackResults()
-	{
-		$('#activity_searchModal').modal('show');
+	function gobackResults(act_id)
+	{	
+		if (act_id == -1)
+			$('#addContentActivity').modal('show');
+		else
+			$('#activity_searchModal').modal('show');
 		$('#activity_viewModal').modal('hide');
 	};
 
