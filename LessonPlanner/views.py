@@ -44,6 +44,12 @@ def activity_ajax_view(request):
 			activityForm = AddActivityContent(initial={'section': section_id,'placement' : placement,'content_type':"Activity"})
 			context = Context({'activityForm': activityForm, 'activity_id':activity_id})
 			return_str = render_block_to_string('ActivityViewModal.html', 'results', context)
+		else:
+			ac = ActivityContent.objects.get(id=activity_id)
+			activityForm = AddActivityContent(instance=ac)
+			context = Context({'activityForm': activityForm, 'activity_id':activity_id})
+			return_str = render_block_to_string('ActivityViewModal.html', 'results', context)
+	
 	return HttpResponse(return_str)
 
 @csrf_exempt
@@ -54,7 +60,6 @@ def requestUnitStandards(request):
 			unit = Unit.objects.get(id=unit_id)
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
-		
 		course = unit.course
 		standard_list = []
 		for group in course.standard_grouping.all():
@@ -68,13 +73,21 @@ def requestUnitStandards(request):
 
 @csrf_exempt
 def search_activity_ajax_view(request):
+	if request.method == 'POST':
+		act_type = request.POST['type']
+		act_length = request.POST['length']
+		act_obj = request.POST['objective']
 	# some random context
-	context = Context({'section_id'})
+		dataset = ActivityContent.objects.all()
+		if act_type != "":
+			dataset = dataset.filter(activity_type__contains=act_type)
+		if act_length != "":
+			dataset = dataset.filter(length__contains=act_length)
+		print dataset
+		context = Context({'activities_found':dataset})
 	# passing the template_name + block_name + context
-	return_str = render_block_to_string('ActivitySearchModal.html', 'results', context)
-	return HttpResponse(return_str)
-
-
+		return_str = render_block_to_string('ActivitySearchModal.html', 'results', context)
+		return HttpResponse(return_str)
 
 def team(request):
         return render(request,'team.html', {})

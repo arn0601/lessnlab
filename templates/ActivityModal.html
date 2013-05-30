@@ -9,24 +9,22 @@
 			<div id="SearchActivities">
 
 				<label>Type</label>
-				<input style=" display:inline-block; width:150px" type="text" name="type_input">
+				<input style=" display:inline-block; width:150px" type="text" id="type_input">
 				<label>Objective</label>
-				<input style=" display:inline-block; width:150px" type="text" name="objective_input">
+				<input style=" display:inline-block; width:150px" type="text" id="objective_input">
 				<label>Length</label>
-				<input style=" display:inline-block; width:150px" type="text" name="length_input">
+				<input style=" display:inline-block; width:150px" type="text" id="length_input">
 
-				<button type="button" class="btn btn-primary search_activity">Search</button>
+				<button type="button" class="btn btn-primary" onclick="searchActivity()">Search</button>
 			</div>
 			
 			<div id="RecommendedActivities">
 						Recommended Activities:		
-
 						None Recommended
-
 			</div>
 			<div id="NewActivity">
 				Create New Activity
-				<button id="create_activity" type="button" class="btn btn-primary content_close" section_id="1" onclick="createActivity()" >Create</button>
+				<button id="create_activity" type="button" class="btn btn-primary" section_id="1" onclick="createActivity()" >Create</button>
 			</div>			
 			</p>
 		  <p>
@@ -37,6 +35,24 @@
 </div>
 
 <script>
+	function searchActivity()
+	{
+		$.ajax({
+			data: {
+				type : $("#type_input").val(),
+				objective : $("#objective_input").val(),
+				length : $("#length_input").val()	
+				},
+			dataType:'html',
+			type: "POST", // GET or POST
+      url: {% url LessonPlanner.views.search_activity_ajax_view %}, // the file to call
+			success : function(data, status, xhr){
+				$('#activity_searchModal').html(data);
+				$('#activity_searchModal').modal('show');
+				$('#addContentActivity').modal('hide');		
+    	}
+		});
+	};
 	function createActivity()
 	{
 
@@ -50,7 +66,7 @@
 			success : function(data, status, xhr){
 					$('#activity_viewModal').html(data);
  					$('#activity_viewModal').modal('show');
-					$('#addContentActivity').modal('hide')		
+					$('#addContentActivity').modal('hide');		
        }
 		});
 	};

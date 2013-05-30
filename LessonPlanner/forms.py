@@ -129,17 +129,16 @@ class AddActivityContent(forms.ModelForm):
 		exclude = ['standards','objectives', 'cumulative_rating', 'number_raters','owner']
                 model = ActivityContent
           	widgets = {'creation_date' : custom_widgets.CalendarDateSelectField(attrs={'id': 'activity_creation_date'}), 'placement' : forms.HiddenInput(), 'content_type': forms.HiddenInput() }	
-#	def save(self):
- #               self.instance.section = self.cleaned_data['section']
-  #              return super(AddActivityContent, self).save()
-
 	def clean_section(self):
 		try:
 			return Section.objects.get(id=self.cleaned_data["section"])
 		except:
 			raise django.Forms.ValidationError("Section does not exist")
 		return data
-		
+	def __init__(self, *args, **kwargs):
+                super(AddActivityContent, self).__init__(*args, **kwargs)
+                self.fields['placement'].label = ""
+		self.fields['content_type'].label = ""
 
 
 class AddPowerPointContent(AddContentForm):
