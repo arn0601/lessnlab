@@ -13,7 +13,7 @@
 		{% for act in  activities_found %}
 
 			<tr> <td> {{ act.name }}</td> <td> {{ act.activity_type }} </td> 
-			<td> {{ act.length }} </td> <td> <button type="button" onclick="viewActivity({{ act.id }})">View</button> </td> </tr>
+			<td> {{ act.length }} </td> <td> <button type="button" onclick="viewActivity({{ act.id }} , {{ section_id }})">View</button> </td> </tr>
 		
 	{% endfor %}
 </table>
@@ -22,17 +22,17 @@
 </div>
 
 <script>
-	function gobackSearch(act_id)
+	function gobackSearch()
   {
 		$('#activity_searchModal').modal('hide');
 		$('#addContentActivity').modal('show');
   }
 
 
-	function viewActivity(activityid)
+	function viewActivity(activityid, sectionid)
 	{
 		$.ajax({
-			data: {activity_id:activityid},
+			data: {activity_id:activityid, section_id:sectionid},
 			dataType:'html',
 			type: "POST", // GET or POST
       url: {% url LessonPlanner.views.activity_ajax_view %}, // the file to call
