@@ -1,0 +1,52 @@
+
+<div class="modal hide" id="editCourse">
+ {% block editCourse %}
+  <div class="modal-header">
+    <a class="close" type="button" onClick="hideEditCourse()">x</a>
+    <h3>Edit course</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url editCourse %}" name="login_form">
+        {% csrf_token %}
+        {% for field in editCourseForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <p>
+	<input type="hidden" value={{ selectedCourse }} name="selectedCourse">
+	<button type="submit" class="btn btn-primary">Update</button>
+	<a class="btn btn-primary" type="button" onClick="hideEditCourse()">Cancel</a>
+      </p>
+    </form>
+  </div>
+ {% endblock %}
+</div>
+
+<script type="text/javascript"> 
+
+	function hideEditCourse() {
+		$("#editCourse").modal("hide");
+	}
+
+
+
+	function requestEditCourse(id){
+
+		$.ajax({
+			data: {course_id:id},
+			dataType:'html',
+			type: "POST", // GET or POST
+      url: {% url LessonPlanner.views.EditCourseRequest %}, // the file to call
+			success : function(data){
+					$('#editCourse').html(data);
+					$('#editCourse').modal('show')		
+       }
+		});
+	}
+
+</script>

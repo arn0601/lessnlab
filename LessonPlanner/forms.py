@@ -74,10 +74,6 @@ class EditUnit(forms.ModelForm):
 		exclude = ['standards', 'cumulative_rating', 'number_raters']
 		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_start_date'}), 'end_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_end_date'}), 'parent_unit': forms.HiddenInput() }
 
-class DeleteUnit(forms.Form):
-	unit_id = forms.CharField(label="")
-	unit_id.widget = forms.HiddenInput()
-
 class AddLessonForm(forms.ModelForm):
 	class Meta:
 		model = Lesson

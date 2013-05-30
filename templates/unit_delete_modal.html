@@ -1,0 +1,31 @@
+<div class="modal hide" id="deleteUnit">
+  <div class="modal-header">
+    <a class="close" type="button" onClick="hideDeleteUnit()">x</a>
+    <h3>Delete unit</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url deleteUnit %}" name="login_form">
+     Are you sure you want to delete the unit?
+	<input type="hidden" name="unit_id" id="deleteUnitHidden">
+<p>
+     <p><button type="submit" class="btn btn-primary">Yes</button>
+        <a class="btn btn-primary" type="button" onClick="hideDeleteUnit()">No</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript"> 
+
+	function hideDeleteUnit() {
+		$("#deleteUnit").modal("hide");
+	}
+
+
+
+	function requestDeleteUnit(id){
+		$("#deleteUnitHidden").val(id)
+		$("#deleteUnit").modal("show");
+	}
+
+</script>

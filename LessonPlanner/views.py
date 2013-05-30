@@ -111,10 +111,6 @@ def changeSectionPlacement(request):
 def showUnits(request):
 	base_dict = base_methods.createBaseDict(request)
         action = request.GET.get('action')
-	if action == "Edit":
-                return EditUnitRequest(request, base_dict['unit'].id)
-        elif action == "Delete":
-                return DeleteUnitRequest(request, base_dict['unit'].id)
 	
 	#return from base
 	user = TeacherProfile.objects.filter(user=request.user)
@@ -349,10 +345,6 @@ def courses(request):
 	if base_dict == None:
 		return HttpResponseRedirect('/studentCourses/')
 	action = request.GET.get('action')
-	if action == "Edit":
-		return EditCourseRequest(request, base_dict['course'].id)
-	elif action == "Delete":
-                return DeleteCourseRequest(request, base_dict['course'].id)
 	
 	request.session['last_page'] = 'courses'
 	return render(request,'course.html', base_dict)	
@@ -413,10 +405,9 @@ def editCourse(request):
 @csrf_exempt
 def deleteCourse(request):
         if request.method == 'POST':
-                addCourseForm = DeleteCourse(data=request.POST)
-                if deleteCourseData(addCourseForm,request.user):
+                if deleteCourseData(request.POST.get('course_id', None)):
                         return HttpResponseRedirect(lastPageToRedirect(request))
-        return HttpResponseRedirect(lastPageToRedirect(request))
+        return HttpResponseRedirect(lastPageToView(request))
 
 @csrf_exempt
 def addUnit(request):
@@ -442,8 +433,7 @@ def editUnit(request):
 @csrf_exempt
 def deleteUnit(request):
         if request.method == 'POST':
-                unitForm = DeleteUnit(data=request.POST)
-                if deleteUnitData(unitForm,request.user):
+                if deleteUnitData(request.POST.get('unit_id', None)):
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return HttpResponseRedirect(lastPageToView(request))
 
@@ -689,43 +679,30 @@ def saveContent(contentForm, request):
                         return (False, None, None)
 	return (False, None, None);
 
-def DeleteCourseRequest(request, course_id):
-        uname = request.user.username
-        user = TeacherProfile.objects.get(user=request.user)
-        user_courses =  Course.objects.filter(owner=user)
-        course = Course.objects.get(id=course_id)
-        deleteCourseForm = DeleteCourse()
-        deleteCourseForm.fields["course_id"].initial = course.id
-        return render(request,'course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteCourseForm':deleteCourseForm,'showDeleteCourse': 1}, context_instance=RequestContext(request))
+@csrf_exempt
+def EditCourseRequest(request):
+	if request.method == 'POST':
+		course_id = request.POST['course_id']
+		course = Course.objects.get(id=course_id)
+		editCourseForm = EditCourse(instance=course)	
+		context = Context({'editCourseForm':editCourseForm, 'selectedCourse':course_id})
+        	return HttpResponse(render_block_to_string('course_edit_modal.html', 'editCourse', context))
+	return HttpResponse('')
 
-
-def EditCourseRequest(request, course_id):
-	uname = request.user.username
-	user = TeacherProfile.objects.get(user=request.user)
-        user_courses =  Course.objects.filter(owner=user)
-	course = Course.objects.get(id=course_id)
-	editCourseForm = EditCourse(instance=course)	
-	return render(request,'course.html', {'userCourses': user_courses, 'username':uname, 'fullname':uname, 'editCourseForm':editCourseForm,'showEditCourse': 1, 'selectedCourse': course_id})
-
-def DeleteUnitRequest(request, unitID):
-        uname = request.user.username
-        user = TeacherProfile.objects.get(user=request.user)
-        user_courses =  Course.objects.filter(owner=user)
-        unit = Unit.objects.get(id=unitID)
-        deleteUnitForm = DeleteUnit()
-        deleteUnitForm.fields["unit_id"].initial = unit.id
-	course_units =  Unit.objects.filter(course=unit.course)
-        return render(request,'unit.html', {'course_id':unit.course.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'deleteUnitForm':deleteUnitForm,'showDeleteUnit': 1}, context_instance=RequestContext(request))
-
-
-def EditUnitRequest(request, unitID):
-        uname = request.user.username
-        user = TeacherProfile.objects.get(user=request.user)
-        user_courses =  Course.objects.filter(owner=user)
-        unit = Unit.objects.get(id=unitID)
-        editUnitForm = EditUnit(instance=unit)
-	course_units =  Unit.objects.filter(course=unit.course)
-        return render(request,'unit.html', {'course_id':unit.course.id,'userUnits':course_units,'userCourses': user_courses, 'username':uname, 'fullname':uname, 'editUnitForm':editUnitForm,'showEditUnit': 1, 'selectedUnit':unitID})
+@csrf_exempt
+def EditUnitRequest(request):
+	if request.method == 'POST':
+		print "change this"
+		unitID = request.POST['unit_id']
+	        unit = Unit.objects.get(id=unitID)
+        	editUnitForm = EditUnit(instance=unit)
+		editUnitForm.fields['owner'].label=''
+		editUnitForm.fields['course'].label=''
+		editUnitForm.fields['parent_unit'].label=''
+		editUnitForm.fields['parent_unit'].initial = None
+		context = Context({'editUnitForm':editUnitForm, 'selectedUnit':unitID})
+        	return HttpResponse(render_block_to_string('unit_edit_modal.html', 'editUnit', context))
+	return HttpResponse('')
 
 def DeleteLessonRequest(request, lessonID):
         uname = request.user.username
@@ -763,17 +740,17 @@ def EditContentRequest(request, contentID):
         return render(request,'lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1})
 
 
-def deleteCourseData(courseForm, request_user):
-	if 'course_id' in courseForm.data:
-       		Course.objects.get(id=courseForm.data['course_id']).delete()
+def deleteCourseData(course_id):
+	if course_id:
+       		Course.objects.get(id=course_id).delete()
                 return True;
         return False;
 
-def deleteUnitData(unitForm, request_user):
-        if 'unit_id' in unitForm.data:
-                Unit.objects.get(id=unitForm.data['unit_id']).delete()
-                return True;
-        return False;
+def deleteUnitData(unit_id):
+	if unit_id:
+		Unit.objects.get(id=unit_id).delete()
+		return True
+	return False
 
 def deleteLessonData(lessonForm, request_user):
         if 'lesson_id' in lessonForm.data:
