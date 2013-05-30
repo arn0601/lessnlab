@@ -74,34 +74,8 @@
 </div> -->
 {% endfor %}
 {% endif %}
-{% endblock %}
-<!-- right nav -->
-{% block rightnav %}
-	<!-- <div class="row">
-		<div class="span2">
-			<h4>{{ course.name}} Units</h4>
-		</div>
-	</div> -->
-	
-	<!--  RIGHT HAND NAVIGATION - This generates the right hand side naviation on the units page. Code block shows 
-	a prompt to add a unit in the course if no units are present, and otherwise shows a menu 
-	of the units that are currently in the course. -->
-	
-	<div class="row">
-		<div class="span3 nocontenttext">
-			<ul class="nav nav-list" style="width: 95%;">
-				<li class="nav-header">{{course.name}} Units</li>
-				{% if userUnits|length == 0 %}
-					<li><a href="#addUnit" data-toggle="modal"><i class="icon-plus"></i>Add Your First Unit</a></li>
-				{% else %}
-					{% for unit in userUnits %}
-					<li><a href="/lessons/?unit_id={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
-					{% endfor %}
-					<li><a href="#addUnit" data-toggle="modal"><i class="icon-plus"></i>Add Another Unit</a></li>
-				{% endif %}
-				</ul>
-			</div>
-		</div>
+
+
 {% if showEditUnit %}
 <div class="modal" id="editUnit">
   <div class="modal-header">
@@ -157,44 +131,49 @@
 </div>
 {% endif %}
 
-{% if addingUnitStandards %}
-<div class="modal" id="addingStandards">
-  <div class="modal-header">
-    <a class="close" type="button" href="/courses/">x</a>
-    <h3>Add standards to unit</h3>
-  </div>
-  <div class="modal-body">
-    <form method="post" action="{% url addUnitStandards %}" name="add_unit_standards">
-        {% csrf_token %}
-        {% for field in unitStandardsForm %}
-        <div class="control-group">
-         <label class="control-label">{{ field.label_tag }}</label>
-            <div class="controls">
-                {{ field }}
-            </div>
-                </div>
-    {% endfor %}
-     
-     <p><button type="submit" class="btn btn-primary">Submit</button>
-        <a class="btn btn-primary" type="button" href="/courses/">Cancel</a>
-      </p>
-    </form>
-  </div>
-</div>
-{% endif %}
+{% include "unit_standards_modal.html" %}
+{% endblock %}
+<!-- right nav -->
+{% block rightnav %}
+	<!-- <div class="row">
+		<div class="span2">
+			<h4>{{ course.name}} Units</h4>
+		</div>
+	</div> -->
+	
+	<!--  RIGHT HAND NAVIGATION - This generates the right hand side naviation on the units page. Code block shows 
+	a prompt to add a unit in the course if no units are present, and otherwise shows a menu 
+	of the units that are currently in the course. -->
+	
+	<div class="row">
+		<div class="span3 nocontenttext">
+			<ul class="nav nav-list" style="width: 95%;">
+				<li class="nav-header">{{course.name}} Units</li>
+				{% if userUnits|length == 0 %}
+					<li><a href="#addUnit" data-toggle="modal"><i class="icon-plus"></i>Add Your First Unit</a></li>
+				{% else %}
+					{% for unit in userUnits %}
+					<li><a href="/lessons/?unit_id={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
+					{% endfor %}
+					<li><a href="#addUnit" data-toggle="modal"><i class="icon-plus"></i>Add Another Unit</a></li>
+				{% endif %}
+				</ul>
+			</div>
+		</div>
+
 <script type="text/javascript"> <!-- scroll jquery -->
 	function requestUnitStandards(id){
 
-		var f = document.createElement("form");
-		f.setAttribute('method',"post");
-		f.setAttribute('action',"{% url LessonPlanner.views.requestUnitStandards %}");
-		var i = document.createElement("input");
-		i.setAttribute('type',"hidden");
-		i.setAttribute('value', id );
-		i.setAttribute('name',"unit_id");
-		f.appendChild(i);
-		document.body.appendChild(f);
-		f.submit();
+		$.ajax({
+			data: {unit_id:id},
+			dataType:'html',
+			type: "POST", // GET or POST
+      url: {% url LessonPlanner.views.requestUnitStandards %}, // the file to call
+			success : function(data){
+					$('#addingUnitStandards').html(data);
+					$('#addingUnitStandards').modal('show')		
+       }
+		});
 	}
 </script>
 {% endblock %}
