@@ -74,28 +74,31 @@
 	</div>
 </div>
 <div class="row">
-	<div class="span3">
+	<div class="span2" style="width:100px;">
+		<a class="btn btn-success btn-small" href="/lessonPlanner/?lesson_id={{ lesson.id }}">Go To Lesson</a>
+	</div>
+	<div class="span2" style="width:78px;">
 		<div class="btn-group">
-  			<button class="btn btn-primary"><i class="icon-eye-open"></i>View</button>
-  			<button class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+  			<button class="btn btn-primary btn-small">View</button>
+  			<button class="btn btn-primary btn-small dropdown-toggle" data-toggle="dropdown">
     			<span class="caret"></span>
   			</button>
   			<ul class="dropdown-menu">
-    			<li><a href="/lessonPlanner/?lesson_id={{ lesson.id }}">Lesson</a></li>
-    			<li><a href="#">Objectives</a></li>
-    			<li><a href="#">Standards</a></li>
+    			<li></li>
+    			<li><a href="#">Lesson Objectives</a></li>
+    			<li><a href="#">Lesson Standards</a></li>
   			</ul>
 		</div>
 	</div>
-	<div class="span3">
+	<div class="span1">
 		<div class="btn-group">
-  			<button class="btn btn-success"><i class="icon-plus"></i>Add</button>
-  			<button class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+  			<button class="btn btn-primary btn-small">Add</button>
+  			<button class="btn btn-primary btn-small dropdown-toggle" data-toggle="dropdown">
     			<span class="caret"></span>
   			</button>
   			<ul class="dropdown-menu">
-    			<li><a href="javascript:void(0)" onClick="requestLessonObjectives('{{ lesson.id }}')">Objective(s)</a></li>
-    			<li><a href="javascript:void(0)" onClick="requestLessonStandards('{{ lesson.id }}')">Standards</a></li>
+    			<li><a href="javascript:void(0)" onClick="requestLessonObjectives('{{ lesson.id }}')">Lesson Objective(s)</a></li>
+    			<li><a href="javascript:void(0)" onClick="requestLessonStandards('{{ lesson.id }}')">Lesson Standards</a></li>
   			</ul>
 		</div>
 	</div>
