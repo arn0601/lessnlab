@@ -38,10 +38,31 @@
         <a class="courseboxtitle" href="/lessonPlanner/?lesson_id={{ lesson.id }}" >{{ lesson.name }}</a>
     </div>
      <div class="span1 offset1" style="text-align: right; width: 130px;">
-    	<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add objectives to {{lesson.name}} lesson" onClick="requestLessonObjectives('{{ lesson.id }}')"><small>Add Objectives</small></a>
+    	<!--<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add objectives to {{lesson.name}} lesson" onClick="requestLessonObjectives('{{ lesson.id }}')"><small>Add Objectives</small></a> -->
+    	<div class="btn-group">
+  			<button class="btn btn-mini">View</button>
+  			<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+    			<span class="caret"></span>
+  			</button>
+  			<ul class="dropdown-menu">
+    			<li></li>
+    			<li><a href="#">Lesson Objectives</a></li>
+    			<li><a href="#">Lesson Standards</a></li>
+  			</ul>
+		</div>
     </div>
     <div class="span1" style="text-align: right; width: 80px;">
-    	<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add course standards to {{lesson.name}} lesson" onClick="requestLessonStandards('{{ lesson.id }}')"><small>Add Standards</small></a>
+    	<div class="btn-group">
+  			<button class="btn btn-mini"><i class="icon-plus"></i> Add</button>
+  			<button class="btn btn-mini dropdown-toggle" data-toggle="dropdown">
+    			<span class="caret"></span>
+  			</button>
+  			<ul class="dropdown-menu">
+    			<li><a href="javascript:void(0)" onClick="requestLessonObjectives('{{ lesson.id }}')">Lesson Objective(s)</a></li>
+    			<li><a href="javascript:void(0)" onClick="requestLessonStandards('{{ lesson.id }}')">Lesson Standards</a></li>
+  			</ul>
+		</div>
+    	<!-- <a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add course standards to {{lesson.name}} lesson" onClick="requestLessonStandards('{{ lesson.id }}')"><small>Add Standards</small></a> -->
     </div>
     <div class="span1" style="text-align: right; width: 20px;">
     	<a href="?lesson_id={{ lesson.id }}&action=Edit"><small>Edit</small></a>
