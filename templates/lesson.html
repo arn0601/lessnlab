@@ -34,10 +34,10 @@
 
 <div class="container coursebox" style="width: 100%;">
 <div class="row">
-	<div class="span2">
+	<div class="span2" style="padding-right: 30px;">
         <a class="courseboxtitle" href="/lessonPlanner/?lesson_id={{ lesson.id }}" >{{ lesson.name }}</a>
     </div>
-     <div class="span1 offset2" style="width: 151px;">
+     <div class="span1 offset3" style="width: 40px;">
     	<!--<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add objectives to {{lesson.name}} lesson" onClick="requestLessonObjectives('{{ lesson.id }}')"><small>Add Objectives</small></a> -->
     	<div class="btn-group">
   			 <a rel="tooltip" data-placement="bottom" title="Add standards or objectives to {{lesson.name}}" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown" href="#">Add
@@ -49,7 +49,7 @@
   			</ul>
 		</div>
     </div>
-    <div class="span1" style="text-align: right; width: 20px;">
+    <div class="span1" style="width: 20px;">
     	<a href="?lesson_id={{ lesson.id }}&action=Edit"><small>Edit</small></a>
     </div>
     <div class="span1" style="padding-top:3px; width: 10px;">
@@ -80,7 +80,7 @@
 	</div>
 </div>
 <div class="row">
-	<div class="span3" style="width:100px;">
+	<div class="span3">
 		<!-- <a class="btn btn-success btn-small" href="/lessonPlanner/?lesson_id={{ lesson.id }}">Go To Lesson</a> -->
 		<div class="btn-group">
   			<a class="btn btn-success btn-small" href="/lessonPlanner/?lesson_id={{ lesson.id }}">View Lesson</a>
