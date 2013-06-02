@@ -73,6 +73,9 @@ class Lesson(Rateable):
 	description = models.TextField()
 	standards = models.ManyToManyField('Standards.Standard', blank=True)
 	objectives = models.ManyToManyField('Objectives.Objective', blank=True)
+	start_date = models.DateField()
+        end_date = models.DateField()
+
 
 class LessonRating(Rating):
 	lesson = models.ForeignKey('Lesson')

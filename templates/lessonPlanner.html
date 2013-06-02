@@ -12,7 +12,7 @@
 				<b>{{ lesson.name }}</b> in the <a href="/lessons/?unit_id={{ unit.id }}"> {{ unit.name }}</a>
 			</div>
 			<div class="span3">
-				<b>Written By: </b><a href="#">{{ fullname }}</a>
+				<b>Created By: </b><a href="#">{{ fullname }}</a>
 			</div>
 		</div>
 		<div>
@@ -142,7 +142,16 @@
 					<div> Activity Type - {{ content.activity_type }} </div>
 					<div> Instructions - {{ content.instructions }} </div>
 					<div> Materials - {{ content.materials }} </div>
-					<div> Length - {{ content.length }} </div>					
+					<div> Length - {{ content.length }} </div>			
+				{% elif content.content_type == "OnlinePicture" %}
+					<h6> Picture </h6>
+					<div id="{{content.id }}_content">
+										<div id="loadImg"><img src="/static/loading.gif" /></div>	
+					<a href="{{content.link}}"><img src="{{ content.link }}" style="max-width:300px; max-height:300px;" onload="document.getElementById('loadImg').style.display='none'"; frameborder="0"></img></a>
+				</div>
+
+				{% elif content.content_type == "OnlineArticle" %}
+						<h6> Article </h6>
 				{% else %}
 						OTHER CONTENT - Need to define template
 				{% endif %}

@@ -217,14 +217,14 @@ def getLessonSpecificInfo(lesson):
 			elif (content.content_type == 'Activity'):
                                 content_list.append(content.activitycontent)
 		section_dict[section] = content_list
-	add_content_form_dict = getAddContentForms(str(-1))
+	add_content_form_dict = getAddContentForms(str(-1), objective_list)
 	return { 'content_objs' : content_objs, 'standard_list' : standard_list,'objective_list' : objective_list,'sections' : section_dict,  'assessment_dict':assessment_dict, 'content_choices':getContentChoices(),  'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
 
 def getContentChoices():
 	return {'General': ["Text"], 'Media': ["PowerPoint","OnlinePicture","OnlineArticle","OnlineVideo","TeacherNote","AdministratorNote"], 'Activity': ["Activity"], 'Checks For Understanding': {}, 'Assessment': ["Assessment"] }
 	
 
-def getAddContentForms(section_id):
+def getAddContentForms(section_id, objective_list):
 	
 	content_form_dict = {'General': {} , 'Media': {}, 'Activity': {}, 'Checks For Understanding': {}, 'Assessment': {} }
 	
@@ -266,6 +266,7 @@ def getAddContentForms(section_id):
 	assessment_form = AddAssessmentContent()
         assessment_form.fields['content_type'].initial = 'Assessment'
         assessment_form.fields['section_id'].initial = section_id
+	assessment_form.fields['objectives'].choices = objective_list
         content_form_dict['Assessment']['Assessment'] = assessment_form
 
 	return content_form_dict

@@ -65,13 +65,13 @@ class AddLessonForm(forms.ModelForm):
 	class Meta:
 		model = Lesson
 		exclude = ['standards','objectives', 'cumulative_rating', 'number_raters']
-		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput() }
+		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput(),'start_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'lesson_start_date'}), 'end_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'lesson_end_date'})}
 
 class EditLesson(forms.ModelForm):
 	class Meta:
 		model = Lesson
 		exclude = ['standards', 'objectives', 'cumulative_rating', 'number_raters']
-		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput() }
+		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput(),'start_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'lesson_start_date'}), 'end_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'lesson_end_date'}) }
 
 class DeleteLesson(forms.Form):
 	lesson_id = forms.CharField(label="")
@@ -143,6 +143,7 @@ class AddOnlinePictureContent(AddContentForm):
 
 class AddAssessmentContent(AddContentForm):
         title = forms.CharField(label="Title")
+	objectives = forms.MultipleChoiceField(label='Select Lesson Objectives')
 	extra_field_count = forms.CharField(label="",widget=forms.HiddenInput())
 	def __init__(self, *args, **kwargs):
 	        extra_fields = kwargs.pop('extra', 0)
