@@ -54,6 +54,25 @@ def activity_ajax_view(request):
 	return HttpResponse(return_str)
 
 @csrf_exempt
+def requestLessonStandards(request):
+	if request.method == 'POST':
+		lesson_id = request.POST['lesson_id']
+		try:
+			lesson = Lesson.objects.get(id=lesson_id)
+		except:
+			return HttpResponseRedirect(lastPageToRedirect(request))
+		
+		unit = lesson.unit
+		standard_list = []
+		for standard in unit.standards.all():
+			standard_list.append((standard.id, standard.description))
+		form = LessonStandardsForm()
+		form.fields['standards'].choices = standard_list
+		form.fields['lesson_id'].initial = lesson_id
+		context = Context({ 'lessonStandardsForm':form})
+		return HttpResponse(render_block_to_string('lesson_standards_modal.html', 'addLessonStandards', context))
+
+@csrf_exempt
 def requestUnitStandards(request):
 	if request.method == 'POST':
 		unit_id = request.POST['unit_id']
@@ -163,10 +182,6 @@ def addUnitStandards(request):
 def showLesson(request):
 	base_dict = base_methods.createBaseDict(request)
         action = request.GET.get('action')
-        if action == "Edit":
-                return EditLessonRequest(request, base_dict['lesson'].id)
-        elif action == "Delete":
-                return DeleteLessonRequest(request, base_dict['lesson'].id)
 
 	request.session['last_page'] = '/lessons/?unit_id='+str(base_dict['unit'].id)
 	return render(request,"lesson.html", base_dict)
@@ -178,20 +193,18 @@ def getLessonStandards(request):
 		lesson_id = request.POST['lesson_id']
 		try:
 			lesson = Lesson.objects.get(id=lesson_id)
-			teacher = TeacherProfile.objects.get(user=request.user)
 		except:
-			return HttpResponseRedirect(lastPageToRedirect(request))
+			return HttpResponse("")
 		standard_list = []
 		for standard in lesson.standards.all():
 			standard_list.append((standard.id, standard.description))
 		form = SelectStandardsForm()
 		form.fields['standard'].choices = standard_list
 		form.fields['lesson_id'].initial = lesson_id
-		base_dict = base_methods.createBaseDict(request)
-		base_dict['selectStandardsForm'] = form
-		base_dict['selectingStandard'] = True
+		print "here getting stnadards"
+		context = Context({'selectStandardsForm':form})
 		
-		return render(request,'lesson.html', base_dict)
+		return HttpResponse(render_block_to_string("lesson_objectives_modal.html", "selectingStandard", context))
 
 #this returns the form to add objectives
 @csrf_exempt
@@ -199,9 +212,10 @@ def createLessonObjectives(request):
 	if request.method == 'POST':
 		standards_form = SelectStandardsForm(data=request.POST)
 		try:
-			lesson = Lesson.objects.get(id=standards_form.data['lesson_id'])
+			lesson_id = standards_form.data.get('lesson_id')
+			lesson = Lesson.objects.get(id=lesson_id)
 		except:
-			return HttpResponseRedirect(lastPageToRedirect(request))
+			return HttpResponse("")
 		standard_list = []
 		for standard in lesson.standards.all():
 			standard_list.append((standard.id,standard.description))
@@ -220,13 +234,11 @@ def createLessonObjectives(request):
 			next_form.fields['created'].choices = obj_list
 			next_form.fields['standard_id'].initial = standards_form.cleaned_data['standard']
 			next_form.fields['lesson_id'].initial = standards_form.cleaned_data['lesson_id']
-			base_dict = base_methods.createBaseDict(request)
-			base_dict['createObjectivesForm'] = next_form
-			base_dict['creatingObjectives'] = True
-			return render(request,'lesson.html',base_dict)
+			context = Context({'createObjectivesForm':next_form})
+			return HttpResponse(render_block_to_string("lesson_objectives_modal.html","addingLessonObjectives",context))
 		else:
 			print standards_form.errors
-	return HttpResponseRedirect(lastPageToRedirect(request))
+	return HttpResponse("")
 
 @csrf_exempt
 def addLessonObjectives(request):
@@ -264,27 +276,6 @@ def addLessonObjectives(request):
 		return HttpResponseRedirect(lastPageToRedirect(request))				
 	return HttpResponseRedirect(lastPageToRedirect(request))
 
-@csrf_exempt
-def requestLessonStandards(request):
-	if request.method == 'POST':
-		lesson_id = request.POST['lesson_id']
-		try:
-			lesson = Lesson.objects.get(id=lesson_id)
-			teacher = TeacherProfile.objects.get(user=request.user)
-		except:
-			return HttpResponseRedirect(lastPageToRedirect(request))
-		
-		unit = lesson.unit
-		standard_list = []
-		for standard in unit.standards.all():
-			standard_list.append((standard.id, standard.description))
-		form = LessonStandardsForm()
-		form.fields['standards'].choices = standard_list
-		form.fields['lesson_id'].initial = lesson_id
-		base_dict = base_methods.createBaseDict(request)
-		base_dict['lessonStandardsForm'] = form
-		base_dict['addingLessonStandards'] = True
-		return render(request,'lesson.html', base_dict)
 
 @csrf_exempt
 def addLessonStandards(request):
@@ -307,7 +298,7 @@ def addLessonStandards(request):
 				lesson.standards.add(s)
 		else:
 			print form.errors
-		return HttpResponseRedirect(lastPageToRedirect(request))				
+		return HttpResponseRedirect("/lessons/?unit_id="+str(unit.id))
 	return HttpResponseRedirect(lastPageToRedirect(request))
 
 
@@ -719,26 +710,28 @@ def EditUnitRequest(request):
         	return HttpResponse(render_block_to_string('unit_edit_modal.html', 'editUnit', context))
 	return HttpResponse('')
 
-def DeleteLessonRequest(request, lessonID):
-        uname = request.user.username
-        user = TeacherProfile.objects.get(user=request.user)
-        user_courses =  Course.objects.filter(owner=user)
-        lesson = Lesson.objects.get(id=lessonID)
-        deleteLessonForm = DeleteLesson()
-        deleteLessonForm.fields["lesson_id"].initial = lesson.id
-	unit_lessons =  Lesson.objects.filter(unit=lesson.unit)
-        return render(request,'lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname, 'fullname':uname,'userLessons':unit_lessons, 'deleteLessonForm':deleteLessonForm,'showDeleteLesson': 1}, context_instance=RequestContext(request))
+@csrf_exempt
+def DeleteLessonRequest(request):
+	if request.method == 'POST':
+		lessonID = request.POST.get('lesson_id')
+	        lesson = Lesson.objects.get(id=lessonID)
+        	deleteLessonForm = DeleteLesson()
+	        deleteLessonForm.fields["lesson_id"].initial = lesson.id
+		context = Context({'deleteLessonForm':deleteLessonForm})
+		return HttpResponse(render_block_to_string("lesson_delete_modal.html", 'deleteLesson', context))
+	return HttpResponse('')
 
-
-def EditLessonRequest(request, lessonID):
-        uname = request.user.username
-        user = TeacherProfile.objects.get(user=request.user)
-        user_courses =  Course.objects.filter(owner=user)
-        lesson = Lesson.objects.get(id=lessonID)
-        unit = lesson.unit
-	unit_lessons =  Lesson.objects.filter(unit=lesson.unit)
-	editLessonForm = EditLesson(instance=lesson)
-        return render(request,'lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1, 'selectedLesson':lessonID})
+@csrf_exempt
+def EditLessonRequest(request):
+	if request.method == 'POST':
+		lessonID = request.POST.get('lesson_id')
+        	lesson = Lesson.objects.get(id=lessonID)
+		editLessonForm = EditLesson(instance=lesson)
+		editLessonForm.fields['owner'].label=''
+		editLessonForm.fields['unit'].label=''
+		context = Context({'editLessonForm':editLessonForm, 'selectedLesson':lessonID})
+		return HttpResponse(render_block_to_string('lesson_edit_modal.html', 'editLesson', context))
+	return HttpResponse('')
 
 def EditContentRequest(request, contentID):
         uname = request.user.username

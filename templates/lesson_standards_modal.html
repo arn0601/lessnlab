@@ -1,0 +1,50 @@
+
+<div class="modal hide" id="addingLessonStandards">
+  {% block addLessonStandards %}
+  <div class="modal-header">
+    <a class="close" type="button" onClick="hideAddingLessonStandards()">x</a>
+    <h3>Add standards to lesson</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url addLessonStandards %}" name="add_unit_standards">
+        {% csrf_token %}
+        {% for field in lessonStandardsForm %}
+        <div class="control-group">
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn btn-primary" type="button" onClick="hideAddingLessonStandards()">Cancel</a>
+      </p>
+    </form>
+  </div>
+  {% endblock %}
+</div>
+
+<script type="text/javascript"> 
+
+	function hideAddingLessonStandards() {
+		$("#addingLessonStandards").modal("hide");
+	}
+
+
+
+	function requestLessonStandards(id){
+
+		$.ajax({
+			data: {lesson_id:id},
+			dataType:'html',
+			type: "POST", // GET or POST
+      url: {% url LessonPlanner.views.requestLessonStandards %}, // the file to call
+			success : function(data){
+					$('#addingLessonStandards').html(data);
+					$('#addingLessonStandards').modal('show')		
+       }
+		});
+	}
+
+</script>
