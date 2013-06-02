@@ -181,6 +181,7 @@ class CreateObjectivesForm(forms.Form):
 		extra_fields = kwargs.pop('extra', 0)
 		super(CreateObjectivesForm, self).__init__(*args, **kwargs)
 		self.fields['new_objectives_count'].initial = extra_fields
+		print self.fields['new_objectives_count'].initial, "initial"
 		for index in range(int(extra_fields)):
 			self.fields['new_objective_{index}'.format(index=index)] = forms.CharField(label='New Objective {index}'.format(index=index),required=False)
 

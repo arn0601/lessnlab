@@ -1,0 +1,114 @@
+<div class="modal hide" id="selectingStandard">
+  {% block selectingStandard %}
+  <div class="modal-header">
+    <a class="close" type="button" onClick="hideAddingLessonObjectives()">x</a>
+    <h3>Select Lesson Standard</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url createLessonObjectives %}" name="create_lesson_objectives" id="selectingStandardForm">
+        {% csrf_token %}
+        {% for field in selectStandardsForm %}
+        <div class="control-group">
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     
+     <p><button type="button" onClick="addLessonObjectives()" class="btn btn-primary">Submit</button>
+        <a class="btn btn-primary" type="button" onClick="hideAddingLessonObjectives()">Cancel</a>
+      </p>
+    </form>
+  </div>
+  {% endblock %}
+</div>
+
+<div class="modal hide" id="addingLessonObjectives">
+  {% block addingLessonObjectives %}
+  <div class="modal-header">
+    <a class="close" type="button" onClick="hiseAddingLessonObjectives()">x</a>
+    <h3>Add Objectives to lesson</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url addLessonObjectives %}" name="add_lesson_objectives">
+        {% csrf_token %}
+        {% for field in createObjectivesForm %}
+        <div class="control-group">
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     
+     <button type="button" id="addObjective" onClick="addObj()"  class="btn btn-primary">Add objective</button>
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+        <a class="btn btn-primary" type="button" onClick="hideAddingLessonObjectives()">Cancel</a>
+      </p>
+    </form>
+  </div>
+  {% endblock %}
+</div>
+
+<script type="text/javascript"> <!-- scroll jquery -->
+	
+	
+	function addObj () {
+		var form = document.getElementsByName("createObjectivesForm");
+		textbox = document.createElement('input');
+		var new_objectives_count = $("[name=new_objectives_count]").val();
+		textbox.name = 'new_objective_' + new_objectives_count;
+		new_objectives_count ++; 
+	
+		div = document.createElement('div');
+		textbox.type = 'text';		
+
+  		var reper = document.getElementById('addObjective');
+ 	 	var parinte = reper.parentNode;
+
+		parinte.insertBefore(textbox, reper);
+		parinte.insertBefore(div, reper);		
+		
+    		$("[name=new_objectives_count]").val(new_objectives_count);
+
+	}
+
+	function requestLessonObjectives(id){
+
+		$.ajax({
+			data: {lesson_id:id},
+			dataType:'html',
+			type: "POST", // GET or POST
+      url: {% url LessonPlanner.views.getLessonStandards %}, // the file to call
+			success : function(data){
+			
+					$('#selectingStandard').html(data);
+					$('#selectingStandard').modal('show')		
+       }
+		});
+	}
+
+	function addLessonObjectives(id) {
+	   var formString = $("#selectingStandardForm").serialize();
+	
+		$.ajax({
+			data: formString,
+			dataType:'html',
+			type: "POST", // GET or POST
+      url: {% url createLessonObjectives %}, // the file to call
+			success : function(data){
+			
+					$('#addingLessonObjectives').html(data);
+					$('#selectingStandard').modal('hide');
+					$('#addingLessonObjectives').modal('show');
+					
+       }
+		});
+	}
+ 
+	function hideAddingLessonObjectives() {
+		$("#addingLessonObjectives").modal("hide");
+		$("#selectingStandard").modal("hide");
+	}
+</script>

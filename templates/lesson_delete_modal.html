@@ -1,0 +1,35 @@
+
+<div class="modal hide" id="deleteLesson">
+{% block deleteLesson %}
+  <div class="modal-header">
+    <a class="close" type="button" onClick="hideDeleteLesson()">x</a>
+    <h3>Delete lesson</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url deleteLesson %}" name="login_form">
+        {% csrf_token %}
+	<input type="hidden" name="lesson_id" id="deleteLessonHidden">
+     Are you sure you want to delete the lesson?
+<p>
+     <p><button type="submit" class="btn btn-primary">Yes</button>
+        <a class="btn btn-primary" type="button" onClick="hideDeleteLesson()">No</a>
+      </p>
+    </form>
+  </div>
+{% endblock %}
+</div>
+
+<script type="text/javascript"> 
+
+	function hideDeleteLesson() {
+		$("#deleteLesson").modal("hide");
+	}
+
+
+
+	function requestDeleteLesson(id){
+		$("#deleteLessonHidden").val(id)
+		$("#deleteLesson").modal("show");
+	}
+
+</script>
