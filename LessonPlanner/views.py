@@ -521,12 +521,13 @@ def addContent(request):
     	if request.method == 'POST':
 		contentForm = AddContentForm(data=request.POST)
 		content_type = contentForm.data['content_type']
+		section = Section.objects.get(id=int(contentForm.data['section_id']))
 		if content_type == "OnlineVideo":
 			success = saveVideoContent(contentForm, request)
 			if success:
 				return HttpResponseRedirect(lastPageToRedirect(request))
 		        return HttpResponseRedirect(lastPageToView(request))
-                (success, content, fields) =  saveContent(contentForm, request)
+                (success, content, fields, objectives) =  saveContent(contentForm,section,section.lesson, request)
 		if success:
 			section = Section.objects.get(id=int(contentForm.data['section_id']))
 			content.section = section
@@ -534,6 +535,10 @@ def addContent(request):
 			content.content_type = contentForm.data['content_type']
 			content.placement = getMaxCount(section)+1
 			content.save()
+			if content_type == "Assessment":
+	                        for obj_id in objectives:
+                                        o = Objective.objects.get(id=obj_id)
+                                        content.objectives.add(o)
 			if fields != None:
 				for qa in fields:
 					(q,ans) = qa
@@ -595,7 +600,8 @@ def sortedDictValues(adict):
     items.sort()
     return [(key,value) for key, value in items]
 
-def saveContent(contentForm, request):
+def saveContent(contentForm, section, lesson, request):
+	
 	if contentForm.is_valid():
 		content_type = contentForm.data['content_type']
 		if (content_type == 'OnlinePicture'):
@@ -603,52 +609,52 @@ def saveContent(contentForm, request):
 			if online_picture_form.is_valid():
 				content = OnlinePictureContent()
 				content.link = online_picture_form.data['link']
-				return (True, content, None)
-			return (False, None, None)
+				return (True, content, None,None)
+			return (False, None, None,None)
 		if (content_type == 'OnlineArticle'):
 			online_article_form = AddOnlineArticleContent(data=request.POST)
 			if online_article_form.is_valid():
 				content = OnlineArticleContent()
 				content.link = online_article_form.data['link']
-				return (True, content, None)
-			return (False, None, None)
+				return (True, content, None,None)
+			return (False, None, None,None)
 		if (content_type == 'PowerPoint'):
                         powerpoint_form = AddPowerPointContent(data=request.POST)
                         if powerpoint_form.is_valid():
                                 content = PowerPointContent()
                                 content.link = powerpoint_form.data['link']
-                                return (True, content, None)
-                        return (False, None, None)	
+                                return (True, content, None,None)
+                        return (False, None, None,None)	
 		if (content_type == 'Text'):
 			text_form = AddTextContent(data=request.POST)
 			if text_form.is_valid():
 				content = TextContent()
 				content.text = text_form.data['text']
-				return (True, content, None)
-			return (False, None, None)
+				return (True, content, None,None)
+			return (False, None, None,None)
 		if (content_type == 'TeacherNote'):
 			teacher_note_form = AddTeacherNoteContent(data=request.POST)
 			if teacher_note_form.is_valid():
 				content = TeacherNoteContent()
 				content.text = teacher_note_form.data['text']
-				return (True, content, None)
-			return (False, None, None)
+				return (True, content, None,None)
+			return (False, None, None,None)
 		if (content_type == 'AdministratorNote'):
 			administrator_note_form = AddAdministratorNoteContent(data=request.POST)
 			if administrator_note_form.is_valid():
 				content = AdministratorNoteContent()
 				content.text = administrator_note_form.data['text']
-				return (True, content, None)
-			return (False, None, None)
+				return (True, content, None,None)
+			return (False, None, None,None)
 		if (content_type == 'Assessment'):
-                        assessment_form = AddAssessmentContent(data=request.POST,extra=request.POST.get('extra_field_count'))
+                        assessment_form = AddAssessmentContent(data=request.POST,extra=request.POST.get('extra_field_count'),objectives=base_methods.getObjectives(lesson))
                         if assessment_form.is_valid():
                                 content = AssessmentContent()
+				objectives = assessment_form.cleaned_data['objectives']
                                 content.title = assessment_form.data['title']
 				questionAnswerList = []
 				allq = sortedDictValues(slicedict("question",assessment_form.data))
 				user = TeacherProfile.objects.get(user=request.user)
-				
 				for question in allq:
 					(key, value) = question
 					attrs = key.split('_')
@@ -679,11 +685,11 @@ def saveContent(contentForm, request):
 	                                        a.owner = user
 						allAnswers.append(a)
 					questionAnswerList.append((q,allAnswers))
-                                return (True, content,questionAnswerList)
+                                return (True, content,questionAnswerList,objectives)
 
 			print assessment_form.errors
-                        return (False, None, None)
-	return (False, None, None);
+                        return (False, None, None,None)
+	return (False, None, None,None);
 
 @csrf_exempt
 def EditCourseRequest(request):

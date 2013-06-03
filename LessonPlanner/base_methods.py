@@ -168,18 +168,26 @@ def createBaseDict(request):
 	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': fullname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'sectionAddForm':sectionAddForm}
 	
 
+def getObjectives(lesson):
+	objective_list = []
+	for objective in lesson.objectives.all():
+                objective_list.append((objective.id, objective.description))
+	return objective_list
+
+def getStandards(lesson):
+	standard_list = []
+	for standard in lesson.standards.all():
+                standard_list.append((standard.id, standard.description))
+	return standard_list
+
 def getLessonSpecificInfo(lesson):
 	lesson_sections = Section.objects.filter(lesson=lesson)
 	section_dict = {}
 	assessment_dict = {}
 	add_content_form_dict = {}
-	standard_list = []
-	objective_list = []
+	standard_list = getStandards(lesson)
+	objective_list = getObjectives(lesson)
 	content_objs = {}
-	for standard in lesson.standards.all():
-        	standard_list.append((standard.id, standard.description))
-	for objective in lesson.objectives.all():
-                objective_list.append((objective.id, objective.description))
 	for section in lesson_sections:
 		content_list = []
 		section_content = Content.objects.filter(section=section)
@@ -187,7 +195,7 @@ def getLessonSpecificInfo(lesson):
 			content_objs_m2m = content.objectives.all()
 			contentobjs_list = []
 			for c_o in content_objs_m2m:
-				contentobjs_list.append((objective.id, objective.description))
+				contentobjs_list.append((c_o.id, c_o.description))
 			content_objs[content.id] = contentobjs_list	
 			if (content.content_type == 'Text'):
 				content_list.append(content.textcontent)
@@ -263,10 +271,9 @@ def getAddContentForms(section_id, objective_list):
 	administrator_note.fields['section_id'].initial = section_id
 	content_form_dict['General']['AdministratorNote'] = administrator_note
 
-	assessment_form = AddAssessmentContent()
+	assessment_form = AddAssessmentContent(objectives=objective_list)
         assessment_form.fields['content_type'].initial = 'Assessment'
         assessment_form.fields['section_id'].initial = section_id
-	assessment_form.fields['objectives'].choices = objective_list
         content_form_dict['Assessment']['Assessment'] = assessment_form
 
 	return content_form_dict

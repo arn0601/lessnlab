@@ -103,6 +103,9 @@
 				{% elif content.content_type == "Assessment" %}
 					<div id="{{content.id }}_content">	
 						<h6> Assessment - {{ content.title }} </h6>
+						{% for objective in content.objectives.all%}
+							<li>{{ objective.description }}</li>
+						{% endfor %}
 						{% for q,placement in assessment_dict|access:content.id|sort_placement %}
 							<div>
 								Question: {{ q.question }}
