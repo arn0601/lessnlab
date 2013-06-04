@@ -40,9 +40,7 @@
      <div class="span1 offset3" style="width: 40px;">
     	<!--<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add objectives to {{lesson.name}} lesson" onClick="requestLessonObjectives('{{ lesson.id }}')"><small>Add Objectives</small></a> -->
     	<div class="btn-group">
-  			 <a rel="tooltip" data-placement="bottom" title="Add standards or objectives to {{lesson.name}}" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown" href="#">Add
-    			<span class="caret"></span>
-  			 </a>
+  			 <a class="close" rel="tooltip" data-placement="bottom" title="Add standards or objectives to {{lesson.name}}" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus"></i></a>
   			<ul class="dropdown-menu">
     			<li><a onClick="requestLessonObjectives('{{ lesson.id }}')">Objectives</a></li>
     			<li><a onClick="requestLessonStandards('{{ lesson.id }}')">Standards</a></li>
