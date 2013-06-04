@@ -118,6 +118,26 @@ def landing(request):
 	return render(request,'landing.html', {'teacherRegistrationForm': teacher_registration_form})
 
 #show the units for a specific course
+@csrf_exempt
+def changeContentPlacement(request):
+	section_id = request.POST["section"]
+        contentList = Content.objects.all().filter(section=section_id)
+        l = []
+        for con in contentList:
+                l.append((con, con.placement))
+        l.sort(key=lambda x: x[1])
+
+        start=int(request.POST["start"])-1
+        final=int(request.POST["final"])-1
+        a1 = l[start]
+        del l[start]
+        l.insert(final,a1)
+        counter = 0
+        for con in l:
+                con[0].placement = counter
+                con[0].save()
+                counter = counter + 1
+        return HttpResponse('')
 
 @csrf_exempt
 def changeSectionPlacement(request):
@@ -636,14 +656,14 @@ def saveContent(contentForm, section, lesson, request):
 			teacher_note_form = AddTeacherNoteContent(data=request.POST)
 			if teacher_note_form.is_valid():
 				content = TeacherNoteContent()
-				content.text = teacher_note_form.data['text']
+				content.note = teacher_note_form.data['text']
 				return (True, content, None,None)
 			return (False, None, None,None)
 		if (content_type == 'AdministratorNote'):
 			administrator_note_form = AddAdministratorNoteContent(data=request.POST)
 			if administrator_note_form.is_valid():
 				content = AdministratorNoteContent()
-				content.text = administrator_note_form.data['text']
+				content.note = administrator_note_form.data['text']
 				return (True, content, None,None)
 			return (False, None, None,None)
 		if (content_type == 'Assessment'):
