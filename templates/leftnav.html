@@ -7,10 +7,11 @@ function imgError(image){
 }
 </script>
 <div class="span2" id="leftnav">
+	{{ course.id }}
 	<div class="row">
 		<ul class="nav nav-list">
 				<li class="nav-header ">My Courses</li>
-				<li><a href="/courses/" class="{% if course.id == "" %} active {% endif %}">All Courses</a></li> 
+				<li><a href="/courses/" class="{% if not course %} active {% endif%}">All Courses</a></li> 
 				{% for c in userCourses %}  
 				<li><a href="/units/?course_id={{ c.id }}" rel="tooltip" data-placement="left" title="Course Description: {{ course.name }}" class="{% if c.id == course.id %} active {% endif%}">{{ c.name }}</a></li>
 				{% endfor %}
