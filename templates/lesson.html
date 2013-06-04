@@ -38,12 +38,11 @@
         <a class="courseboxtitle" href="/lessonPlanner/?lesson_id={{ lesson.id }}" >{{ lesson.name }}</a>
     </div>
      <div class="span1 offset3" style="width: 10px;">
-    	<!--<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add objectives to {{lesson.name}} lesson" onClick="requestLessonObjectives('{{ lesson.id }}')"><small>Add Objectives</small></a> -->
     	<div class="btn-group">
   			 <a class="close ropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus"></i></a>
   			<ul class="dropdown-menu">
-    			<li><a href="#" onClick="requestLessonObjectives('{{ lesson.id }}')">Add Objectives</a></li>
-    			<li><a href="#" onClick="requestLessonStandards('{{ lesson.id }}')">Add Standards</a></li>
+    			<li><a href="#" onClick="requestLessonObjectives('{{ lesson.id }}')">Add Lesson Objectives</a></li>
+    			<li><a href="#" onClick="requestLessonStandards('{{ lesson.id }}')">Add Lesson Standards</a></li>
   			</ul>
 		</div>
     </div>
