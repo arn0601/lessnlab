@@ -33,14 +33,17 @@
 </div>
 <div class="row">
 	<div class="span10">
-        <p><b>Standards Groups in Course</b>
-        {% for group in course.standard_grouping.all %}
-		<p> <a onClick="getCourseStandardsFromGroup('{{ group.id }}')"> {{ group.subject.value }} Standards, Grade {{ group.grade.value }}  for {{ group.standard_type.value}}:{{ group.state.value }} 
-		</a> </p>
-	{% endfor %} 
-	</p>
-	<!-- TODO remove this as a get -->
-		<a class="btn btn-success btn-small" type="button" href="/units/?course_id={{ course.id }}">Go To Course</a>
+    	<div class="btn-group">
+  			<a class="btn btn-success btn-small" href="/units/?course_id={{ course.id }}">Go To Course</a>
+  			<button class="btn btn-success btn-small dropdown-toggle" data-toggle="dropdown">
+    			<span class="caret"></span>
+  			</button>
+  			<ul class="dropdown-menu">
+  				{% for group in course.standard_grouping.all %}
+    			<li><a href="#" onClick="getCourseStandardsFromGroup('{{ group.id }}')">View Course Standards</a></li>
+  				{% endfor %} 
+  			</ul>
+		</div>
     </div>
 </div>
 </div> <!-- Course box -->
