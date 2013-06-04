@@ -1,0 +1,35 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html style="height:100%;">
+  <head>
+    <title>LessnLab - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+		<link href="/static/bootstrap.css" rel="stylesheet" media="screen">
+		<link href="/static/styles.css" rel="stylesheet" media="screen">
+		<link rel="stylesheet" href="http://blueimp.github.com/cdn/css/bootstrap.min.css">
+		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>	
+  <script>
+  	jQuery(function ($) {
+	$("a").tooltip()})
+	
+  </script>
+  </head>
+  <body>
+		<div class="container basecontent" style="padding-top: 42px; width: 1000px; min-height: 100%; margin-bottom: -50px; height:auto;">
+		 {% include "navbar.html" %}
+			<div class="row" style="height: 100%;">
+				<div class="span12" style="padding-top: 5px; margin-left: 184px">
+		    	{% block content %}{% endblock %}
+				</div>
+			</div>
+			<div class="push"></div>
+		</div>
+			{% include "footer.html" %}
+			{% include "modals.html" %}
+	</body>
+	<script src="/static/bootstrap.js"> </script>
+
+</html>
