@@ -32,27 +32,25 @@
 	<a class="btn btn-primary btn-small" type="button" onClick="requestLessonObjectives('{{ lesson.id }}')" >Add Objectives</a>
 </div> -->
 
-<div class="container coursebox" style="width: 100%;">
+<div class="container coursebox">
 <div class="row">
-	<div class="span2" style="padding-right: 30px;">
+	<div class="span3">
         <a class="courseboxtitle" href="/lessonPlanner/?lesson_id={{ lesson.id }}" >{{ lesson.name }}</a>
     </div>
-     <div class="span1 offset3" style="width: 40px;">
+     <div class="span1 offset3" style="width: 10px;">
     	<!--<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add objectives to {{lesson.name}} lesson" onClick="requestLessonObjectives('{{ lesson.id }}')"><small>Add Objectives</small></a> -->
     	<div class="btn-group">
-  			 <a rel="tooltip" data-placement="bottom" title="Add standards or objectives to {{lesson.name}}" class="btn btn-mini btn-primary dropdown-toggle" data-toggle="dropdown" href="#">Add
-    			<span class="caret"></span>
-  			 </a>
+  			 <a class="close ropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus"></i></a>
   			<ul class="dropdown-menu">
-    			<li><a onClick="requestLessonObjectives('{{ lesson.id }}')">Objectives</a></li>
-    			<li><a onClick="requestLessonStandards('{{ lesson.id }}')">Standards</a></li>
+    			<li><a href="#" onClick="requestLessonObjectives('{{ lesson.id }}')">Add Objectives</a></li>
+    			<li><a href="#" onClick="requestLessonStandards('{{ lesson.id }}')">Add Standards</a></li>
   			</ul>
 		</div>
     </div>
-    <div class="span1" style="width: 20px;">
-    	<a onClick="requestEditLesson('{{ lesson.id }}')"><small>Edit</small></a>
+    <div class="span1" style="width: 10px;">
+    	<a class="close" href="#" onClick="requestEditLesson('{{ lesson.id }}')"><i class="icon-edit"></i></a>
     </div>
-    <div class="span1" style="padding-top:3px; width: 10px;">
+    <div class="span1" style="width: 10px;">
     	 <a class="close" rel="tooltip" data-placement="right" title="Delete {{lesson.name}} lesson" onClick="requestDeleteLesson('{{ lesson.id }}')"><i class="icon-trash"></i></a>
     </div>
 </div>
@@ -68,10 +66,10 @@
 
     </div>
     <div class="span2">
-    	<p><b>Start Date: </b>{{lesson.start_date}}</p>
+    	<p><b>Starts: </b>{{lesson.start_date}}</p>
     </div>
     <div class="span2">
-    	<p><b>End Date: </b>{{lesson.end_date}}</p>
+    	<p><b>Ends: </b>{{lesson.end_date}}</p>
     </div>
 </div>
 <div class="row">
