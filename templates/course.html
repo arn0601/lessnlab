@@ -9,15 +9,10 @@
 	<div class="span4">
         <a class="courseboxtitle" href="/units/?course_id={{ course.id }}" >{{ course.name }}</a>
     </div>
-    <div class="span1 offset3" style="text-align: right; width: 142px;">
-    	{% for group in course.standard_grouping.all %}
-    	<a href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="View the learning standards this course is aligned to" onClick="getCourseStandardsFromGroup('{{ group.id }}')"><small>View Standards</small></a>
-		{% endfor %}
+    <div class="span1 offset5" style="text-align: right; width: 10px;">
+    	<a class="close" rel="tooltip" data-placement="right" title="Edit Course Details" href="javascript:void(0)" onClick="requestEditCourse('{{ course.id }}')"><i class="icon-edit"></i></a>
     </div>
-    <div class="span1" style="text-align: right; width: 10px;">
-    	<a href="javascript:void(0)" onClick="requestEditCourse('{{ course.id }}')"><small>Edit</small></a>
-    </div>
-    <div class="span1" style="padding-top:3px; width: 28px;">
+    <div class="span1" style="width: 10px;">
     	 <a class="close" rel="tooltip" data-placement="right" title="Delete Course" onClick="requestDeleteCourse('{{ course.id }}')"><i class="icon-trash"></i></a>
     </div>
 </div>
@@ -33,14 +28,17 @@
 </div>
 <div class="row">
 	<div class="span10">
-        <p><b>Standards Groups in Course</b>
-        {% for group in course.standard_grouping.all %}
-		<p> <a onClick="getCourseStandardsFromGroup('{{ group.id }}')"> {{ group.subject.value }} Standards, Grade {{ group.grade.value }}  for {{ group.standard_type.value}}:{{ group.state.value }} 
-		</a> </p>
-	{% endfor %} 
-	</p>
-	<!-- TODO remove this as a get -->
-		<a class="btn btn-success btn-small" type="button" href="/units/?course_id={{ course.id }}">Go To Course</a>
+    	<div class="btn-group">
+  			<a class="btn btn-success btn-small" href="/units/?course_id={{ course.id }}">Go To Course</a>
+  			<button class="btn btn-success btn-small dropdown-toggle" data-toggle="dropdown">
+    			<span class="caret"></span>
+  			</button>
+  			<ul class="dropdown-menu">
+  				{% for group in course.standard_grouping.all %}
+    			<li><a href="#" onClick="getCourseStandardsFromGroup('{{ group.id }}')">View Course Standards</a></li>
+  				{% endfor %} 
+  			</ul>
+		</div>
     </div>
 </div>
 </div> <!-- Course box -->
