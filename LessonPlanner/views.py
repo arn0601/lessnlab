@@ -251,6 +251,8 @@ def addLessonObjectives(request):
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
 		
+		objectives_list = [(o.id,o.description) for o in Objective.objects.filter(standard=standard)]
+		form.fields['created'].choices = objectives_list
 		if form.is_valid():
 			already_created = form.cleaned_data['created']
 			for obj_id in already_created:
