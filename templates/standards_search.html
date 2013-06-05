@@ -3,22 +3,23 @@
 {% load dictionary_extras %}
 <!DOCTYPE html>
 {% block content %}
-         <div class="noborderunitbox" id="u1">
-    <form class="form-horizontal" method="post" action="{% url standardsSearch %}" name="standard_search">
-	{% for field in standardsSearchForm %}
-	<div class="control-group">
-	<label class="control-label">{{ field.label }}</label>
-	<div class="controls"> {{ field }} </div>
+<div class="container">
+	<div class="row">
+    	<form method="post" action="{% url standardsSearch %}" name="standard_search">
+		{% for field in standardsSearchForm %}
+		<div class="control-group">
+		<label class="control-label">{{ field.label }}</label>
+		<div class="controls"> {{ field }} </div>
 	</div>
 	{% endfor %}
 	<div class="control-group">
-	<div class="controls"><input class="btn btn-small btn-success" type="submit" value="Search"></div>
+	<div class="controls"><input class="btn btn-large btn-success" type="submit" value="Search For Standards"></div>
 	</div>
     </form>
-</div>
-
-	<table class="table table-hover table-striped table-bordered" style="width:95%;margin-left:20px">
-	<caption><h5> {{ searchedStandards|length }} {% if has_state %} {{ state }} {% else %} {{ standard_type }} {% endif %} Standards Found </h5></caption>
+	</div>
+<div class="row">
+<table class="table table-hover table-striped table-bordered">
+	<caption><h4> {{ searchedStandards|length }} {% if has_state %} {{ state }} {% else %} {{ standard_type }} {% endif %} Standards Found </h4></caption>
 	<thead> <tr> <th> # </th> <th> Type </th> {% if has_state %} <th> State </th> {% endif %}  <th> Grade </th> <th> Subject </th> <th> Content </th> </tr> </thead>
 	<tbody>
 	{% for standards in searchedStandards %}
@@ -27,6 +28,7 @@
         </tbody>
 	</table>
 	</p>
-	</div>
-
+</div>
+</div>
+</div>
 {% endblock %}
