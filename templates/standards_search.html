@@ -3,7 +3,7 @@
 {% load dictionary_extras %}
 <!DOCTYPE html>
 {% block content %}
-<div class="container">
+<div class="container" style="padding-left: 20px;">
 	<div class="row">
     	<form method="post" action="{% url standardsSearch %}" name="standard_search">
 		{% for field in standardsSearchForm %}
@@ -19,7 +19,7 @@
 	</div>
 <div class="row">
 <table class="table table-hover table-striped table-bordered">
-	<caption><h4> {{ searchedStandards|length }} {% if has_state %} {{ state }} {% else %} {{ standard_type }} {% endif %} Standards Found </h4></caption>
+	<h4> {{ searchedStandards|length }} {% if has_state %} {{ state }} {% else %} {{ standard_type }} {% endif %} Standards Found </h4>
 	<thead> <tr> <th> # </th> <th> Type </th> {% if has_state %} <th> State </th> {% endif %}  <th> Grade </th> <th> Subject </th> <th> Content </th> </tr> </thead>
 	<tbody>
 	{% for standards in searchedStandards %}
@@ -27,7 +27,6 @@
 	{% endfor %}
         </tbody>
 	</table>
-	</p>
 </div>
 </div>
 </div>
