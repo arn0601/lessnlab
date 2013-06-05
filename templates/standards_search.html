@@ -4,7 +4,7 @@
 <!DOCTYPE html>
 {% block content %}
 <div class="container">
-	<h3 style="color:#666666; font-family: sans-serif; padding-left: 20px;">Search for Course Standards</h3>
+	<h3 style="font-family: sans-serif; padding-left: 20px;">Search for Course Standards</h3>
 	<div class="row" style="padding-left: 40px;">
     	<form method="post" action="{% url standardsSearch %}" name="standard_search">
 		{% for field in standardsSearchForm %}
