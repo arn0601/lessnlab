@@ -8,7 +8,7 @@
 		<h3> Learn About {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} {{ standard.standard_type.value }} {% endif %} Standard {{ standard.numbering }}</h3>
 		<h6>{{ standard.description  }}</h6>
 		<hr/>
-		<div class="row">
+		<div class="row-fluid">
 			<h5> At A Glance Details</h5>
 	<!-- add a glance details - state, type etc -->
 			<div class="span2"> <p><strong> Id</strong> </p> <p> {{ standard.numbering }} </p> </div>
@@ -18,7 +18,7 @@
 			<div class="span2"> <p> <strong> Grade Level </strong> </p> <p> {{ standard.grade.value }} </p> </div>
 		</div>
 		<hr />
-		<div class="row">
+		<div class="row-fluid">
 			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#standard_guidance"></i>
 			<h5> What Does This Standard Mean? </h5>
 			<div id="standard_guidance" class="collapse in" hide="true">
@@ -36,7 +36,7 @@
 			</div>
 		</div>
 		<hr />
-		<div class="row">
+		<div class="row-fluid">
 			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#courses_taught"></i>
 			<h5> Courses Covering this Standard</h5>
 			<div id="courses_taught" class="collapse in">
@@ -51,7 +51,7 @@
 		<hr />
 		 <div class="row-fluid">
 			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#objectives_associated"></i>
-			<b> Aligned Objective(s) </b>
+			<h5> Aligned Objective(s) </h5>
 			<div id="objectives_associated" class="collapse in">
 				<table class="table table-hover table-striped table-bordered">
 				<thead> <tr> <th> Objective</th> <th> Author </th> <th> Quality </th> </tr> </thead>
