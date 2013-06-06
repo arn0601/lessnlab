@@ -3,20 +3,22 @@
 {% load dictionary_extras %}
 <!DOCTYPE html>
 {% block content %}
-	<h3 style="font-family: sans-serif; padding-left: 20px;">Search for Course Standards</h3>
-	<div class="row" style="padding-left: 40px;">
+<h3 style="font-family: sans-serif; padding-left: 20px;">Search for Course Standards</h3>
+<div class="row" style="padding-left: 40px;">
+	<div class="span12">
     	<form method="post" action="{% url standardsSearch %}" name="standard_search">
 		{% for field in standardsSearchForm %}
 		<div class="control-group">
 		<label class="control-label">{{ field.label }}</label>
 		<div class="controls"> {{ field }} </div>
+		</div>
+		{% endfor %}
+		<div class="control-group">
+		<div class="controls"><input class="btn btn-success" type="submit" value="Find Standards"></div>
+		</div>
+    <	/form>
 	</div>
-	{% endfor %}
-	<div class="control-group">
-	<div class="controls"><input class="btn btn-success" type="submit" value="Find Standards"></div>
-	</div>
-    </form>
-	</div>
+</div>
 <hr/>
 <div class="row" style="padding-left: 40px;">
 <table class="table table-hover table-striped table-bordered">
@@ -42,7 +44,5 @@
 	{% endfor %}
     </tbody>
 </table>
-</div>
-</div>
 </div>
 {% endblock %}
