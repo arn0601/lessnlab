@@ -19,8 +19,7 @@
 		</div>
 		<hr />
 		<div class="row-fluid">
-			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#standard_guidance"></i>
-			<h5> What Does This Standard Mean? </h5>
+			<h5><i type="button" class="icon-plus" data-toggle="collapse" data-target="#standard_guidance"></i> What Does This Standard Mean? </h5>
 			<div id="standard_guidance" class="collapse in" hide="true">
 			  	{% if analysis|length == 0 %}
 			  	<div class="alertbox" style="width: 100%;">
@@ -45,8 +44,7 @@
 		</div>
 		<hr />
 		<div class="row-fluid">
-			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#courses_taught"></i>
-			<h5> Courses Covering this Standard</h5>
+			<h5><i type="button" class="icon-plus" data-toggle="collapse" data-target="#courses_taught"></i>Courses Covering this Standard</h5>
 			<div id="courses_taught" class="collapse in">
 				<table class="table table-hover table-striped table-bordered">
 				<thead> <tr> <th> Course Name</th> <th> Subject </th> <th> Grade Level </th> <th> Course Author </th> <th> Quality</th> </tr> </thead>
@@ -57,9 +55,15 @@
 			</div>
 		</div>
 		<hr />
-		 <div class="row-fluid">
-			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#objectives_associated"></i>
-			<h5> Aligned Objective(s) </h5>
+		 <div class="row-fluid">	
+			<h5><i type="button" class="icon-plus" data-toggle="collapse" data-target="#objectives_associated"></i>Aligned Objective(s) </h5>
+			{% if standardObjectives|length == 0 %}
+			  	<div class="alertbox" style="width: 100%;">
+					<div class="alert alert-info">
+					<p>This standard has no aligned objectives yet</p>
+					</div>
+				</div>
+			{% else %}
 			<div id="objectives_associated" class="collapse in">
 				<table class="table table-hover table-striped table-bordered">
 				<thead> <tr> <th> Objective</th> <th> Author </th> <th> Quality </th> </tr> </thead>
@@ -67,6 +71,7 @@
 					<tr> <td> {{ objective.description }} </td> <td> {{ objective.owner.user_firstname }} {{ objective.owner.user_lastname }}  </td> <td> {{ standardObjectives|access:objective }} </td> </tr>
 				{% endfor %}
 				</table>
+			{% endif %}
 			</div>
 		</div> 
 	
