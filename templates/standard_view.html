@@ -6,7 +6,7 @@
 
         <div class="container" id="u1" class="content_div" style="margin-bottom:60px">
 		<h3> Learn About {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} {{ standard.standard_type.value }} {% endif %} Standard {{ standard.numbering }}</h3>
-		<h6>{{ standard.description  }}</h6>
+		<p>{{ standard.description  }}</p>
 		<hr/>
 		<div class="row-fluid">
 			<h5> At A Glance Details</h5>
@@ -22,6 +22,13 @@
 			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#standard_guidance"></i>
 			<h5> What Does This Standard Mean? </h5>
 			<div id="standard_guidance" class="collapse in" hide="true">
+			  	{% if analysis|length == 0 %}
+			  	<div class="alertbox" style="width: 100%;">
+					<div class="alert alert-info">
+					<p>No explanations have been added yet. <a href="#addStandardAnalysis" data-toggle="modal">Add one.</a></p>
+					</div>
+				</div>
+			  	{% else %}
 			  	<p><a href="#addStandardAnalysis" data-toggle="modal">Add An Explanation</a></p>
 				<table class="table table-hover table-striped table-bordered">
 					<thead> <tr> <th> Explanation </th> <th> Author </th> <th> Quality </th> </thead>
@@ -33,6 +40,7 @@
 						</tr>
 					{% endfor %}
 				</table>
+				{% endif %}
 			</div>
 		</div>
 		<hr />
