@@ -23,21 +23,21 @@
 	<caption style="padding-bottom: 10px;"><h5>{{ searchedStandards|length }} {% if has_state %} {{ state }} {% else %} {{ standard_type }} {% endif %} Standards Found </h5></caption>
 	<thead> 
 		<tr> 
-			<th>Number</th> 
-			<th>Grade Level</th> 
+			<th>Standard</th> 
+			<th>Grade</th> 
 			<th>Subject</th> 
-			<th>Description</th> 
+			<th>Id</th>
 		</tr>
 	</thead>
 	<tbody>
 	{% for standards in searchedStandards %}
 	<tr> 
-		<td>{{ standards.numbering }}</td>
+		<td> <a href="/standard/?standard_id={{ standards.id }}">{{ standards.description }}</a> </td>
 		<!-- <td> {{ standards.standard_type.value }}</td> 
 		{% if has_state %} <td> {{ standards.state.value }} </td> {% endif %} -->
 		<td> {{ standards.grade.value }} </td> 
 		<td> {{ standards.subject.value }} </td> 
-		<td> <a href="/standard/?standard_id={{ standards.id }}">{{ standards.description }}</a> </td> 
+		<td>{{ standards.numbering }}</td>	 
 	</tr>
 	{% endfor %}
     </tbody>
