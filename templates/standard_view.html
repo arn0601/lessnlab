@@ -24,7 +24,7 @@
 			  	{% if analysis|length == 0 %}
 			  	<div class="alertbox" style="width: 100%;">
 					<div class="alert alert-info">
-					<p>No explanations have been added yet. <a href="#addStandardAnalysis" data-toggle="modal">Add one.</a></p>
+					<p>No explanations have been added yet. Be the first to <a href="#addStandardAnalysis" data-toggle="modal">add one.</a></p>
 					</div>
 				</div>
 			  	{% else %}
@@ -44,7 +44,7 @@
 		</div>
 		<hr />
 		<div class="row-fluid">
-			<h5><i type="button" class="icon-plus" data-toggle="collapse" data-target="#courses_taught"></i>Courses Covering this Standard</h5>
+			<h5><i type="button" class="icon-plus" data-toggle="collapse" data-target="#courses_taught"></i> Courses Covering this Standard</h5>
 			<div id="courses_taught" class="collapse in">
 				<table class="table table-hover table-striped table-bordered">
 				<thead> <tr> <th> Course Name</th> <th> Subject </th> <th> Grade Level </th> <th> Course Author </th> <th> Quality</th> </tr> </thead>
@@ -56,7 +56,7 @@
 		</div>
 		<hr />
 		 <div class="row-fluid">	
-			<h5><i type="button" class="icon-plus" data-toggle="collapse" data-target="#objectives_associated"></i>Aligned Objective(s) </h5>
+			<h5><i type="button" class="icon-plus" data-toggle="collapse" data-target="#objectives_associated"></i> Aligned Objective(s) </h5>
 			{% if standardObjectives|length == 0 %}
 			  	<div class="alertbox" style="width: 100%;">
 					<div class="alert alert-info">
