@@ -120,6 +120,14 @@
 			 	padding-left: 10px;
 			 }
 			 
+/* Standards Search Styles */
+
+			.standardsSearchTableHead {
+			
+				text-align: center;
+				font-family: sans-serif;
+			
+			}
 /* Unit and Course box display */ 
 
 			.coursebox {
