@@ -3,8 +3,6 @@
 {% load dictionary_extras %}
 <!DOCTYPE html>
 {% block content %}
-
-        <div class="container" id="u1" class="content_div" style="margin-bottom:60px">
 		<h3> Learn About {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} {{ standard.standard_type.value }} {% endif %} Standard {{ standard.numbering }}</h3>
 		<p>{{ standard.description  }}</p>
 		<hr/>
@@ -57,6 +55,7 @@
 		<hr />
 		 <div class="row-fluid">	
 			<h5><i type="button" class="icon-plus" data-toggle="collapse" data-target="#objectives_associated"></i> Aligned Objective(s) </h5>
+			<div id="objectives_associated" class="collapse in">
 			{% if standardObjectives|length == 0 %}
 			  	<div class="alertbox" style="width: 100%;">
 					<div class="alert alert-info">
@@ -64,7 +63,6 @@
 					</div>
 				</div>
 			{% else %}
-			<div id="objectives_associated" class="collapse in">
 				<table class="table table-hover table-striped table-bordered">
 				<thead> <tr> <th> Objective</th> <th> Author </th> <th> Quality </th> </tr> </thead>
 				{% for objective in standardObjectives %}
