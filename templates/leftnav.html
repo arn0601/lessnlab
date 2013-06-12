@@ -14,7 +14,7 @@ function imgError(image){
 				{% for c in userCourses %}  
 				<li><a href="/units/?course_id={{ c.id }}" rel="tooltip" data-placement="left" title="Grade {{ c.grade }}, {{ c.subject}}" class="{% if c.id == course.id %} active {% endif%}">{{ c.name }}</a></li>
 				{% endfor %}
-				<li><a href="#addCourse" data-toggle="modal"><small><i class="icon-plus"></i>Add Course</small></a></li>
+				<li><a href="#chooseNewCourse" data-toggle="modal"><small><i class="icon-plus"></i>Add Course</small></a></li>
 		</ul>
 	</div>
 </div>

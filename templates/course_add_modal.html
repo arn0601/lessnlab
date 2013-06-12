@@ -1,0 +1,111 @@
+<div class="modal hide" id="recommendCourse">
+	{% block recommendCourseCriteria %} 
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Choose the criteria for course</h3>
+   </div>
+   <div class="modal-body">
+    <form method="post" action="" id="recommend_course_criteria">
+	{% csrf_token %}
+	{% for field in recommendCourseCriteriaForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+   		</div>
+    	{% endfor %}
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+		<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+      </p>
+    </form>
+   </div>
+	{% endblock %}
+</div>
+
+<div class="modal hide" id="chooseNewCourse">
+	{% block chooseNewCourse %} 
+ <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a course</h3>
+  </div>
+  <div class="modal-body">
+	<a onClick="chooseRecommendCourse()">Choose from a recommended course</a><br>
+	<a onClick="chooseAddCourse()">Create your own course</a>
+  </div>
+	{% endblock %}
+</div>
+
+
+<div class="modal hide" id="addCourse">
+	{% block addCourse %} 
+ <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a course</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addCourse %}" name="login_form">
+	{% csrf_token %}
+	{% for field in courseAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+   		</div>
+    {% endfor %}
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+		<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+	{% endblock %}
+</div>
+
+
+<script type="text/javascript"> 
+
+	function chooseNewCourse1() {
+		$("#chooseNewCourse").modal("show");
+	}
+	
+	function chooseRecommendCourse() {
+		$("#chooseNewCourse").modal("hide");	
+		$("#recommendCourse").modal("show");
+	}
+
+	function chooseAddCourse() {
+		$("#chooseNewCourse").modal("hide");
+		$("#addCourse").modal("show");
+	}
+
+	function hideAddCourse() {
+		$("#addCourse").modal("hide");
+	}
+
+	function hideRecommendCourse() {
+		$("#recommendCourse").modal("hide");
+	}
+
+	function hideChooseNewCourse() {
+		$("#chooseNewCourse").modal("hide");
+	}
+
+	function createCourseFromStandard(id){
+
+		$.ajax({
+			data: {standard_id:id},
+			dataType:'html',
+			type: "POST", // GET or POST
+      url: {% url LessonPlanner.views.createCourseFromStandard %}, // the file to call
+			success : function(data){
+					$('#addCourse').html(data);
+					$('#addCourse').modal('show')		
+       }
+		});
+	}
+
+</script>

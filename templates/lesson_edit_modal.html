@@ -1,7 +1,7 @@
 <div class="modal hide" id="editLesson">
 {% block editLesson %}
   <div class="modal-header">
-    <a class="close" type="button" onClick="hideEditLesson()">x</a>
+  <button type="button" class="close" data-dismiss="modal">x</button>
     <h3>Edit Lesson</h3>
   </div>
   <div class="modal-body">
@@ -19,7 +19,7 @@
      <p>
 	<input type="hidden" value={{ selectedLesson }} name="selectedLesson">
 <button type="submit" class="btn btn-primary">Update</button>
-        <a class="btn btn-primary" type="button" onClick="hideEditLesson()">Cancel</a>
+        <a class="btn btn-primary" type="button" data-dismiss="modal">Cancel</a>
       </p>
     </form>
   </div>
@@ -27,12 +27,6 @@
 </div>
 
 <script type="text/javascript"> 
-
-	function hideEditLesson() {
-		$("#editLesson").modal("hide");
-	}
-
-
 
 	function requestEditLesson(id){
 

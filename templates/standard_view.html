@@ -6,6 +6,8 @@
 	<div class="container"> 
 		<h3> Learn About {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} {{ standard.standard_type.value }} {% endif %} Standard {{ standard.numbering }}</h3>
 		<p>{{ standard.description  }}</p>
+		<p> <a onClick="createCourseFromStandard('{{ standard.id }}')">Use this standard to help create a course</a></p>
+		<p> <a onClick="recommendCourseFromStandard()">Use an already created course that uses this standard</a><p>
 		<hr/>
 		<div class="row-fluid">
 			<h5> At A Glance Details</h5>
@@ -74,6 +76,8 @@
 			</div>
 		</div> 
 	</div>
+{% include "course_add_modal.html" %}
+
 <div class="modal hide" id="addStandardAnalysis">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">x</button>

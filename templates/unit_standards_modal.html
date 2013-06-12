@@ -1,8 +1,8 @@
 <div class="modal hide" id="addingUnitStandards">
 {% block addStandards %}
   <div class="modal-header">
-    <a class="close" type="button" onClick="hideAddingUnitStandards()">x</a>
-    <h3>Add standards to unit</h3>
+  <button type="button" class="close" data-dismiss="modal">x</button>
+   <h3>Add standards to unit</h3>
   </div>
   <div class="modal-body">
     <form method="post" action="{% url addUnitStandards %}" name="add_unit_standards">
@@ -17,7 +17,7 @@
     {% endfor %}
      
      <p><button type="submit" class="btn btn-primary">Submit</button>
-        <a class="btn btn-primary" type="button" onClick="hideAddingUnitStandards()">Cancel</a>
+        <a class="btn btn-primary" type="button" data-dismiss="modal">Cancel</a>
       </p>
     </form>
   </div>
