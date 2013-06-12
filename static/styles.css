@@ -120,6 +120,14 @@
 			 	padding-left: 10px;
 			 }
 			 
+/* Standards Search Styles */
+
+			.standardSearchTableHead {
+			
+				text-align: center;
+				font-family: sans-serif;
+			
+			}
 /* Unit and Course box display */ 
 
 			.coursebox {
@@ -127,9 +135,9 @@
                 padding-bottom: 15px;
                 font-size: 10pt;
                 padding-left: 10px;
-                border-bottom-width: 1px;
+                /* border-bottom-width: 1px;
                 border-bottom-color: #c8c8c8;
-                border-bottom-style: inset;
+                border-bottom-style: inset; */
                 margin-top: 10px;
                 width: 100%;
             }

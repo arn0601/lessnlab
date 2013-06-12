@@ -1,34 +1,37 @@
-{% extends "base.html" %}
+{% extends "base-1col.html" %}
 {% load staticfiles %}
 {% load dictionary_extras %}
 <!DOCTYPE html>
 {% block content %}
-
-        <div class="container" id="u1" class="content_div" style="margin-bottom:60px">
-		<h4> Details for {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} {{ standard.standard_type.value }} {% endif %} Standard {{ standard.numbering }}</h4>
+	<div class="container"> 
+		<h3> Learn About {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} {{ standard.standard_type.value }} {% endif %} Standard {{ standard.numbering }}</h3>
+		<p>{{ standard.description  }}</p>
+		<p> <a onClick="createCourseFromStandard('{{ standard.id }}')">Use this standard to help create a course</a></p>
+		<p> <a onClick="recommendCourseFromStandard()">Use an already created course that uses this standard</a><p>
+		<hr/>
 		<div class="row-fluid">
-			<p>{{ standard.description  }}</p>
-			<p> <a onClick="createCourseFromStandard('{{ standard.id }}')">Use this standard to help create a course</a></p>
-			<p> <a onClick="recommendCourseFromStandard()">Use an already created course that uses this standard</a><p>
-		</div>
-		<hr />
-		<div class="row-fluid">
-			<h5> At a Glance </h5>
+			<h5> At A Glance Details</h5>
 	<!-- add a glance details - state, type etc -->
-			<div class="span2"> <p><strong> #</strong> </p> <p> {{ standard.numbering }} </p> </div>
-			<div class="span2"> <p> <strong> Type </strong> </p> <p> {{ standard.standard_type.value }} </p> </div>
-			<div class="span2"> <p> <strong > State </strong>  </p> <p> {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} N/A {% endif %} </p> </div>
+			<div class="span2"> <p><strong> Id</strong> </p> <p> {{ standard.numbering }} </p> </div>
+			<div class="span2"> <p> <strong> Type</strong> </p> <p> {{ standard.standard_type.value }} </p> </div>
+			<div class="span2"> <p> <strong> State </strong>  </p> <p> {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} No State {% endif %} </p> </div>
 			<div class="span2"> <p> <strong> Subject </strong> </p> <p> {{ standard.subject.value }} </p> </div>
-			<div class="span2"> <p> <strong> Grade </strong> </p> <p> {{ standard.grade.value }} </p> </div>
+			<div class="span2"> <p> <strong> Grade Level </strong> </p> <p> {{ standard.grade.value }} </p> </div>
 		</div>
 		<hr />
 		<div class="row-fluid">
-			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#standard_guidance"></i>
-			<b> Standard Guidance </b>
-			<div id="standard_guidance" class="collapse in">
-			  	<p><a href="#addStandardAnalysis" data-toggle="modal">Add Analysis for this Standard</a></p>
+			<h5><i type="button" class="icon-plus" data-toggle="collapse" data-target="#standard_guidance"></i> What Does This Standard Mean? </h5>
+			<div id="standard_guidance" class="collapse in" hide="true">
+			  	{% if analysis|length == 0 %}
+			  	<div class="alertbox" style="width: 100%;">
+					<div class="alert alert-info">
+					<p>No explanations have been added yet. Be the first to <a href="#addStandardAnalysis" data-toggle="modal">add one.</a></p>
+					</div>
+				</div>
+			  	{% else %}
+			  	<p><a href="#addStandardAnalysis" data-toggle="modal">Add An Explanation</a></p>
 				<table class="table table-hover table-striped table-bordered">
-					<thead> <tr> <th> Analysis </th> <th> Teacher </th> <th> Usefulness </th> </thead>
+					<thead> <tr> <th> Explanation </th> <th> Author </th> <th> Quality </th> </thead>
 					{% for sa in analysis %}
 						<tr> <td>  {{ sa.analysis }} </td> <td> {{ sa.teacher.user_firstname }} {{ sa.teacher.user_lastname }}  </td> <td id="cum_rating-{{ sa.id }}"> {{ sa.cumulative_rating }} </td> <td> 
 						{% for r in ratingOptions %}
@@ -37,15 +40,15 @@
 						</tr>
 					{% endfor %}
 				</table>
+				{% endif %}
 			</div>
 		</div>
 		<hr />
 		<div class="row-fluid">
-			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#courses_taught"></i>
-			<b> Courses Teaching this Standard </b>
+			<h5><i type="button" class="icon-plus" data-toggle="collapse" data-target="#courses_taught"></i> Courses Covering this Standard</h5>
 			<div id="courses_taught" class="collapse in">
 				<table class="table table-hover table-striped table-bordered">
-				<thead> <tr> <th> Name </th> <th> Subject </th> <th> Grade </th> <th> Author </th> <th> Rating </th> </tr> </thead>
+				<thead> <tr> <th> Course Name</th> <th> Subject </th> <th> Grade Level </th> <th> Course Author </th> <th> Quality</th> </tr> </thead>
 				{% for course in standardCourses %}
 					<tr> <td> <a href="/courseView/?course_id={{ course.id }}">{{ course.name }} </a></td> <td> {{ course.subject.value }} </td> <td> {{ course.grade }} </td> <td> {{ course.owner.user_firstname }} {{ course.owner.user_lastname }} </td> <td> {{ standardCourses|access:course }} </td> </tr>
 				{% endfor %}
@@ -53,27 +56,36 @@
 			</div>
 		</div>
 		<hr />
-		 <div class="row-fluid">
-			<i type="button" class="icon-plus" data-toggle="collapse" data-target="#objectives_associated"></i>
-			<b> Objectives associated with this standard </b>
+		 <div class="row-fluid">	
+			<h5><i type="button" class="icon-plus" data-toggle="collapse" data-target="#objectives_associated"></i> Aligned Objective(s) </h5>
 			<div id="objectives_associated" class="collapse in">
+			{% if standardObjectives|length == 0 %}
+			  	<div class="alertbox" style="width: 100%;">
+					<div class="alert alert-info">
+					<p>This standard has no aligned objectives yet</p>
+					</div>
+				</div>
+			{% else %}
 				<table class="table table-hover table-striped table-bordered">
-				<thead> <tr> <th> Description </th> <th> Author </th> <th> Rating </th> </tr> </thead>
+				<thead> <tr> <th> Objective</th> <th> Author </th> <th> Quality </th> </tr> </thead>
 				{% for objective in standardObjectives %}
 					<tr> <td> {{ objective.description }} </td> <td> {{ objective.owner.user_firstname }} {{ objective.owner.user_lastname }}  </td> <td> {{ standardObjectives|access:objective }} </td> </tr>
 				{% endfor %}
 				</table>
+			{% endif %}
 			</div>
 		</div> 
-	
 	</div>
+<<<<<<< HEAD
 
 {% include "course_add_modal.html" %}
 
+=======
+>>>>>>> 8048b188613b7cab6763dce5c22d48cd1766b86e
 <div class="modal hide" id="addStandardAnalysis">
   <div class="modal-header">
     <button type="button" class="close" data-dismiss="modal">x</button>
-    <h3>Add Analysis for Standard {{ standard.numbering }} </h3>
+    <h3>Add An Explanation for Standard {{ standard.numbering }} </h3>
   </div>
   <div class="modal-body">
     <form method="post" action="{% url LessonPlanner.views.addStandardAnalysis %}" name="login_form">

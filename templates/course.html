@@ -3,6 +3,13 @@
 {% load dictionary_extras %}
 <!DOCTYPE html>
 {% block content %}
+{% if userCourses|length == 0 %}
+<div class="container alertbox" style="width: 100%;">
+	<div class="alert alert-info">
+		<p>You haven't added any courses yet. <a href="#addCourse" data-toggle="modal">Add one.</a></p>
+	</div>
+</div>
+{% else %} 	
 {% for course in userCourses %}
 <div class="container coursebox" style="width: 100%;">
 <div class="row">
@@ -43,6 +50,7 @@
 </div>
 </div> <!-- Course box -->
 {% endfor %}
+{% endif %}
 
 {% include "course_edit_modal.html" %}
 {% include "course_delete_modal.html" %}

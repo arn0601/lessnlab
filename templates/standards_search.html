@@ -1,32 +1,46 @@
-{% extends "base.html" %}
+{% extends "base-1col.html" %}
 {% load staticfiles %}
 {% load dictionary_extras %}
 <!DOCTYPE html>
 {% block content %}
-         <div class="noborderunitbox" id="u1">
-    <form class="form-horizontal" method="post" action="{% url standardsSearch %}" name="standard_search">
-	{% for field in standardsSearchForm %}
-	<div class="control-group">
-	<label class="control-label">{{ field.label }}</label>
-	<div class="controls"> {{ field }} </div>
-	</div>
-	{% endfor %}
-	<div class="control-group">
-	<div class="controls"><input class="btn btn-small btn-success" type="submit" value="Search"></div>
-	</div>
-    </form>
+<h3 style="font-family: sans-serif; padding-left: 330px;">Course Standards Search</h3>
+<div class="row" style="padding-left: 276px;">
+    	<form method="post" class="form-horizontal" action="{% url standardsSearch %}" name="standard_search">
+		{% for field in standardsSearchForm %}
+		<div class="control-group">
+		<label class="control-label">{{ field.label }}</label>
+		<div class="controls"> {{ field }} </div>
+		</div>
+		{% endfor %}
+		<div class="control-group">
+		<div class="controls"><input class="btn btn-success" type="submit" value="Find Standards"></div>
+		</div>
+    	</form>
 </div>
-
-	<table class="table table-hover table-striped table-bordered" style="width:95%;margin-left:20px">
-	<caption><h5> {{ searchedStandards|length }} {% if has_state %} {{ state }} {% else %} {{ standard_type }} {% endif %} Standards Found </h5></caption>
-	<thead> <tr> <th> # </th> <th> Type </th> {% if has_state %} <th> State </th> {% endif %}  <th> Grade </th> <th> Subject </th> <th> Content </th> </tr> </thead>
+<hr/>
+<div class="row" style="padding-left: 40px; padding-right: 20px;">
+<table class="table table-hover table-striped table-bordered">
+	<caption style="padding-bottom: 10px;"><h5>{{ searchedStandards|length }} {% if has_state %} {{ state }} {% else %} {{ standard_type }} {% endif %} Standards Found </h5></caption>
+	<thead> 
+		<tr> 
+			<th>Standard</th> 
+			<th>Grade</th> 
+			<th>Subject</th> 
+			<th>Id</th>
+		</tr>
+	</thead>
 	<tbody>
 	{% for standards in searchedStandards %}
-	<tr> <td><b> {{ standards.numbering }}</b> </td> <td> {{ standards.standard_type.value }} </td> {% if has_state %} <td> {{ standards.state.value }} </td> {% endif %}<td> {{ standards.grade.value }} </td> <td> {{ standards.subject.value }} </td> <td> <a href="/standard/?standard_id={{ standards.id }}">{{ standards.description }}</a> </td> </tr>
+	<tr> 
+		<td> <a href="/standard/?standard_id={{ standards.id }}">{{ standards.description }}</a> </td>
+		<!-- <td> {{ standards.standard_type.value }}</td> 
+		{% if has_state %} <td> {{ standards.state.value }} </td> {% endif %} -->
+		<td> {{ standards.grade.value }} </td> 
+		<td> {{ standards.subject.value }} </td> 
+		<td>{{ standards.numbering }}</td>	 
+	</tr>
 	{% endfor %}
-        </tbody>
-	</table>
-	</p>
-	</div>
-
+    </tbody>
+</table>
+</div>
 {% endblock %}

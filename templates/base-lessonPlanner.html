@@ -41,9 +41,48 @@ $(function() {
     });
  });
 
+ $(function() {
+    $( ".content_sortable" ).sortable({
+			start: function(event, ui) {
+            var start_pos = ui.item.index();
+            ui.item.data('start_pos', start_pos);
+      },
+			stop: function( event, ui ) 
+			{
+				var start =  ui.item.data('start_pos') + 1;
+				var final = ui.item.index() + 1;
+				var section_id  = ui.item.parent().attr("section_id");
+				a = $("#section"+section_id)[0];							
+				div1 = a.children[start];
+				div2 = a.children[final];
+
+				if(start > final)
+					a.insertBefore(div1,div2);
+				else
+					insertAfter(div2,div1);
+
+				var stringData = start + "," + final;
+				$.ajax({ // create an AJAX call...
+            data: {
+					    start : start,
+					    final : final,
+							section : section_id
+									},
+            type: "POST", // GET or POST
+            url: "/changeContentPlacement/?lesson_id={{lesson.id}}", // the file to call
+            success: function(response) { // on success..
+                 // update the DIV
+        		}
+        });
+			}
+		});
+	});
+
 
   $(function() {
     $( "#sortable" ).sortable({
+			handle: ".portlet-header",
+			
 			start: function(event, ui) {
             var start_pos = ui.item.index();
             ui.item.data('start_pos', start_pos);
@@ -57,11 +96,6 @@ $(function() {
 				div1 = a.children[start];
 				div2 = a.children[final];
 
-				if(start > final)
-					a.insertBefore(div1,div2);
-				else
-					insertAfter(div2,div1);
-
 				var stringData = start + "," + final;
 				$.ajax({ // create an AJAX call...
             data: {
@@ -71,7 +105,10 @@ $(function() {
             type: "POST", // GET or POST
             url: "/changeSectionPlacement/?lesson_id={{lesson.id}}", // the file to call
             success: function(response) { // on success..
-                 // update the DIV
+              if(start > final)
+								a.insertBefore(div1,div2);
+							else
+								insertAfter(div2,div1);
         		}
         });
 			}
@@ -135,7 +172,7 @@ $(function() {
 							<a href="javascript:void(0)" id="leftNav0" onClick="goToByScroll('overview')">Overview</a>
 					  </li>
 					</ul>
-					<ul class="nav nav-pills nav-stacked" id="sortable">
+					<ul class="nav nav-pills nav-stacked sections_sortable" id="sortable">
 						
 						{% for section, section_placement in sections|sort_placement %}
 				 		{% with section.name as user_key %}
@@ -144,9 +181,9 @@ $(function() {
 								id="leftNav{{ section.id }}" onClick="goToByScroll('{{ section.id }}')">{{ section_types|access:user_key }}</a>
 							</div>
     					<div class="portlet-content">
-								<ul class="nav nav-pills nav-stacked">
+								<ul class="nav nav-pills nav-stacked content_sortable" section_id="{{ section.id }}">
 									{% for content, content_placement in sections|access:section|sort_placement %}
-										<li><a href="javascript:void(0)" id="leftNav{{ section.id }}" onClick="goToByScroll('{{content.id }}_content')">
+										<li><a href="javascript:void(0)" class="content_types" id="leftNav{{ section.id }}" onClick="goToByScroll('{{content.id }}_content')">
 										{{ content.content_type }}
 										 </a></li>
 												

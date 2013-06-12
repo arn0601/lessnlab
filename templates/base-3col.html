@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html style="height:100%;">
   <head>
-    <title>LessnLab - Home</title>
+    <title>LessnLab</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<link href="/static/bootstrap.css" rel="stylesheet" media="screen">
 		<link href="/static/styles.css" rel="stylesheet" media="screen">
@@ -18,7 +18,7 @@
   <body>
   <div class="container basecontent" style="padding-top: 42px; width: 1000px; margin-bottom: -50px; min-height: 100%; height: auto;">
 			{% include "navbar.html" %}
-			<div class="row" style="padding-left: 20px; height: 100%">
+			<div class="row" style="padding-left: 20px; padding-right: 20px; height: 100%">
 				{% include "leftnav.html" %}
 				<div class="span7" style="margin-left: 184px;">
 		      		{% block content %}{% endblock %}
