@@ -9,6 +9,12 @@ from registration.backends import get_backend
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from accounts.forms import *
+
+def view_profile(request):
+	return HttpResponseRedirect('profile.html')
+
+
+
 @csrf_exempt
 def logout_user(request):
 	logout(request)	
