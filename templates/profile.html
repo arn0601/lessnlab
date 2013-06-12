@@ -5,11 +5,11 @@
 {% block content %}
 <div class="row">
 	<div class="span3">
-		<img src="static/zheadshot.jpg" class="img-rounded"></img>
+		<img src="/static/zheadshot.jpg" class="img-rounded"></img>
 	</div>
 	<div class="span9">
-		<h5>{{fullname}}</h5>
-		<h5>{{user.user_school_state}}</h5>
+		<h5>{{ fullname }}</h5>
+		<h5>{{ user.user_school_state }}</h5>
 	</div>
 </div>
 <hr/>
@@ -17,6 +17,9 @@
 	
 	<div class="span12">
 		<h4>My Courses</h4>
+		{% for course in userCourses %}
+		 {{	course.name }}
+		{% endfor %}
 	</div>
 
 </div>
