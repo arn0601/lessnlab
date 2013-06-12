@@ -2,7 +2,7 @@
 <div class="modal hide" id="deleteLesson">
 {% block deleteLesson %}
   <div class="modal-header">
-    <a class="close" type="button" onClick="hideDeleteLesson()">x</a>
+  <button type="button" class="close" data-dismiss="modal">x</button>
     <h3>Delete lesson</h3>
   </div>
   <div class="modal-body">
@@ -12,7 +12,7 @@
      Are you sure you want to delete the lesson?
 <p>
      <p><button type="submit" class="btn btn-primary">Yes</button>
-        <a class="btn btn-primary" type="button" onClick="hideDeleteLesson()">No</a>
+        <a class="btn btn-primary" type="button" data-dismiss="modal">No</a>
       </p>
     </form>
   </div>
@@ -20,12 +20,6 @@
 </div>
 
 <script type="text/javascript"> 
-
-	function hideDeleteLesson() {
-		$("#deleteLesson").modal("hide");
-	}
-
-
 
 	function requestDeleteLesson(id){
 		$("#deleteLessonHidden").val(id)

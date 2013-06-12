@@ -8,6 +8,8 @@
 		<h4> Details for {% if standard.standard_type.value == 'State' %} {{ standard.state.value }} {% else %} {{ standard.standard_type.value }} {% endif %} Standard {{ standard.numbering }}</h4>
 		<div class="row-fluid">
 			<p>{{ standard.description  }}</p>
+			<p> <a onClick="createCourseFromStandard('{{ standard.id }}')">Use this standard to help create a course</a></p>
+			<p> <a onClick="recommendCourseFromStandard()">Use an already created course that uses this standard</a><p>
 		</div>
 		<hr />
 		<div class="row-fluid">
@@ -66,6 +68,7 @@
 	
 	</div>
 
+{% include "course_add_modal.html" %}
 
 <div class="modal hide" id="addStandardAnalysis">
   <div class="modal-header">

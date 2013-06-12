@@ -377,7 +377,6 @@ def addCourseStandards(course, teacher):
 	standards = Standard.objects.filter(subject=course.subject).filter(grade=course.grade)
 	groups_to_render = []
         groups_add = {};
-	print standards
 	
 	for standard in standards:
 		good_standard = False
@@ -386,7 +385,6 @@ def addCourseStandards(course, teacher):
 				good_standard=True
 		else:
 			good_standard=True
-		print good_standard
 		if good_standard:
 			for sg in standard.standardgrouping_set.all():
 				if sg.prebuilt==True:
@@ -402,13 +400,20 @@ def addCourseStandards(course, teacher):
 @csrf_exempt
 def editCourse(request):
 	if request.method == 'POST':
+		try:
+			teacher = TeacherProfile.objects.get(user=request.user)
+		except:
+			return HttpResponseRedirect('/')
 		course_id = request.POST['selectedCourse']
 		course = Course.objects.get(id=course_id)
                 editCourseForm = EditCourse(request.POST, instance=course)
                 if editCourseForm.is_valid():
 			editCourseForm.save()
-                        return HttpResponseRedirect(lastPageToRedirect(request))
-        return HttpResponseRedirect(lastPageToRedirect(request))
+			course.standard_grouping.clear()
+			groups_added = addCourseStandards(course,teacher)
+			
+                        return HttpResponseRedirect('/courses/')
+        return HttpResponseRedirect('/courses/')
 
 @csrf_exempt
 def deleteCourse(request):
@@ -1078,4 +1083,31 @@ def rateAnalysis(request):
 			print traceback.format_exception(*sys.exc_info())
 			
 		return HttpResponse(str(sa.cumulative_rating))
-		
+
+'''
+this will get the add form course given the standard
+'''
+@csrf_exempt
+def createCourseFromStandard(request):
+	if request.method == 'POST':
+		try:
+			teacher = TeacherProfile.objects.get(user=request.user)
+		except:
+			return HttpResponse('')
+		sid = request.POST.get('standard_id')
+		if sid == None:
+			return HttpResponse('')
+		standard = Standard.objects.get(id=sid)
+		t = standard.standard_type
+		s = None
+		if (t.value == 'State'):
+			s = standard.state
+		b = standard.subject
+		g = standard.grade
+		addCourseForm = AddCourse()
+		addCourseForm.fields['grade'].initial = g
+		addCourseForm.fields['owner'].initial = teacher
+		addCourseForm.fields['subject'].initial = b
+		context = Context({'courseAddForm': addCourseForm})
+		return HttpResponse(render_block_to_string('course_add_modal.html', 'addCourse', context))
+	return HttpResponse('')

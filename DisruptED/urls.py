@@ -41,6 +41,8 @@ urlpatterns = patterns('',
     url(r'^addActivity/$', 'LessonPlanner.views.activity_add'),
     url(r'^$', 'LessonPlanner.views.landing'),
 
+    url(r'^createCourseFromStandard/$', 'LessonPlanner.views.createCourseFromStandard', name='createCourseFromStandard'),
+
     url(r'team/$', 'LessonPlanner.views.team'),
     (r'^login/$', 'accounts.views.login_user'),
     (r'^logout/$', 'accounts.views.logout_user'),

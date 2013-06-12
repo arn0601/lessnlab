@@ -1,7 +1,7 @@
 <div class="modal hide" id="selectingStandard">
   {% block selectingStandard %}
   <div class="modal-header">
-    <a class="close" type="button" onClick="hideAddingLessonObjectives()">x</a>
+  <button type="button" class="close" data-dismiss="modal">x</button>
     <h3>Select Lesson Standard</h3>
   </div>
   <div class="modal-body">
@@ -17,7 +17,7 @@
     {% endfor %}
      
      <p><button type="button" onClick="addLessonObjectives()" class="btn btn-primary">Submit</button>
-        <a class="btn btn-primary" type="button" onClick="hideAddingLessonObjectives()">Cancel</a>
+        <a class="btn btn-primary" type="button" data-dismiss="modal">Cancel</a>
       </p>
     </form>
   </div>
@@ -27,7 +27,7 @@
 <div class="modal hide" id="addingLessonObjectives">
   {% block addingLessonObjectives %}
   <div class="modal-header">
-    <a class="close" type="button" onClick="hiseAddingLessonObjectives()">x</a>
+  <button type="button" class="close" data-dismiss="modal">x</button>
     <h3>Add Objectives to lesson</h3>
   </div>
   <div class="modal-body">
@@ -44,7 +44,7 @@
      
      <button type="button" id="addObjective" onClick="addObj()"  class="btn btn-primary">Add objective</button>
      <p><button type="submit" class="btn btn-primary">Submit</button>
-        <a class="btn btn-primary" type="button" onClick="hideAddingLessonObjectives()">Cancel</a>
+        <a class="btn btn-primary" type="button" data-dismiss="modal">Cancel</a>
       </p>
     </form>
   </div>
@@ -107,8 +107,4 @@
 		});
 	}
  
-	function hideAddingLessonObjectives() {
-		$("#addingLessonObjectives").modal("hide");
-		$("#selectingStandard").modal("hide");
-	}
 </script>
