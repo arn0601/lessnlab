@@ -12,7 +12,7 @@ function imgError(image){
 				<li class="nav-header ">My Courses</li>
 				<li><a href="/courses/" class="{% if not course %} active {% endif%}">All Courses</a></li> 
 				{% for c in userCourses %}  
-				<li><a href="/units/?course_id={{ c.id }}" rel="tooltip" data-placement="left" title="Course Description: {{ course.name }}" class="{% if c.id == course.id %} active {% endif%}">{{ c.name }}</a></li>
+				<li><a href="/units/?course_id={{ c.id }}" rel="tooltip" data-placement="left" title="Grade {{ c.grade }}, {{ c.subject}}" class="{% if c.id == course.id %} active {% endif%}">{{ c.name }}</a></li>
 				{% endfor %}
 				<li><a href="#addCourse" data-toggle="modal"><small><i class="icon-plus"></i>Add Course</small></a></li>
 		</ul>
