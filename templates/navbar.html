@@ -12,9 +12,9 @@
     				 <b class="caret"></b>  
 					</a> 
 					<ul class="dropdown-menu">
-						<li><a href="#">Profile</a></li> 
+						<li><a href="{% url Profile.views.view_profile %}">Profile</a></li> 
 						<li><a href="#">Settings</a></li>
-						<li><a href="/logout/">Logout</a></li>
+						<li><a href="{% url accounts.views.logout_user %}">Logout</a></li>
 					</ul> 
 			  </li>
 			  <li class="dropdown">  

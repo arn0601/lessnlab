@@ -46,6 +46,7 @@ urlpatterns = patterns('',
 
     url(r'team/$', 'LessonPlanner.views.team'),
     (r'^login/$', 'accounts.views.login_user'),
+    (r'^profile/$', 'Profile.views.view_profile'),
     (r'^logout/$', 'accounts.views.logout_user'),
     (r'^lessons/$', 'LessonPlanner.views.showLesson'),
     (r'^lessonPlanner/$', 'LessonPlanner.views.showLessonPlanner'),

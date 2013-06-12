@@ -9,6 +9,7 @@ from registration.backends import get_backend
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from accounts.forms import *
+
 @csrf_exempt
 def logout_user(request):
 	logout(request)	

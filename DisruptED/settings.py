@@ -136,7 +136,8 @@ INSTALLED_APPS = (
     'LessonPlanner',
     'Standards',
     'Objectives',
-    'Rating'
+    'Rating',
+    'Profile'
 )
 
 # A sample logging configuration. The only tangible logging
