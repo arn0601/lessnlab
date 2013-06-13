@@ -10,14 +10,13 @@
 	</div>
 	<div class="span10">
 		<h5>{{ fullname }}</h5>
-		<p style="color:#666666; font-size: 10pt; font-family: sans-serif;">{{ user.user_type }} in {{ user.user_school_state }}</p>
-		<p style="color:#666666; font-size: 10pt; font-family: sans-serif;">Teaches {{ userCourses|length }} courses </p>
+		<p style="color:#666666; font-weight: strong; font-size: 10pt; font-family: sans-serif;">{{ user.user_type }} in {{ user.user_school_state }}</p>
 	</div>
 </div>
 <hr/>
 <div class="row">
 	<div class="span12">
-		<h4>My Courses</h4>
+		<h4>My Courses ({{ userCourses|length }})</h4>
 		<ul>
 			{% for course in userCourses %}
 		 		<li><a href="/units/?course_id={{ course.id }}">{{ course.name }}</a></li>
