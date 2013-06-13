@@ -133,8 +133,16 @@
 
 			.profileHeader {
 			
-				color:#666666; 
-				font-weight: strong; 
+				color:black; 
+				font-weight: bold; 
+				font-size: 12pt; 
+				font-family: sans-serif;
+			
+			}
+			
+			.profileSubHeader {
+			
+				color:#c8c8c8; 
 				font-size: 10pt; 
 				font-family: sans-serif;
 			
