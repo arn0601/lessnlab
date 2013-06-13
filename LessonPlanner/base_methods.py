@@ -165,7 +165,7 @@ def createBaseDict(request):
 	fullname = firstname + " " + lastname
 	
 	#return (stuff for function, stuff to render)
-	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': fullname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'sectionAddForm':sectionAddForm}
+	return {'user':user, 'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': fullname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'sectionAddForm':sectionAddForm}
 	
 
 def getObjectives(lesson):
