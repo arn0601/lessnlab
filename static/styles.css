@@ -128,6 +128,18 @@
 				font-family: sans-serif;
 			
 			}
+			
+/* Profile Page */
+
+			.profileHeader {
+			
+				color:#666666; 
+				font-weight: strong; 
+				font-size: 10pt; 
+				font-family: sans-serif;
+			
+			}
+			
 /* Unit and Course box display */ 
 
 			.coursebox {
