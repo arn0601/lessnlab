@@ -24,12 +24,12 @@
 	</div>
 	<div class="span3">
 		<h4>Education</h4>
-		<ul style="font-size: 10pt;">
-			<li>A.B., Economics, Government & Information Science, Cornell University</li>
-			<li>M.Ed, Education Management, Columbia Teacher's College</li>
+		<ul>
+			<li>Cornell University - A.B., Economics, Government & Information Science</li>
+			<li>Columbia University - M.Ed, Education Management</li>
 		</ul>
 		<h4>Expertise</h4>
-		<ul style="font-size: 10pt;">
+		<ul>
 			<li>Investment</li>
 			<li>Checks For Understanding</li>
 		</ul>
@@ -38,7 +38,7 @@
 <hr/>
 <div class="row">
 	<div class="span12">
-		<h3>Courses ({{ userCourses|length }})</h3>
+		<h4>Courses ({{ userCourses|length }})</h4>
 		<ul>
 			{% for course in userCourses %}
 		 		<li><a href="/units/?course_id={{ course.id }}">{{ course.name }} </a> - {{ course.subject }}</li>
