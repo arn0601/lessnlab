@@ -11,20 +11,20 @@
 	<div class="span10">
 		<p class="profileHeader">{{ fullname }}</p>
 		<p class="profileSubHeader">{{ user.user_type }} at Liberty High School</p>
-		<p>A.B., Cornell University</p>
+		<p class="profileSubHeader">A.B., Cornell University</p>
 		<a class="btn btn-success btn-small" href="#">Edit Profile</a>
 	</div>
 </div>
 <hr/>
 <div class="row">
-	<div class="span7">
-		<h4>About Me</h4>
+	<div class="span9">
+		<h5>About Me</h5>
 		<p>
 			Zain is a teacher at Liberty High School, and specializes in Science Education.
 		</p>
 	</div>
-	<div class="span5">
-		<h4>Connect</h4>
+	<div class="span3">
+		<h5>Connect</h5>
 		<p>Twitter: <a href="http://www.twitter.com/thezainpasha">http://www.twitter.com/thezainpasha</a></p>
 		<p>Donors Choose: <a href="#">http://www.donorschoose.org</a></p>
 	</div>
@@ -32,7 +32,7 @@
 <hr/>
 <div class="row">
 	<div class="span12">
-		<h4>Courses ({{ userCourses|length }})</h4>
+		<h5>Courses ({{ userCourses|length }})</h5>
 		<ul>
 			{% for course in userCourses %}
 		 		<li><a href="/units/?course_id={{ course.id }}">{{ course.name }}</a></li>
