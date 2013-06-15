@@ -18,35 +18,27 @@
 <hr/>
 <div class="row">
 	<div class="span8">
-		<h5>About</h5>
+		<h4>About</h4>
 		<p>
 			Zain is a teacher at Liberty High School, and specializes in Science Education.
 		</p>
 	</div>
 	<div class="span4">
-		<h5>Connect</h5>
-		<p>Twitter: <a href="http://www.twitter.com/thezainpasha">http://www.twitter.com/thezainpasha</a></p>
-		<p>LinkedIn: <a href="http://www.twitter.com/thezainpasha">http://linkedin.com</a></p>
-		<p>Donors Choose: <a href="#">http://www.donorschoose.org</a></p>
+		<h4>Courses ({{ userCourses|length }})</h4>
+		<ul>
+			{% for course in userCourses %}
+		 		<li><a href="/units/?course_id={{ course.id }}">{{ course.name }} </a> - {{ course.subject }}</li>
+			{% endfor %}
+		</ul>
 	</div>
 </div>
 <hr/>
 <div class="row">
-	<div class="span8">
-		<h5>Courses ({{ userCourses|length }})</h5>
-		<ul>
-			{% for course in userCourses %}
-		 		<li><a href="/units/?course_id={{ course.id }}">{{ course.name }} - {{ course.subject }}</a></li>
-			{% endfor %}
-		</ul>
-	</div>
-	<div class="span4">
-		<h5>Newest Lessons</h5>
-		<ul>
-			{% for lesson in userLessons %}
-		 		<li><a href="/units/?course_id={{ course.id }}">{{ lesson.name }}</a></li>
-			{% endfor %}
-		</ul>
+	<div class="span12">
+		<h4>Connect</h4>
+		<p>Twitter: <a href="http://www.twitter.com/thezainpasha">http://www.twitter.com/thezainpasha</a></p>
+		<p>LinkedIn: <a href="http://www.twitter.com/thezainpasha">http://linkedin.com</a></p>
+		<p>Donors Choose: <a href="#">http://www.donorschoose.org</a></p>
 	</div>
 </div>
 </div>
