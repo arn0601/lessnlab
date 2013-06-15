@@ -17,23 +17,23 @@
 <hr/>
 <div class="row">
 	<div class="span9">
-		<h4>About</h4>
+		<h3>About</h3>
 		<p>
 			Zain is a teacher at Liberty High School, and specializes in Science Education.
 		</p>
-		<h6>Education</h6>
+		<h4>Education</h4>
 		<ul>
 			<li>A.B., Economics, Government & Information Science, Cornell University</li>
 			<li>M.Ed, Education Management, Columbia Teacher's College</li>
 		</ul>
-		<h6>Expertise</h6>
+		<h4>Expertise</h4>
 		<ul>
 			<li>Investment</li>
 			<li>Checks For Understanding</li>
 		</ul>
 	</div>
 	<div class="span3">
-		<h4>Courses ({{ userCourses|length }})</h4>
+		<h3>Courses ({{ userCourses|length }})</h3>
 		<ul>
 			{% for course in userCourses %}
 		 		<li><a href="/units/?course_id={{ course.id }}">{{ course.name }} </a> - {{ course.subject }}</li>
