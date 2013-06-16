@@ -9,9 +9,8 @@
 		<img src="/static/zheadshot.jpg" class="img-rounded" style="height: 140px; width: 140px;"></img>
 	</div>
 	<div class="span10">
-		<p class="profileHeader">{{ fullname }}</p>
-		<p class="profileSubHeader">{{ user.user_type }} in {{ user.user_school_state }}</p>
-		<p class="profileSubHeader"><<School Name>></p>
+		<h5>{{ fullname }} <i class="icon-ok-sign"></i></h5>
+		<p class="profileSubHeader">{{ user.user_type }} at Liberty High School</p>
 		<a class="btn btn-success btn-small" href="#">Edit Profile</a>
 	</div>
 </div>
@@ -19,25 +18,38 @@
 <div class="row">
 	<div class="span12">
 		<h4>About</h4>
-	</div>
-	<div class="span12">
-		<h6>Education</h6>
-		<ul>
-			<li>A.B., Cornell University - Economics, Government & Information Science </li>
-		</ul>
-		<h6>Biography</h6>
 		<p>
-			Zain is a ......
+			Zain is a teacher at Liberty High School, and specializes in Science Education. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
 		</p>
+	</div>
+</div>
+<div class="row">
+	<div class="span12">
+		<h4>Education</h4>
+		<ul>
+			<li>Cornell University - A.B., Economics, Government & Information Science</li>
+			<li>Columbia University - M.Ed, Education Management</li>
+		</ul>
+	</div>
+</div>
+<div class="row">
+	<div class="span12">
+		<h4>Skills</h4>
+		<ul>
+			<li>Student Investment</li>
+			<li>Checks For Understanding</li>
+			<li>Curriculum Planning</li>
+			<li>Classroom Management</li>
+		</ul>
 	</div>
 </div>
 <hr/>
 <div class="row">
 	<div class="span12">
-		<h4>My Courses ({{ userCourses|length }})</h4>
+		<h4>Courses ({{ userCourses|length }})</h4>
 		<ul>
 			{% for course in userCourses %}
-		 		<li><a href="/units/?course_id={{ course.id }}">{{ course.name }}</a></li>
+		 		<li><a href="/units/?course_id={{ course.id }}">{{ course.name }} </a> - {{ course.subject }}</li>
 			{% endfor %}
 		</ul>
 	</div>
