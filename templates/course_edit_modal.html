@@ -6,7 +6,7 @@
     <h3>Edit course</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url editCourse %}" name="login_form">
+    <form method="post" action="{% url editCourse %}">
         {% csrf_token %}
         {% for field in editCourseForm %}
         <div class="control-group">
@@ -38,8 +38,7 @@
 	function requestEditCourse(id){
 
 		$.ajax({
-			data: {course_id:id},
-			dataType:'html',
+			data:{course_id:id},
 			type: "POST", // GET or POST
       url: {% url LessonPlanner.views.EditCourseRequest %}, // the file to call
 			success : function(data){
@@ -48,5 +47,9 @@
        }
 		});
 	}
+
+
+
+
 
 </script>

@@ -98,6 +98,17 @@ class AddContentForm(forms.Form):
 	content_type = forms.CharField(label="")
 	content_type.widget = forms.HiddenInput()
 
+class AddCFUContent(AddContentForm):
+	text = forms.CharField(label="Text", max_length=256, widget=forms.Textarea)
+	expected_response = forms.CharField(label="Expected Response", max_length=256, widget=forms.Textarea)
+	objectives = forms.MultipleChoiceField(label='Select Content Objectives')
+	def __init__(self, *args, **kwargs):
+                obj_fields = kwargs.pop('objectives', 0)
+
+                super(AddCFUContent, self).__init__(*args, **kwargs)
+                self.fields['objectives'].choices = obj_fields
+
+
 class AddTextContent(AddContentForm):
 	text = forms.CharField(label="Text", max_length=256, widget=forms.Textarea)
 
@@ -143,7 +154,7 @@ class AddOnlinePictureContent(AddContentForm):
 
 class AddAssessmentContent(AddContentForm):
         title = forms.CharField(label="Title")
-	objectives = forms.MultipleChoiceField(label='Select Lesson Objectives')
+	objectives = forms.MultipleChoiceField(label='Select Content Objectives')
 	extra_field_count = forms.CharField(label="",widget=forms.HiddenInput())
 	def __init__(self, *args, **kwargs):
 	        extra_fields = kwargs.pop('extra', 0)

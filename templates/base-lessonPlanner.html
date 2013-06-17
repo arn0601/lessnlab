@@ -8,7 +8,6 @@
     <!-- Bootstrap -->
 		<link href="/static/bootstrap.css" rel="stylesheet" media="screen">
 		<link href="/static/styles.css" rel="stylesheet" media="screen">
-		<link rel="stylesheet" href="http://blueimp.github.com/cdn/css/bootstrap.min.css">
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" />
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 	
@@ -16,6 +15,7 @@
   	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
   	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 		<script src="/static/bootstrap.js"></script>
+ <script src="/static/lessnlab.js"></script>
 
 		<style>
 			.portlet { margin: 0 1em 1em 0; }
@@ -66,10 +66,10 @@ $(function() {
             data: {
 					    start : start,
 					    final : final,
-							section : section_id
+							section : section_id,
 									},
             type: "POST", // GET or POST
-            url: "/changeContentPlacement/?lesson_id={{lesson.id}}", // the file to call
+						url: {% url changeContentPlacement %},
             success: function(response) { // on success..
                  // update the DIV
         		}
@@ -166,7 +166,7 @@ $(function() {
 		<div style="height: 100%">
 			{% include "navbar.html" %}
 			<div class="row-fluid" style="position: relative; height: 100%">
-				<div class="span2 noborderunitbox" id="leftnav" style="position:fixed">
+				<div class="span2 noborderunitbox" id="leftnav" style="position:fixed;margin-left:8px">
 					<ul class="nav nav-pills nav-stacked">
 						<li>
 							<a href="javascript:void(0)" id="leftNav0" onClick="goToByScroll('overview')">Overview</a>
@@ -384,6 +384,8 @@ $(function() {
 		var x=document.getElementsByTagName("form");
 		for(var i=0;i<x.length;i++)
 		{
+			if (!("name" in x[i].attributes))
+				continue;
 			var name = x[i].attributes["name"].value;
 			if(name.indexOf("c_") === 0)
 			{
@@ -457,33 +459,12 @@ $(function() {
 	});
 });
 
-	$(function(){
-    $(document).on('click', '.search_activity', function(){ 
 	
-		$.ajax({
-			data: {type:'Individual'},
-			dataType:'html',
-			type: "POST", // GET or POST
-      url: {% url LessonPlanner.views.search_activity_ajax_view %}, // the file to call
-			success : function(data, status, xhr){
-		      $('#activity_searchModal').html(data);
- 					$('#activity_searchModal').modal('show');
-					$('#addContentActivityOverride').modal('hide');
-         }
-			});
-	 });
-});
-
-
 	</script>
 
 
-
-
 {% include "ActivitySearchModal.html" %}
-
 {% include "ActivityViewModal.html" %}
-
 {% include "ActivityModal.html" %}
 
 

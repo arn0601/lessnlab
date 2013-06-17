@@ -6,7 +6,6 @@ from LessonPlanner.forms import *
 from Standards.models import *
 from Objectives.models import Objective, ObjectiveRating
 from django.shortcuts import render_to_response,render
-from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
 from accounts.models import TeacherProfile
@@ -22,7 +21,6 @@ import sys, traceback
 import urlparse
 
 
-@csrf_exempt
 def activity_add(request):
 	if request.method == 'POST':
                 addCourseForm = AddActivityContent(data=request.POST)
@@ -33,7 +31,6 @@ def activity_add(request):
 	return HttpResponseRedirect(lastPageToView(request))
 
 
-@csrf_exempt
 def activity_ajax_view(request):
 	return_str = ""
 	if request.method == 'POST':
@@ -53,7 +50,6 @@ def activity_ajax_view(request):
 	
 	return HttpResponse(return_str)
 
-@csrf_exempt
 def requestLessonStandards(request):
 	if request.method == 'POST':
 		lesson_id = request.POST['lesson_id']
@@ -72,7 +68,6 @@ def requestLessonStandards(request):
 		context = Context({ 'lessonStandardsForm':form})
 		return HttpResponse(render_block_to_string('lesson_standards_modal.html', 'addLessonStandards', context))
 
-@csrf_exempt
 def requestUnitStandards(request):
 	if request.method == 'POST':
 		unit_id = request.POST['unit_id']
@@ -91,7 +86,6 @@ def requestUnitStandards(request):
 		context = Context({'unitStandardsForm': form})
 		return HttpResponse(render_block_to_string('unit_standards_modal.html', 'addStandards', context))
 
-@csrf_exempt
 def search_activity_ajax_view(request):
 	if request.method == 'POST':
 		section_id = request.POST.get('section_id',-1)
@@ -118,7 +112,6 @@ def landing(request):
 	return render(request,'landing.html', {'teacherRegistrationForm': teacher_registration_form})
 
 #show the units for a specific course
-@csrf_exempt
 def changeContentPlacement(request):
 	section_id = request.POST["section"]
         contentList = Content.objects.all().filter(section=section_id)
@@ -139,7 +132,6 @@ def changeContentPlacement(request):
                 counter = counter + 1
         return HttpResponse('')
 
-@csrf_exempt
 def changeSectionPlacement(request):
 	base_dict = base_methods.createBaseDict(request)
 	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
@@ -161,7 +153,6 @@ def changeSectionPlacement(request):
 		counter = counter + 1
 	return HttpResponse('')
 
-@csrf_exempt
 def showUnits(request):
 	base_dict = base_methods.createBaseDict(request)
         action = request.GET.get('action')
@@ -173,7 +164,6 @@ def showUnits(request):
 #show the lessons of a unit
 
 
-@csrf_exempt
 def addUnitStandards(request):
 	if request.method == 'POST':
 		form = UnitStandardsForm(data=request.POST)
@@ -207,7 +197,6 @@ def showLesson(request):
 	return render(request,"lesson.html", base_dict)
 	
 #this function is used when creating objectives to select the initial standard
-@csrf_exempt
 def getLessonStandards(request):
 	if request.method == 'POST':
 		lesson_id = request.POST['lesson_id']
@@ -227,7 +216,6 @@ def getLessonStandards(request):
 		return HttpResponse(render_block_to_string("lesson_objectives_modal.html", "selectingStandard", context))
 
 #this returns the form to add objectives
-@csrf_exempt
 def createLessonObjectives(request):
 	if request.method == 'POST':
 		standards_form = SelectStandardsForm(data=request.POST)
@@ -260,7 +248,6 @@ def createLessonObjectives(request):
 			print standards_form.errors
 	return HttpResponse("")
 
-@csrf_exempt
 def addLessonObjectives(request):
 	if request.method == 'POST':
 		form = CreateObjectivesForm(data=request.POST)
@@ -299,7 +286,6 @@ def addLessonObjectives(request):
 	return HttpResponseRedirect(lastPageToRedirect(request))
 
 
-@csrf_exempt
 def addLessonStandards(request):
 	if request.method == 'POST':
 		form = LessonStandardsForm(data=request.POST)
@@ -367,7 +353,6 @@ def lastPageToRedirect(request):
 		return '/studentCourses/'
 	return '/courses/'
 
-@csrf_exempt
 def courses(request):
 	base_dict = base_methods.createBaseDict(request)
 	if base_dict == None:
@@ -377,7 +362,7 @@ def courses(request):
 	request.session['last_page'] = 'courses'
 	return render(request,'course.html', base_dict)	
 
-@csrf_exempt
+
 def addCourse(request):
 	if request.method == 'POST':
 		addCourseForm = AddCourse(data=request.POST)
@@ -417,7 +402,6 @@ def addCourseStandards(course, teacher):
 		groups_add[group] = slist
 	return groups_add
 
-@csrf_exempt
 def editCourse(request):
 	if request.method == 'POST':
 		try:
@@ -435,14 +419,12 @@ def editCourse(request):
                         return HttpResponseRedirect('/courses/')
         return HttpResponseRedirect('/courses/')
 
-@csrf_exempt
 def deleteCourse(request):
         if request.method == 'POST':
                 if deleteCourseData(request.POST.get('course_id', None)):
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return HttpResponseRedirect(lastPageToView(request))
 
-@csrf_exempt
 def addUnit(request):
 	if request.method == 'POST':
                 addUnitForm = AddUnitForm(request.POST)
@@ -452,7 +434,6 @@ def addUnit(request):
 	print addUnitForm.errors
         return HttpResponseRedirect(lastPageToRedirect(request))
 
-@csrf_exempt
 def editUnit(request):
         if request.method == 'POST':
 		unit_id = request.POST['selectedUnit']
@@ -463,7 +444,6 @@ def editUnit(request):
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return HttpResponseRedirect(lastPageToRedirect(request))
 
-@csrf_exempt
 def deleteUnit(request):
         if request.method == 'POST':
                 if deleteUnitData(request.POST.get('unit_id', None)):
@@ -471,7 +451,6 @@ def deleteUnit(request):
         return HttpResponseRedirect(lastPageToView(request))
 
 
-@csrf_exempt
 def addLesson(request):
         if request.method == 'POST':
                 addLessonForm = AddLessonForm(request.POST)
@@ -481,7 +460,6 @@ def addLesson(request):
 	print addLessonForm.errors
         return HttpResponseRedirect(lastPageToRedirect(request))
 
-@csrf_exempt
 def editLesson(request):
         if request.method == 'POST':
 		lesson_id = request.POST['selectedLesson']
@@ -492,7 +470,6 @@ def editLesson(request):
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return HttpResponseRedirect(lastPageToRedirect(request))
 
-@csrf_exempt
 def deleteLesson(request):
         if request.method == 'POST':
                 lessonForm = DeleteLesson(data=request.POST)
@@ -500,7 +477,6 @@ def deleteLesson(request):
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return HttpResponseRedirect(lastPageToView(request))
 
-@csrf_exempt
 def deleteSection(request):
 	if request.method == 'POST':
 		sectionForm = DeleteSection(data=request.POST)
@@ -508,7 +484,6 @@ def deleteSection(request):
 			return HttpResponseRedirect(lastPageToRedirect(request))
 	return HttpResponseRedirect(lastPageToView(request))
 
-@csrf_exempt
 def deleteContent(request):
         if request.method == 'POST':
                 contentForm = DeleteContent(data=request.POST)
@@ -519,7 +494,6 @@ def deleteContent(request):
 
 
 
-@csrf_exempt
 def addSection(request):
 	if request.method == 'POST':
 		sectionForm = AddSectionForm(request.POST)
@@ -542,8 +516,6 @@ def getMaxCount(section):
         return  maxCont+1
 
 
-
-@csrf_exempt
 def addContent(request):
     	if request.method == 'POST':
 		contentForm = AddContentForm(data=request.POST)
@@ -562,7 +534,7 @@ def addContent(request):
 			content.content_type = contentForm.data['content_type']
 			content.placement = getMaxCount(section)+1
 			content.save()
-			if content_type == "Assessment":
+			if objectives:
 	                        for obj_id in objectives:
                                         o = Objective.objects.get(id=obj_id)
                                         content.objectives.add(o)
@@ -638,42 +610,51 @@ def saveContent(contentForm, section, lesson, request):
 				content.link = online_picture_form.data['link']
 				return (True, content, None,None)
 			return (False, None, None,None)
-		if (content_type == 'OnlineArticle'):
+		elif (content_type == 'OnlineArticle'):
 			online_article_form = AddOnlineArticleContent(data=request.POST)
 			if online_article_form.is_valid():
 				content = OnlineArticleContent()
 				content.link = online_article_form.data['link']
 				return (True, content, None,None)
 			return (False, None, None,None)
-		if (content_type == 'PowerPoint'):
+		elif (content_type == 'PowerPoint'):
                         powerpoint_form = AddPowerPointContent(data=request.POST)
                         if powerpoint_form.is_valid():
                                 content = PowerPointContent()
                                 content.link = powerpoint_form.data['link']
                                 return (True, content, None,None)
                         return (False, None, None,None)	
-		if (content_type == 'Text'):
+		elif (content_type == 'Text'):
 			text_form = AddTextContent(data=request.POST)
 			if text_form.is_valid():
 				content = TextContent()
 				content.text = text_form.data['text']
 				return (True, content, None,None)
 			return (False, None, None,None)
-		if (content_type == 'TeacherNote'):
+		elif (content_type == 'TeacherNote'):
 			teacher_note_form = AddTeacherNoteContent(data=request.POST)
 			if teacher_note_form.is_valid():
 				content = TeacherNoteContent()
 				content.note = teacher_note_form.data['text']
 				return (True, content, None,None)
 			return (False, None, None,None)
-		if (content_type == 'AdministratorNote'):
-			administrator_note_form = AddAdministratorNoteContent(data=request.POST)
-			if administrator_note_form.is_valid():
-				content = AdministratorNoteContent()
-				content.note = administrator_note_form.data['text']
-				return (True, content, None,None)
+		elif (content_type == 'CFU'):
+			cfu_form = AddCFUContent(data=request.POST,objectives=base_methods.getObjectives(lesson))
+			if cfu_form.is_valid():
+				content = CFUContent()
+				objectives = cfu_form.cleaned_data['objectives']
+				content.text = cfu_form.data['text']
+				content.expected_response = cfu_form.data['expected_response']
+				return (True, content, None,objectives)
 			return (False, None, None,None)
-		if (content_type == 'Assessment'):
+		elif (content_type == 'AdministratorNote'):
+                        administrator_note_form = AddAdministratorNoteContent(data=request.POST)
+                        if administrator_note_form.is_valid():
+                                content = AdministratorNoteContent()
+                                content.note = administrator_note_form.data['text']
+                                return (True, content, None,None)
+                        return (False, None, None,None)
+		elif (content_type == 'Assessment'):
                         assessment_form = AddAssessmentContent(data=request.POST,extra=request.POST.get('extra_field_count'),objectives=base_methods.getObjectives(lesson))
                         if assessment_form.is_valid():
                                 content = AssessmentContent()
@@ -718,7 +699,6 @@ def saveContent(contentForm, section, lesson, request):
                         return (False, None, None,None)
 	return (False, None, None,None);
 
-@csrf_exempt
 def EditCourseRequest(request):
 	if request.method == 'POST':
 		course_id = request.POST['course_id']
@@ -728,7 +708,6 @@ def EditCourseRequest(request):
         	return HttpResponse(render_block_to_string('course_edit_modal.html', 'editCourse', context))
 	return HttpResponse('')
 
-@csrf_exempt
 def EditUnitRequest(request):
 	if request.method == 'POST':
 		print "change this"
@@ -743,7 +722,6 @@ def EditUnitRequest(request):
         	return HttpResponse(render_block_to_string('unit_edit_modal.html', 'editUnit', context))
 	return HttpResponse('')
 
-@csrf_exempt
 def DeleteLessonRequest(request):
 	if request.method == 'POST':
 		lessonID = request.POST.get('lesson_id')
@@ -754,7 +732,6 @@ def DeleteLessonRequest(request):
 		return HttpResponse(render_block_to_string("lesson_delete_modal.html", 'deleteLesson', context))
 	return HttpResponse('')
 
-@csrf_exempt
 def EditLessonRequest(request):
 	if request.method == 'POST':
 		lessonID = request.POST.get('lesson_id')
@@ -799,7 +776,6 @@ def deleteLessonData(lessonForm, request_user):
                 return True;
         return False;
 
-@csrf_exempt
 def manageStudents(request):
 	base_dict = base_methods.createBaseDict(request)
 	#get courses with students
@@ -813,7 +789,6 @@ def manageStudents(request):
 	base_dict['courseStudents'] = course_students
 	return render(request,'manage_students.html', base_dict)
 
-@csrf_exempt
 def studentRequestCourse(request):
 	base_dict = base_methods.createStudentDict(request)
 	teacher_request = TeacherRequestForm(data=request.POST)
@@ -833,7 +808,6 @@ def studentRequestCourse(request):
 	else:
 		return HttpResponseRedirect(lastPageToRedirect(request))
 
-@csrf_exempt
 def studentAddCourse(request):
 	courseRequestForm = CourseRequestForm(data=request.POST)
 	teacher_id = courseRequestForm.data['teacher_id']
@@ -887,7 +861,6 @@ def deleteContentData(contentForm, request_user):
 		return True
 	return False
 
-@csrf_exempt
 def getStandardsFromGroup(request):
 	if request.method == 'POST':
 		group_id = request.POST['group_id']
@@ -906,7 +879,6 @@ def getStandardsFromGroup(request):
 		return render(request,'course.html', base_dict)
 	return HttpResponseRedirect('/courses/')
 
-@csrf_exempt
 def standardsSearch(request):
 	base_dict = base_methods.createBaseDict(request)
 	base_dict['standardsSearchForm'] = StandardsSearchForm()
@@ -940,7 +912,6 @@ def standardsSearch(request):
 			return HttpResponseRedirect('/standardsSearch/')
 	return render(request,'standards_search.html', base_dict)
 
-@csrf_exempt
 def manageCourseStudents(request):
 	if request.method == 'POST':
 		cid = request.POST['course_id']
@@ -1031,7 +1002,6 @@ def publicCourseView(request):
 	base_dict['courseUnits'] = course_unit_list
 	return render(request,'public_course_view.html',base_dict)
 
-@csrf_exempt
 def addStandardAnalysis(request):
 	if request.method == 'POST':
 		form = StandardAnalysisForm(data=request.POST)
@@ -1074,7 +1044,6 @@ def publicUnitView(request):
 	base_dict['unitLessons'] = unit_lesson_list
 	return render(request,'public_unit_view.html',base_dict)
 
-@csrf_exempt
 def rateAnalysis(request):
 	if request.method == 'POST':
 		print request.POST
@@ -1107,7 +1076,6 @@ def rateAnalysis(request):
 '''
 this will get the add form course given the standard
 '''
-@csrf_exempt
 def createCourseFromStandard(request):
 	if request.method == 'POST':
 		try:
