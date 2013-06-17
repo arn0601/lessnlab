@@ -6,7 +6,6 @@ from LessonPlanner.models import *
 from LessonPlanner.forms import *
 from Standards.models import Standard
 from django.shortcuts import render_to_response
-from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
 from accounts.models import TeacherProfile, StudentProfile
@@ -199,6 +198,8 @@ def getLessonSpecificInfo(lesson):
 			content_objs[content.id] = contentobjs_list	
 			if (content.content_type == 'Text'):
 				content_list.append(content.textcontent)
+			elif (content.content_type == 'CFU'):
+                                content_list.append(content.cfucontent)
 			elif (content.content_type == 'OnlineVideo'):
 				content_list.append(content.onlinevideocontent)
 			elif (content.content_type == 'OnlineArticle'):
@@ -229,52 +230,57 @@ def getLessonSpecificInfo(lesson):
 	return { 'content_objs' : content_objs, 'standard_list' : standard_list,'objective_list' : objective_list,'sections' : section_dict,  'assessment_dict':assessment_dict, 'content_choices':getContentChoices(),  'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
 
 def getContentChoices():
-	return {'General': ["Text"], 'Media': ["PowerPoint","OnlinePicture","OnlineArticle","OnlineVideo","TeacherNote","AdministratorNote"], 'Activity': ["Activity"], 'Checks For Understanding': {}, 'Assessment': ["Assessment"] }
+	return {'General': [("Text","Text")], 'Media': [("PowerPoint","PowerPoint"),("Online Picture","OnlinePicture"),("Online Article","OnlineArticle"),("Online Video","OnlineVideo"),("Teacher Note","TeacherNote"),("Administrator Note","AdministratorNote")], 'Activity': [("Activity","Activity")], 'Checks for Understanding': [("Checks for Understanding","CFU")], 'Assessment': [("Assessment","Assessment")] }
 	
 
 def getAddContentForms(section_id, objective_list):
 	
-	content_form_dict = {'General': {} , 'Media': {}, 'Activity': {}, 'Checks For Understanding': {}, 'Assessment': {} }
+	content_form_dict = {'General': {} , 'Media': {}, 'Activity': {}, 'CFU': {}, 'Assessment': {} }
 	
 	online_video_form = AddOnlineVideoContent()
 	online_video_form.fields['content_type'].initial = 'OnlineVideo'
 	online_video_form.fields['section_id'].initial = section_id
-	content_form_dict['Media']["OnlineVideo"] = online_video_form
+	content_form_dict['Media']["OnlineVideo"] = ("Online Video",online_video_form)
 	
 	power_point_form = AddPowerPointContent()
         power_point_form.fields['content_type'].initial = 'PowerPoint'
         power_point_form.fields['section_id'].initial = section_id
-        content_form_dict['Media']["PowerPoint"] = power_point_form
+        content_form_dict['Media']["PowerPoint"] = ("PowerPoint",power_point_form)
 	
 	online_picture_form = AddOnlinePictureContent()
 	online_picture_form.fields['content_type'].initial = 'OnlinePicture'
 	online_picture_form.fields['section_id'].initial = section_id
-	content_form_dict['Media']["OnlinePicture"] = online_picture_form
+	content_form_dict['Media']["OnlinePicture"] = ("Online Picture",online_picture_form)
 	
 	online_article_form = AddOnlineArticleContent()
 	online_article_form.fields['content_type'].initial = 'OnlineArticle'
 	online_article_form.fields['section_id'].initial = section_id
-	content_form_dict['Media']['OnlineArticle'] = online_article_form
+	content_form_dict['Media']['OnlineArticle'] = ("Online Article",online_article_form)
 	
 	text_form = AddTextContent()
 	text_form.fields['content_type'].initial = 'Text'
 	text_form.fields['section_id'].initial = section_id
-	content_form_dict['General']['Text'] = text_form
+	content_form_dict['General']['Text'] = ("Text",text_form)
 	
 	teacher_note = AddTeacherNoteContent()
 	teacher_note.fields['content_type'].initial = 'TeacherNote'
 	teacher_note.fields['section_id'].initial = section_id
-	content_form_dict['General']['TeacherNote'] = teacher_note
+	content_form_dict['General']['TeacherNote'] = ("Teacher Note",teacher_note)
+	
+	cfu = AddCFUContent(objectives=objective_list)
+        cfu.fields['content_type'].initial = 'CFU'
+        cfu.fields['section_id'].initial = section_id
+        content_form_dict['CFU']['CFU'] = ("Check for Understanding",cfu)
 	
 	administrator_note = AddAdministratorNoteContent()
 	administrator_note.fields['content_type'].initial = 'AdministratorNote'
 	administrator_note.fields['section_id'].initial = section_id
-	content_form_dict['General']['AdministratorNote'] = administrator_note
+	content_form_dict['General']['AdministratorNote'] = ("Administrator Note",administrator_note)
 
 	assessment_form = AddAssessmentContent(objectives=objective_list)
         assessment_form.fields['content_type'].initial = 'Assessment'
         assessment_form.fields['section_id'].initial = section_id
-        content_form_dict['Assessment']['Assessment'] = assessment_form
+        content_form_dict['Assessment']['Assessment'] = ("Assessement",assessment_form)
 
 	return content_form_dict
 

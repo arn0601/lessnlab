@@ -107,18 +107,18 @@
 
 
  {% for header,nested in section_content_forms.items  %}
- {% for type,contentAddForm in nested.items %}
+ {% for type,tupledata in nested.items %}
  
 <div class="{{ type }}Modal modal hide" id="addContent{{ type }}">
 	<div class="modal-header">
 		<button type="button" class="close content_close" data-dismiss="modal">x</button>
-	    	<h3>Add Content - {{ type }} </h3>
+	    	<h3>Add Content - {{ tupledata.0 }} </h3>
 	</div>
 	 <div class="modal-body">
 		<div>
     		<form id="content_form" method="post" action="{% url LessonPlanner.views.addContent %}" name="c_{{ type }}">
 		{% csrf_token %}
-			{% for field in contentAddForm %}
+			{% for field in tupledata.1 %}
 		 	<div class="control-group">
 			{{ field.errors.as_text }}
 				<label class="control-label">{{ field.label_tag }}</label>

@@ -1,23 +1,24 @@
-<div class="sectionnav">
-		<div class="span2">
-				<h5>Add Content</h5>
-		</div>
-		<div class="span10">
-			<ul class="nav nav-pills">						  
-				{% for dropdown_header in dropdown_order %}
-				<li class="dropdown">
-				 	<a class="dropdown-toggle" data-toggle="dropdown" href="#">
-								{{ dropdown_header }}
-				 		<b class="caret"></b>
-					</a>
-		  		<ul class="dropdown-menu showContent" class="btn btn-primary btn-small announce">			
-						{% for dropdown_header_dict in section_content_forms|access:dropdown_header %}
-						<li><a href="#" class="content_show" data-sectionid="{{ section.id }}" 
-								data-contenttype="{{ dropdown_header_dict }}">{{ dropdown_header_dict }}</a></li>   							
+{% load dictionary_extras %}
+	<div class="sectionnav row-fluid" style="bottom-border: 1px">
+				<div class="span2">
+						<h5>Add Content</h5>
+				</div>
+				<div class="span10">
+					<ul class="nav nav-pills">						  
+						{% for dropdown_header in dropdown_order %}
+						<li class="dropup">
+						 	<a class="dropdown-toggle ddt" data-toggle="dropdown" href="#">
+										{{ dropdown_header }}
+						 		<b class="caret"></b>
+							</a>
+							<ul class=" mymenu dropdown-menu pull-up showContent " class="btn btn-primary btn-small announce">			
+								{% for dropdown in content_choices|access:dropdown_header %}
+								<li><a href="#" class="content_show" data-sectionid="{{ section.id }}" 
+										data-contenttype="{{ dropdown.1 }}">{{ dropdown.0 }}</a></li>   							
+								{% endfor %}
+							</ul>
+						</li>
 						{% endfor %}
 					</ul>
-				</li>
-				{% endfor %}
-			</ul>
-		</div> 
-	</div>
+				</div> 
+			</div>

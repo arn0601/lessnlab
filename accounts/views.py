@@ -1,5 +1,4 @@
 # Create your views here.
-from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
@@ -10,7 +9,6 @@ from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from accounts.forms import *
 
-@csrf_exempt
 def logout_user(request):
 	logout(request)	
 	return HttpResponseRedirect('/')
@@ -24,7 +22,6 @@ def validateLoginArgs(request):
 	else:
 		return None
 
-@csrf_exempt
 def login_user(request):
 	user = validateLoginArgs(request)
        	if user is not None:
@@ -68,7 +65,6 @@ def registerStudent(request, backend, success_url=None, form_class=None,
                               {'form': form},
                               context_instance=context)
 
-@csrf_exempt
 def validateRegisterTeacher(request):
     print request.POST
     form = TeacherRegistrationForm(data=request.POST)
@@ -78,7 +74,6 @@ def validateRegisterTeacher(request):
 	print form.errors
         return render_to_response('form_errors.html', { 'form' : form })
 
-@csrf_exempt
 def validateLogin(request):
 	print request.POST
 	user = validateLoginArgs(request)
@@ -87,7 +82,6 @@ def validateLogin(request):
 	else:
 		return HttpResponse('Incorrect Username and / or Password')
 
-@csrf_exempt
 def registerTeacher(request, backend, success_url=None, form_class=None,
              disallowed_url='registration_disallowed',
              template_name='registration/registration_form.html',

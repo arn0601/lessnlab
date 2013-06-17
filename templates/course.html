@@ -58,7 +58,7 @@
 {% if addCourseSecondStep %}
 <div class="modal" id="second">
   <div class="modal-header">
-    <a class="close" type="button" href="/courses/">x</a>
+    <a class="close" type="button" href="{% url course %}">x</a>
     <h3>Synced standards to course</h3>
   </div>
   <div class="modal-body">
@@ -68,7 +68,7 @@
 
 	<thead> <tr> <th> # </th> <th> Content </th> </tr> </thead>
 		{% for standard in groupsAdded|access:group %}
-			<tr><td>{{ standard.numbering }} </td> <td> <a href="/standard/?standard_id={{ standard.id }}">{{ standard.description }} </a> </td> </tr>
+			<tr><td>{{ standard.numbering }} </td> <td> <a href="{% url getStandard %}?standard_id={{ standard.id }}">{{ standard.description }} </a> </td> </tr>
 		{% endfor %}
 	</table>
         {% endfor %}
@@ -82,7 +82,7 @@
 {% if showGroupStandards %}
 <div class="modal" id="deleteCourse">
   <div class="modal-header">
-    <a class="close" type="button" href="/courses/">x</a>
+    <a class="close" type="button" href="{% url course%}">x</a>
     <h3>{{ selectedGroup.name }}</h3>
     <h4>This group has been synced based on class parameters</h4>
   </div>

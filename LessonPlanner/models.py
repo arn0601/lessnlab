@@ -112,6 +112,10 @@ class ActivityContent(Content):
 	length = models.FloatField()
 	materials = models.TextField()
 
+class CFUContent(Content):
+        text = models.CharField(max_length=256)
+	expected_response = models.CharField(max_length=256) 
+
 class OnlineVideoContent(Content):
 	link = models.CharField(max_length=256)
 
