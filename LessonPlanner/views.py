@@ -362,7 +362,6 @@ def courses(request):
 	request.session['last_page'] = 'courses'
 	return render(request,'course.html', base_dict)	
 
-
 def addCourse(request):
 	if request.method == 'POST':
 		addCourseForm = AddCourse(data=request.POST)
@@ -373,10 +372,12 @@ def addCourse(request):
 			base_dict = base_methods.createBaseDict(request)
 			base_dict['groupsAdded'] = groups_added
 			base_dict['addCourseSecondStep'] = True
-			return render(request,'course.html', base_dict)
+			return HttpResponse("success")
 		else:
 			print addCourseForm.errors
-	return HttpResponseRedirect(lastPageToRedirect(request))
+			context = Context({'courseAddForm':addCourseForm})
+			return HttpResponse(render_block_to_string('course_add_modal.html', 'addCourse', context))
+	return HttpResponseRedirect('/courses/')
 
 def addCourseStandards(course, teacher):
 	standards = Standard.objects.filter(subject=course.subject).filter(grade=course.grade)

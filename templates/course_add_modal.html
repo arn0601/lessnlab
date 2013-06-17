@@ -45,7 +45,7 @@
     <h3>Add a course</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url LessonPlanner.views.addCourse %}" name="login_form">
+    <form method="post" action="{% url LessonPlanner.views.addCourse %}" id="addNewCourse">
 	{% csrf_token %}
 	{% for field in courseAddForm %}
         <div class="control-group">
@@ -56,7 +56,7 @@
             </div>
    		</div>
     {% endfor %}
-     <p><button type="submit" class="btn btn-primary">Submit</button>
+     <p><button type="button" class="btn btn-primary" onClick="addNewCourse()">Submit</button>
 		<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
 <!--Department,Subject,Year-->
       </p>
@@ -67,6 +67,25 @@
 
 
 <script type="text/javascript"> 
+
+        function addNewCourse() {
+		var formString = $("#addNewCourse").serialize()
+		$.ajax({
+			data : formString,
+			dataType : "html",
+			type: "POST",
+			url: {% url LessonPlanner.views.addCourse %},
+			success: function(data) {
+				if (data == "success") {
+					location.reload();
+				}
+				else {
+					$("#addCourse").html(data);
+					$("#addCourse").modal("show");
+				}
+			}
+		});
+	}
 
 	function chooseNewCourse1() {
 		$("#chooseNewCourse").modal("show");
