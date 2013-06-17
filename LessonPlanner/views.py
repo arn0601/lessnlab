@@ -66,9 +66,8 @@ def requestLessonStandards(request):
 		standard_list = []
 		for standard in unit.standards.all():
 			standard_list.append((standard.id, standard.description))
-		form = LessonStandardsForm()
+		form = LessonStandardsForm(lesson_id=lesson_id)
 		form.fields['standards'].choices = standard_list
-		form.fields['lesson_id'].initial = lesson_id
 		context = Context({ 'lessonStandardsForm':form})
 		return HttpResponse(render_block_to_string('lesson_standards_modal.html', 'addLessonStandards', context))
 
@@ -85,9 +84,8 @@ def requestUnitStandards(request):
 		for group in course.standard_grouping.all():
 			for standard in group.standard.all():
 				standard_list.append((standard.id, standard.description))
-		form = UnitStandardsForm()
+		form = UnitStandardsForm(unit_id=unit_id)
 		form.fields['standards'].choices = standard_list
-		form.fields['unit_id'].initial = unit_id
 		context = Context({'unitStandardsForm': form})
 		return HttpResponse(render_block_to_string('unit_standards_modal.html', 'addStandards', context))
 
@@ -218,9 +216,8 @@ def getLessonStandards(request):
 		standard_list = []
 		for standard in lesson.standards.all():
 			standard_list.append((standard.id, standard.description))
-		form = SelectStandardsForm()
+		form = SelectStandardsForm(lesson_id=lesson_id)
 		form.fields['standard'].choices = standard_list
-		form.fields['lesson_id'].initial = lesson_id
 		print "here getting stnadards"
 		context = Context({'selectStandardsForm':form})
 		
@@ -250,10 +247,8 @@ def createLessonObjectives(request):
 			obj_list = []
 			for obj in best_objectives:
 				obj_list.append((obj.id, obj.description))
-			next_form = CreateObjectivesForm()
+			next_form = CreateObjectivesForm(standard_id=standards_form.cleaned_data['standard'], lesson_id=standards_form.cleaned_data['lesson_id'])
 			next_form.fields['created'].choices = obj_list
-			next_form.fields['standard_id'].initial = standards_form.cleaned_data['standard']
-			next_form.fields['lesson_id'].initial = standards_form.cleaned_data['lesson_id']
 			context = Context({'createObjectivesForm':next_form})
 			return HttpResponse(render_block_to_string("lesson_objectives_modal.html","addingLessonObjectives",context))
 		else:
@@ -738,10 +733,6 @@ def EditUnitRequest(request):
 		unitID = request.POST['unit_id']
 	        unit = Unit.objects.get(id=unitID)
         	editUnitForm = EditUnit(instance=unit)
-		editUnitForm.fields['owner'].label=''
-		editUnitForm.fields['course'].label=''
-		editUnitForm.fields['parent_unit'].label=''
-		editUnitForm.fields['parent_unit'].initial = None
 		context = Context({'editUnitForm':editUnitForm, 'selectedUnit':unitID})
         	return HttpResponse(render_block_to_string('unit_edit_modal.html', 'editUnit', context))
 	return HttpResponse('')
@@ -751,8 +742,7 @@ def DeleteLessonRequest(request):
 	if request.method == 'POST':
 		lessonID = request.POST.get('lesson_id')
 	        lesson = Lesson.objects.get(id=lessonID)
-        	deleteLessonForm = DeleteLesson()
-	        deleteLessonForm.fields["lesson_id"].initial = lesson.id
+        	deleteLessonForm = DeleteLesson(lesson_id=lesson.id)
 		context = Context({'deleteLessonForm':deleteLessonForm})
 		return HttpResponse(render_block_to_string("lesson_delete_modal.html", 'deleteLesson', context))
 	return HttpResponse('')
@@ -763,26 +753,9 @@ def EditLessonRequest(request):
 		lessonID = request.POST.get('lesson_id')
         	lesson = Lesson.objects.get(id=lessonID)
 		editLessonForm = EditLesson(instance=lesson)
-		editLessonForm.fields['owner'].label=''
-		editLessonForm.fields['unit'].label=''
 		context = Context({'editLessonForm':editLessonForm, 'selectedLesson':lessonID})
 		return HttpResponse(render_block_to_string('lesson_edit_modal.html', 'editLesson', context))
 	return HttpResponse('')
-
-def EditContentRequest(request, contentID):
-        uname = request.user.username
-        user = UserProfile.objects.get(user=request.user)
-        user_courses =  Course.objects.filter(owner=user)
-        content = Content.objects.get(id=contentID)
-	lesson = content.lesson
-        unit = lesson.unit
-        unit_lessons =  Lesson.objects.filter(unit=lesson.unit)
-        editLessonForm = EditContent()
-        editLessonForm.fields["lesson_id"].initial = lesson.id
-        editLessonForm.fields["unit_id"].initial = unit.id
-        editLessonForm.fields["name"].initial = lesson.name
-        return render(request,'lesson.html', {'unitID':lesson.unit.id,'userCourses': user_courses, 'username':uname,'userLessons':unit_lessons, 'fullname':uname, 'editLessonForm':editLessonForm,'showEditLesson': 1})
-
 
 def deleteCourseData(course_id):
 	if course_id:
@@ -829,7 +802,6 @@ def studentRequestCourse(request):
 		for course in courses:
 			course_list.append((course.id, course.name))
 		course_request.fields['courses'].choices = course_list
-		course_request.fields['teacher_id'].initial = teacher.id
 		base_dict['teacherCoursesRequestForm'] = course_request
 		base_dict['coursesWereRequested'] = True
 		return render(request,'student_course.html', base_dict)
@@ -1001,8 +973,7 @@ def getStandard(request):
 		base_dict['standardCourses'] = courses
 		base_dict['standard'] = s
 		base_dict['standardObjectives'] = objective_dict
-		saf = StandardAnalysisForm()
-		saf.fields['standard_id'].initial = s.id
+		saf = StandardAnalysisForm(standard_id=s.id)
 		base_dict['standardAnalysisForm'] = saf
 		base_dict['ratingOptions'] = (1,2,3,4,5)
 		base_dict['user_id'] = request.user.id
@@ -1127,11 +1098,7 @@ def createCourseFromStandard(request):
 			s = standard.state
 		b = standard.subject
 		g = standard.grade
-		addCourseForm = AddCourse()
-		addCourseForm.fields['grade'].initial = g
-		addCourseForm.fields['owner'].initial = teacher
-		addCourseForm.fields['owner'].label=''
-		addCourseForm.fields['subject'].initial = b
+		addCourseForm = AddCourse(grade=g, owner=teacher, subject=b)
 		context = Context({'courseAddForm': addCourseForm})
 		return HttpResponse(render_block_to_string('course_add_modal.html', 'addCourse', context))
 	return HttpResponse('')
