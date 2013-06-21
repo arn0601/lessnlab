@@ -16,19 +16,20 @@ def returnStudentForms():
 	teacherRequestForm = TeacherRequestForm()
 	return (teacherRequestForm)
 
+def checkUserIsStudent(request):
+	try:
+		user = StudentProfile.objects.get(user=request.user)
+		return user
+        except:
+		logout(request)
+		return None
+
 def createStudentDict(request):
 	(teacherRequestForm) = returnStudentForms()
-	try:
-		print request.user
-		user = StudentProfile.objects.get(user=request.user)
-        except:
-		print 'Student Does No Exist for ' + str(request.user.id)
-		try:
-			user = TeacherProfile.objects.get(user=request.user)
-			return None
-		except: 
-			logout(request)
-			return None
+	user = checkUserIsStudent(request)
+	if not user:
+		return None
+
 	#get all courses associated with the user
 	courses = CourseStudents.objects.filter(student=user, approved=True)
 	###################################
@@ -83,19 +84,26 @@ def createStudentDict(request):
 	#return (stuff for function, stuff to render)
 	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'teacherRequestForm': teacherRequestForm, 'coursesWereRequested': 0}
 
+def checkUserIsTeacher(request_user):
+	try:
+		user = TeacherProfile.objects.get(user=request_user)
+		return user
+	except:
+		logout(request)
+		return None
+
 def createBaseDict(request):
 	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm) = returnBlankForms()
 	try:
-		user = TeacherProfile.objects.get(user=request.user)
-        	courseAddForm.fields['owner'].initial = user
-        	unitAddForm.fields['owner'].initial = user
-        	lessonAddForm.fields['owner'].initial = user
-	except TeacherProfile.DoesNotExist:
-		try:
-			user = StudentProfile.objects.get(user=request.user)
-			return None
-		except:
-			logout(request)
+		user = checkUserIsTeacher(request.user)
+		return user
+	except:
+		logout(request)
+		return None
+
+       	courseAddForm.fields['owner'].initial = user
+       	unitAddForm.fields['owner'].initial = user
+       	lessonAddForm.fields['owner'].initial = user
 	#get all courses associated with the user
 	user_courses =  Course.objects.filter(owner=user)
 	

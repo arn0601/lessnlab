@@ -38,7 +38,7 @@
 			data: {unit_id:id},
 			dataType:'html',
 			type: "POST", // GET or POST
-      url: {% url LessonPlanner.views.requestUnitStandards %}, // the file to call
+      url: {% url LessonPlanner.views.requestAddableUnitStandards %}, // the file to call
 			success : function(data){
 					$('#addingUnitStandards').html(data);
 					$('#addingUnitStandards').modal('show')		

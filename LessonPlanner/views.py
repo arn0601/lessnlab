@@ -50,7 +50,7 @@ def activity_ajax_view(request):
 	
 	return HttpResponse(return_str)
 
-def requestLessonStandards(request):
+def requestAddableLessonStandards(request):
 	if request.method == 'POST':
 		lesson_id = request.POST['lesson_id']
 		try:
@@ -59,15 +59,13 @@ def requestLessonStandards(request):
 			return HttpResponseRedirect(lastPageToRedirect(request))
 		
 		unit = lesson.unit
-		standard_list = []
-		for standard in unit.standards.all():
-			standard_list.append((standard.id, standard.description))
+		standard_list = unit_methods.getUnitStandards(unit, True)
 		form = LessonStandardsForm(lesson_id=lesson_id)
 		form.fields['standards'].choices = standard_list
 		context = Context({ 'lessonStandardsForm':form})
 		return HttpResponse(render_block_to_string('lesson_standards_modal.html', 'addLessonStandards', context))
 
-def requestUnitStandards(request):
+def requestAddableUnitStandards(request):
 	if request.method == 'POST':
 		unit_id = request.POST['unit_id']
 		try:
@@ -75,10 +73,7 @@ def requestUnitStandards(request):
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
 		course = unit.course
-		standard_list = []
-		for group in course.standard_grouping.all():
-			for standard in group.standard.all():
-				standard_list.append((standard.id, standard.description))
+		standard_list = course_methods.getCourseStandards(course, True)
 		form = UnitStandardsForm(unit_id=unit_id)
 		form.fields['standards'].choices = standard_list
 		context = Context({'unitStandardsForm': form})
@@ -153,10 +148,7 @@ def changeSectionPlacement(request):
 
 def showUnits(request):
 	base_dict = base_methods.createBaseDict(request)
-        action = request.GET.get('action')
-	
 	#return from base
-	user = TeacherProfile.objects.filter(user=request.user)
 	request.session['last_page'] = '/units/?course_id='+str(base_dict['course'].id)
 	return render(request,"unit.html", base_dict)	
 #show the lessons of a unit
@@ -165,17 +157,17 @@ def showUnits(request):
 def addUnitStandards(request):
 	if request.method == 'POST':
 		form = UnitStandardsForm(data=request.POST)
+		teacher = checkUserIsTeacher(request.user)
+		if not teacher:
+			logout(request)
+			return HttpResponseRedirect('/')
 		try:
 			unit = Unit.objects.get(id=int(form.data['unit_id']))
-			teacher = TeacherProfile.objects.get(user=request.user)
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
 		
 		course = unit.course
-		standard_list = []
-		for group in course.standard_grouping.all():
-			for standard in group.standard.all():
-				standard_list.append((standard.id, standard.description))
+		standard_list = course_methods.getCourseStandards(course, True)
 		form.fields['standards'].choices = standard_list
 		if form.is_valid():
 			
@@ -187,10 +179,8 @@ def addUnitStandards(request):
 		return HttpResponseRedirect(lastPageToRedirect(request))				
 	return HttpResponseRedirect(lastPageToRedirect(request))
 
-def showLesson(request):
+def showLessons(request):
 	base_dict = base_methods.createBaseDict(request)
-        action = request.GET.get('action')
-
 	request.session['last_page'] = '/lessons/?unit_id='+str(base_dict['unit'].id)
 	return render(request,"lesson.html", base_dict)
 	
@@ -202,9 +192,7 @@ def getLessonStandards(request):
 			lesson = Lesson.objects.get(id=lesson_id)
 		except:
 			return HttpResponse("")
-		standard_list = []
-		for standard in lesson.standards.all():
-			standard_list.append((standard.id, standard.description))
+		standard_list = lesson_methods.getLessonStandards(lesson, True)
 		form = SelectStandardsForm(lesson_id=lesson_id)
 		form.fields['standard'].choices = standard_list
 		print "here getting stnadards"
@@ -221,9 +209,7 @@ def createLessonObjectives(request):
 			lesson = Lesson.objects.get(id=lesson_id)
 		except:
 			return HttpResponse("")
-		standard_list = []
-		for standard in lesson.standards.all():
-			standard_list.append((standard.id,standard.description))
+		standard_list = lesson_methods.getLessonStandards(lesson, True)
 		standards_form.fields['standard'].choices = standard_list	
 		if standards_form.is_valid():
 			try:
@@ -246,10 +232,14 @@ def createLessonObjectives(request):
 def addLessonObjectives(request):
 	if request.method == 'POST':
 		form = CreateObjectivesForm(data=request.POST)
+		
+		teacher = checkUserIsTeacher(request.user)
+		if not teacher:
+			logout(request)
+			return HttpResponseRedirect('/')
 		try:
 			lesson = Lesson.objects.get(id=int(form.data['lesson_id']))
 			standard = Standard.objects.get(id=int(form.data['standard_id']))
-			teacher = TeacherProfile.objects.get(user=request.user)
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
 		
@@ -284,16 +274,18 @@ def addLessonObjectives(request):
 def addLessonStandards(request):
 	if request.method == 'POST':
 		form = LessonStandardsForm(data=request.POST)
+
+		teacher = checkUserIsTeacher(request.user)
+		if not teacher:
+			logout(request)
+			return HttpResponseRedirect('/')
 		try:
 			lesson = Lesson.objects.get(id=int(form.data['lesson_id']))
-			teacher = TeacherProfile.objects.get(user=request.user)
 		except:
 			return HttpResponseRedirect(lastPageToRedirect(request))
 		
 		unit = lesson.unit
-		standard_list = []
-		for standard in unit.standards.all():
-			standard_list.append((standard.id, standard.description))
+		standard_list = unit_methods.getUnitStandards(unit, True)
 		form.fields['standards'].choices = standard_list
 		if form.is_valid():
 			for sid in form.cleaned_data['standards']:
@@ -319,7 +311,6 @@ def showLessonPlanner(request):
 	base_dict['deleteSectionForm'] = delete_section_form
 	base_dict['deleteContentForm'] = delete_content_form
 	request.session['last_page'] = '/lessonPlanner/?lesson_id='+str(base_dict['lesson'].id)
-	user = TeacherProfile.objects.filter(user=request.user)
 	return render(request,'lessonPlanner.html', base_dict)
 
 def lastPageToView(request):
@@ -348,21 +339,24 @@ def lastPageToRedirect(request):
 		return '/studentCourses/'
 	return '/courses/'
 
-def courses(request):
+def showCourses(request):
 	base_dict = base_methods.createBaseDict(request)
 	if base_dict == None:
-		return HttpResponseRedirect('/studentCourses/')
-	action = request.GET.get('action')
+		return HttpResponseRedirect('/')
 	
 	request.session['last_page'] = 'courses'
 	return render(request,'course.html', base_dict)	
 
 def addCourse(request):
 	if request.method == 'POST':
+
+		teacher = checkUserIsTeacher(request.user)
+		if not teacher:
+			logout(request)
+			return HttpResponseRedirect('/')
 		addCourseForm = AddCourse(data=request.POST)
 		if addCourseForm.is_valid():
 			course = addCourseForm.save()
-			teacher = TeacherProfile.objects.get(user=request.user)
 			groups_added = addCourseStandards(course, teacher)
 			base_dict = base_methods.createBaseDict(request)
 			base_dict['groupsAdded'] = groups_added
@@ -400,9 +394,9 @@ def addCourseStandards(course, teacher):
 
 def editCourse(request):
 	if request.method == 'POST':
-		try:
-			teacher = TeacherProfile.objects.get(user=request.user)
-		except:
+		teacher = checkUserIsTeacher(request.user)
+		if not teacher:
+			logout(request)
 			return HttpResponseRedirect('/')
 		course_id = request.POST['selectedCourse']
 		course = Course.objects.get(id=course_id)
@@ -486,9 +480,6 @@ def deleteContent(request):
                 if deleteContentData(contentForm,request.user):
                         return HttpResponseRedirect(lastPageToRedirect(request))
         return HttpResponseRedirect(lastPageToView(request))
-
-
-
 
 def addSection(request):
 	if request.method == 'POST':
@@ -796,7 +787,6 @@ def studentAddCourse(request):
 	courseRequestForm.fields['courses'].choices = course_list
 	if courseRequestForm.is_valid():
 		try:
-			teacher = TeacherProfile.objects.get(id=courseRequestForm.data['teacher_id'])
 			for course_id in courseRequestForm.cleaned_data['courses']:
 				course = Course.objects.get(owner=teacher, id=course_id)
 				cs_exists = CourseStudents.objects.filter(student=student, course=course)
@@ -976,12 +966,15 @@ def publicCourseView(request):
 
 def addStandardAnalysis(request):
 	if request.method == 'POST':
+		teacher = checkUserIsTeacher(request.user)
+		if not teacher:
+			return HttpResponseRedirect('/')
+
 		form = StandardAnalysisForm(data=request.POST)
 		if form.is_valid():
 			standard_id = form.cleaned_data['standard_id']
 			try:
 				standard = Standard.objects.get(id=standard_id)
-				teacher = TeacherProfile.objects.get(user=request.user)
 			except:
 				print 'error in addStandardAnalysis'
 				return HttpResponseRedirect('/standard/?standard_id='+str(standard_id))
@@ -1009,9 +1002,7 @@ def publicUnitView(request):
 		if ( len(rating_list) > 0):
 			rating = reduce(lambda x, y: x+y, rating_list)/float(len(rating_list))
 		unit_lesson_list.append((lesson, rating))
-	unit_standards = []
-	for standard in unit.standards.all():
-		unit_standards.append(standard)
+	unit_standards = unit_methods.getUnitStandards(unit, False)
 	base_dict['unitStandards'] = unit_standards
 	base_dict['unitLessons'] = unit_lesson_list
 	return render(request,'public_unit_view.html',base_dict)
@@ -1050,9 +1041,8 @@ this will get the add form course given the standard
 '''
 def createCourseFromStandard(request):
 	if request.method == 'POST':
-		try:
-			teacher = TeacherProfile.objects.get(user=request.user)
-		except:
+		teacher = checkUserIsTeacher(request.user)
+		if not teacher:
 			return HttpResponse('')
 		sid = request.POST.get('standard_id')
 		if sid == None:
