@@ -18,6 +18,7 @@ def returnStudentForms():
 
 def checkUserIsStudent(request):
 	try:
+		print request.user
 		user = StudentProfile.objects.get(user=request.user)
 		return user
         except:
@@ -94,10 +95,8 @@ def checkUserIsTeacher(request_user):
 
 def createBaseDict(request):
 	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm) = returnBlankForms()
-	try:
-		user = checkUserIsTeacher(request.user)
-		return user
-	except:
+	user = checkUserIsTeacher(request.user)
+	if not user:
 		logout(request)
 		return None
 

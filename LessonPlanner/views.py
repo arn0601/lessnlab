@@ -3,6 +3,9 @@ from django.template import RequestContext
 from LessonPlanner.models import Lesson,Course,Unit,Section
 from LessonPlanner.models import *
 from LessonPlanner.forms import *
+import unit_methods
+import course_methods
+import lesson_methods
 from Standards.models import *
 from Objectives.models import Objective, ObjectiveRating
 from django.shortcuts import render_to_response,render
@@ -341,6 +344,7 @@ def lastPageToRedirect(request):
 
 def showCourses(request):
 	base_dict = base_methods.createBaseDict(request)
+	print base_dict
 	if base_dict == None:
 		return HttpResponseRedirect('/')
 	
@@ -1058,3 +1062,4 @@ def createCourseFromStandard(request):
 		context = Context({'courseAddForm': addCourseForm})
 		return HttpResponse(render_block_to_string('course_add_modal.html', 'addCourse', context))
 	return HttpResponse('')
+
