@@ -6,7 +6,7 @@
     <h3>Add standards to lesson</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url addLessonStandards %}" name="add_unit_standards">
+    <form method="post" action="{% url addLessonStandards %}" name="add_lesson_standards">
         {% csrf_token %}
         {% for field in lessonStandardsForm %}
         <div class="control-group">

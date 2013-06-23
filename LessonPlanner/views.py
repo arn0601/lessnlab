@@ -17,6 +17,7 @@ from datetime import datetime
 from django.utils.timezone import utc
 import simplejson
 import base_methods 
+from django.middleware.csrf import get_token
 from ajax_helpers import render_block_to_string
 from django.template import loader,Context
 from django.contrib.auth.models import User
