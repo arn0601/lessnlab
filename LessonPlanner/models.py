@@ -26,9 +26,31 @@ class Course(Rateable):
 	department = models.CharField(max_length=32)
 	subject = models.ForeignKey('Standards.Subject')
 	grade = models.ForeignKey('Standards.Grade')
-	start_date = models.DateField()
-	end_date = models.DateField()
+	start_date = models.DateField(null=True)
+	end_date = models.DateField(nul=True)
 	standard_grouping = models.ManyToManyField('StandardGrouping', blank=True, null=True)
+	state = models.ForeignKey('Standards.State')
+	parent = models.ForeignKey(self, null=True, blank=True)
+
+	def clone_from_parent(self, course, teacher=None):	
+		if course and course.id:
+			self.name = course.name
+			self.owner = course.owner
+			self.department = course.department
+			self.subject = course.subject
+			self.grade = course.grade
+			#skip start and end date, who knows what these are
+			for group in course.standard_grouping.all():
+				self.standard_grouping.add(group)
+			self.state = course.state
+		else:
+			return False
+		if teacher and teacher.id:
+			self.owner = teacher
+		else:
+			return False
+		return True
+			
 
 class CourseStudents(models.Model):
 	course = models.ForeignKey('Course')
@@ -58,8 +80,30 @@ class Unit(Rateable):
 	owner = models.ForeignKey('accounts.TeacherProfile')
 	parent_unit = models.ForeignKey('self', null=True, blank=True)
 	standards = models.ManyToManyField('Standards.Standard', blank=True)
-	start_date = models.DateField()
-	end_date = models.DateField()
+	start_date = models.DateField(null=True)
+	end_date = models.DateField(null=True)
+
+	def clone_from_parent(self, unit, teacher, course):
+		if unit and unit.id:
+			self.name = unit.name
+			self.description = unit.description
+			self.assessment_type = unit.assessment_type
+			self.course = unit.course
+			self.owner = unit.owner
+			self.parent_unit = unit
+			#skip standards, cant add unless you save
+			#skip start and end date, who know what these are
+		else:
+			return False
+		if teacher and teacher.id:
+			self.owner = teacher
+		else:
+			return False
+		if course and course.id:
+			self.course = course
+		else:
+			return False
+		return True
 
 class UnitRating(Rating):
 	unit = models.ForeignKey('Unit')
@@ -73,9 +117,29 @@ class Lesson(Rateable):
 	description = models.TextField()
 	standards = models.ManyToManyField('Standards.Standard', blank=True)
 	objectives = models.ManyToManyField('Objectives.Objective', blank=True)
-	start_date = models.DateField()
-        end_date = models.DateField()
+	start_date = models.DateField(null=True)
+        end_date = models.DateField(null=True)
 
+	def clone_from_parent(self, lesson, teacher, unit):
+		if lesson and lesson.id:
+			self.name = lesson.name
+			self.unit = lesson.unit
+			self.owner = lesson.owner
+			self.tags = lesson.tags
+			self.description = lesson.description
+			#skip standards and objectives
+			#skip start and end date who knows when there are
+		else:
+			return False
+		if teacher and teacher.id:
+			self.owner = teacher
+		else:
+			return False
+		if unit and unit.id:
+			self.unit = unit
+		else:
+			return False
+		return True
 
 class LessonRating(Rating):
 	lesson = models.ForeignKey('Lesson')

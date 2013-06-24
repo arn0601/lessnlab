@@ -4,12 +4,13 @@
 <!DOCTYPE html>
 {% block content %}
 
-         <div class="container" id="u1" style="margin-bottom: 60px;">
+<div class="container" id="u1" style="margin-bottom: 60px;">
 	<h4> Details for {{ course.name }}  </h4>
 	
 	<div class="row-fluid">
 	Author : {{ course.owner.user_firstname }} {{ course.owner.user_lastname }} <br>
 	Course Length : {{ course_length.0 }} weeks,  {{ course_length.1 }} days
+	<button onClick="cloneCourse('{{ course.id }}')" class="btn btn-primary">Use this course</button>
 	</div>
 	<hr />
 	<div class="row-fluid">

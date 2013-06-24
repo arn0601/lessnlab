@@ -371,7 +371,7 @@ def addCourse(request):
 			print addCourseForm.errors
 			context = Context({'courseAddForm':addCourseForm})
 			return HttpResponse(render_block_to_string('course_add_modal.html', 'addCourse', context))
-	return HttpResponseRedirect('/courses/')
+	return HttpResponse('')
 
 def addCourseStandards(course, teacher):
 	standards = Standard.objects.filter(subject=course.subject).filter(grade=course.grade)
@@ -425,9 +425,12 @@ def addUnit(request):
                 addUnitForm = AddUnitForm(request.POST)
                 if addUnitForm.is_valid():
 			addUnitForm.save()
-                        return HttpResponseRedirect(lastPageToRedirect(request))
-	print addUnitForm.errors
-        return HttpResponseRedirect(lastPageToRedirect(request))
+                        return HttpResponse('success')
+		else:
+			context = Context({'unitAddForm':addUnitForm})
+			return HttpResponse(render_block_to_string('unit_add_modal.html', 'addUnit', context))
+			
+        return HttpResponseRedirect('')
 
 def editUnit(request):
         if request.method == 'POST':
@@ -1052,7 +1055,10 @@ def createCourseFromStandard(request):
 		sid = request.POST.get('standard_id')
 		if sid == None:
 			return HttpResponse('')
-		standard = Standard.objects.get(id=sid)
+		try:
+			standard = Standard.objects.get(id=sid)
+		except:
+			return HttpResponse('')
 		t = standard.standard_type
 		s = None
 		if (t.value == 'State'):
@@ -1062,5 +1068,22 @@ def createCourseFromStandard(request):
 		addCourseForm = AddCourse(grade=g, owner=teacher, subject=b)
 		context = Context({'courseAddForm': addCourseForm})
 		return HttpResponse(render_block_to_string('course_add_modal.html', 'addCourse', context))
+	return HttpResponse('')
+
+def cloneCourseFromAnother(request):
+	if request.method  == 'POST':
+		teacher = checkUserIsTeacher(request.user)
+		if not teacher:
+			return HttpResponse('')
+		course_id = request.POST.get('course_id')
+		if course_id == None:
+			return HttpResponse('')
+		try:
+			course = Course.objects.get(id=course_id)
+		except:
+			return HttpResponse(;;)
+		new_course = course_methods.deepcopy_course(course, teacher)
+		if new_course:
+			return HttpResponse('success')
 	return HttpResponse('')
 

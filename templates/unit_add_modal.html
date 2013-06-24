@@ -1,0 +1,89 @@
+<div class="modal hide" id="addUnit">
+	{% block addUnit %}
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a Unit</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addUnit %}" id="addNewUnit">
+        {% csrf_token %}
+        {% for field in unitAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+		{{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <p><button type="submit" class="btn btn-primary" onClick="addNewUnit()" >Submit</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+	{% endblock %}
+</div>
+
+<script type="text/javascript"> 
+
+        function addNewUnit() {
+		var formString = $("#addNewUnit").serialize()
+		$.ajax({
+			data : formString,
+			dataType : "html",
+			type: "POST",
+			url: {% url LessonPlanner.views.addUnit %},
+			success: function(data) {
+				if (data == "success") {
+					location.reload();
+				}
+				else {
+					$("#addUnit").html(data);
+					$("#addUnit").modal("show");
+				}
+			}
+		});
+	}
+
+	function chooseNewCourse1() {
+		$("#chooseNewCourse").modal("show");
+	}
+	
+	function chooseRecommendCourse() {
+		$("#chooseNewCourse").modal("hide");	
+		$("#recommendCourse").modal("show");
+	}
+
+	function chooseAddCourse() {
+		$("#chooseNewCourse").modal("hide");
+		$("#addCourse").modal("show");
+	}
+
+	function hideAddCourse() {
+		$("#addCourse").modal("hide");
+	}
+
+	function hideRecommendCourse() {
+		$("#recommendCourse").modal("hide");
+	}
+
+	function hideChooseNewCourse() {
+		$("#chooseNewCourse").modal("hide");
+	}
+
+	function createCourseFromStandard(id){
+
+		$.ajax({
+			data: {standard_id:id},
+			dataType:'html',
+			type: "POST", // GET or POST
+      url: {% url LessonPlanner.views.createCourseFromStandard %}, // the file to call
+			success : function(data){
+					$('#addCourse').html(data);
+					$('#addCourse').modal('show')		
+       }
+		});
+	}
+
+</script>
