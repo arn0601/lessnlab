@@ -13,9 +13,9 @@ def getLessonStandards(lesson, use_tuple):
 
 def shallowcopy_lesson(lesson, teacher, unit):
 	new_lesson = Lesson()
-	cloned = new_lesson.clone_from_parent(lesson, teacher, unit
+	cloned = new_lesson.clone_from_parent(lesson, teacher, unit)
 	if cloned:
-		return new_lessj
+		return new_lesson
 	else:
 		return None
 

@@ -30,11 +30,11 @@ class AddCourse(forms.ModelForm):
 	class Meta:
 		model = Course
 		widgets = { 'owner': forms.HiddenInput(), 'start_date': custom_widgets.CalendarDateSelectField(), 'end_date': custom_widgets.CalendarDateSelectField() }
-		exclude = ['standard_grouping', 'cumulative_rating', 'number_raters']
+		exclude = ['standard_grouping', 'cumulative_rating', 'number_raters', 'parent']
 	
 	def __init__(self, *args, **kwargs):
 		subject = kwargs.pop('subject', None)
-		owner = kwargs.pop('owner', None)
+		owner = kwargs.pop('teacher', None)
 		grade = kwargs.pop('grade', None)
 		super(AddCourse, self).__init__(*args,**kwargs)
 		self.fields['owner'].label=''
@@ -56,7 +56,7 @@ class EditCourse(forms.ModelForm):
 	class Meta:
 		model = Course
 		widgets = {  'owner': forms.HiddenInput(), 'start_date': custom_widgets.CalendarDateSelectField(), 'end_date': custom_widgets.CalendarDateSelectField() }
-		exclude = ['standard_grouping', 'cumulative_rating', 'number_raters']
+		exclude = ['standard_grouping', 'cumulative_rating', 'number_raters', 'state', 'parent']
 
 class DeleteCourse(forms.Form):
 	course_id = forms.CharField(label="")

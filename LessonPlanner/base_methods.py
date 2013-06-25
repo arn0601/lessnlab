@@ -90,7 +90,6 @@ def checkUserIsTeacher(request_user):
 		user = TeacherProfile.objects.get(user=request_user)
 		return user
 	except:
-		logout(request)
 		return None
 
 def createBaseDict(request):
@@ -99,6 +98,8 @@ def createBaseDict(request):
 	if not user:
 		logout(request)
 		return None
+
+	courseAddForm.fields['state'].initial = user.user_school_state
 
        	courseAddForm.fields['owner'].initial = user
        	unitAddForm.fields['owner'].initial = user

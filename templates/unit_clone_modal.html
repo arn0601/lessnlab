@@ -1,0 +1,36 @@
+
+<div class="modal hide" id="cloneUnitFailed">
+  <div class="modal-header">
+  	  <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Clone Unit Failed</h3>
+  </div>
+  <div class="modal-body">
+     Failed to clone unit, sorry about that
+	<p>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+	</p>
+  </div>
+</div>
+
+<script type="text/javascript"> 
+
+
+        function cloneUnit(id) {
+
+		$.ajax({
+			data:{unit_id:id},
+			type: "POST", // GET or POST
+      url: {% url LessonPlanner.views.cloneUnit %}, // the file to call
+			success : function(data){
+					if (data == "") {
+						$("#cloneUnitFailed").modal("show")
+					}
+					else {
+						location.reload();
+					}
+       }
+		});
+
+	}
+
+</script>

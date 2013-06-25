@@ -27,10 +27,10 @@ class Course(Rateable):
 	subject = models.ForeignKey('Standards.Subject')
 	grade = models.ForeignKey('Standards.Grade')
 	start_date = models.DateField(null=True)
-	end_date = models.DateField(nul=True)
+	end_date = models.DateField(null=True)
 	standard_grouping = models.ManyToManyField('StandardGrouping', blank=True, null=True)
 	state = models.ForeignKey('Standards.State')
-	parent = models.ForeignKey(self, null=True, blank=True)
+	parent = models.ForeignKey('self', null=True, blank=True)
 
 	def clone_from_parent(self, course, teacher=None):	
 		if course and course.id:

@@ -16,7 +16,7 @@ from accounts.forms import TeacherRegistrationForm
 from datetime import datetime
 from django.utils.timezone import utc
 import simplejson
-import base_methods 
+import base_methods
 from django.middleware.csrf import get_token
 from ajax_helpers import render_block_to_string
 from django.template import loader,Context
@@ -161,7 +161,7 @@ def showUnits(request):
 def addUnitStandards(request):
 	if request.method == 'POST':
 		form = UnitStandardsForm(data=request.POST)
-		teacher = checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request.user)
 		if not teacher:
 			logout(request)
 			return HttpResponseRedirect('/')
@@ -237,7 +237,7 @@ def addLessonObjectives(request):
 	if request.method == 'POST':
 		form = CreateObjectivesForm(data=request.POST)
 		
-		teacher = checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request.user)
 		if not teacher:
 			logout(request)
 			return HttpResponseRedirect('/')
@@ -279,7 +279,7 @@ def addLessonStandards(request):
 	if request.method == 'POST':
 		form = LessonStandardsForm(data=request.POST)
 
-		teacher = checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request.user)
 		if not teacher:
 			logout(request)
 			return HttpResponseRedirect('/')
@@ -355,11 +355,11 @@ def showCourses(request):
 def addCourse(request):
 	if request.method == 'POST':
 
-		teacher = checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request.user)
 		if not teacher:
 			logout(request)
 			return HttpResponseRedirect('/')
-		addCourseForm = AddCourse(data=request.POST)
+		addCourseForm = AddCourse(data=request.POST, teacher=teacher)
 		if addCourseForm.is_valid():
 			course = addCourseForm.save()
 			groups_added = addCourseStandards(course, teacher)
@@ -399,7 +399,7 @@ def addCourseStandards(course, teacher):
 
 def editCourse(request):
 	if request.method == 'POST':
-		teacher = checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request.user)
 		if not teacher:
 			logout(request)
 			return HttpResponseRedirect('/')
@@ -454,9 +454,12 @@ def addLesson(request):
                 addLessonForm = AddLessonForm(request.POST)
                 if addLessonForm.is_valid():
 			addLessonForm.save()
-                        return HttpResponseRedirect(lastPageToRedirect(request))
-	print addLessonForm.errors
-        return HttpResponseRedirect(lastPageToRedirect(request))
+                        return HttpResponse('success')
+		else:
+			context = Context({'lessonAddForm':addLessonForm})
+			return HttpResponse(render_block_to_string('lesson_add_modal.html', 'addLesson', context))
+			
+        return HttpResponse('')
 
 def editLesson(request):
         if request.method == 'POST':
@@ -974,7 +977,7 @@ def publicCourseView(request):
 
 def addStandardAnalysis(request):
 	if request.method == 'POST':
-		teacher = checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request.user)
 		if not teacher:
 			return HttpResponseRedirect('/')
 
@@ -1049,7 +1052,7 @@ this will get the add form course given the standard
 '''
 def createCourseFromStandard(request):
 	if request.method == 'POST':
-		teacher = checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request.user)
 		if not teacher:
 			return HttpResponse('')
 		sid = request.POST.get('standard_id')
@@ -1070,9 +1073,9 @@ def createCourseFromStandard(request):
 		return HttpResponse(render_block_to_string('course_add_modal.html', 'addCourse', context))
 	return HttpResponse('')
 
-def cloneCourseFromAnother(request):
+def cloneCourse(request):
 	if request.method  == 'POST':
-		teacher = checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request.user)
 		if not teacher:
 			return HttpResponse('')
 		course_id = request.POST.get('course_id')
@@ -1081,7 +1084,25 @@ def cloneCourseFromAnother(request):
 		try:
 			course = Course.objects.get(id=course_id)
 		except:
-			return HttpResponse(;;)
+			return HttpResponse('')
+		new_course = course_methods.deepcopy_course(course, teacher)
+		if new_course:
+			return HttpResponse('success')
+	return HttpResponse('')
+
+#TODO finish this
+def cloneUnit(request):
+	if request.method  == 'POST':
+		teacher = base_methods.checkUserIsTeacher(request.user)
+		if not teacher:
+			return HttpResponse('')
+		course_id = request.POST.get('course_id')
+		if course_id == None:
+			return HttpResponse('')
+		try:
+			course = Course.objects.get(id=course_id)
+		except:
+			return HttpResponse('')
 		new_course = course_methods.deepcopy_course(course, teacher)
 		if new_course:
 			return HttpResponse('success')
