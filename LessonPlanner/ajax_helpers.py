@@ -1,5 +1,6 @@
 from django.template.loader_tags import BlockNode, ExtendsNode
 from django.template import loader, Context, RequestContext, TextNode
+from django.http import HttpResponse
 
 def get_template(template):
     if isinstance(template, (tuple, list)):
@@ -54,6 +55,7 @@ def direct_block_to_template(request, template, block, extra_context=None, mimet
     """
     if extra_context is None:
     	extra_context = {}
+    print "Extra",extra_context
     dictionary = {'params': kwargs}
     for key, value in extra_context.items():
         if callable(value):

@@ -5,8 +5,9 @@
 <div class="noborderunitbox" id="allSections">
 	<div id="section0" class="row-fluid">
 		<div class="sectionheader" >
-			Lesson Overview
+			Lesson Overview 	<a target="_new" href="{% url lessonPresentation %}?lesson_id={{ lesson.id }}"> [Presentation View] </a>
 		</div>
+		
 		<div class="overviewsectionnav row-fluid">					
 			<div class="span4">
 				<b>{{ lesson.name }}</b> in the <a href="/lessons/?unit_id={{ unit.id }}"> {{ unit.name }}</a>

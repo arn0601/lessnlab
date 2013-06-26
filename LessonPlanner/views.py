@@ -16,14 +16,16 @@ from accounts.forms import TeacherRegistrationForm
 from datetime import datetime
 from django.utils.timezone import utc
 import simplejson
-import base_methods
-from django.middleware.csrf import get_token
-from ajax_helpers import render_block_to_string
+import base_methods 
+from ajax_helpers import direct_block_to_template
 from django.template import loader,Context
 from django.contrib.auth.models import User
 import sys, traceback
 import urlparse
 
+def lesson_presentation(request):
+	base_dict = base_methods.createBaseDict(request)
+	return render(request,"lesson_presentation.html", base_dict)
 
 def activity_add(request):
 	if request.method == 'POST':
@@ -43,16 +45,16 @@ def activity_ajax_view(request):
 		if activity_id==-1:
 			placement = getMaxCount(Section.objects.get(id=section_id))+1
 			activityForm = AddActivityContent(initial={'section': section_id,'placement' : placement,'content_type':"Activity"})
-			context = Context({'activityForm': activityForm, 'activity_id':activity_id})
-			return_str = render_block_to_string('ActivityViewModal.html', 'results', context)
+			context = {'activityForm': activityForm, 'activity_id':activity_id}
+			return_str = direct_block_to_template(request,'ActivityViewModal.html', 'results', context)
 		else:
 			placement = getMaxCount(Section.objects.get(id=section_id))+1
 			ac = ActivityContent.objects.get(id=activity_id)
 			activityForm = AddActivityContent(instance=ac,initial={'section': section_id,'placement' : placement,'content_type':"Activity"})
-			context = Context({'activityForm': activityForm, 'activity_id':activity_id})
-			return_str = render_block_to_string('ActivityViewModal.html', 'results', context)
+			context = {'activityForm': activityForm, 'activity_id':activity_id}
+			return_str = direct_block_to_template(request,'ActivityViewModal.html', 'results', context)
 	
-	return HttpResponse(return_str)
+	return return_str
 
 def requestAddableLessonStandards(request):
 	if request.method == 'POST':
@@ -66,8 +68,8 @@ def requestAddableLessonStandards(request):
 		standard_list = unit_methods.getUnitStandards(unit, True)
 		form = LessonStandardsForm(lesson_id=lesson_id)
 		form.fields['standards'].choices = standard_list
-		context = Context({ 'lessonStandardsForm':form})
-		return HttpResponse(render_block_to_string('lesson_standards_modal.html', 'addLessonStandards', context))
+		context = { 'lessonStandardsForm':form}
+		return direct_block_to_template(request,'lesson_standards_modal.html', 'addLessonStandards', context)
 
 def requestAddableUnitStandards(request):
 	if request.method == 'POST':
@@ -80,8 +82,8 @@ def requestAddableUnitStandards(request):
 		standard_list = course_methods.getCourseStandards(course, True)
 		form = UnitStandardsForm(unit_id=unit_id)
 		form.fields['standards'].choices = standard_list
-		context = Context({'unitStandardsForm': form})
-		return HttpResponse(render_block_to_string('unit_standards_modal.html', 'addStandards', context))
+		context = {'unitStandardsForm': form}
+		return direct_block_to_template(request,'unit_standards_modal.html', 'addStandards', context)
 
 def search_activity_ajax_view(request):
 	if request.method == 'POST':
@@ -96,10 +98,10 @@ def search_activity_ajax_view(request):
 		if act_length != "":
 			dataset = dataset.filter(length__contains=act_length)
 		print dataset
-		context = Context({'activities_found':dataset, 'section_id' : section_id})
+		context = {'activities_found':dataset, 'section_id' : section_id}
 	# passing the template_name + block_name + context
-		return_str = render_block_to_string('ActivitySearchModal.html', 'results', context)
-		return HttpResponse(return_str)
+		return_str = direct_block_to_template(request,'ActivitySearchModal.html', 'results', context)
+		return return_str
 
 def team(request):
         return render(request,'team.html', {})
@@ -200,9 +202,9 @@ def getLessonStandards(request):
 		form = SelectStandardsForm(lesson_id=lesson_id)
 		form.fields['standard'].choices = standard_list
 		print "here getting stnadards"
-		context = Context({'selectStandardsForm':form})
+		context = {'selectStandardsForm':form}
 		
-		return HttpResponse(render_block_to_string("lesson_objectives_modal.html", "selectingStandard", context))
+		return direct_block_to_template(request,"lesson_objectives_modal.html", "selectingStandard", context)
 
 #this returns the form to add objectives
 def createLessonObjectives(request):
@@ -227,8 +229,8 @@ def createLessonObjectives(request):
 				obj_list.append((obj.id, obj.description))
 			next_form = CreateObjectivesForm(standard_id=standards_form.cleaned_data['standard'], lesson_id=standards_form.cleaned_data['lesson_id'])
 			next_form.fields['created'].choices = obj_list
-			context = Context({'createObjectivesForm':next_form})
-			return HttpResponse(render_block_to_string("lesson_objectives_modal.html","addingLessonObjectives",context))
+			context = {'createObjectivesForm':next_form}
+			return direct_block_to_template(request,"lesson_objectives_modal.html","addingLessonObjectives",context)
 		else:
 			print standards_form.errors
 	return HttpResponse("")
@@ -369,9 +371,9 @@ def addCourse(request):
 			return HttpResponse("success")
 		else:
 			print addCourseForm.errors
-			context = Context({'courseAddForm':addCourseForm})
-			return HttpResponse(render_block_to_string('course_add_modal.html', 'addCourse', context))
-	return HttpResponse('')
+			context = {'courseAddForm':addCourseForm}
+			return direct_block_to_template(request,'course_add_modal.html', 'addCourse', context)
+	return HttpResponseRedirect('/courses/')
 
 def addCourseStandards(course, teacher):
 	standards = Standard.objects.filter(subject=course.subject).filter(grade=course.grade)
@@ -702,8 +704,8 @@ def EditCourseRequest(request):
 		course_id = request.POST['course_id']
 		course = Course.objects.get(id=course_id)
 		editCourseForm = EditCourse(instance=course)	
-		context = Context({'editCourseForm':editCourseForm, 'selectedCourse':course_id})
-        	return HttpResponse(render_block_to_string('course_edit_modal.html', 'editCourse', context))
+		context = {'editCourseForm':editCourseForm, 'selectedCourse':course_id}
+        	return direct_block_to_template(request,'course_edit_modal.html', 'editCourse', context)
 	return HttpResponse('')
 
 def EditUnitRequest(request):
@@ -712,8 +714,8 @@ def EditUnitRequest(request):
 		unitID = request.POST['unit_id']
 	        unit = Unit.objects.get(id=unitID)
         	editUnitForm = EditUnit(instance=unit)
-		context = Context({'editUnitForm':editUnitForm, 'selectedUnit':unitID})
-        	return HttpResponse(render_block_to_string('unit_edit_modal.html', 'editUnit', context))
+		context = {'editUnitForm':editUnitForm, 'selectedUnit':unitID}
+        	return direct_block_to_template(request,'unit_edit_modal.html', 'editUnit', context)
 	return HttpResponse('')
 
 def DeleteLessonRequest(request):
@@ -721,8 +723,8 @@ def DeleteLessonRequest(request):
 		lessonID = request.POST.get('lesson_id')
 	        lesson = Lesson.objects.get(id=lessonID)
         	deleteLessonForm = DeleteLesson(lesson_id=lesson.id)
-		context = Context({'deleteLessonForm':deleteLessonForm})
-		return HttpResponse(render_block_to_string("lesson_delete_modal.html", 'deleteLesson', context))
+		context = {'deleteLessonForm':deleteLessonForm}
+		return direct_block_to_template(request,"lesson_delete_modal.html", 'deleteLesson', context)
 	return HttpResponse('')
 
 def EditLessonRequest(request):
@@ -730,8 +732,8 @@ def EditLessonRequest(request):
 		lessonID = request.POST.get('lesson_id')
         	lesson = Lesson.objects.get(id=lessonID)
 		editLessonForm = EditLesson(instance=lesson)
-		context = Context({'editLessonForm':editLessonForm, 'selectedLesson':lessonID})
-		return HttpResponse(render_block_to_string('lesson_edit_modal.html', 'editLesson', context))
+		context = {'editLessonForm':editLessonForm, 'selectedLesson':lessonID}
+		return direct_block_to_template(request,'lesson_edit_modal.html', 'editLesson', context)
 	return HttpResponse('')
 
 def deleteCourseData(course_id):
@@ -1069,8 +1071,8 @@ def createCourseFromStandard(request):
 		b = standard.subject
 		g = standard.grade
 		addCourseForm = AddCourse(grade=g, owner=teacher, subject=b)
-		context = Context({'courseAddForm': addCourseForm})
-		return HttpResponse(render_block_to_string('course_add_modal.html', 'addCourse', context))
+		context = {'courseAddForm': addCourseForm}
+		return direct_block_to_template(request,'course_add_modal.html', 'addCourse', context)
 	return HttpResponse('')
 
 def cloneCourse(request):
