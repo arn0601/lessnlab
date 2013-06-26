@@ -20,6 +20,9 @@ from django.contrib.auth.models import User
 import sys, traceback
 import urlparse
 
+def lesson_presentation(request):
+	base_dict = base_methods.createBaseDict(request)
+	return render(request,"lesson_presentation.html", base_dict)
 
 def activity_add(request):
 	if request.method == 'POST':
