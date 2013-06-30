@@ -26,7 +26,7 @@
 						$("#cloneCourseFailed").modal("show")
 					}
 					else {
-						location.reload();
+						window.location = {% url LessonPlanner.views.showCourses %}
 					}
        }
 		});

@@ -1,4 +1,4 @@
-from LessonPlanner.models import Lesson
+from LessonPlanner.models import Lesson, Unit
 from Standards.models import Standard
 
 def getLessonStandards(lesson, use_tuple):

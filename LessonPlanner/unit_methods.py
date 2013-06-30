@@ -1,4 +1,5 @@
-from LessonPlanner.models import Unit
+from LessonPlanner.models import Unit, Lesson
+import lesson_methods
 from Standards.models import Standard
 
 def getUnitStandards(unit, use_tuple) :
@@ -18,7 +19,7 @@ def shallowcopy_unit(unit, teacher, course):
 	else:
 		return None
 
-def deepcopy_course(unit, teacher, course):
+def deepcopy_unit(unit, teacher, course):
 	#first copy over the course
 	new_unit = shallowcopy_unit(unit, teacher, course)
 

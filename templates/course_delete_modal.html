@@ -6,6 +6,7 @@
   <div class="modal-body">
     <form method="post" action="{% url deleteCourse %}" name="deleteCourse">
      Are you sure you want to delete the course?
+        {% csrf_token %}
 	<input type="hidden" name="course_id" id="deleteCourseHidden">
 <p>
      <p><button type="submit" class="btn btn-primary">Yes</button>

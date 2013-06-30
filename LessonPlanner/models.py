@@ -40,8 +40,6 @@ class Course(Rateable):
 			self.subject = course.subject
 			self.grade = course.grade
 			#skip start and end date, who knows what these are
-			for group in course.standard_grouping.all():
-				self.standard_grouping.add(group)
 			self.state = course.state
 		else:
 			return False
@@ -87,7 +85,6 @@ class Unit(Rateable):
 		if unit and unit.id:
 			self.name = unit.name
 			self.description = unit.description
-			self.assessment_type = unit.assessment_type
 			self.course = unit.course
 			self.owner = unit.owner
 			self.parent_unit = unit
