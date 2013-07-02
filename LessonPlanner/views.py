@@ -957,24 +957,7 @@ def publicCourseView(request):
 	base_dict = base_methods.createBaseDict(request)
 	course_id = request.GET['course_id']
 	course = Course.objects.get(id=course_id)
-	course_delta = (course.end_date - course.start_date)
-	base_dict['course_length']=(course_delta.days/7, course_delta.days%7)
-	course_units = Unit.objects.filter(course=course).order_by('start_date')
-	course_unit_list = []
-	for unit in course_units:
-		ratings = UnitRating.objects.filter(unit=unit)
-		rating_list = [rating.rating for rating in ratings]
-		rating = 0
-		if ( len(rating_list) > 0):
-			rating = reduce(lambda x, y: x+y, rating_list)/float(len(rating_list))
-		course_unit_list.append((unit, rating))
-	
-	course_standards = []
-	for sg in course.standard_grouping.all():
-		for standard in sg.standard.all():
-			course_standards.append(standard)
-	base_dict['courseStandards'] = 	course_standards
-	base_dict['courseUnits'] = course_unit_list
+	base_dict.update(course_methods.getCourseInfo(course))
 	return render(request,'public_course_view.html',base_dict)
 
 def addStandardAnalysis(request):

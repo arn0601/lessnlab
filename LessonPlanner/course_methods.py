@@ -24,6 +24,16 @@ def getCourseInfo(course):
 	course_dict = {}
 	course_dict['studentsTaking'] = getStudentsTaking(course)
 	course_dict['courseClones'] = getCourseClones(course)
+	course_units = Unit.objects.filter(course=course).order_by('start_date')
+	course_dict['courseUnits'] = course_units
+	
+	#course length
+	course_delta = (course.end_date - course.start_date)
+	course_dict['courseLength']=(course_delta.days/7, course_delta.days%7)
+
+	course_dict['courseStandards']= getCourseStandards(course, False)
+
+	return course_dict
 
 def getCourseStandards(course, use_tuple):
 	standard_list = []

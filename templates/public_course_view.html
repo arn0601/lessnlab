@@ -9,7 +9,10 @@
 	
 	<div class="row-fluid">
 	Author : {{ course.owner.user_firstname }} {{ course.owner.user_lastname }} <br>
-	Course Length : {{ course_length.0 }} weeks,  {{ course_length.1 }} days
+	Course Length : {{ courseLength.0 }} weeks,  {{ courseLength.1 }} days <br>
+	Number of students in course: {{ studentsTaking|length }} <br> 
+	Number of teachers using this course: {{ courseClones|length }} <br>
+	Course Rating (by other teachers): {{ course.cumulative_rating }} <br>
 	<button onClick="cloneCourse('{{ course.id }}')" class="btn btn-primary">Use this course</button>
 	</div>
 	<hr />
