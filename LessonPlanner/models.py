@@ -23,13 +23,13 @@ class Course(Rateable):
 	name = models.CharField(max_length=32)
 	#description = models.TextField()
 	owner = models.ForeignKey('accounts.TeacherProfile')
+	state = models.ForeignKey('Standards.State')
 	department = models.CharField(max_length=32)
 	subject = models.ForeignKey('Standards.Subject')
 	grade = models.ForeignKey('Standards.Grade')
 	start_date = models.DateField(null=True)
 	end_date = models.DateField(null=True)
 	standard_grouping = models.ManyToManyField('StandardGrouping', blank=True, null=True)
-	state = models.ForeignKey('Standards.State')
 	parent = models.ForeignKey('self', null=True, blank=True)
 
 	def clone_from_parent(self, course, teacher=None):	

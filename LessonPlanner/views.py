@@ -839,21 +839,18 @@ def deleteContentData(contentForm, request_user):
 
 def getStandardsFromGroup(request):
 	if request.method == 'POST':
-		group_id = request.POST['group_id']
+		course_id = request.POST['course_id']
 		try:
-			group = StandardGrouping.objects.get(id=group_id)
+			course = Course.objects.get(id=course_id)
 		except:
-			return HttpResponseRedirect('/courses/')
-		base_dict = base_methods.createBaseDict(request)
+			return HttpResponse('')
 		standard_list = []
-		for standard in group.standard.all():
-			standard_list.append(standard)
-		base_dict['groupStandards'] = standard_list
-		base_dict['showGroupStandards'] = True
-		base_dict['selectedGroup'] = group
-		base_dict['user_id'] = request.user.id
-		return render(request,'course.html', base_dict)
-	return HttpResponseRedirect('/courses/')
+		for group in course.standard_grouping.all():
+			for standard in group.standard.all():
+				standard_list.append(standard)
+		context = {'groupStandards': standard_list}
+		return direct_block_to_template(request,'course_view_standards.html', 'showGroupStandards', context)
+	return HttpResponse('')
 
 def standardsSearch(request):
 	base_dict = base_methods.createBaseDict(request)
