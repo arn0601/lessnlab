@@ -65,8 +65,15 @@
 	{% endblock %}
 </div>
 
+{% include "course_view_standards.html" %}
 
 <script type="text/javascript"> 
+
+	function resetForm($form) {
+		$form.find('input:text, input:password, input:file, select, textarea').val('');
+		$form.find('input:radio, input:checkbox')
+			.removeAttr('checked').removeAttr('selected');
+	}
 
         function addNewCourse() {
 		var formString = $("#addNewCourse").serialize()
@@ -76,13 +83,23 @@
 			type: "POST",
 			url: {% url LessonPlanner.views.addCourse %},
 			success: function(data) {
-				if (data == "success") {
-					location.reload();
+				if (data != "") {
+					var obj = jQuery.parseJSON(data);
+					if (obj.success == "1") {
+						$("#addCourse").modal("hide");
+						$("#showGroupStandards").html(obj.response);		
+						$("#showGroupStandards").modal("show");
+						window.location.reload(true);
+					}
+					else {
+						$("#addCourse").html(data);
+						$("#addCourse").modal("show");
+					}
 				}
-				else {
-					$("#addCourse").html(data);
-					$("#addCourse").modal("show");
-				}
+				//else {
+				//	$("#addCourse").html(data);
+				//	$("#addCourse").modal("show");
+				//}
 			}
 		});
 	}

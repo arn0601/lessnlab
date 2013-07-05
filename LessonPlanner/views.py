@@ -15,9 +15,9 @@ from accounts.models import TeacherProfile
 from accounts.forms import TeacherRegistrationForm
 from datetime import datetime
 from django.utils.timezone import utc
-import simplejson
+from django.utils import simplejson
 import base_methods 
-from ajax_helpers import direct_block_to_template
+from ajax_helpers import direct_block_to_template, direct_json_to_template
 from django.template import loader,Context
 from django.contrib.auth.models import User
 import sys, traceback
@@ -365,14 +365,13 @@ def addCourse(request):
 		if addCourseForm.is_valid():
 			course = addCourseForm.save()
 			groups_added = addCourseStandards(course, teacher)
-			base_dict = base_methods.createBaseDict(request)
-			base_dict['groupsAdded'] = groups_added
-			base_dict['addCourseSecondStep'] = True
-			return HttpResponse("success")
+			standard_list = course_methods.getCourseStandards(course, False)
+			context = {'groupStandards': standard_list}
+			return direct_json_to_template(request,'course_view_standards.html', 'showGroupStandards', context, {'success':'1'})
 		else:
 			print addCourseForm.errors
 			context = {'courseAddForm':addCourseForm}
-			return direct_block_to_template(request,'course_add_modal.html', 'addCourse', context)
+			return direct_json_to_template(request,'course_add_modal.html', 'addCourse', context, {'success':'0'})
 	return HttpResponseRedirect('/courses/')
 
 def addCourseStandards(course, teacher):
@@ -844,10 +843,7 @@ def getStandardsFromGroup(request):
 			course = Course.objects.get(id=course_id)
 		except:
 			return HttpResponse('')
-		standard_list = []
-		for group in course.standard_grouping.all():
-			for standard in group.standard.all():
-				standard_list.append(standard)
+		standard_list = getCourseStandards(course, False)
 		context = {'groupStandards': standard_list}
 		return direct_block_to_template(request,'course_view_standards.html', 'showGroupStandards', context)
 	return HttpResponse('')
