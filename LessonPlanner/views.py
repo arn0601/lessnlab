@@ -366,7 +366,7 @@ def addCourse(request):
 			course = addCourseForm.save()
 			groups_added = addCourseStandards(course, teacher)
 			standard_list = course_methods.getCourseStandards(course, False)
-			context = {'groupStandards': standard_list}
+			context = {'groupStandards': standard_list, 'justSynced': True}
 			return direct_json_to_template(request,'course_view_standards.html', 'showGroupStandards', context, {'success':'1'})
 		else:
 			print addCourseForm.errors
@@ -843,8 +843,8 @@ def getStandardsFromGroup(request):
 			course = Course.objects.get(id=course_id)
 		except:
 			return HttpResponse('')
-		standard_list = getCourseStandards(course, False)
-		context = {'groupStandards': standard_list}
+		standard_list = course_methods.getCourseStandards(course, False)
+		context = {'groupStandards': standard_list, 'justSynced': True}
 		return direct_block_to_template(request,'course_view_standards.html', 'showGroupStandards', context)
 	return HttpResponse('')
 
