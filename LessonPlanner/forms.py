@@ -278,14 +278,14 @@ class StandardsSearchForm(forms.Form):
 class TeacherRequestForm(forms.Form):
 	email = forms.CharField(label='Teacher Email')
 
-class CourseRequestForm(forms.Form):
+class ClassRequestForm(forms.Form):
 	teacher_id = forms.CharField(label='')
 	teacher_id.widget = forms.HiddenInput()
-	courses = forms.MultipleChoiceField(label='Choose courses')
+	classes = forms.MultipleChoiceField(label='Choose classes')
 
 	def __init__(self, *args, **kwargs):
 		teacher_id = kwargs.pop(teacher_id, None)
-		super(CourseRequestForm, self).__init__(*args, **kwargs)
+		super(ClassRequestForm, self).__init__(*args, **kwargs)
 		if teacher_id:
 			course_request.fields['teacher_id'].initial = teacher_id
 

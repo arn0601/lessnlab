@@ -32,7 +32,7 @@ def createStudentDict(request):
 		return None
 
 	#get all courses associated with the user
-	courses = CourseStudents.objects.filter(student=user, approved=True)
+	courses = ClassStudents.objects.filter(student=user, approved=True)
 	###################################
 	#get the lesson
 	###################################
@@ -75,7 +75,7 @@ def createStudentDict(request):
 	if ( course ):
         	user_units =  Unit.objects.filter(course=course)
 		try:
-			allowed = CourseStudents.objects.get(course=course, student=user, allowed=True)
+			allowed = ClassStudents.objects.get(course=course, student=user, allowed=True)
 		except:
 			print 'Student not allowed to access course'
 			return HttpResponseRedirect('/studentCourses/');

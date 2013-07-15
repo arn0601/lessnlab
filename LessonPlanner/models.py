@@ -21,7 +21,7 @@ class Tag(models.Model):
 
 class Course(Rateable):
 	name = models.CharField(max_length=32)
-	#description = models.TextField()
+	description = models.TextField()
 	owner = models.ForeignKey('accounts.TeacherProfile')
 	state = models.ForeignKey('Standards.State')
 	department = models.CharField(max_length=32)
@@ -50,8 +50,16 @@ class Course(Rateable):
 		return True
 			
 
-class CourseStudents(models.Model):
+class Class(models.Model):
 	course = models.ForeignKey('Course')
+	name = models.CharField(max_length=32)
+	current_unit = models.ForeignKey('Unit')
+	current_lesson = models.ForeignKey('Lesson')
+	current_section = models.ForeignKey('Section')
+	current_content = models.ForeignKey('Content')
+
+class ClassStudents(models.Model):
+	course_class = models.ForeignKey('Class')
 	student = models.ForeignKey('accounts.StudentProfile')
 	registered = models.BooleanField()
 	approved = models.BooleanField()

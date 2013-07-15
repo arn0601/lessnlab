@@ -758,7 +758,7 @@ def manageStudents(request):
 	#get courses with students
 	course_students = {}
 	for course in base_dict['userCourses']:
-		cs_list = CourseStudents.objects.filter(course=course)
+		cs_list = ClassStudents.objects.filter(course_class__course__exact = course)
 		
 		student_list = [cs for cs in cs_list]
 		for s in student_list:
@@ -785,27 +785,28 @@ def studentRequestCourse(request):
 		return HttpResponseRedirect(lastPageToRedirect(request))
 
 def studentAddCourse(request):
-	courseRequestForm = CourseRequestForm(data=request.POST)
-	teacher_id = courseRequestForm.data['teacher_id']
+	classRequestForm = ClassRequestForm(data=request.POST)
+	teacher_id = classRequestForm.data['teacher_id']
 	try:
 		teacher = TeacherProfile.objects.get(id=teacher_id)
 		student = StudentProfile.objects.get(user=request.user)
 	except:
 		return HttpResponseRedirect('/studentCourses/')
-	courses = Course.objects.filter(owner=teacher)
-	course_list = []
-	for course in courses:
-		course_list.append((course.id, course.name))
-	courseRequestForm.fields['courses'].choices = course_list
-	if courseRequestForm.is_valid():
+	
+	classes = Class.objects.filter(course__owner__exact=teacher)
+	class_list = []
+	for c in classes:
+		class_list.append((c.id, c.name))
+	classRequestForm.fields['classes'].choices = class_list
+	if classRequestForm.is_valid():
 		try:
-			for course_id in courseRequestForm.cleaned_data['courses']:
-				course = Course.objects.get(owner=teacher, id=course_id)
-				cs_exists = CourseStudents.objects.filter(student=student, course=course)
+			for class_id in classRequestForm.cleaned_data['classes']:
+				course_class = Class.objects.get(id=class_id)
+				cs_exists = ClassStudents.objects.filter(course_class__student__exact=student, course_class=course_class)
 				if cs_exists and len(cs_exists) > 0:
 					return HttpResponseRedirect('/studentCourses/')
-				cs = CourseStudents()
-				cs.course = course
+				cs = ClassStudents()
+				cs.course_class = course_class
 				cs.student = student
 				cs.approved = False
 				cs.save()
@@ -882,7 +883,7 @@ def standardsSearch(request):
 	return render(request,'standards_search.html', base_dict)
 
 def manageCourseStudents(request):
-	if request.method == 'POST':
+	'''if request.method == 'POST':
 		cid = request.POST['course_id']
 		try:
 			course = Course.objects.get(id=cid)
@@ -897,10 +898,8 @@ def manageCourseStudents(request):
 				cs.approved=True
 				cs.save()
 			except:
-				continue	
-		return HttpResponseRedirect('/manageStudents/')
-	else:
-		return HttpResponseRedirect('/manageStudents/')
+				continue'''
+	return HttpResponseRedirect('/manageStudents/')
 
 def getStandard(request):
 	if request.method == 'GET':
