@@ -1,13 +1,15 @@
 # Create your views here.
-from django.template import RequestContext
-from LessonPlanner.models import Lesson,Course,Unit,Section
 from LessonPlanner.models import *
 from LessonPlanner.forms import *
-import unit_methods
-import course_methods
-import lesson_methods
+from Courses.models import Course
+from Units.models import Unit
+from Lessons.models import Lesson
+from Courses import course_methods
+from Units import unit_methods
+from Lessons import lesson_methods
 from Standards.models import *
 from Objectives.models import Objective, ObjectiveRating
+from django.template import RequestContext
 from django.shortcuts import render_to_response,render
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
@@ -16,8 +18,9 @@ from accounts.forms import TeacherRegistrationForm
 from datetime import datetime
 from django.utils.timezone import utc
 from django.utils import simplejson
-import base_methods 
-from ajax_helpers import direct_block_to_template, direct_json_to_template
+from Utils import base_methods 
+from Utils.ajax_helpers import direct_block_to_template, direct_json_to_template
+from Utils import base_methods
 from django.template import loader,Context
 from django.contrib.auth.models import User
 import sys, traceback
@@ -34,8 +37,7 @@ def activity_add(request):
 			addCourseForm.save()
 		else:
 			print addCourseForm.errors
-	return HttpResponseRedirect(lastPageToView(request))
-
+	return HttpResponseRedirect(request.session['last_page'])
 
 def activity_ajax_view(request):
 	return_str = ""
@@ -55,35 +57,6 @@ def activity_ajax_view(request):
 			return_str = direct_block_to_template(request,'ActivityViewModal.html', 'results', context)
 	
 	return return_str
-
-def requestAddableLessonStandards(request):
-	if request.method == 'POST':
-		lesson_id = request.POST['lesson_id']
-		try:
-			lesson = Lesson.objects.get(id=lesson_id)
-		except:
-			return HttpResponseRedirect(lastPageToRedirect(request))
-		
-		unit = lesson.unit
-		standard_list = unit_methods.getUnitStandards(unit, True)
-		form = LessonStandardsForm(lesson_id=lesson_id)
-		form.fields['standards'].choices = standard_list
-		context = { 'lessonStandardsForm':form}
-		return direct_block_to_template(request,'lesson_standards_modal.html', 'addLessonStandards', context)
-
-def requestAddableUnitStandards(request):
-	if request.method == 'POST':
-		unit_id = request.POST['unit_id']
-		try:
-			unit = Unit.objects.get(id=unit_id)
-		except:
-			return HttpResponseRedirect(lastPageToRedirect(request))
-		course = unit.course
-		standard_list = course_methods.getCourseStandards(course, True)
-		form = UnitStandardsForm(unit_id=unit_id)
-		form.fields['standards'].choices = standard_list
-		context = {'unitStandardsForm': form}
-		return direct_block_to_template(request,'unit_standards_modal.html', 'addStandards', context)
 
 def search_activity_ajax_view(request):
 	if request.method == 'POST':
@@ -152,155 +125,8 @@ def changeSectionPlacement(request):
 		counter = counter + 1
 	return HttpResponse('')
 
-def showUnits(request):
-	base_dict = base_methods.createBaseDict(request)
-	#return from base
-	request.session['last_page'] = '/units/?course_id='+str(base_dict['course'].id)
-	return render(request,"unit.html", base_dict)	
-#show the lessons of a unit
 
 
-def addUnitStandards(request):
-	if request.method == 'POST':
-		form = UnitStandardsForm(data=request.POST)
-		teacher = base_methods.checkUserIsTeacher(request.user)
-		if not teacher:
-			logout(request)
-			return HttpResponseRedirect('/')
-		try:
-			unit = Unit.objects.get(id=int(form.data['unit_id']))
-		except:
-			return HttpResponseRedirect(lastPageToRedirect(request))
-		
-		course = unit.course
-		standard_list = course_methods.getCourseStandards(course, True)
-		form.fields['standards'].choices = standard_list
-		if form.is_valid():
-			
-			for sid in form.cleaned_data['standards']:
-				s = Standard.objects.get(id=sid)
-				unit.standards.add(s)
-		else:
-			print form.errors
-		return HttpResponseRedirect(lastPageToRedirect(request))				
-	return HttpResponseRedirect(lastPageToRedirect(request))
-
-def showLessons(request):
-	base_dict = base_methods.createBaseDict(request)
-	request.session['last_page'] = '/lessons/?unit_id='+str(base_dict['unit'].id)
-	return render(request,"lesson.html", base_dict)
-	
-#this function is used when creating objectives to select the initial standard
-def getLessonStandards(request):
-	if request.method == 'POST':
-		lesson_id = request.POST['lesson_id']
-		try:
-			lesson = Lesson.objects.get(id=lesson_id)
-		except:
-			return HttpResponse("")
-		standard_list = lesson_methods.getLessonStandards(lesson, True)
-		form = SelectStandardsForm(lesson_id=lesson_id)
-		form.fields['standard'].choices = standard_list
-		print "here getting stnadards"
-		context = {'selectStandardsForm':form}
-		
-		return direct_block_to_template(request,"lesson_objectives_modal.html", "selectingStandard", context)
-
-#this returns the form to add objectives
-def createLessonObjectives(request):
-	if request.method == 'POST':
-		standards_form = SelectStandardsForm(data=request.POST)
-		try:
-			lesson_id = standards_form.data.get('lesson_id')
-			lesson = Lesson.objects.get(id=lesson_id)
-		except:
-			return HttpResponse("")
-		standard_list = lesson_methods.getLessonStandards(lesson, True)
-		standards_form.fields['standard'].choices = standard_list	
-		if standards_form.is_valid():
-			try:
-				s = Standard.objects.get(id=standards_form.cleaned_data['standard'])
-			except:
-				print "standard not found"
-				return HttpResponseRedirect(lastPageToRedirect(request))
-			best_objectives = Objective.objects.filter(standard=s)[:5]
-			obj_list = []
-			for obj in best_objectives:
-				obj_list.append((obj.id, obj.description))
-			next_form = CreateObjectivesForm(standard_id=standards_form.cleaned_data['standard'], lesson_id=standards_form.cleaned_data['lesson_id'])
-			next_form.fields['created'].choices = obj_list
-			context = {'createObjectivesForm':next_form}
-			return direct_block_to_template(request,"lesson_objectives_modal.html","addingLessonObjectives",context)
-		else:
-			print standards_form.errors
-	return HttpResponse("")
-
-def addLessonObjectives(request):
-	if request.method == 'POST':
-		form = CreateObjectivesForm(data=request.POST)
-		
-		teacher = base_methods.checkUserIsTeacher(request.user)
-		if not teacher:
-			logout(request)
-			return HttpResponseRedirect('/')
-		try:
-			lesson = Lesson.objects.get(id=int(form.data['lesson_id']))
-			standard = Standard.objects.get(id=int(form.data['standard_id']))
-		except:
-			return HttpResponseRedirect(lastPageToRedirect(request))
-		
-		objectives_list = [(o.id,o.description) for o in Objective.objects.filter(standard=standard)]
-		form.fields['created'].choices = objectives_list
-		if form.is_valid():
-			already_created = form.cleaned_data['created']
-			for obj_id in already_created:
-				old_o = Objective.objects.get(id=obj_id)
-				new_o = Objective()
-				new_o.description = old_o.description
-				new_o.standard = old_o.standard
-				new_o.owner = teacher
-				new_o.creation_date = datetime.today()
-				new_o.save()
-				lesson.objectives.add(new_o)
-			new_count = form.cleaned_data['new_objectives_count']
-			for index in range(0,int(new_count)):
-				new_o = Objective()
-				new_o.description = form.data['new_objective_{index}'.format(index=index)]
-				new_o.standard = standard
-				new_o.owner = teacher
-				new_o.creation_date = datetime.today()
-				new_o.save()
-				lesson.objectives.add(new_o)
-		else:
-			print form.errors
-		return HttpResponseRedirect(lastPageToRedirect(request))				
-	return HttpResponseRedirect(lastPageToRedirect(request))
-
-
-def addLessonStandards(request):
-	if request.method == 'POST':
-		form = LessonStandardsForm(data=request.POST)
-
-		teacher = base_methods.checkUserIsTeacher(request.user)
-		if not teacher:
-			logout(request)
-			return HttpResponseRedirect('/')
-		try:
-			lesson = Lesson.objects.get(id=int(form.data['lesson_id']))
-		except:
-			return HttpResponseRedirect(lastPageToRedirect(request))
-		
-		unit = lesson.unit
-		standard_list = unit_methods.getUnitStandards(unit, True)
-		form.fields['standards'].choices = standard_list
-		if form.is_valid():
-			for sid in form.cleaned_data['standards']:
-				s = Standard.objects.get(id=sid)
-				lesson.standards.add(s)
-		else:
-			print form.errors
-		return HttpResponseRedirect("/lessons/?unit_id="+str(unit.id))
-	return HttpResponseRedirect(lastPageToRedirect(request))
 
 
 def showLessonPlanner(request):
@@ -319,179 +145,22 @@ def showLessonPlanner(request):
 	request.session['last_page'] = '/lessonPlanner/?lesson_id='+str(base_dict['lesson'].id)
 	return render(request,'lessonPlanner.html', base_dict)
 
-def lastPageToView(request):
-	if request.session['last_page'] == 'courses':
-		return courses(request)
-	elif 'units' in request.session['last_page']:
-                return unit(request)
-	elif 'lessons' in request.session['last_page']:
-		return request.session['last_page']
-	elif 'lessonPlanner' in request.session['last_page']:
-		return request.session['last_page']
-	elif 'studentCourses' in request.session['last_page']:
-		return showStudentCourses(request)
-	return courses(request)
-	
-def lastPageToRedirect(request):
-	if request.session['last_page'] == 'courses':
-		return '/courses/'
-	elif 'units' in request.session['last_page']:
-                return request.session['last_page']
-	elif 'lessons' in request.session['last_page']:
-                return request.session['last_page']
-	elif 'lessonPlanner' in request.session['last_page']:
-                return request.session['last_page']
-	elif 'studentCourses' in request.session['last_page']:
-		return '/studentCourses/'
-	return '/courses/'
-
-def showCourses(request):
-	base_dict = base_methods.createBaseDict(request)
-	print base_dict
-	if base_dict == None:
-		return HttpResponseRedirect('/')
-	
-	request.session['last_page'] = 'courses'
-	return render(request,'course.html', base_dict)	
-
-def addCourse(request):
-	if request.method == 'POST':
-
-		teacher = base_methods.checkUserIsTeacher(request.user)
-		if not teacher:
-			logout(request)
-			return HttpResponseRedirect('/')
-		addCourseForm = AddCourse(data=request.POST, teacher=teacher)
-		if addCourseForm.is_valid():
-			course = addCourseForm.save()
-			groups_added = addCourseStandards(course, teacher)
-			standard_list = course_methods.getCourseStandards(course, False)
-			context = {'groupStandards': standard_list, 'justSynced': True}
-			return direct_json_to_template(request,'course_view_standards.html', 'showGroupStandards', context, {'success':'1'})
-		else:
-			print addCourseForm.errors
-			context = {'courseAddForm':addCourseForm}
-			return direct_json_to_template(request,'course_add_modal.html', 'addCourse', context, {'success':'0'})
-	return HttpResponseRedirect('/courses/')
-
-def addCourseStandards(course, teacher):
-	standards = Standard.objects.filter(subject=course.subject).filter(grade=course.grade)
-	groups_to_render = []
-        groups_add = {};
-	
-	for standard in standards:
-		good_standard = False
-		if standard.standard_type == 'State':
-			if (standard.state == teacher.state):
-				good_standard=True
-		else:
-			good_standard=True
-		if good_standard:
-			for sg in standard.standardgrouping_set.all():
-				if sg.prebuilt==True:
-					course.standard_grouping.add(sg)
-		
-	for group in course.standard_grouping.all():
-		slist = []
-		for standard in group.standard.all():
-			slist.append(standard)
-		groups_add[group] = slist
-	return groups_add
-
-def editCourse(request):
-	if request.method == 'POST':
-		teacher = base_methods.checkUserIsTeacher(request.user)
-		if not teacher:
-			logout(request)
-			return HttpResponseRedirect('/')
-		course_id = request.POST['selectedCourse']
-		course = Course.objects.get(id=course_id)
-                editCourseForm = EditCourse(request.POST, instance=course)
-                if editCourseForm.is_valid():
-			editCourseForm.save()
-			course.standard_grouping.clear()
-			groups_added = addCourseStandards(course,teacher)
-			
-                        return HttpResponseRedirect('/courses/')
-        return HttpResponseRedirect('/courses/')
-
-def deleteCourse(request):
-        if request.method == 'POST':
-                if deleteCourseData(request.POST.get('course_id', None)):
-                        return HttpResponseRedirect(lastPageToRedirect(request))
-        return HttpResponseRedirect(lastPageToView(request))
-
-def addUnit(request):
-	if request.method == 'POST':
-                addUnitForm = AddUnitForm(request.POST)
-                if addUnitForm.is_valid():
-			addUnitForm.save()
-                        return HttpResponse('success')
-		else:
-			context = Context({'unitAddForm':addUnitForm})
-			return HttpResponse(render_block_to_string('unit_add_modal.html', 'addUnit', context))
-			
-        return HttpResponseRedirect('')
-
-def editUnit(request):
-        if request.method == 'POST':
-		unit_id = request.POST['selectedUnit']
-		unit = Unit.objects.get(id=unit_id)
-                unitForm = EditUnit(request.POST, instance=unit)
-                if unitForm.is_valid():
-			unitForm.save()
-                        return HttpResponseRedirect(lastPageToRedirect(request))
-        return HttpResponseRedirect(lastPageToRedirect(request))
-
-def deleteUnit(request):
-        if request.method == 'POST':
-                if deleteUnitData(request.POST.get('unit_id', None)):
-                        return HttpResponseRedirect(lastPageToRedirect(request))
-        return HttpResponseRedirect(lastPageToView(request))
 
 
-def addLesson(request):
-        if request.method == 'POST':
-                addLessonForm = AddLessonForm(request.POST)
-                if addLessonForm.is_valid():
-			addLessonForm.save()
-                        return HttpResponse('success')
-		else:
-			context = Context({'lessonAddForm':addLessonForm})
-			return HttpResponse(render_block_to_string('lesson_add_modal.html', 'addLesson', context))
-			
-        return HttpResponse('')
-
-def editLesson(request):
-        if request.method == 'POST':
-		lesson_id = request.POST['selectedLesson']
-		lesson = Lesson.objects.get(id=lesson_id)
-                lessonForm = EditLesson(request.POST, instance=lesson)
-                if lessonForm.is_valid():
-			lesson=lessonForm.save()
-                        return HttpResponseRedirect(lastPageToRedirect(request))
-        return HttpResponseRedirect(lastPageToRedirect(request))
-
-def deleteLesson(request):
-        if request.method == 'POST':
-                lessonForm = DeleteLesson(data=request.POST)
-                if deleteLessonData(lessonForm,request.user):
-                        return HttpResponseRedirect(lastPageToRedirect(request))
-        return HttpResponseRedirect(lastPageToView(request))
 
 def deleteSection(request):
 	if request.method == 'POST':
 		sectionForm = DeleteSection(data=request.POST)
 		if deleteSectionData(sectionForm,request.user):
-			return HttpResponseRedirect(lastPageToRedirect(request))
-	return HttpResponseRedirect(lastPageToView(request))
+			return HttpResponseRedirect(request.session['last_page'])
+	return HttpResponseRedirect(request.session['last_page'])
 
 def deleteContent(request):
         if request.method == 'POST':
                 contentForm = DeleteContent(data=request.POST)
                 if deleteContentData(contentForm,request.user):
-                        return HttpResponseRedirect(lastPageToRedirect(request))
-        return HttpResponseRedirect(lastPageToView(request))
+                        return HttpResponseRedirect(request.session['last_page'])
+        return HttpResponseRedirect(request.session['last_page'])
 
 def addSection(request):
 	if request.method == 'POST':
@@ -503,8 +172,8 @@ def addSection(request):
 		section.save()
 	
 		sectionForm.save_m2m()
-		return HttpResponseRedirect(lastPageToRedirect(request))
-	return HttpResponseRedirect(lastPageToRedirect(request))
+		return HttpResponseRedirect(request.session['last_page'])
+	return HttpResponseRedirect(request.session['last_page'])
 
 def getMaxCount(section):
 	section_content = Content.objects.filter(section=section)
@@ -523,8 +192,8 @@ def addContent(request):
 		if content_type == "OnlineVideo":
 			success = saveVideoContent(contentForm, request)
 			if success:
-				return HttpResponseRedirect(lastPageToRedirect(request))
-		        return HttpResponseRedirect(lastPageToView(request))
+				return HttpResponseRedirect(request.session['last_page'])
+		        return HttpResponseRedirect(request.session['last_page'])
                 (success, content, fields, objectives) =  saveContent(contentForm,section,section.lesson, request)
 		if success:
 			section = Section.objects.get(id=int(contentForm.data['section_id']))
@@ -545,8 +214,8 @@ def addContent(request):
 					for a in ans:
 						a.question = q
 						a.save()
-                        return HttpResponseRedirect(lastPageToRedirect(request))
-	return HttpResponseRedirect(lastPageToView(request))
+                        return HttpResponseRedirect(request.session['last_page'])
+	return HttpResponseRedirect(request.session['last_page'])
 
 def cleanVideoLink(link):
 	if "youtube" in link:
@@ -698,60 +367,6 @@ def saveContent(contentForm, section, lesson, request):
                         return (False, None, None,None)
 	return (False, None, None,None);
 
-def EditCourseRequest(request):
-	if request.method == 'POST':
-		course_id = request.POST['course_id']
-		course = Course.objects.get(id=course_id)
-		editCourseForm = EditCourse(instance=course)	
-		context = {'editCourseForm':editCourseForm, 'selectedCourse':course_id}
-        	return direct_block_to_template(request,'course_edit_modal.html', 'editCourse', context)
-	return HttpResponse('')
-
-def EditUnitRequest(request):
-	if request.method == 'POST':
-		print "change this"
-		unitID = request.POST['unit_id']
-	        unit = Unit.objects.get(id=unitID)
-        	editUnitForm = EditUnit(instance=unit)
-		context = {'editUnitForm':editUnitForm, 'selectedUnit':unitID}
-        	return direct_block_to_template(request,'unit_edit_modal.html', 'editUnit', context)
-	return HttpResponse('')
-
-def DeleteLessonRequest(request):
-	if request.method == 'POST':
-		lessonID = request.POST.get('lesson_id')
-	        lesson = Lesson.objects.get(id=lessonID)
-        	deleteLessonForm = DeleteLesson(lesson_id=lesson.id)
-		context = {'deleteLessonForm':deleteLessonForm}
-		return direct_block_to_template(request,"lesson_delete_modal.html", 'deleteLesson', context)
-	return HttpResponse('')
-
-def EditLessonRequest(request):
-	if request.method == 'POST':
-		lessonID = request.POST.get('lesson_id')
-        	lesson = Lesson.objects.get(id=lessonID)
-		editLessonForm = EditLesson(instance=lesson)
-		context = {'editLessonForm':editLessonForm, 'selectedLesson':lessonID}
-		return direct_block_to_template(request,'lesson_edit_modal.html', 'editLesson', context)
-	return HttpResponse('')
-
-def deleteCourseData(course_id):
-	if course_id:
-       		Course.objects.get(id=course_id).delete()
-                return True;
-        return False;
-
-def deleteUnitData(unit_id):
-	if unit_id:
-		Unit.objects.get(id=unit_id).delete()
-		return True
-	return False
-
-def deleteLessonData(lessonForm, request_user):
-        if 'lesson_id' in lessonForm.data:
-                Lesson.objects.get(id=lessonForm.data['lesson_id']).delete()
-                return True;
-        return False;
 
 def manageStudents(request):
 	base_dict = base_methods.createBaseDict(request)
@@ -782,7 +397,7 @@ def studentRequestCourse(request):
 		base_dict['coursesWereRequested'] = True
 		return render(request,'student_course.html', base_dict)
 	else:
-		return HttpResponseRedirect(lastPageToRedirect(request))
+		return HttpResponseRedirect(request.session['last_page'])
 
 def studentAddCourse(request):
 	classRequestForm = ClassRequestForm(data=request.POST)
@@ -812,10 +427,10 @@ def studentAddCourse(request):
 				cs.save()
 				return HttpResponseRedirect('/studentCourses/')
 		except:
-			return HttpResponseRedirect(lastPageToRedirect(request))
+			return HttpResponseRedirect(request.session['last_page'])
 	else:	
 		print courseRequestForm.errors
-		return HttpResponseRedirect(lastPageToRedirect(request))
+		return HttpResponseRedirect(request.session['last_page'])
 
 def studentShowCourses(request):
 	base_dict = base_methods.createStudentDict(request)
@@ -945,13 +560,6 @@ def getStandard(request):
 
 	return HttpResponseRedirect('/courses/')
 
-def publicCourseView(request):
-	base_dict = base_methods.createBaseDict(request)
-	course_id = request.GET['course_id']
-	course = Course.objects.get(id=course_id)
-	base_dict.update(course_methods.getCourseInfo(course))
-	return render(request,'public_course_view.html',base_dict)
-
 def addStandardAnalysis(request):
 	if request.method == 'POST':
 		teacher = base_methods.checkUserIsTeacher(request.user)
@@ -975,25 +583,6 @@ def addStandardAnalysis(request):
 	return HttpResponseRedirect('/standard/?standard_id='+str(standard_id))
 		
 
-def publicUnitView(request):
-	base_dict = base_methods.createBaseDict(request)
-	unit_id = request.GET['unit_id']
-	unit = Unit.objects.get(id=unit_id)
-	unit_delta = (unit.end_date - unit.start_date)
-	base_dict['unit_length']=(unit_delta.days/7, unit_delta.days%7)
-	unit_lessons = Lesson.objects.filter(unit=unit)
-	unit_lesson_list = []
-	for lesson in unit_lessons:
-		ratings = LessonRating.objects.filter(lesson=lesson)
-		rating_list = [rating.rating for rating in ratings]
-		rating = 0
-		if ( len(rating_list) > 0):
-			rating = reduce(lambda x, y: x+y, rating_list)/float(len(rating_list))
-		unit_lesson_list.append((lesson, rating))
-	unit_standards = unit_methods.getUnitStandards(unit, False)
-	base_dict['unitStandards'] = unit_standards
-	base_dict['unitLessons'] = unit_lesson_list
-	return render(request,'public_unit_view.html',base_dict)
 
 def rateAnalysis(request):
 	if request.method == 'POST':
@@ -1027,45 +616,6 @@ def rateAnalysis(request):
 '''
 this will get the add form course given the standard
 '''
-def createCourseFromStandard(request):
-	if request.method == 'POST':
-		teacher = base_methods.checkUserIsTeacher(request.user)
-		if not teacher:
-			return HttpResponse('')
-		sid = request.POST.get('standard_id')
-		if sid == None:
-			return HttpResponse('')
-		try:
-			standard = Standard.objects.get(id=sid)
-		except:
-			return HttpResponse('')
-		t = standard.standard_type
-		s = None
-		if (t.value == 'State'):
-			s = standard.state
-		b = standard.subject
-		g = standard.grade
-		addCourseForm = AddCourse(grade=g, owner=teacher, subject=b)
-		context = {'courseAddForm': addCourseForm}
-		return direct_block_to_template(request,'course_add_modal.html', 'addCourse', context)
-	return HttpResponse('')
-
-def cloneCourse(request):
-	if request.method  == 'POST':
-		teacher = base_methods.checkUserIsTeacher(request.user)
-		if not teacher:
-			return HttpResponse('')
-		course_id = request.POST.get('course_id')
-		if course_id == None:
-			return HttpResponse('')
-		try:
-			course = Course.objects.get(id=course_id)
-		except:
-			return HttpResponse('')
-		new_course = course_methods.deepcopy_course(course, teacher)
-		if new_course:
-			return HttpResponse('success')
-	return HttpResponse('')
 
 #TODO finish this
 def cloneUnit(request):

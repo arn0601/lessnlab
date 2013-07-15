@@ -1,35 +1,23 @@
 from django.db import models
-from Rating.models import Rating
+from Rating.models import Rating, Rateable
+from Types.models import *
 
 class Standard(models.Model):
-	state = models.ForeignKey('State', null=True, blank=True)
+	state = models.ForeignKey('Types.State', null=True, blank=True)
 	description = models.TextField()
 	creation_date = models.DateTimeField()
 	start_date = models.DateField()
 	expiration_date = models.DateField()
 	department = models.CharField(max_length=32)
-	subject = models.ForeignKey('Subject')
-	grade = models.ForeignKey('Grade')
+	subject = models.ForeignKey('Types.Subject')
+	grade = models.ForeignKey('Types.Grade')
 	numbering = models.CharField(max_length=32)
-	standard_type = models.ForeignKey('StandardType')
+	standard_type = models.ForeignKey('Types.StandardType')
 
-class State(models.Model):
-	value = models.CharField(max_length=8)
+class StandardAnalysis(Rateable):
+	teacher = models.ForeignKey('accounts.TeacherProfile')
+	standard = models.ForeignKey('Standards.Standard')
+	analysis = models.TextField(null=True, blank=True)
 
-	def __unicode__(self):
-		return u'%s' % (self.value)
-class StandardType(models.Model):
-	value = models.CharField(max_length=32)
-
-	def __unicode__(self):
-		return u'%s' % (self.value)
-class Subject(models.Model):
-	value = models.CharField(max_length=16)
-
-	def __unicode__(self):
-		return u'%s' % (self.value)
-class Grade(models.Model):
-	value = models.CharField(max_length=8)
-	
-	def __unicode__(self):
-		return u'%s' % (self.value)
+class StandardAnalysisRating(Rating):
+	standard_analysis = models.ForeignKey('StandardAnalysis')
