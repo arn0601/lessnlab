@@ -120,44 +120,7 @@ $(function() {
 	}
   </script>
 		<script type="text/javascript"> <!-- scroll jquery -->
-			function goToByScroll(id){
-	 			$('html,body').animate({scrollTop: $("#"+id).offset().top - 100},1500);
-			}
-			function getVideoIDfromLink(url)
-			{
-					var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-					var match = url.match(regExp);
-					if (match&&match[2].length==11){
-							return match[2];
-					}else{
-							//error
-					}
-			};
 
-			function getVideoHtmlbyLink(video_link,div_id)
-			{
-				video_id = getVideoIDfromLink(video_link);
-				return getVideoHtmlbyID(video_id,div_id);
-			};
-
-			function getVideoHtmlbyID(video_id,div_id)
-			{
-				jQTubeUtil.video(video_id,function(response)
-				{
-					var video = response.videos[0];
-					jQuery("#"+div_id).html(getVideoHtml(video));
-				});
-			};
-
-			function getVideoHtml(video)
-			{
-				var title = video.title.substring(0,32);
-				var description = video.description.substring(0,32);
-				var video_id = video.videoId;
-				var url = "http://www.youtube.com/watch?feature=player_embedded&v=" + video_id;
-				return "<div style='width:330px;'> <div style='width:175px; float:right'> <b>Title: </b> <a href='" + url + "' > "  + title + "</a><div> <b> Description: </b>" + description +"</div> </div> <div onclick='onVidImgClick(this)' > <img src='http://img.youtube.com/vi/" + video_id + "/1.jpg' alt='splash' width='120px' height='90px' style='cursor: pointer' style='display:inline'/ ></div> <div style='display: none'>   <iframe width='200px' height='150px' temp='http://www.youtube.com/embed/" + video_id + "?autoplay=0'> </iframe></div>";
-
-			};
 
 		</script>
   </head>
