@@ -1,0 +1,40 @@
+
+<div class="modal hide" id="showGroupStandards">
+  {% block showGroupStandards %}
+  <div class="modal-header">
+    <button type="button" class="close" {% if justSynced %} onClick="window.location.reload(true)" {% else %} data-dismiss="modal" {% endif %}>{% if justSynced %} OK {% else %} x {% endif %}</button>
+
+    <h4>This group {% if justSynced %} will be {% else %} has been {% endif %} synced based on class parameters</h4>
+  </div>
+  <div class="modal-body">
+	<table class="table table-striped table-bordered">
+
+	<thead> <tr> <th> Subject </th> <th> # </th> <th> Content </th> <th> Type </th> <th> State (if applicable) </th> <th> Grade </th> </tr> </thead>
+        {% for standard in groupStandards %}
+        
+		<tr><td>{{ standard.numbering }} </td> <td> {{ standard.subject }} </td><td> <a href="/standard/?standard_id={{ standard.id }}">{{ standard.description }} </a> </td> <td> {{ standard.standard_type }} </td> <td> {% if standard.standard_type == "State" %} standard.state {% endif %}  </td><td> {{ standard.grade }} </td> </tr>
+    {% endfor %}
+	</table>
+
+  </div>
+  {% endblock %}
+</div>
+
+<script type="text/javascript"> <!-- scroll jquery -->
+	function getCourseStandardsFromGroup(id){
+		$.ajax({
+			data:{course_id:id},
+			type:"POST",
+
+      			url: {% url LessonPlanner.views.getStandardsFromGroup %}, // the file to call
+
+			success : function(data){
+				if (data != "") {
+					$("#showGroupStandards").html(data)
+					$("#showGroupStandards").modal("show")
+				}
+
+			}
+		});
+	}
+</script>

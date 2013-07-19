@@ -41,9 +41,7 @@
     			<span class="caret"></span>
   			</button>
   			<ul class="dropdown-menu">
-  				{% for group in course.standard_grouping.all %}
-    			<li><a href="#" onClick="getCourseStandardsFromGroup('{{ group.id }}')">View Course Standards</a></li>
-  				{% endfor %} 
+    			<li><a href="#" onClick="getCourseStandardsFromGroup('{{ course.id }}')">View Course Standards</a></li>
   			</ul>
 		</div>
     </div>
@@ -79,42 +77,6 @@
 </div>
 {% endif %}
 
-{% if showGroupStandards %}
-<div class="modal" id="deleteCourse">
-  <div class="modal-header">
-    <a class="close" type="button" href="{% url course%}">x</a>
-    <h3>{{ selectedGroup.name }}</h3>
-    <h4>This group has been synced based on class parameters</h4>
-  </div>
-  <div class="modal-body">
-	<table class="table table-striped table-bordered">
-
-	<thead> <tr> <th> # </th> <th> Content </th> </tr> </thead>
-        {% for standard in groupStandards %}
-        
-		<tr><td>{{ standard.numbering }} </td> <td> <a href="/standard/?standard_id={{ standard.id }}">{{ standard.description }} </a> </td> </tr>
-    {% endfor %}
-	</table>
-
-  </div>
-</div>
-{% endif %}
-
-
-<script type="text/javascript"> <!-- scroll jquery -->
-	function getCourseStandardsFromGroup(id){
-
-		var f = document.createElement("form");
-		f.setAttribute('method',"post");
-		f.setAttribute('action',"{% url LessonPlanner.views.getStandardsFromGroup %}");
-		var i = document.createElement("input");
-		i.setAttribute('type',"hidden");
-		i.setAttribute('value', id );
-		i.setAttribute('name',"group_id");
-		f.appendChild(i);
-		document.body.appendChild(f);
-		f.submit();
-	}
-</script>
+{% include "course_view_standards.html" %}
 
 {% endblock %}

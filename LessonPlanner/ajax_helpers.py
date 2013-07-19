@@ -1,6 +1,7 @@
 from django.template.loader_tags import BlockNode, ExtendsNode
 from django.template import loader, Context, RequestContext, TextNode
 from django.http import HttpResponse
+from django.utils import simplejson
 
 def get_template(template):
     if isinstance(template, (tuple, list)):
@@ -66,3 +67,20 @@ def direct_block_to_template(request, template, block, extra_context=None, mimet
     t = get_template(template)
     t.render(c)
     return HttpResponse(render_template_block(t, block, c), mimetype=mimetype)
+
+def direct_json_to_template(request, template, block, extra_context=None, json_dict={}, **kwargs):
+    if extra_context is None:
+        extra_context = {}
+    print "Extra",extra_context
+    dictionary = {'params': kwargs}
+    for key, value in extra_context.items():
+        if callable(value):
+            dictionary[key] = value()
+        else:
+            dictionary[key] = value
+    c = RequestContext(request, dictionary)
+    t = get_template(template)
+    t.render(c)
+    json_dict.update({'response':render_template_block(t, block, c)})
+    return HttpResponse(simplejson.dumps(json_dict), mimetype="application/json")
+    

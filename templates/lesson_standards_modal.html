@@ -6,7 +6,7 @@
     <h3>Add standards to lesson</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url addLessonStandards %}" name="add_unit_standards">
+    <form method="post" action="{% url addLessonStandards %}" name="add_lesson_standards">
         {% csrf_token %}
         {% for field in lessonStandardsForm %}
         <div class="control-group">
@@ -39,7 +39,7 @@
 			data: {lesson_id:id},
 			dataType:'html',
 			type: "POST", // GET or POST
-      url: {% url LessonPlanner.views.requestLessonStandards %}, // the file to call
+      url: {% url LessonPlanner.views.requestAddableLessonStandards %}, // the file to call
 			success : function(data){
 					$('#addingLessonStandards').html(data);
 					$('#addingLessonStandards').modal('show')		

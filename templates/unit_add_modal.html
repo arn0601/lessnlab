@@ -1,0 +1,52 @@
+<div class="modal hide" id="addUnit">
+	{% block addUnit %}
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a Unit</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addUnit %}" id="addNewUnit">
+        {% csrf_token %}
+        {% for field in unitAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+		{{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <p><button type="button" class="btn btn-primary" onClick="addNewUnit()" >Submit</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+	{% endblock %}
+</div>
+
+{% include "unit_standards_modal.html" %}
+
+<script type="text/javascript"> 
+
+        function addNewUnit() {
+		var formString = $("#addNewUnit").serialize()
+		$.ajax({
+			data : formString,
+			dataType : "html",
+			type: "POST",
+			url: {% url LessonPlanner.views.addUnit %},
+			success: function(data) {
+				if (data == "success") {
+					window.location.reload(true);
+				}
+				else {
+					$("#addUnit").html(data);
+					$("#addUnit").modal("show");
+				}
+			}
+		});
+	}
+
+
+</script>

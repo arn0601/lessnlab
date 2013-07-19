@@ -1,4 +1,4 @@
-
+import course_methods
 from django.core.exceptions import *
 from django.template import RequestContext
 from LessonPlanner.models import Lesson
@@ -16,19 +16,21 @@ def returnStudentForms():
 	teacherRequestForm = TeacherRequestForm()
 	return (teacherRequestForm)
 
-def createStudentDict(request):
-	(teacherRequestForm) = returnStudentForms()
+def checkUserIsStudent(request):
 	try:
 		print request.user
 		user = StudentProfile.objects.get(user=request.user)
+		return user
         except:
-		print 'Student Does No Exist for ' + str(request.user.id)
-		try:
-			user = TeacherProfile.objects.get(user=request.user)
-			return None
-		except: 
-			logout(request)
-			return None
+		logout(request)
+		return None
+
+def createStudentDict(request):
+	(teacherRequestForm) = returnStudentForms()
+	user = checkUserIsStudent(request)
+	if not user:
+		return None
+
 	#get all courses associated with the user
 	courses = CourseStudents.objects.filter(student=user, approved=True)
 	###################################
@@ -83,22 +85,42 @@ def createStudentDict(request):
 	#return (stuff for function, stuff to render)
 	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'teacherRequestForm': teacherRequestForm, 'coursesWereRequested': 0}
 
-def createBaseDict(request):
-	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm) = returnBlankForms()
+def checkUserIsTeacher(request_user):
 	try:
-		user = TeacherProfile.objects.get(user=request.user)
-        	courseAddForm.fields['owner'].initial = user
-        	unitAddForm.fields['owner'].initial = user
-        	lessonAddForm.fields['owner'].initial = user
-	except TeacherProfile.DoesNotExist:
-		try:
-			user = StudentProfile.objects.get(user=request.user)
-			return None
-		except:
-			logout(request)
+		user = TeacherProfile.objects.get(user=request_user)
+		return user
+	except:
+		return None
+
+def createBaseDict(request):
+
+	#initialize an empty base dict, as we create things, we should add them to the dictionary
+	base_dict = {}
+
+	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm) = returnBlankForms()
+	user = checkUserIsTeacher(request.user)
+	if not user:
+		logout(request)
+		return None
+
+	base_dict['user'] = user
+
+	courseAddForm.fields['state'].initial = user.user_school_state
+
+       	courseAddForm.fields['owner'].initial = user
+       	unitAddForm.fields['owner'].initial = user
+       	lessonAddForm.fields['owner'].initial = user
+
+	base_dict['courseAddForm'] = courseAddForm
+	base_dict['unitAddForm'] = unitAddForm
+	base_dict['lessonAddForm'] = lessonAddForm
+	base_dict['sectionAddForm'] = sectionAddForm
+
 	#get all courses associated with the user
 	user_courses =  Course.objects.filter(owner=user)
-	
+
+	base_dict['userCourses'] = user_courses	
+
 	lesson = None	
 	
 	#####################################
@@ -113,6 +135,9 @@ def createBaseDict(request):
 			sectionAddForm.fields['lesson'].initial = lesson
 		else:
 			lesson = None
+
+	base_dict['lesson'] = lesson
+
 	#####################################
 	#get the unit
 	####################################
@@ -133,6 +158,9 @@ def createBaseDict(request):
 			unitAddForm.fields['course'].initial = unit.course
 		else:
 			unit = None
+
+	base_dict['unit'] = unit
+
 	##########################################
 	#get the course
 	##############################################	
@@ -146,25 +174,32 @@ def createBaseDict(request):
 		user_lessons = Lesson.objects.filter(unit=unit)
 		course = unit.course
 
+	base_dict['userLessons'] = user_lessons
+
 	#get the course id and course
 	course_id = request.GET.get('course_id')
 	if ( not course_id == None ):
 		course = Course.objects.get(id=course_id)
+		base_dict.update(course_methods.getCourseInfo(course))
 		if (course.owner == user):
 			unitAddForm.fields['course'].initial = course
 		else:
 			course = None
 	#check course
 	if ( course ):
-        	user_units =  Unit.objects.filter(course=course)
-	
+        	user_units =  Unit.objects.filter(course=course)	
+
+	base_dict['course'] = course
+	base_dict['userUnits'] = user_units
+
 	uname = request.user.username
-	firstname = user.user_firstname
-	lastname = user.user_lastname
-	fullname = firstname + " " + lastname
-	
+	fullname = user.user_firstname + " " + user.user_lastname
+
+	base_dict['username'] = uname
+	base_dict['fullname'] = fullname	
+
 	#return (stuff for function, stuff to render)
-	return {'user':user, 'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': user_courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': fullname, 'courseAddForm':courseAddForm, 'unitAddForm':unitAddForm, 'lessonAddForm':lessonAddForm, 'sectionAddForm':sectionAddForm}
+	return base_dict
 	
 
 def getObjectives(lesson):

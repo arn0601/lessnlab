@@ -4,22 +4,29 @@
 <!DOCTYPE html>
 {% block content %}
 
-         <div class="container" id="u1" style="margin-bottom: 60px;">
+<div class="container" id="u1" style="margin-bottom: 60px;">
 	<h4> Details for {{ course.name }}  </h4>
 	
 	<div class="row-fluid">
 	Author : {{ course.owner.user_firstname }} {{ course.owner.user_lastname }} <br>
-	Course Length : {{ course_length.0 }} weeks,  {{ course_length.1 }} days
+	Course Length : {{ courseLength.0 }} weeks,  {{ courseLength.1 }} days <br>
+	Number of students in course: {{ studentsTaking|length }} <br> 
+	Number of teachers using this course: {{ courseClones|length }} <br>
+	Course Rating (by other teachers): {{ course.cumulative_rating }} <br>
+	<button onClick="cloneCourse('{{ course.id }}')" class="btn btn-primary">Use this course</button>
 	</div>
 	<hr />
 	<div class="row-fluid">
-	<h5> Standards taught in this course </h5>
+	<h5> <i type="button" class="icon-plus" data-toggle="collapse" data-target="#course_standards"> </i>Standards taught in this course </h5>
+
+	<div id="course_standards" class="collapse in" hide="true">
 	<table class="table table-hover table-striped table-bordered">
 	<thead> <tr> <th> # </th> <th> Type </th> {% if has_state %} <th> State </th> {% endif %}  <th> Grade </th> <th> Subject </th> <th> Content </th> </tr> </thead>
 		{% for standards in courseStandards %}
 	<tr> <td><b> {{ standards.numbering }}</b> </td> <td> {{ standards.standard_type.value }} </td> {% if has_state %} <td> {{ standards.state.value }} </td> {% endif %}<td> {{ standards.grade.value }} </td> <td> {{ standards.subject.value }} </td> <td> <a href="/standard/?standard_id={{ standards.id }}">{{ standards.description }}</a> </td> </tr>
 		{% endfor %}
 	</table>
+	</div>
 	</div>
 	<hr />
 	<div class="row-fluid">
@@ -38,6 +45,6 @@
 	
 </div>
 
-
+{% include "course_clone_modal.html" %}
 
 {% endblock %}

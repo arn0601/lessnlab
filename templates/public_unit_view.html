@@ -4,13 +4,14 @@
 <!DOCTYPE html>
 {% block content %}
 
-	<div class="container" id="u1" style="margin-bottom: 60px;">
+<div class="container" id="u1" style="margin-bottom: 60px;">
 	<h4> Details for {{ unit.name }}</h4>
 	
 	<div class="row-fluid">
 	Course : {{ unit.course.name }} <br>
 	Author :  {{ unit.owner.user_firstname }} {{ unit.owner.user_lastname }} <br>
 	Unit Length : {{ unit_length.0 }} weeks,  {{ unit_length.1 }} days
+	<button class="btn btn-primary" onClick="cloneUnit('{{ unit.id }}')">Use this unit</button>
 	</div>
 	<hr />
 	<div class="row-fluid">

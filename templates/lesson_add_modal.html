@@ -1,0 +1,51 @@
+<div class="modal hide" id="addLesson">
+	{% block addLesson %} 
+ <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a Lesson</h3>
+  </div>
+  <div class="modal-body">
+    <form method="post" action="{% url LessonPlanner.views.addLesson %}" id="addNewLesson">
+        {% csrf_token %}
+        {% for field in lessonAddForm %}
+        <div class="control-group">
+        {{ field.errors.as_text }}
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <p><button type="button" class="btn btn-primary" onClick="addNewLesson()" >Submit</button>
+                <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
+<!--Department,Subject,Year-->
+      </p>
+    </form>
+  </div>
+	{% endblock %}
+</div>
+
+
+
+<script type="text/javascript"> 
+
+        function addNewLesson() {
+		var formString = $("#addNewLesson").serialize()
+		$.ajax({
+			data : formString,
+			dataType : "html",
+			type: "POST",
+			url: {% url LessonPlanner.views.addLesson %},
+			success: function(data) {
+				if (data == "success") {
+					window.location.reload(true);
+				}
+				else {
+					$("#addLesson").html(data);
+					$("#addLesson").modal("show");
+				}
+			}
+		});
+	}
+
+</script>
