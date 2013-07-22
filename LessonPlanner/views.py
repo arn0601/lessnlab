@@ -1085,20 +1085,3 @@ def cloneUnit(request):
 			return HttpResponse('success')
 	return HttpResponse('')
 
-def createClass(request):
-	if request.method  == 'POST':
-		teacher = base_methods.checkUserIsTeacher(request.user)
-                if not teacher:
-                        return HttpResponse('')
-                course_id = request.POST.get('course_id')
-		if course_id == None:
-                        return HttpResponse('')
-                try:
-                        course = Course.objects.get(id=course_id)
-                except:
-                        return HttpResponse('')
-		
-
-def addClass(request):
-	if request.method  == 'POST':
-		
