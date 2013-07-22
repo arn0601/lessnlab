@@ -1,5 +1,7 @@
-from LessonPlanner.models import Course, StandardGrouping, Unit, ClassStudents, Class
-import unit_methods
+from Courses.models import Course
+from Classes.models import Class, ClassStudents
+from Units import unit_methods
+from Units.models import Unit
 from Standards.models import Standard
 import sets
 

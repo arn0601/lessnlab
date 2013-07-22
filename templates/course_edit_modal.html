@@ -40,7 +40,7 @@
 		$.ajax({
 			data:{course_id:id},
 			type: "POST", // GET or POST
-      url: {% url LessonPlanner.views.EditCourseRequest %}, // the file to call
+      url: {% url requestEditCourse %}, // the file to call
 			success : function(data){
 					$('#editCourse').html(data);
 					$('#editCourse').modal('show')		

@@ -80,7 +80,7 @@
 			data: {lesson_id:id},
 			dataType:'html',
 			type: "POST", // GET or POST
-      url: {% url LessonPlanner.views.getLessonStandards %}, // the file to call
+      url: {% url Lessons.views.getLessonStandards %}, // the file to call
 			success : function(data){
 			
 					$('#selectingStandard').html(data);

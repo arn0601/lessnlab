@@ -34,7 +34,7 @@
 			data: {lesson_id:id},
 			dataType:'html',
 			type: "POST", // GET or POST
-      url: {% url LessonPlanner.views.EditLessonRequest %}, // the file to call
+      url: {% url Lessons.views.EditLessonRequest %}, // the file to call
 			success : function(data){
 					$('#editLesson').html(data);
 					$('#editLesson').modal('show')		

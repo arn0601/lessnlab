@@ -45,7 +45,7 @@
     <h3>Add a course</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url LessonPlanner.views.addCourse %}" id="addNewCourse">
+    <form method="post" action="{% url Courses.views.addCourse %}" id="addNewCourse">
 	{% csrf_token %}
 	{% for field in courseAddForm %}
         <div class="control-group">
@@ -81,7 +81,7 @@
 			data : formString,
 			dataType : "html",
 			type: "POST",
-			url: {% url LessonPlanner.views.addCourse %},
+			url: {% url Courses.views.addCourse %},
 			success: function(data) {
 				if (data != "") {
 					var obj = jQuery.parseJSON(data);
@@ -135,7 +135,7 @@
 			data: {standard_id:id},
 			dataType:'html',
 			type: "POST", // GET or POST
-      url: {% url LessonPlanner.views.createCourseFromStandard %}, // the file to call
+      url: {% url Courses.views.createCourseFromStandard %}, // the file to call
 			success : function(data){
 					$('#addCourse').html(data);
 					$('#addCourse').modal('show')		

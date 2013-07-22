@@ -5,7 +5,7 @@
     <h3>Add a Lesson</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url LessonPlanner.views.addLesson %}" id="addNewLesson">
+    <form method="post" action="{% url Lessons.views.addLesson %}" id="addNewLesson">
         {% csrf_token %}
         {% for field in lessonAddForm %}
         <div class="control-group">
@@ -35,7 +35,7 @@
 			data : formString,
 			dataType : "html",
 			type: "POST",
-			url: {% url LessonPlanner.views.addLesson %},
+			url: {% url Lessons.views.addLesson %},
 			success: function(data) {
 				if (data == "success") {
 					window.location.reload(true);
