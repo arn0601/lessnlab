@@ -1,7 +1,7 @@
 from django import forms
 from LessonPlanner.models import *
 from Standards.models import *
-import custom_widgets 
+from Utils import custom_widgets
 
 ACTIVITY_TYPE = [('Group','Group'),('Individual','Individual')]
 
