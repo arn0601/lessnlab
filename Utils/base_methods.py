@@ -1,9 +1,14 @@
-import course_methods
+from Courses import course_methods
 from django.core.exceptions import *
 from django.template import RequestContext
-from LessonPlanner.models import Lesson
 from LessonPlanner.models import *
 from LessonPlanner.forms import *
+from Lessons.models import Lesson
+from Lessons.forms import *
+from Courses.models import Course
+from Courses.forms import *
+from Units.models import Unit
+from Units.forms import *
 from Standards.models import Standard
 from django.shortcuts import render_to_response
 from django.http import HttpResponse,HttpResponseRedirect
@@ -11,6 +16,7 @@ from django.core import serializers
 from accounts.models import TeacherProfile, StudentProfile
 import simplejson
 from django.contrib.auth import logout
+
 
 def returnStudentForms():
 	teacherRequestForm = TeacherRequestForm()
@@ -32,7 +38,7 @@ def createStudentDict(request):
 		return None
 
 	#get all courses associated with the user
-	courses = CourseStudents.objects.filter(student=user, approved=True)
+	courses = ClassStudents.objects.filter(student=user, approved=True)
 	###################################
 	#get the lesson
 	###################################
@@ -75,7 +81,7 @@ def createStudentDict(request):
 	if ( course ):
         	user_units =  Unit.objects.filter(course=course)
 		try:
-			allowed = CourseStudents.objects.get(course=course, student=user, allowed=True)
+			allowed = ClassStudents.objects.get(course=course, student=user, allowed=True)
 		except:
 			print 'Student not allowed to access course'
 			return HttpResponseRedirect('/studentCourses/');

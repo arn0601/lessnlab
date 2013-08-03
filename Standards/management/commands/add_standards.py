@@ -2,7 +2,8 @@ from django.core.management.base import NoArgsCommand
 from django.template import Template, Context
 from django.conf import settings
 from Standards.models import *
-from LessonPlanner.models import StandardGrouping
+from Types.models import *
+from Courses.models import StandardGrouping
 import sys,traceback
 import datetime
 import csv

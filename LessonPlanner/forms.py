@@ -1,12 +1,8 @@
 from django import forms
 from LessonPlanner.models import *
 from Standards.models import *
-import custom_widgets 
+from Utils import custom_widgets
 
-SUBJECTS = [('Mathematics','Mathematics'),('Science','Science'),('English','English')]
-SUBJECTS_STRING = '[' + ",".join(["\"%s\"" % s for (s, s2) in SUBJECTS]) + ']'
-GRADES = [('K','K'),('1','1'),('2','2'),('3','3'),('4','4'),('5','5'),('6','6'),('7','7'),('8','8'),('9','9'),('10','10'),('11','11'),('12','12')]
-GRADES_STRING = '[' + ",".join(["\"%s\"" % s for (s, s2) in GRADES]) + ']'
 ACTIVITY_TYPE = [('Group','Group'),('Individual','Individual')]
 
 
@@ -26,87 +22,7 @@ def createInputWidget(className):
 	return forms.TextInput(attrs={'data-provide':'typeahead', 'data-source': createDataSource(className), 'autocomplete':'off' })
 	
 
-class AddCourse(forms.ModelForm):
-	class Meta:
-		model = Course
-		widgets = { 'owner': forms.HiddenInput(), 'start_date': custom_widgets.CalendarDateSelectField(), 'end_date': custom_widgets.CalendarDateSelectField() }
-		exclude = ['standard_grouping', 'cumulative_rating', 'number_raters', 'parent']
-	
-	def __init__(self, *args, **kwargs):
-		subject = kwargs.pop('subject', None)
-		owner = kwargs.pop('teacher', None)
-		grade = kwargs.pop('grade', None)
-		super(AddCourse, self).__init__(*args,**kwargs)
-		self.fields['owner'].label=''
-		if grade:
-			self.fields['grade'].initial = grade
-		if owner:
-			self.fields['owner'].initial = owner
-		if subject:
-			self.fields['subject'].initial = subject
 
-
-
-class AddGroups(forms.Form):
-	groups = forms.MultipleChoiceField(label='Standards groups')
-	course_id = forms.ChoiceField(label='')
-	course_id.widget = forms.HiddenInput()
-
-class EditCourse(forms.ModelForm):
-	class Meta:
-		model = Course
-		widgets = {  'owner': forms.HiddenInput(), 'start_date': custom_widgets.CalendarDateSelectField(), 'end_date': custom_widgets.CalendarDateSelectField() }
-		exclude = ['standard_grouping', 'cumulative_rating', 'number_raters', 'state', 'parent']
-
-class DeleteCourse(forms.Form):
-	course_id = forms.CharField(label="")
-	course_id.widget = forms.HiddenInput()
-
-class AddUnitForm(forms.ModelForm):
-	class Meta:
-		model = Unit
-		exclude = ['standards', 'cumulative_rating', 'number_raters']
-		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_start_date'}), 'end_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_end_date'}), 'parent_unit': forms.HiddenInput() }
-
-class EditUnit(forms.ModelForm):
-	class Meta:
-		model = Unit
-		exclude = ['standards', 'cumulative_rating', 'number_raters']
-		widgets = {'course': forms.HiddenInput(), 'owner': forms.HiddenInput() , 'start_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_start_date'}), 'end_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'unit_end_date'}), 'parent_unit': forms.HiddenInput() }
-
-	def __init__(self, *args, **kwargs):
-		super(EditUnit, self).__init__(*args, **kwargs)
-		self.fields['owner'].label=''
-		self.fields['course'].label=''
-		self.fields['parent_unit'].label=''
-		self.fields['parent_unit'].initial = None
-
-class AddLessonForm(forms.ModelForm):
-	class Meta:
-		model = Lesson
-		exclude = ['standards','objectives', 'cumulative_rating', 'number_raters']
-		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput(),'start_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'lesson_start_date'}), 'end_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'lesson_end_date'})}
-
-class EditLesson(forms.ModelForm):
-	class Meta:
-		model = Lesson
-		exclude = ['standards', 'objectives', 'cumulative_rating', 'number_raters']
-		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput(),'start_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'lesson_start_date'}), 'end_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'lesson_end_date'}) }
-
-	def __init__(self, *args, **kwargs):
-		super(EditLesson, self).__init__(*args, **kwargs)
-		self.fields['owner'].label=''
-		self.fields['unit'].label=''
-
-class DeleteLesson(forms.Form):
-	lesson_id = forms.CharField(label="")
-	lesson_id.widget = forms.HiddenInput()
-
-	def __init__(self, *args, **kwargs):
-		lesson_id = kwargs.pop('lesson_id', None)
-		super(DeleteLesson, self).__init__(*args,**kwargs)
-		if lesson_id:
-	        	self.fields["lesson_id"].initial = lesson_id
 
 class AddSectionForm(forms.ModelForm):
 	class Meta:
@@ -198,105 +114,4 @@ class AddAssessmentContent(AddContentForm):
         	    # generate extra fields in the number specified via extra_fields
 	            	self.fields['extra_field_{index}'.format(index=index)] = forms.CharField(label='extra_field_{index}'.format(index=index),required=False)
 
-class UnitStandardsForm(forms.Form):
-	unit_id = forms.CharField(label='')
-	unit_id.widget = forms.HiddenInput()
-	standards = forms.MultipleChoiceField(label='Select Unit Standards')
 
-	def __init__(self, *args, **kwargs):
-		unit_id = kwargs.pop('unit_id', None)
-		super(UnitStandardsForm, self).__init__(*args, **kwargs)
-		if unit_id:
-			self.fields['unit_id'].initial = unit_id
-
-class LessonStandardsForm(forms.Form):
-	lesson_id = forms.CharField(label='')
-	lesson_id.widget = forms.HiddenInput()
-	standards = forms.MultipleChoiceField(label='Select Lesson Standards')
-
-	def __init__(self, *args, **kwargs):
-		lesson_id = kwargs.pop('lesson_id', None)
-		super(LessonStandardsForm, self).__init__(*args, **kwargs)
-		if lesson_id:
-			self.fields['lesson_id'].initial = lesson_id
-
-class SelectStandardsForm(forms.Form):
-	lesson_id = forms.CharField(label='')
-	lesson_id.widget = forms.HiddenInput()
-	standard = forms.ChoiceField(label='Select Standard')
-	
-	def __init__(self, *args, **kwargs):
-		lesson_id = kwargs.pop('lesson_id', None)
-		super(SelectStandardsForm, self).__init__(*args, **kwargs)
-		if lesson_id:
-			self.fields['lesson_id'].initial = lesson_id
-
-class CreateObjectivesForm(forms.Form):
-	lesson_id = forms.CharField(label='')
-	lesson_id.widget = forms.HiddenInput()
-	standard_id = forms.CharField(label='')
-	standard_id.widget = forms.HiddenInput()
-	created = forms.MultipleChoiceField(label='Choose from created objectives', required=False)
-	new_objectives_count = forms.CharField(label='', widget=forms.HiddenInput())
-
-	def __init__(self, *args, **kwargs):
-		standard_id = kwargs.pop('standard_id', None)
-		lesson_id = kwargs.pop('lesson_id', None)
-		extra_fields = kwargs.pop('extra', 0)
-		super(CreateObjectivesForm, self).__init__(*args, **kwargs)
-		self.fields['new_objectives_count'].initial = extra_fields
-		print self.fields['new_objectives_count'].initial, "initial"
-		for index in range(int(extra_fields)):
-			self.fields['new_objective_{index}'.format(index=index)] = forms.CharField(label='New Objective {index}'.format(index=index),required=False)
-		if standard_id:
-			self.fields['standard_id'].initial = standard_id
-		if lesson_id:
-			self.fields['lesson_id'].initial = lesson_id
-
-class StandardsSearchForm(forms.Form):
-	
-	standard_type = forms.ChoiceField(label='Type', widget=forms.Select(attrs={'style': 'width: 150px'}))
-	state = forms.ChoiceField(label='State', required=False, widget=forms.Select(attrs={'style': 'width: 150px'}))
-	grade = forms.ChoiceField(label='Grade', widget=forms.Select(attrs={'style': 'width: 50px'}))
-	subject = forms.ChoiceField(label='Subject', widget=forms.Select(attrs={'style': 'width: 150px'}))
-
-	def __init__(self, *args, **kwargs):
-		
-		super(StandardsSearchForm, self).__init__(*args,**kwargs)
-		self.fields['grade'].choices = createChoices(Grade)
-		self.fields['grade'].initial = ''
-
-		self.fields['subject'].choices = createChoices(Subject)
-		self.fields['subject'].initial = ''
-
-		self.fields['state'].choices = createChoices(State)
-		self.fields['state'].initial = ''
-
-		self.fields['standard_type'].choices = createChoices(StandardType)
-		self.fields['standard_type'].initial = ''
-
-class TeacherRequestForm(forms.Form):
-	email = forms.CharField(label='Teacher Email')
-
-class CourseRequestForm(forms.Form):
-	teacher_id = forms.CharField(label='')
-	teacher_id.widget = forms.HiddenInput()
-	courses = forms.MultipleChoiceField(label='Choose courses')
-
-	def __init__(self, *args, **kwargs):
-		teacher_id = kwargs.pop(teacher_id, None)
-		super(CourseRequestForm, self).__init__(*args, **kwargs)
-		if teacher_id:
-			course_request.fields['teacher_id'].initial = teacher_id
-
-class StandardAnalysisForm(forms.Form):
-	standard_id = forms.CharField(label='')
-	standard_id.widget = forms.HiddenInput()
-	analysis = forms.CharField(label='Guidance')
-	analysis.widget = forms.Textarea()
-
-	def __init__(self, *args, **kwargs):
-		standard_id = kwargs.pop('standard_id', None)
-		super(StandardAnalysisForm, self).__init__(args, kwargs)
-		if standard_id:
-			self.fields['standard_id'].initial = standard_id

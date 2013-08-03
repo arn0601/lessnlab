@@ -1,5 +1,6 @@
-from LessonPlanner.models import Unit, Lesson
-import lesson_methods
+from Lessons.models import Lesson
+from Units.models import Unit
+import Lessons.lesson_methods
 from Standards.models import Standard
 
 def getUnitStandards(unit, use_tuple) :

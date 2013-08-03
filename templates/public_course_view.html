@@ -17,7 +17,7 @@
 	</div>
 	<hr />
 	<div class="row-fluid">
-	<h5> <i type="button" class="icon-plus" data-toggle="collapse" data-target="#course_standards"> </i>Standards taught in this course </h5>
+	<h5> <i type="button" class="icon-plus" data-toggle="collapse" data-target="#course_standards"> </i>Standards taught in this course ({% standards|length %} Standards) </h5>
 
 	<div id="course_standards" class="collapse in" hide="true">
 	<table class="table table-hover table-striped table-bordered">
@@ -37,6 +37,23 @@
 			<tr> <td> <a href="/unitView/?unit_id={{ unit.id }}">{{ unit.name }} </a></td> <td> {{ unit.description }} </td> <td> {{ unit.start_date }} </td> <td> {{ unit.end_date }} </td> <td> {{ rating }} </td> </tr>
 		{% endfor %}
 	</table>
+	<!--<div class="accordion" id="unitAccordion">
+	{% for unit in courseUnits %}
+		<div class="accordion-group">
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" href="#unit{{ unit.id }}"> {{ unit.name }}</a>
+			</div>
+			<div id="unit{{ unit.id }}" class="accordion-body collapse">
+				<div class="accordion-inner">
+
+				Description: {{ unit.description }}<br>
+				Start Date: {{ unit.start_date }}<br>
+				End Date: {{ unit.end_date }}<br>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+	</div>-->
 	</div>
 	<hr />
 	<div class="row-fluid">

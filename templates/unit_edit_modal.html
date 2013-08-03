@@ -37,7 +37,7 @@
 			data: {unit_id:id},
 			dataType:'html',
 			type: "POST", // GET or POST
-      url: {% url LessonPlanner.views.EditUnitRequest %}, // the file to call
+      url: {% url Units.views.EditUnitRequest %}, // the file to call
 			success : function(data){
 					$('#editUnit').html(data);
 					$('#editUnit').modal('show')		

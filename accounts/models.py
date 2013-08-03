@@ -5,6 +5,7 @@ from django.db.models.signals import post_save
 import extra_methods
 from Standards.models import State
 from Rating.models import Rating
+from Types.models import *
 
 
 USERTYPES = [('Teacher','Teacher'),('Student','Student')]
@@ -16,7 +17,7 @@ class UserProfile(models.Model):
         user_dob = models.DateField(null=True, blank=True)
 	user_school_name = models.CharField(max_length=32, null=True, blank=True)
 	user_school_district = models.CharField(max_length=32, null=True, blank=True)
-        user_school_state = models.ForeignKey('Standards.State')
+        user_school_state = models.ForeignKey('Types.State')
 	user_type = models.CharField(max_length=32, choices=USERTYPES)
 
 class TeacherProfile(UserProfile):

@@ -1,11 +1,13 @@
-from LessonPlanner.models import Course, StandardGrouping, Unit, CourseStudents
-import unit_methods
+from Courses.models import Course
+from Classes.models import Class, ClassStudents
+from Units import unit_methods
+from Units.models import Unit
 from Standards.models import Standard
 import sets
 
 #returns a list of students taking course
 def getStudentsTaking(course):
-	cs = CourseStudents.objects.filter(course=course)
+	cs = ClassStudents.objects.filter(course_class__course__exact=course)
 	student_list = []
 	for item in cs:
 		student_list.append(item.student)
