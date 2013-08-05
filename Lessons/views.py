@@ -1,6 +1,6 @@
 from Units.models import Unit
-from Utils.ajax_helpers import direct_block_to_template, direct_json_to_template
-from django.template import RequestContext
+from Utils.ajax_helpers import direct_block_to_template, direct_json_to_template, render_block_to_string
+from django.template import RequestContext, Context
 from django.shortcuts import render_to_response,render
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
