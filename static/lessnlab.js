@@ -1,18 +1,22 @@
-			function goToByScroll(id){
-	 			$('html,body').animate({scrollTop: $("#"+id).offset().top - 100},1500);
-			}
+
+
+
+
+function goToByScroll(id){
+	$('html,body').animate({scrollTop: $("#"+id).offset().top - 100},1500);
+}
 			
 
 function getVideoIDfromLink(url)
-			{
-					var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-					var match = url.match(regExp);
-					if (match&&match[2].length==11){
-							return match[2];
-					}else{
-							//error
-					}
-			};
+{
+		var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+		var match = url.match(regExp);
+		if (match&&match[2].length==11){
+				return match[2];
+		}else{
+				//error
+		}
+};
 
 			function getVideoHtmlbyLink(video_link,div_id)
 			{
@@ -142,3 +146,4 @@ $(document).ajaxSend(function(event, xhr, settings) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     }
 });
+

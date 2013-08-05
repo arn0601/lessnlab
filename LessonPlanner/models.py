@@ -19,7 +19,7 @@ LESSONPLANNER_DROPDOWN_ORDER = ['General', 'Media', 'Checks for Understanding', 
 # Create your models here.
 
 class Section(Rateable):
-	lesson = models.ForeignKey(Lesson)
+	lesson = models.ForeignKey('Lessons.Lesson')
 	placement = models.IntegerField(blank=True)
 	name = models.IntegerField(max_length=32, choices=SECTIONTYPE)
 	description = models.TextField()
