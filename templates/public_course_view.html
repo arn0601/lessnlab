@@ -33,7 +33,7 @@
 	<h5> Units taught in this course ({{ courseUnits|length }} Units)</h5>
 	<table class="table table-hover table-striped table-bordered">
 	<thead> <tr> <th> Name </th> <th> Description </th> <th> Start Date </th> <th> End Date </th> <th> Rating </th> </tr> </thead>
-		{% for unit,rating in courseUnits %}
+		{% for unit in courseUnits %}
 			<tr> <td> <a href="/unitView/?unit_id={{ unit.id }}">{{ unit.name }} </a></td> <td> {{ unit.description }} </td> <td> {{ unit.start_date }} </td> <td> {{ unit.end_date }} </td> <td> {{ rating }} </td> </tr>
 		{% endfor %}
 	</table>
