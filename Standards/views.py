@@ -13,6 +13,7 @@ from Lessons.models import *
 # Create your views here.
 
 def standardsSearch(request):
+	print request
 	base_dict = base_methods.createBaseDict(request)
 	base_dict['standardsSearchForm'] = StandardsSearchForm(auto_id='standard_search_%s')
 	if request.method == 'POST':
@@ -43,8 +44,11 @@ def standardsSearch(request):
 			base_dict['has_state'] = has_state
 			return render(request,'standards_search.html', base_dict)
 		else:
+			print form.errors
 			return HttpResponseRedirect('/standardsSearch/')
-	return render(request,'standards_search.html', base_dict)
+	else:
+		print "not post"
+		return render(request,'standards_search.html', base_dict)
 
 def getStandard(request):
 	if request.method == 'GET':

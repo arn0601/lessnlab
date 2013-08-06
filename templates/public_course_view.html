@@ -17,7 +17,7 @@
 	</div>
 	<hr />
 	<div class="row-fluid">
-	<h5> <i type="button" class="icon-plus" data-toggle="collapse" data-target="#course_standards"> </i>Standards taught in this course ({% standards|length %} Standards) </h5>
+	<h5> <i type="button" class="icon-plus" data-toggle="collapse" data-target="#course_standards"> </i>Standards taught in this course ({{ courseStandards|length }} Standards) </h5>
 
 	<div id="course_standards" class="collapse in" hide="true">
 	<table class="table table-hover table-striped table-bordered">
@@ -30,7 +30,7 @@
 	</div>
 	<hr />
 	<div class="row-fluid">
-	<h5> Units taught in this course </h5>
+	<h5> Units taught in this course ({{ courseUnits|length }} Units)</h5>
 	<table class="table table-hover table-striped table-bordered">
 	<thead> <tr> <th> Name </th> <th> Description </th> <th> Start Date </th> <th> End Date </th> <th> Rating </th> </tr> </thead>
 		{% for unit,rating in courseUnits %}

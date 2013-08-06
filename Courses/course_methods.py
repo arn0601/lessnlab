@@ -3,6 +3,7 @@ from Classes.models import Class, ClassStudents
 from Units import unit_methods
 from Units.models import Unit
 from Standards.models import Standard
+import datetime
 import sets
 
 #returns a list of students taking course
@@ -30,7 +31,9 @@ def getCourseInfo(course):
 	course_dict['courseUnits'] = course_units
 	
 	#course length
-	course_delta = (course.end_date - course.start_date)
+	course_delta = datetime.timedelta.resolution
+	if (course.end_date and course.start_date):
+		course_delta = (course.end_date - course.start_date)
 	course_dict['courseLength']=(course_delta.days/7, course_delta.days%7)
 
 	course_dict['courseStandards']= getCourseStandards(course, False)
