@@ -103,7 +103,7 @@ def createBaseDict(request):
 	#initialize an empty base dict, as we create things, we should add them to the dictionary
 	base_dict = {}
 
-	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm) = returnBlankForms()
+	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm, courseParametersForm) = returnBlankForms()
 	user = checkUserIsTeacher(request.user)
 	if not user:
 		logout(request)
@@ -121,6 +121,8 @@ def createBaseDict(request):
 	base_dict['unitAddForm'] = unitAddForm
 	base_dict['lessonAddForm'] = lessonAddForm
 	base_dict['sectionAddForm'] = sectionAddForm
+	courseParametersForm.fields['state'].initial = user.user_school_state
+	base_dict['recommendCourseParametersForm'] = courseParametersForm
 
 	#get all courses associated with the user
 	user_courses =  Course.objects.filter(owner=user)
@@ -347,4 +349,5 @@ def returnBlankForms():
 	addSectionForm.fields['lesson'].label=''
 	addSectionForm.fields['placement'].label=''
 	addSectionForm.fields['creation_date'].label=''
-	return (addCourseForm, addUnitForm , addLessonForm, addSectionForm)
+	courseParametersForm = RecommendCourseParametersForm()
+	return (addCourseForm, addUnitForm , addLessonForm, addSectionForm, courseParametersForm)

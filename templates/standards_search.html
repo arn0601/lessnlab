@@ -8,17 +8,20 @@
     	<form method="post" class="form-horizontal" action="{% url standardsSearch %}" name="standard_search">
 		{% csrf_token %}
 		{% for field in standardsSearchForm %}
-		<div class="control-group">
-		<label class="control-label">{{ field.label }}</label>
-		<div class="controls"> {{ field }} </div>
+		<div id="div_search_{{ field.auto_id }}">
+			<div class="control-group" >
+			<label class="control-label">{{ field.label }}</label>
+				<div class="controls"> {{ field }} </div>
+			</div>
 		</div>
 		{% endfor %}
-		<div class="control-group">
+					<div class="control-group" >
+
 		<div class="controls"><input class="btn btn-success" type="submit" value="Find Standards"></div>
+		
 		</div>
     	</form>
 </div>
-<hr/>
 <div class="row" style="padding-left: 40px; padding-right: 20px;">
 <table class="table table-hover table-striped table-bordered">
 	<caption style="padding-bottom: 10px;"><h5>{{ searchedStandards|length }} {% if has_state %} {{ state }} {% else %} {{ standard_type }} {% endif %} Standards Found </h5></caption>
@@ -44,4 +47,20 @@
     </tbody>
 </table>
 </div>
+
+
+<script type="text/javascript"> 
+
+	$("#standard_search_standard_type").change( 
+		function() {
+			if ($('option:selected', this).text() != "State") {
+	//			$("#div_search_standard_search_state").attr("disabled", "disabled");
+				$("#div_search_standard_search_state").hide();
+			}
+			else {
+//				$("#div_search_standard_search_state").removeAttr("disabled");
+				$("#div_search_standard_search_state").show();
+			}
+		});
+</script>
 {% endblock %}

@@ -53,3 +53,10 @@ class ClassRequestForm(forms.Form):
 		super(ClassRequestForm, self).__init__(*args, **kwargs)
 		if teacher_id:
 			course_request.fields['teacher_id'].initial = teacher_id
+
+class RecommendCourseParametersForm(forms.Form):
+	state = forms.ModelChoiceField(queryset=State.objects.all(), label='State')
+	grade = forms.ModelChoiceField(queryset=Grade.objects.all(), label='Grade')
+	subject = forms.ModelChoiceField(queryset=Subject.objects.all(), label='Subject')
+
+	
