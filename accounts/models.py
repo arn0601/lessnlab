@@ -14,15 +14,26 @@ class UserProfile(models.Model):
 	user = models.OneToOneField(User)
 	user_firstname = models.CharField(max_length=32)
 	user_lastname = models.CharField(max_length=32)
-        user_dob = models.DateField(null=True, blank=True)
+	user_dob = models.DateField(null=True, blank=True)
 	user_school_name = models.CharField(max_length=32, null=True, blank=True)
 	user_school_district = models.CharField(max_length=32, null=True, blank=True)
-        user_school_state = models.ForeignKey('Types.State')
+	user_school_state = models.ForeignKey('Types.State')
 	user_type = models.CharField(max_length=32, choices=USERTYPES)
 
 class TeacherProfile(UserProfile):
-        teacher_code = models.CharField(max_length=32)
-	
+  teacher_code = models.CharField(max_length=32)
+
+
+class TeacherProfileAttributes(models.Model):
+	teacher					= models.OneToOneField(TeacherProfile)
+	bio							= models.CharField(null=True, verbose_name="Bio", max_length=1024)
+	linkedIn_url 		= models.CharField(null=True, verbose_name="LinkedIn",max_length=32)
+	twitter_handle 	= models.CharField(null=True, verbose_name="Twitter", max_length=32)
+	education				= models.CharField(null=True, verbose_name="Education", max_length=128)
+	skills					= models.CharField(null=True, verbose_name="Skills", max_length=128)
+	expertise				= models.CharField(null=True, verbose_name="Expertise", max_length=128)
+
+
 class TeacherRating(Rating):
 	teacher = models.ForeignKey('TeacherProfile')
 

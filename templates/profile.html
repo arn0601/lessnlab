@@ -3,6 +3,17 @@
 {% load dictionary_extras %}
 <!DOCTYPE html>
 {% block content %}
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
+	<script src="/static/bootstrap.js"></script>
+	<script src="/static/lessnlab.js"></script>
+	<script src="/static/editable_text_box.js"></script>
+	<link href="/static/editable_text_box.css" rel="stylesheet" media="screen">
+		
+</head>
+
 <div class="container" style="padding-top: 20px;">
 <div class="row">
 	<div class="span2">
@@ -18,9 +29,49 @@
 <div class="row">
 	<div class="span12">
 		<h4>About</h4>
-		<p>
-			Zain is a teacher at Liberty High School, and specializes in Science Education. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-		</p>
+		{% for row in about_attrs %}
+		<div  class="dataAttrib" >
+			{{ row.humanreadable_name }}
+		</div>
+		<div class="editabletextarea" modelmap_id="{{ row.modelmapid }}" obj_id="{{ row.id }}" cols="10" rows="4" url="{% url setData %}">
+			 {{ row.value }}
+		</div>
+		{% endfor %}
+		
+		<div class="dataAttrib">
+			LinkedIn:
+		</div> 
+		<div class="editabletext" url="{% url setData %}">
+			 http://linkedin.com/amannalavade
+		</div>
+		
+		<div class="dataAttrib">
+			Twitter:
+		</div> 
+		<div class="editabletext" url="{% url setData %}">
+			 amannalavade
+		</div>
+		
+		<div class="dataAttrib" >
+			School:
+		</div> 
+		<div class="editabletext" url="{% url setData %}">
+			 Wissahickon High School
+		</div>
+		
+		<div class="dataAttrib" >
+			School District:
+		</div> 
+		<div class="editabletext" url="{% url setData %}">
+			 Wissahickon School District
+		</div>
+		
+		<div class="dataAttrib" url="{% url setData %}">
+			Grade(s):
+		</div> 
+		<div class="editabletext" url="{% url setData %}">
+			 9th
+		</div>		
 	</div>
 </div>
 <div class="row">
@@ -40,6 +91,9 @@
 			<li>Checks For Understanding</li>
 			<li>Curriculum Planning</li>
 			<li>Classroom Management</li>
+			
+			<p class="profileSubHeader">Teaching Style: Authoritative</p>
+			<p class="profileSubHeader">Expertise: Football, Soccer, Math</p>
 		</ul>
 	</div>
 </div>
