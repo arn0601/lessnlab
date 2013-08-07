@@ -2,7 +2,6 @@ from django.db import models
 from Rating.models import Rateable, Rating
 from Units.models import Unit
 from Standards.models import Standard
-from Objectives.models import Objective
 from Types.models import *
 
 # Create your models here.
@@ -16,7 +15,6 @@ class Lesson(Rateable):
 	tags = models.TextField()
 	description = models.TextField()
 	standards = models.ManyToManyField('Standards.Standard', blank=True)
-	objectives = models.ManyToManyField('Objectives.Objective', blank=True)
 	start_date = models.DateField(null=True)
         end_date = models.DateField(null=True)
 

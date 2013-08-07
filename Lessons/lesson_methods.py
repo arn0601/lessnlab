@@ -1,6 +1,8 @@
 from Standards.models import Standard
 from Units.models import Unit
 from Lessons.models import Lesson
+from Objectives import objective_methods
+from Objectives.models import Objective
 
 def getLessonStandards(lesson, use_tuple):
 	standard_list = []
@@ -32,9 +34,9 @@ def deepcopy_lesson(lesson, teacher, unit):
 	for standard in lesson.standards.all():
 		new_lesson.standards.add(standard)
 
-	for objective in lesson.objectives.all():
+	for objective in Objective.objects.filter(lesson=lesson):
 		new_objective = objective_methods.deepcopy_objective(objective, teacher, new_lesson)
-		new_lesson.objectives.add(new_objective)
+		new_objective.lesson = new_lesson
 
 	#deepcopy lesson stuff TODO for aman
 

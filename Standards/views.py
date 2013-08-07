@@ -72,20 +72,12 @@ def getStandard(request):
 			if ( len(rating_list) > 0 ):
 				course_rating = reduce(lambda x, y: x+y, rating_list)/float(len(rating_list))
 			courses[course] = course_rating
-		objectives = Objective.objects.filter(standard=s)
-		objective_dict = {}
-		for objective in objectives:
-			ratings= ObjectiveRating.objects.filter(objective=objective)
-			rating_list = [rating.value for rating in ratings]
-			objective_rating = 0
-			if (len(rating_list) > 0):
-				objective_rating = reduce(lambda x, y: x+y, rating_list)/float(len(rating_list))
-			objective_dict[objective] = objective_rating
+		objectives = Objective.objects.filter(standard=s).order_by('cumulative_rating')
 		sa = StandardAnalysis.objects.filter(standard=s).order_by('cumulative_rating')
 		base_dict['analysis'] = sa
 		base_dict['standardCourses'] = courses
 		base_dict['standard'] = s
-		base_dict['standardObjectives'] = objective_dict
+		base_dict['standardObjectives'] = objectives
 		saf = StandardAnalysisForm(standard_id=s.id)
 		base_dict['standardAnalysisForm'] = saf
 		base_dict['ratingOptions'] = (1,2,3,4,5)

@@ -11,6 +11,7 @@ import lesson_methods
 from Utils import base_methods
 from Units import unit_methods
 from datetime import datetime
+from Objectives.models import Objective
 # Create your views here.
 def showLessons(request):
 	base_dict = base_methods.createBaseDict(request)
@@ -103,8 +104,8 @@ def addLessonObjectives(request):
 				new_o.standard = old_o.standard
 				new_o.owner = teacher
 				new_o.creation_date = datetime.today()
+				new_o.lesson = lesson
 				new_o.save()
-				lesson.objectives.add(new_o)
 			new_count = form.cleaned_data['new_objectives_count']
 			for index in range(0,int(new_count)):
 				new_o = Objective()
@@ -112,8 +113,8 @@ def addLessonObjectives(request):
 				new_o.standard = standard
 				new_o.owner = teacher
 				new_o.creation_date = datetime.today()
+				new_o.lesson = lesson
 				new_o.save()
-				lesson.objectives.add(new_o)
 		else:
 			print form.errors
 		return HttpResponseRedirect(request.session['last_page'])				

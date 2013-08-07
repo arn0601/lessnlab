@@ -212,7 +212,7 @@ def createBaseDict(request):
 
 def getObjectives(lesson):
 	objective_list = []
-	for objective in lesson.objectives.all():
+	for objective in Objective.objects.filter(lesson=lesson):
                 objective_list.append((objective.id, objective.description))
 	return objective_list
 
