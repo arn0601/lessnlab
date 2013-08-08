@@ -30,7 +30,7 @@ def getLessonStandards(request):
 		form = SelectStandardsForm(lesson_id=lesson_id)
 		form.fields['standard'].choices = standard_list
 		print "here getting stnadards"
-		context = {'selectStandardsForm':form}
+		context = {'selectStandardsForm':form, 'standardsExist':(len(standard_list) > 0)}
 		
 		return direct_block_to_template(request,"lesson_objectives_modal.html", "selectingStandard", context)
 

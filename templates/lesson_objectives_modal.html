@@ -5,6 +5,10 @@
     <h3>Select Lesson Standard</h3>
   </div>
   <div class="modal-body">
+    {% if not standardsExist %}
+	You have not added standards to this lesson. Please add standards to this lesson
+    {% else %}
+	Please select the standard for which to add an objective <br>
     <form method="post" action="{% url createLessonObjectives %}" name="create_lesson_objectives" id="selectingStandardForm">
         {% csrf_token %}
         {% for field in selectStandardsForm %}
@@ -20,6 +24,7 @@
         <a class="btn btn-primary" type="button" data-dismiss="modal">Cancel</a>
       </p>
     </form>
+  {% endif %}
   </div>
   {% endblock %}
 </div>
