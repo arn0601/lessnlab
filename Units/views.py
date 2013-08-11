@@ -11,6 +11,7 @@ from Lessons.models import Lesson
 from Utils.ajax_helpers import direct_block_to_template, direct_json_to_template
 from django.template import loader,Context
 from django.contrib.auth.models import User
+import simplejson
 
 # Create your views here.
 def showUnits(request):
@@ -25,10 +26,11 @@ def addUnit(request):
                 addUnitForm = AddUnitForm(request.POST)
                 if addUnitForm.is_valid():
 			addUnitForm.save()
-                        return HttpResponse('success')
+			return HttpResponse(simplejson.dumps({'success': '1'}))
 		else:
-			context = Context({'unitAddForm':addUnitForm})
-			return HttpResponse(render_block_to_string('unit_add_modal.html', 'addUnit', context))
+			print addUnitForm.errors
+			context = {'unitAddForm':addUnitForm}
+			return direct_json_to_template(request,'unit_add_modal.html', 'addUnit', context, {'success':'0'})
 			
         return HttpResponseRedirect('')
 
@@ -39,7 +41,11 @@ def editUnit(request):
                 unitForm = EditUnit(request.POST, instance=unit)
                 if unitForm.is_valid():
 			unitForm.save()
-                        return HttpResponseRedirect(request.session['last_page'])
+			return HttpResponse(simplejson.dumps({'success': '1'}))
+		else:
+			print unitForm.errors
+			context = {'editUnitForm':unitForm, 'selectedUnit':unit_id}
+			return direct_json_to_template(request,'unit_edit_modal.html', 'editUnit', context, {'success':'0'})
         return HttpResponseRedirect(request.session['last_page'])
 
 def addUnitStandards(request):
@@ -78,7 +84,10 @@ def requestAddableUnitStandards(request):
 		course = unit.course
 		standard_list = course_methods.getCourseStandards(course, True)
 		form = UnitStandardsForm(unit_id=unit_id)
+		unit_list = unit_methods.getUnitStandards(unit, True)
+		unit_standards_choices = [x for (x,y) in unit_list]
 		form.fields['standards'].choices = standard_list
+		form.fields['standards'].initial = unit_standards_choices
 		context = {'unitStandardsForm': form}
 		return direct_block_to_template(request,'unit_standards_modal.html', 'addStandards', context)
 

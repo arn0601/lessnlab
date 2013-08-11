@@ -10,6 +10,7 @@ from django.core import serializers
 import Utils.base_methods as base_methods
 from Courses.forms import *
 from Lessons.models import Lesson
+import simplejson
 
 # Create your views here.
 
@@ -80,8 +81,11 @@ def editCourse(request):
 			editCourseForm.save()
 			course.standard_grouping.clear()
 			groups_added = addCourseStandards(course,teacher)
-			
-                        return HttpResponseRedirect('/courses/')
+			return HttpResponse(simplejson.dumps({'success':'1'}))
+		else:
+			print editCourseForm.errors
+			context = {'editCourseForm':editCourseForm, 'selectedCourse':course_id}
+			return direct_json_to_template(request,'course_edit_modal.html', 'editCourse', context, {'success':'0'})
         return HttpResponseRedirect('/courses/')
 
 def deleteCourse(request):

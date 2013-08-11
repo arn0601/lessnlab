@@ -35,6 +35,7 @@
     <h3>Add a course</h3>
   </div>
   <div class="modal-body">
+		{{ courseAddForm.non_field_errors }}
     <form method="post" action="{% url Courses.views.addCourse %}" id="addNewCourse">
 	{% csrf_token %}
 	{% for field in courseAddForm %}
@@ -81,7 +82,7 @@
 						$("#showGroupStandards").modal("show");
 					}
 					else {
-						$("#addCourse").html(data);
+						$("#addCourse").html(obj.response);
 						$("#addCourse").modal("show");
 					}
 				}

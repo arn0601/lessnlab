@@ -37,11 +37,12 @@
 			type: "POST",
 			url: {% url Lessons.views.addLesson %},
 			success: function(data) {
-				if (data == "success") {
+				var obj = jQuery.parseJSON(data);
+				if (obj.success == "1") {
 					window.location.reload(true);
 				}
 				else {
-					$("#addLesson").html(data);
+					$("#addLesson").html(obj.response);
 					$("#addLesson").modal("show");
 				}
 			}

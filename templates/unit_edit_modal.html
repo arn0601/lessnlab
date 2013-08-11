@@ -6,7 +6,7 @@
     <h3>Edit Unit</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url editUnit %}" name="login_form">
+    <form method="post" action="{% url editUnit %}" id="EditUnitForm">
         {% csrf_token %}
         {% for field in editUnitForm %}
         <div class="control-group">
@@ -20,7 +20,7 @@
 	 
     <p>
 	<input type="hidden" value={{ selectedUnit }} name="selectedUnit">
-	<button type="submit" class="btn btn-primary">Update</button>
+        <p><button type="button" class="btn btn-primary" onClick="editUnit()">Update</button>
         <a class="btn btn-primary" type="button" data-dismiss="modal">Cancel</a>
       </p>
     </form>
@@ -45,4 +45,29 @@
 		});
 	}
 
+        function editUnit() {
+		var formString = $("#EditUnitForm").serialize()
+		$.ajax({
+			data : formString,
+			dataType : "html",
+			type: "POST",
+			url: {% url Units.views.editUnit %},
+			success: function(data) {
+				if (data != "") {
+					var obj = jQuery.parseJSON(data);
+					if (obj.success == "1") {
+						window.location.reload(true);
+					}
+					else {
+						$("#editUnit").html(obj.response);
+						$("#editUnit").modal("show");
+					}
+				}
+				//else {
+				//	$("#addCourse").html(data);
+				//	$("#addCourse").modal("show");
+				//}
+			}
+		});
+	}
 </script>

@@ -5,7 +5,7 @@
     <h3>Edit Lesson</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url editLesson %}" name="login_form">
+    <form method="post" action="{% url editLesson %}" id="editLessonForm">
         {% csrf_token %}
         {% for field in editLessonForm %}
         <div class="control-group">
@@ -18,7 +18,7 @@
     {% endfor %}
      <p>
 	<input type="hidden" value={{ selectedLesson }} name="selectedLesson">
-<button type="submit" class="btn btn-primary">Update</button>
+        <p><button type="button" class="btn btn-primary" onClick="editLesson()">Update</button>
         <a class="btn btn-primary" type="button" data-dismiss="modal">Cancel</a>
       </p>
     </form>
@@ -36,10 +36,32 @@
 			type: "POST", // GET or POST
       url: {% url Lessons.views.EditLessonRequest %}, // the file to call
 			success : function(data){
-					$('#editLesson').html(data);
-					$('#editLesson').modal('show')		
+								
+				$("#editLesson").html(data);
+				$("#editLesson").modal("show");
        }
 		});
 	}
 
+        function editLesson() {
+		var formString = $("#editLessonForm").serialize()
+		$.ajax({
+			data : formString,
+			dataType : "html",
+			type: "POST",
+			url: {% url Lessons.views.editLesson %},
+			success: function(data) {
+				if (data != "") {
+					var obj = jQuery.parseJSON(data);
+					if (obj.success == "1") {
+						window.location.reload(true);
+					}
+					else {
+						$("#editLesson").html(obj.response);
+						$("#editLesson").modal("show");
+					}
+				}
+			}
+		});
+	}
 </script>

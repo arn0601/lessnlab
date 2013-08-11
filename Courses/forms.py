@@ -22,6 +22,14 @@ class AddCourse(forms.ModelForm):
 		if subject:
 			self.fields['subject'].initial = subject
 
+	def clean(self):
+		cleaned_data = super(AddCourse, self).clean()
+		if (cleaned_data.get('start_date') > cleaned_data.get('end_date')):
+			if not self._errors.has_key('start_date'):
+		                from django.forms.util import ErrorList
+		                self._errors['start_date'] = ErrorList()
+			self._errors['start_date'].append("Start date should be before end date")
+		return cleaned_data
 
 
 class AddGroups(forms.Form):
@@ -34,6 +42,16 @@ class EditCourse(forms.ModelForm):
 		model = Course
 		widgets = {  'owner': forms.HiddenInput(), 'start_date': custom_widgets.CalendarDateSelectField(), 'end_date': custom_widgets.CalendarDateSelectField() }
 		exclude = ['standard_grouping', 'cumulative_rating', 'number_raters', 'state', 'parent']
+
+        def clean(self):
+                cleaned_data = super(EditCourse, self).clean()
+                if (cleaned_data.get('start_date') > cleaned_data.get('end_date')):
+			if not self._errors.has_key('start_date'):
+		                from django.forms.util import ErrorList
+		                self._errors['start_date'] = ErrorList()
+			self._errors['start_date'].append("Start date should be before end date")
+                return cleaned_data
+
 
 class DeleteCourse(forms.Form):
 	course_id = forms.CharField(label="")

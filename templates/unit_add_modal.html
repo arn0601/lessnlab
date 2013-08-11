@@ -37,12 +37,15 @@
 			type: "POST",
 			url: {% url Units.views.addUnit %},
 			success: function(data) {
-				if (data == "success") {
-					window.location.reload(true);
-				}
-				else {
-					$("#addUnit").html(data);
-					$("#addUnit").modal("show");
+				if (data != "") {
+					var obj = jQuery.parseJSON(data);
+					if (obj.success == "1") {
+						window.location.reload(true);
+					}
+					else {
+						$("#addUnit").html(obj.response);
+						$("#addUnit").modal("show");
+					}
 				}
 			}
 		});

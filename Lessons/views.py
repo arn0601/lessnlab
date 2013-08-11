@@ -8,6 +8,7 @@ from Courses.models import Course
 from Lessons.models import  Lesson
 from Lessons.forms import *
 import lesson_methods
+import simplejson
 from Utils import base_methods
 from Units import unit_methods
 from datetime import datetime
@@ -151,21 +152,25 @@ def addLesson(request):
                 addLessonForm = AddLessonForm(request.POST)
                 if addLessonForm.is_valid():
 			addLessonForm.save()
-                        return HttpResponse('success')
+			return HttpResponse(simplejson.dumps({'success': '1'}))
 		else:
-			context = Context({'lessonAddForm':addLessonForm})
-			return HttpResponse(render_block_to_string('lesson_add_modal.html', 'addLesson', context))
+			context = {'lessonAddForm':addLessonForm}
+			return direct_json_to_template(request,'lesson_add_modal.html', 'addLesson', context, {'success':'0'})
 			
         return HttpResponse('')
 
 def editLesson(request):
+	print request
         if request.method == 'POST':
 		lesson_id = request.POST['selectedLesson']
 		lesson = Lesson.objects.get(id=lesson_id)
                 lessonForm = EditLesson(request.POST, instance=lesson)
                 if lessonForm.is_valid():
 			lesson=lessonForm.save()
-                        return HttpResponseRedirect(request.session['last_page'])
+			return HttpResponse(simplejson.dumps({'success': '1'}))
+		else:
+			context = {'editLessonForm':lessonForm, 'selectedLesson':lesson_id}
+			return direct_json_to_template(request,'lesson_edit_modal.html', 'editLesson', context, {'success':'0'})
         return HttpResponseRedirect(request.session['last_page'])
 
 def deleteLesson(request):

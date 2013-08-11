@@ -8,6 +8,31 @@ class AddLessonForm(forms.ModelForm):
 		exclude = ['standards','objectives', 'cumulative_rating', 'number_raters']
 		widgets = { 'unit': forms.HiddenInput() , 'owner': forms.HiddenInput(),'start_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'lesson_start_date'}), 'end_date': custom_widgets.CalendarDateSelectField(attrs={'id': 'lesson_end_date'})}
 
+	def clean(self):
+		cleaned_data = super(AddLessonForm, self).clean()
+		unit = cleaned_data.get("unit")
+		if (cleaned_data.get("start_date") > cleaned_data.get("end_date")) :
+
+			if not self._errors.has_key('start_date'):
+		                from django.forms.util import ErrorList
+		                self._errors['start_date'] = ErrorList()
+			self._errors['start_date'].append("Start date should be before end date")
+		if (cleaned_data.get("start_date") < unit.start_date):
+
+			if not self._errors.has_key('start_date'):
+		                from django.forms.util import ErrorList
+		                self._errors['start_date'] = ErrorList()
+			self._errors['start_date'].append("Start date should be after unit start date")
+		if (cleaned_data.get("end_date") > unit.end_date):
+
+			if not self._errors.has_key('end_date'):
+		                from django.forms.util import ErrorList
+		                self._errors['end_date'] = ErrorList()
+			self._errors['end_date'].append("End date should be before unit end date")
+
+		return cleaned_data
+
+
 class EditLesson(forms.ModelForm):
 	class Meta:
 		model = Lesson
@@ -18,6 +43,30 @@ class EditLesson(forms.ModelForm):
 		super(EditLesson, self).__init__(*args, **kwargs)
 		self.fields['owner'].label=''
 		self.fields['unit'].label=''
+
+	def clean(self):
+		cleaned_data = super(EditLesson, self).clean()
+		unit = cleaned_data.get("unit")
+		if (cleaned_data.get("start_date") > cleaned_data.get("end_date")) :
+
+			if not self._errors.has_key('start_date'):
+		                from django.forms.util import ErrorList
+		                self._errors['start_date'] = ErrorList()
+			self._errors['start_date'].append("Start date should be before end date")
+		if (cleaned_data.get("start_date") < unit.start_date):
+
+			if not self._errors.has_key('start_date'):
+		                from django.forms.util import ErrorList
+		                self._errors['start_date'] = ErrorList()
+			self._errors['start_date'].append("Start date should be after unit start date")
+		if (cleaned_data.get("end_date") > unit.end_date):
+
+			if not self._errors.has_key('end_date'):
+		                from django.forms.util import ErrorList
+		                self._errors['end_date'] = ErrorList()
+			self._errors['end_date'].append("End date should be before unit end date")
+
+		return cleaned_data
 
 class DeleteLesson(forms.Form):
 	lesson_id = forms.CharField(label="")

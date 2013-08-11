@@ -6,7 +6,7 @@
     <h3>Edit course</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url editCourse %}">
+    <form method="post" action="{% url editCourse %}" id="EditCourseForm">
         {% csrf_token %}
         {% for field in editCourseForm %}
         <div class="control-group">
@@ -17,9 +17,8 @@
             </div>
                 </div>
     {% endfor %}
-     <p>
 	<input type="hidden" value={{ selectedCourse }} name="selectedCourse">
-	<button type="submit" class="btn btn-primary">Update</button>
+        <p><button type="button" class="btn btn-primary" onClick="editCourse()">Update</button>
 	<a class="btn btn-primary" type="button" onClick="hideEditCourse()">Cancel</a>
       </p>
     </form>
@@ -49,6 +48,32 @@
 	}
 
 
+        function editCourse() {
+		var formString = $("#EditCourseForm").serialize()
+		$.ajax({
+			data : formString,
+			dataType : "html",
+			type: "POST",
+			url: {% url Courses.views.editCourse %},
+			success: function(data) {
+				if (data != "") {
+					var obj = jQuery.parseJSON(data);
+					if (obj.success == "1") {
+						hideEditCourse();
+						window.location.reload(true);
+					}
+					else {
+						$("#editCourse").html(obj.response);
+						$("#editCourse").modal("show");
+					}
+				}
+				//else {
+				//	$("#addCourse").html(data);
+				//	$("#addCourse").modal("show");
+				//}
+			}
+		});
+	}
 
 
 
