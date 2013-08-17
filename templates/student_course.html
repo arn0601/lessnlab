@@ -10,63 +10,10 @@
 	<p><b>Year:</b>
         {{ course.course.year }}
 	<p>
-	<a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Edit">Edit</a>
-        <a class="btn btn-primary btn-small" type="button" href="?course_id={{ course.id }}&action=Delete">Delete</a>
 
         </div>
 {% endfor %}
 
-{% if showEditCourse %}
-<div class="modal" id="editCourse">
-  <div class="modal-header">
-    <a class="close" type="button" href="/courses/">x</a>
-    <h3>Edit course</h3>
-  </div>
-  <div class="modal-body">
-    <form method="post" action="{% url editCourse %}" name="login_form">
-        {% csrf_token %}
-        {% for field in editCourseForm %}
-        <div class="control-group">
-        {{ field.errors.as_text }}
-         <label class="control-label">{{ field.label_tag }}</label>
-            <div class="controls">
-                {{ field }}
-            </div>
-                </div>
-    {% endfor %}
-     <p><button type="submit" class="btn btn-primary">Update</button>
-	<a class="btn btn-primary" type="button" href="/courses/">Cancel</a>
-      </p>
-    </form>
-  </div>
-</div>
-{% endif %}
-{% if showDeleteCourse %}
-<div class="modal" id="deleteCourse">
-  <div class="modal-header">
-    <a class="close" type="button" href="/courses/">x</a>
-    <h3>Delete course</h3>
-  </div>
-  <div class="modal-body">
-    <form method="post" action="{% url deleteCourse %}" name="login_form">
-        {% csrf_token %}
-        {% for field in deleteCourseForm %}
-        <div class="control-group">
-         <label class="control-label">{{ field.label_tag }}</label>
-            <div class="controls">
-                {{ field }}
-            </div>
-                </div>
-    {% endfor %}
-     Are you sure you want to delete the course?
-<p>
-     <p><button type="submit" class="btn btn-primary">Yes</button>
-        <a class="btn btn-primary" type="button" href="/courses/">No</a>
-      </p>
-    </form>
-  </div>
-</div>
-{% endif %}
 
 {% endblock %}
 

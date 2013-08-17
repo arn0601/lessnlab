@@ -13,8 +13,9 @@ from Standards.models import Standard
 from django.shortcuts import render_to_response
 from django.http import HttpResponse,HttpResponseRedirect
 from django.core import serializers
-from accounts.models import TeacherProfile, StudentProfile
+from accounts.models import TeacherProfile, StudentProfile, UserProfile
 import simplejson
+from Classes.models import Class, ClassStudents
 from django.contrib.auth import logout
 
 
@@ -22,12 +23,18 @@ def returnStudentForms():
 	teacherRequestForm = TeacherRequestForm()
 	return (teacherRequestForm)
 
-def checkUserIsStudent(request):
+def checkUserType(request):
 	try:
-		print request.user
+		user = UserProfile.objects.get(user=request.user)
+		return user.user_type
+	except:
+		return None
+
+def checkUserIsStudent(request):
+	if checkUserType(request) == 'Student':
 		user = StudentProfile.objects.get(user=request.user)
 		return user
-        except:
+        else:
 		logout(request)
 		return None
 
@@ -92,10 +99,10 @@ def createStudentDict(request):
 	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'teacherRequestForm': teacherRequestForm, 'coursesWereRequested': 0}
 
 def checkUserIsTeacher(request_user):
-	try:
+	if checkUserType == 'Teacher':
 		user = TeacherProfile.objects.get(user=request_user)
 		return user
-	except:
+	else:
 		return None
 
 def createBaseDict(request):

@@ -1,4 +1,4 @@
-
+{% block teacherRegistrationModal %}
 <div class="modal hide fade bottomborder" id="register">
   	<div class="modal-header modalheaderspacing" id="register_header">
   	  <button type="button" class="close" data-dismiss="modal">x</button>
@@ -111,7 +111,7 @@
         </div>
     </form>
   </div>
-<div>
+</div>
 
 <script type="text/javascript"> <!-- scroll jquery -->
 
@@ -122,12 +122,14 @@
 			data: formString,
 			url: "{% url accounts.views.validateRegisterTeacher %}",
 			success: function(response) {
-				if (response == "") {
+				var obj = jQuery.parseJSON(data);
+				
+				if (obj.success == "1") {
 					$("#register_teacher").submit();
 				}
 				else {
 					var modal = document.getElementById('register_errors');
-					modal.innerHTML=response;
+					modal.innerHTML=obj.response;
 				}
 			}
 		});
@@ -135,4 +137,4 @@
 	}
 
 </script>
-
+ {% endblock %}
