@@ -20,6 +20,7 @@ def showCourses(request):
 	print user_type
 	if user_type == 'Teacher':
 		base_dict = base_methods.createBaseDict(request)
+		print base_dict['courseAddForm']
 		request.session['last_page'] = '/courses/'
 		return render(request,'course.html', base_dict)
 	elif user_type == 'Student':
