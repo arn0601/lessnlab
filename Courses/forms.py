@@ -62,6 +62,15 @@ class DeleteCourse(forms.Form):
 class TeacherRequestForm(forms.Form):
 	email = forms.CharField(label='Teacher Email')
 
+	def clean_email(self):
+		data = self.cleaned_data['email']
+		try:
+			user = User.objects.get(email=data)
+			teacher = TeacherProfile.objects.get(user=user)
+			return data
+		except:
+			raise forms.ValidationError("Email doesn't exist")
+
 class ClassRequestForm(forms.Form):
 	teacher = forms.ModelChoiceField(label='', queryset=TeacherProfile.objects.none())
 	teacher.widget = forms.HiddenInput()

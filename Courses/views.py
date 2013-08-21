@@ -168,7 +168,8 @@ def cloneCourse(request):
 	return HttpResponse('')
 
 def studentRequestCourse(request):
-	base_dict = base_methods.createStudentDict(request)
+	if not base_methods.checkUserIsStudent(request):
+		return HttpResponse(simplejson.dumps({'success':'0'}))
 	teacher_request = TeacherRequestForm(data=request.POST)
 	if teacher_request.is_valid():
 		generic_user = User.objects.get(email=teacher_request.data['email'])
@@ -179,11 +180,11 @@ def studentRequestCourse(request):
 			for class_ in Class.objects.filter(course=course):
 				classes.append(class_)
 		course_request.fields['classes'].choices = classes
+		base_dict = {}
 		base_dict['teacherCoursesRequestForm'] = course_request
-		base_dict['coursesWereRequested'] = True
-		return render(request,'student_course.html', base_dict)
+		return direct_json_to_template(request,'student_choose_courses.html', 'choose_course_form', base_dict, {'success':'1'})
 	else:
-		return HttpResponseRedirect(request.session['last_page'])
+		return HttpResponse(simplejson.dumps({'success':'0'}))
 
 def studentAddCourse(request):
 	classRequestForm = ClassRequestForm(data=request.POST)

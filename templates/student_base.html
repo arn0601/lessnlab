@@ -1,3 +1,4 @@
+{% block studentbase %}
 {% load staticfiles %}
 <!DOCTYPE html>
 <html style="height:100%">
@@ -5,7 +6,8 @@
     <title>LessnLab - Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-                <link href="http://blueimp.github.com/cdn/css/bootstrap.min.css" rel="stylesheet" media="screen">
+                <!--- link href="http://blueimp.github.com/cdn/css/bootstrap.min.css" rel="stylesheet" media="screen"-->
+                <link href="/static/bootstrap.min.css" rel="stylesheet" media="screen">
                 <link href="/static/styles.css" rel="stylesheet" media="screen">
                 <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
   <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
@@ -32,61 +34,16 @@
         </body>
         <script src="/static/bootstrap.js"> </script>
 
+{% include "student_request_course.html" %}
+{% include "student_choose_courses.html" %}
 
-<div class="modal hide" id="requestCourse">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">x</button>
-    <h3>Request to be added to teacher's course</h3>
-  </div>
-  <div class="modal-body">
-    <form method="post" action="{% url Courses.views.studentRequestCourse %}" name="request_course_form">
-	{% csrf_token %}
-	{% for field in teacherRequestForm %}
-        <div class="control-group">
-        {{ field.errors.as_text }}
-         <label class="control-label">{{ field.label_tag }}</label>
-            <div class="controls">
-                {{ field }}
-            </div>
-   		</div>
-    {% endfor %}
-     <p><button type="submit" class="btn btn-primary">Submit</button>
-		<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
-      </p>
-    </form>
-  </div>
-</div>
 
-{% if coursesWereRequested %}
-<div class="modal" id="chooseCourses">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">x</button>
-    <h3>Request to be added to teacher's course</h3>
-  </div>
-  <div class="modal-body">
-    <form method="post" action="{% url Courses.views.studentAddCourse %}" name="add_course_form">
-	{% csrf_token %}
-	{% if teacherCoursesRequestForm %}
-	{% for field in teacherCoursesRequestForm %}
-        <div class="control-group">
-        {{ field.errors.as_text }}
-         <label class="control-label">{{ field.label_tag }}</label>
-            <div class="controls">
-                {{ field }}
-            </div>
-   		</div>
-    {% endfor %}
-	{% endif %}
-     <p><button type="submit" class="btn btn-primary">Submit</button>
-		<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
-      </p>
-    </form>
-  </div>
-</div>
-{% endif %}
+
 </body>
 <!-- Javascript -->
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/static/bootstrap.js"></script>
 
 </html>
+
+{% endblock %}
