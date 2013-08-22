@@ -3,6 +3,7 @@ from Utils.ajax_helpers import direct_block_to_template, direct_json_to_template
 from django.template import loader,Context
 from django.contrib.auth.models import User
 import course_methods
+from Classes.models import *
 from django.template import RequestContext
 from django.shortcuts import render_to_response,render
 from django.http import HttpResponse,HttpResponseRedirect
@@ -15,13 +16,19 @@ import simplejson
 # Create your views here.
 
 def showCourses(request):
-	base_dict = base_methods.createBaseDict(request)
-	print base_dict
-	if base_dict == None:
+	user_type = base_methods.checkUserType(request)
+	print user_type
+	if user_type == 'Teacher':
+		base_dict = base_methods.createBaseDict(request)
+		print base_dict['courseAddForm']
+		request.session['last_page'] = '/courses/'
+		return render(request,'course.html', base_dict)
+	elif user_type == 'Student':
+		base_dict = base_methods.createStudentDict(request)
+                request.session['last_page'] = '/courses/'
+		return render(request,'student_course.html', base_dict)
+	else:
 		return HttpResponseRedirect('/')
-	
-	request.session['last_page'] = '/courses/'
-	return render(request,'course.html', base_dict)	
 
 
 def addCourse(request):
@@ -161,3 +168,54 @@ def cloneCourse(request):
 			return HttpResponse('success')
 	return HttpResponse('')
 
+def studentRequestCourse(request):
+	if not base_methods.checkUserIsStudent(request):
+		return HttpResponse(simplejson.dumps({'success':'0'}))
+	teacher_request = TeacherRequestForm(data=request.POST)
+	if teacher_request.is_valid():
+		generic_user = User.objects.get(email=teacher_request.data['email'])
+		teacher = TeacherProfile.objects.get(user=generic_user)
+		course_request = ClassRequestForm(teacher=teacher)
+		classes = []
+		for course in Course.objects.filter(owner=teacher):
+			for class_ in Class.objects.filter(course=course):
+				classes.append(class_)
+		course_request.fields['classes'].choices = classes
+		base_dict = {}
+		base_dict['teacherCoursesRequestForm'] = course_request
+		return direct_json_to_template(request,'student_choose_courses.html', 'choose_course_form', base_dict, {'success':'1'})
+	else:
+		return HttpResponse(simplejson.dumps({'success':'0'}))
+
+def studentAddCourse(request):
+	classRequestForm = ClassRequestForm(data=request.POST)
+	teacher_id = classRequestForm.data['teacher_id']
+	try:
+		teacher = TeacherProfile.objects.get(id=teacher_id)
+		student = StudentProfile.objects.get(user=request.user)
+	except:
+		return HttpResponseRedirect('/studentCourses/')
+	
+	classes = Class.objects.filter(course__owner__exact=teacher)
+	class_list = []
+	for c in classes:
+		class_list.append((c.id, c.name))
+	classRequestForm.fields['classes'].choices = class_list
+	if classRequestForm.is_valid():
+		try:
+			for class_id in classRequestForm.cleaned_data['classes']:
+				course_class = Class.objects.get(id=class_id)
+				cs_exists = ClassStudents.objects.filter(course_class__student__exact=student, course_class=course_class)
+				if cs_exists and len(cs_exists) > 0:
+					return HttpResponseRedirect('/studentCourses/')
+				cs = ClassStudents()
+				cs.course_class = course_class
+				cs.student = student
+				cs.approved = False
+				cs.save()
+				return HttpResponseRedirect('/studentCourses/')
+		except:
+			return HttpResponseRedirect(request.session['last_page'])
+	else:	
+		print courseRequestForm.errors
+		return HttpResponseRedirect(request.session['last_page'])

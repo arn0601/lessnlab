@@ -2,12 +2,14 @@
 from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
+from Utils.ajax_helpers import *
 from django.shortcuts import redirect
 from django.template import RequestContext
 from registration.backends import get_backend
 from django.contrib.auth import logout
 from django.contrib.auth.decorators import login_required
 from accounts.forms import *
+import simplejson
 
 def logout_user(request):
 	logout(request)	
@@ -24,12 +26,15 @@ def validateLoginArgs(request):
 
 def login_user(request):
 	user = validateLoginArgs(request)
+	print user
        	if user is not None:
        		if user.is_active:
-      			login(request, user)
+			print "herehere"
+      			print login(request, user)
 			return HttpResponseRedirect('/courses/')
         		
             			# Return a 'disabled account' error message
+	print "therethere"
 	return HttpResponseRedirect('/')
 
 
@@ -38,11 +43,12 @@ def registerStudent(request, backend, success_url=None, form_class=None,
              template_name='registration/registration_form.html',
              extra_context=None):
     backend = get_backend(backend)
+    print 'student register2'
     if not backend.registration_allowed(request):
         return redirect(disallowed_url)
     if form_class is None:
         form_class = backend.get_form_class(request)
-
+    print 'student register'
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
@@ -65,14 +71,24 @@ def registerStudent(request, backend, success_url=None, form_class=None,
                               {'form': form},
                               context_instance=context)
 
-def validateRegisterTeacher(request):
-    print request.POST
-    form = TeacherRegistrationForm(data=request.POST)
+
+def validateRegisterStudent(request):
+    form = StudentRegistrationForm(data=request.POST)
     if form.is_valid():
-        return HttpResponse('')
+        return HttpResponse(simplejson.dumps({'success':'1'}))
     else:
 	print form.errors
-        return render_to_response('form_errors.html', { 'form' : form })
+        context = {'form': form }
+        return direct_json_to_template(request,'form_errors.html', 'reg_errors', context, {'success':'0'})
+
+def validateRegisterTeacher(request):
+    form = TeacherRegistrationForm(data=request.POST)
+    if form.is_valid():
+        return HttpResponse(simplejson.dumps({'success':'1'}))
+
+    else:
+	context = {'form': form }
+	return direct_json_to_template(request,'form_errors.html', 'reg_errors', context, {'success':'0'})
 
 def validateLogin(request):
 	print request.POST

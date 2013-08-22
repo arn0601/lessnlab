@@ -18,9 +18,7 @@ def registerUserProfile(sender, user, request, **kwargs):
 		user_profile.teacher_code = form.data['teacher_code']
 		user_profile.user_type = 'Teacher'
 		user_profile.save()
-		print "id:",user_profile.id
 		user_profile = TeacherProfile.objects.get(user = user)
-		print "id:",user_profile.id
 		teacher_profileAttrs = TeacherProfileAttributes(teacher=user_profile)
 		teacher_profileAttrs.save()
 	else:

@@ -1,13 +1,13 @@
-{% block teacherRegistrationModal %}
-<div class="modal hide fade bottomborder" id="register">
-  	<div class="modal-header modalheaderspacing" id="register_header">
+{% block studentRegistrationModal %}
+<div class="modal hide fade bottomborder" id="register_student_modal">
+  	<div class="modal-header modalheaderspacing" id="register_student_header">
   	  <button type="button" class="close" data-dismiss="modal">x</button>
   	  <p class="modaltitle">Create Your LessnLab Account</p>
-		<div id="register_errors">
+		<div id="student_register_errors">
 		</div>
   	</div>
   <div class="modal-body">
-    <form action="{% url accounts.views.registerTeacher %}" method="post" id="register_teacher">
+    <form action="{% url accounts.views.registerStudent %}" method="post" id="register_student">
     	<div class="container register">
     		<div class="row">
     			<div class="span3"> 
@@ -80,7 +80,7 @@
     		<div class="row">
     			<div class="span6">
     				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="username" placeholder="Enter a Username">
-    				<input type="hidden" name="user_type" value="Teacher">
+    				<input type="hidden" name="user_type" value="Student">
     			</div>
     		</div>
     		<div class="row">
@@ -93,16 +93,11 @@
     				<input type="password" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="password2" placeholder="Confirm Password">
     			</div>
     		</div>
-    		<div class="row">
-    			<div class="span6">
-    				<input type="text" class="logintextbox input-block-level" style="height: 45px; font-size: 12pt; background-color: whitesmoke;" name="teacher_code" placeholder="Registration Code">
-    			</div>
-    		</div>	
     {% csrf_token %}
     <!-- username, email, password1, password2, first_name, last_name, school_state, teacher_code -->
     		<div class="row">
     			<div class="span1 offset2" style="margin-right: 5px;">
-                	<button type="button" onClick="registerTeacher()" class="btn btn-primary">Register</input>
+                	<button type="button" onClick="registerStudent()" class="btn btn-primary">Register</input>
             	</div>
             	<div class="span1">
                 	<button type="reset" class="btn btn-primary" data-dismiss="modal">Cancel</input>
@@ -115,20 +110,20 @@
 
 <script type="text/javascript"> <!-- scroll jquery -->
 
-	function registerTeacher() {
-		var formString = $("#register_teacher").serialize();
+	function registerStudent() {
+		var formString = $("#register_student").serialize();
 		$.ajax( {
 			type: "POST",
 			data: formString,
-			url: "{% url accounts.views.validateRegisterTeacher %}",
-			success: function(response) {
+			url: "{% url accounts.views.validateRegisterStudent %}",
+			success: function(data) {
 				var obj = jQuery.parseJSON(data);
 				
 				if (obj.success == "1") {
-					$("#register_teacher").submit();
+					$("#register_student").submit();
 				}
 				else {
-					var modal = document.getElementById('register_errors');
+					var modal = document.getElementById('student_register_errors');
 					modal.innerHTML=obj.response;
 				}
 			}
@@ -137,4 +132,4 @@
 	}
 
 </script>
- {% endblock %}
+{% endblock %}

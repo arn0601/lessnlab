@@ -1,199 +1,49 @@
+{% block studentbase %}
 {% load staticfiles %}
 <!DOCTYPE html>
-<html>
+<html style="height:100%">
   <head>
     <title>LessnLab - Home</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap -->
-<link href="http://blueimp.github.com/cdn/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="/static/styles.css" rel="stylesheet" media="screen">
-<link rel="stylesheet" href="/static/bootstrap-image-gallery.min.css">
-	<script type="text/javascript"> <!-- scroll jquery -->
-		function goToByScroll(id){
- 			$('html,body').animate({scrollTop: $("#"+id).offset().top},1000);
-	}
-	</script>
-	
+                <!--- link href="http://blueimp.github.com/cdn/css/bootstrap.min.css" rel="stylesheet" media="screen"-->
+                <link href="/static/bootstrap.min.css" rel="stylesheet" media="screen">
+                <link href="/static/styles.css" rel="stylesheet" media="screen">
+                <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" />
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="/static/lessnlab.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script> 
+  <script>
+        jQuery(function ($) {
+        $("a").tooltip()})
+        
+  </script>
   </head>
-  <body style="padding-top:40px;">
-  <div class="navbar navbar-fixed-top navcolor">
-<div class="navbar-inner">
-  	   <div class="row-fluid">
-		  	<div class="span2">
-		  	<ul class="nav">
-		  		<li class="dropdown">  
-      				 	 <a href="#"  
-          				 class="dropdown-toggle"  
-          				 data-toggle="dropdown">  
-          				 <i class="icon-user"></i> {{ fullname }}
-          				 <b class="caret"></b>  
-      					 </a>  
-     			<ul class="dropdown-menu">
-				<li><a href="/courses/">Home</a></li> 
-      				<li><a href="#">Profile</a></li> 
-					<li><a href="#">Network</a></li>
-      				<li><a href="#">Settings</a></li>
-      				<li><a href="#">Logout</a></li>
-    			</ul> 
-   					  </li>
-   			</ul>
-   			</div>
-   			<div class="span10">
-		  		<ul class="nav pull-left">
-				 <li class="dropdown">  
-      				 	 <a href="#"  
-          				 class="dropdown-toggle"  
-          				 data-toggle="dropdown"><b class="caret"></b> 
+  <body>
+                <div class="container basecontent" style="padding-top: 42px; width: 1000px; min-height: 100%; margin-bottom: -50px; height:auto;">
+                 {% include "student_navbar.html" %}
+                        <div class="row" style="height: 100%; padding-left: 20px;">
+                                {% include "student_leftnav.html" %}
+                                <div class="span10" style="padding-top: 5px; margin-left: 184px">
+                        {% block content %}{% endblock %}
+                                </div>
+                        </div>
+                        <div class="push"></div>
+                </div>
+                        {% include "footer.html" %}
+        </body>
+        <script src="/static/bootstrap.js"> </script>
 
-					{% if course %}
-						{{ course.subject }}
-					{% else %}
-						Current Course
-					{% endif %}
-      					 </a>  
-	     				<ul class="dropdown-menu">
-					{% for course in userCourses %}  
-						<li><a href="/units/?course_id={{ course.id }}">{{ course.subject }}</a></li>
-					{% endfor %}
+{% include "student_request_course.html" %}
+{% include "student_choose_courses.html" %}
 
-	    				</ul>  
-   				</li>
 
-{% if course %}
-   					 
- 
-   					 <li><a class="#"> <i class="icon-chevron-right"></i> </a>
-   					 <li class="dropdown">  
-      				 	 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><b class="caret">
-					{% if unit %}
-						{{ unit.name }}
-					{% else %}
-						Current Unit
-					{% endif %} </a>  
-     				<ul class="dropdown-menu">
-				{% for unit in userUnits %}  
-					<li><a href="/lessons/?unit_id={{ unit.id }}">{{ unit.name }}</a></li>
-				{% endfor %}
 
-    				</ul>  
-   					  </li>
-{% endif %}
-{% if unit %}
-   					  
-   					 <li><a class="#"> <i class="icon-chevron-right"></i> </a>
-   					 <li class="dropdown">  
-      				 	 <a href="#"  
-          				 class="dropdown-toggle"  
-          				 data-toggle="dropdown"><b class="caret"></b>
-					{% if lesson %}
-						{{ lesson.name }}
-					{% else %}
-						Current Lesson
-					{% endif %}
-      					 </a>  
-     			<ul class="dropdown-menu">
-				{% for lesson in userLessons %}  
-					<li><a href="/lessonPlanner/?lesson_id={{ lesson.id }}">{{ lesson.name }}</a></li>
-				{% endfor %}
-    			</ul>  
-   					  </li>
-{% endif %}
-   				</ul>
-		  	</div>
-		</div>
-</div>
-</div>
-<div class="row-fluid">
-<!-- left hand secondary nav -->
-	<div class="span2" id="leftnav">
-		<div class="row-fluid">
-			<div class="span8 profileImageBox">
-				<img class="img-rounded profileImage" src="/static/{{username}}.jpg"/>
-				<h5>{{fullname}}</h5>
-			</div>	
-		</div>
-		<div class="row-fluid">
-			<ul class="nav nav-list">
-  				<li class="nav-header">Favorites</li>
-  				<li><a href="/courses/">Home</a></li>
-			</ul>
-			<ul class="nav nav-list">
-  				<li class="nav-header">Courses</li>
-					{% for course in userCourses %}  
-					<li><a href="/units/?course_id={{ course.id }}">{{ course.subject }}</a></li>
-					{% endfor %}
-			</ul>
-			<ul class="nav nav-list">
-  				<li class="nav-header">Tools</li>
-  				<li><a href="#requestCourse" data-toggle="modal">Course Request</a></li>
-			</ul>
-		</div>
-	</div>
-<!-- Content Area -->
-	<div class="span10" id="content">
-        {% block content %}{% endblock %}
- 	</div>
-</div>
-<!-- Footer -->
-<div class="row-fluid footer">
-		<div class="row-fluid" style="text-align:center; height: 50px; padding-bottom: 20px; background-color:#efefef; vertical-align: middle;">
-			<small><p style="padding-top: 10px;">Created by <a href="#">LessnLab Inc.</a>, Copyright 2013. All Rights Reserved.</p></small>
-		</div>
-</div>
-<div class="modal hide" id="requestCourse">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">x</button>
-    <h3>Request to be added to teacher's course</h3>
-  </div>
-  <div class="modal-body">
-    <form method="post" action="{% url LessonPlanner.views.studentRequestCourse %}" name="request_course_form">
-	{% csrf_token %}
-	{% for field in teacherRequestForm %}
-        <div class="control-group">
-        {{ field.errors.as_text }}
-         <label class="control-label">{{ field.label_tag }}</label>
-            <div class="controls">
-                {{ field }}
-            </div>
-   		</div>
-    {% endfor %}
-     <p><button type="submit" class="btn btn-primary">Submit</button>
-		<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
-      </p>
-    </form>
-  </div>
-</div>
-
-{% if coursesWereRequested %}
-<div class="modal" id="chooseCourses">
-  <div class="modal-header">
-    <button type="button" class="close" data-dismiss="modal">x</button>
-    <h3>Request to be added to teacher's course</h3>
-  </div>
-  <div class="modal-body">
-    <form method="post" action="{% url LessonPlanner.views.studentAddCourse %}" name="add_course_form">
-	{% csrf_token %}
-	{% if teacherCoursesRequestForm %}
-	{% for field in teacherCoursesRequestForm %}
-        <div class="control-group">
-        {{ field.errors.as_text }}
-         <label class="control-label">{{ field.label_tag }}</label>
-            <div class="controls">
-                {{ field }}
-            </div>
-   		</div>
-    {% endfor %}
-	{% endif %}
-     <p><button type="submit" class="btn btn-primary">Submit</button>
-		<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
-      </p>
-    </form>
-  </div>
-</div>
-{% endif %}
 </body>
 <!-- Javascript -->
     <script src="http://code.jquery.com/jquery.js"></script>
     <script src="/static/bootstrap.js"></script>
 
 </html>
+
+{% endblock %}

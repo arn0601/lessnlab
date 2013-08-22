@@ -381,64 +381,6 @@ def manageStudents(request):
 	base_dict['courseStudents'] = course_students
 	return render(request,'manage_students.html', base_dict)
 
-def studentRequestCourse(request):
-	base_dict = base_methods.createStudentDict(request)
-	teacher_request = TeacherRequestForm(data=request.POST)
-	if teacher_request.is_valid():
-		generic_user = User.objects.get(email=teacher_request.data['email'])
-		teacher = TeacherProfile.objects.get(user=generic_user)
-		course_request = CourseRequestForm()
-		courses = Course.objects.filter(owner=teacher)
-		course_list = []
-		for course in courses:
-			course_list.append((course.id, course.name))
-		course_request.fields['courses'].choices = course_list
-		base_dict['teacherCoursesRequestForm'] = course_request
-		base_dict['coursesWereRequested'] = True
-		return render(request,'student_course.html', base_dict)
-	else:
-		return HttpResponseRedirect(request.session['last_page'])
-
-def studentAddCourse(request):
-	classRequestForm = ClassRequestForm(data=request.POST)
-	teacher_id = classRequestForm.data['teacher_id']
-	try:
-		teacher = TeacherProfile.objects.get(id=teacher_id)
-		student = StudentProfile.objects.get(user=request.user)
-	except:
-		return HttpResponseRedirect('/studentCourses/')
-	
-	classes = Class.objects.filter(course__owner__exact=teacher)
-	class_list = []
-	for c in classes:
-		class_list.append((c.id, c.name))
-	classRequestForm.fields['classes'].choices = class_list
-	if classRequestForm.is_valid():
-		try:
-			for class_id in classRequestForm.cleaned_data['classes']:
-				course_class = Class.objects.get(id=class_id)
-				cs_exists = ClassStudents.objects.filter(course_class__student__exact=student, course_class=course_class)
-				if cs_exists and len(cs_exists) > 0:
-					return HttpResponseRedirect('/studentCourses/')
-				cs = ClassStudents()
-				cs.course_class = course_class
-				cs.student = student
-				cs.approved = False
-				cs.save()
-				return HttpResponseRedirect('/studentCourses/')
-		except:
-			return HttpResponseRedirect(request.session['last_page'])
-	else:	
-		print courseRequestForm.errors
-		return HttpResponseRedirect(request.session['last_page'])
-
-def studentShowCourses(request):
-	base_dict = base_methods.createStudentDict(request)
-	if base_dict == None:
-		return HttpResponseRedirect('/courses/')
-	request.session['last_page'] = 'studentCourses'
-	return render(request,'student_course.html', base_dict)
-
 
 def deleteSectionData(sectionForm, request_user):
 	if 'section_id' in sectionForm.data:
