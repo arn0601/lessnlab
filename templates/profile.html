@@ -4,11 +4,8 @@
 <!DOCTYPE html>
 {% block content %}
 <head>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-	<script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
-	<script src="/static/bootstrap.js"></script>
-	<script src="/static/lessnlab.js"></script>
+
+
 	<script src="/static/editable_text_box.js"></script>
 	<link href="/static/editable_text_box.css" rel="stylesheet" media="screen">
 		
@@ -22,7 +19,6 @@
 	<div class="span10">
 		<h5>{{ fullname }} <i class="icon-ok-sign"></i></h5>
 		<p class="profileSubHeader">{{ user.user_type }} at Liberty High School</p>
-		<a class="btn btn-success btn-small" href="#">Edit Profile</a>
 	</div>
 </div>
 <hr/>
@@ -33,68 +29,57 @@
 		<div  class="dataAttrib" >
 			{{ row.humanreadable_name }}
 		</div>
-		<div class="editabletextarea" modelmap_id="{{ row.modelmapid }}" obj_id="{{ row.id }}" cols="10" rows="4" url="{% url setData %}">
-			 {{ row.value }}
-		</div>
-		{% endfor %}
-		
-		<div class="dataAttrib">
-			LinkedIn:
-		</div> 
-		<div class="editabletext" url="{% url setData %}">
-			 http://linkedin.com/amannalavade
-		</div>
-		
-		<div class="dataAttrib">
-			Twitter:
-		</div> 
-		<div class="editabletext" url="{% url setData %}">
-			 amannalavade
-		</div>
-		
-		<div class="dataAttrib" >
-			School:
-		</div> 
-		<div class="editabletext" url="{% url setData %}">
-			 Wissahickon High School
-		</div>
-		
-		<div class="dataAttrib" >
-			School District:
-		</div> 
-		<div class="editabletext" url="{% url setData %}">
-			 Wissahickon School District
-		</div>
-		
-		<div class="dataAttrib" url="{% url setData %}">
-			Grade(s):
-		</div> 
-		<div class="editabletext" url="{% url setData %}">
-			 9th
-		</div>		
+			{% if row.istextarea%}
+			<div class="editabletextarea" model_map_id="{{ row.model_map_id }}" obj_id="{{ row.id }}" cols="10" rows="4" url="{% url setData %}">
+				 {{ row.value }}
+			</div>
+			{% else %}
+			<div class="editabletext" model_map_id="{{ row.model_map_id }}" obj_id="{{ row.id }}" url="{% url setData %}">
+				{{ row.value }}
+			</div>	
+			{% endif %}
+			
+		{% endfor %}	
 	</div>
 </div>
 <div class="row">
 	<div class="span12">
 		<h4>Education</h4>
-		<ul>
-			<li>Cornell University - A.B., Economics, Government & Information Science</li>
-			<li>Columbia University - M.Ed, Education Management</li>
-		</ul>
+		{% for row in edu_attrs %}
+		<div  class="dataAttrib" >
+			{{ row.humanreadable_name }}
+		</div>
+			{% if row.istextarea%}
+			<div class="editabletextarea" model_map_id="{{ row.model_map_id }}" obj_id="{{ row.id }}" cols="10" rows="4" url="{% url setData %}">
+				 {{row.value|linebreaks}}
+			</div>
+			{% else %}
+			<div class="editabletext" model_map_id="{{ row.model_map_id }}" obj_id="{{ row.id }}" url="{% url setData %}">
+				{{ row.value }}
+			</div>	
+			{% endif %}
+			
+		{% endfor %}	
 	</div>
 </div>
 <div class="row">
 	<div class="span12">
 		<h4>Skills</h4>
-		<ul>
-			<li>Student Investment</li>
-			<li>Checks For Understanding</li>
-			<li>Curriculum Planning</li>
-			<li>Classroom Management</li>
+		{% for row in skills_attrs %}
+		<div  class="dataAttrib" >
+			{{ row.humanreadable_name }}
+		</div>
+			{% if row.istextarea %}
+			<div class="editabletextarea" model_map_id="{{ row.model_map_id }}" obj_id="{{ row.id }}" cols="10" rows="4" url="{% url setData %}">
+				 <key>{{row.value}}</key>
+			</div>
+			{% else %}
+			<div class="editabletext" model_map_id="{{ row.model_map_id }}" obj_id="{{ row.id }}" url="{% url setData %}">
+				{{ row.value }}
+			</div>	
+			{% endif %}
 			
-			<p class="profileSubHeader">Teaching Style: Authoritative</p>
-			<p class="profileSubHeader">Expertise: Football, Soccer, Math</p>
-		</ul>
+		{% endfor %}	
 	</div>
 </div>
 <hr/>

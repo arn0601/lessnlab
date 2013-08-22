@@ -1,6 +1,6 @@
 input[type=text]
 {
-	margin-top:10px;
+
 	font-size:12px;
 	color:#545454;
 	-moz-border-radius: 2px;
@@ -14,7 +14,7 @@ input[type=text]
 
 textarea
 {
-	margin-top:10px;
+  margin-bottom: 10px;		
 	font-size:12px;
 	color:#545454;
 	-moz-border-radius: 2px;
@@ -27,16 +27,17 @@ textarea
 
 .dataAttrib
 {
-	margin-top:10px;
+
 	float: left;
 	font-size:18px;
 	color:#545454;
-	vertical-align: top
+	vertical-align: top;
+	margin-bottom: 10px;
 }
 
 .editabletextarea
 {
-	margin-top:10px;
+	margin-bottom: 10px;
 	font-size:14px;
 	color:#545454;
 	margin-left: 150px;
@@ -45,7 +46,7 @@ textarea
 
 .editabletext
 {
-	margin-top:10px;
+	margin-bottom: 10px;
 	font-size:14px;
 	color:#545454;
 	margin-left: 150px;

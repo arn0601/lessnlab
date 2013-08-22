@@ -42,7 +42,7 @@ $(document).ready(function(){
 		$(this).prev().show();
 		try{
 			var url = $(this).attr('url');
-			var model_map_id = $(this).attr('modelmap_id');
+			var model_map_id = $(this).attr('model_map_id');
 			var objid = $(this).attr('obj_id');
 			var t = setData(model_map_id, objid, this.value, url );
 			$(this).remove()
@@ -80,20 +80,30 @@ $(document).ready(function(){
 		
 
 			
-	$('input[type="text"]').keypress(function(event) {
-		if (event.keyCode == '13') {
-			if ($.trim(this.value) == ''){  
-			 this.value = (this.defaultValue ? this.defaultValue : '');  
-		 }
-		 else
-		 {
-			 $(this).prev().prev().html(this.value);
-		 }
-		 
-		 $(this).hide();
-		 $(this).prev().show();
-		 $(this).prev().prev().show();
-		}
+	$(function(){
+		$(document).on('keypress', 'input[type="text"]', function(event){
+			if (event.keyCode == '13') {
+				if ($.trim(this.value) == ''){  
+					this.value = (this.defaultValue ? this.defaultValue : '');  
+				}
+				else{
+				 $(this).prev().html(this.value);
+				}
+				$(this).prev().show();
+		
+				try{
+					var url = $(this).attr('url');
+					var model_map_id = $(this).attr('model_map_id');
+					var objid = $(this).attr('obj_id');
+					var t = setData(model_map_id, objid, this.value, url )
+					$(this).remove()
+				}
+				catch(err)
+				{
+					
+				}
+			}
+		});
 	});
 	
 	function setData(model_map_id, obj_id, value, urlvar) {

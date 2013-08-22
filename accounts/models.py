@@ -29,7 +29,9 @@ class TeacherProfileAttributes(models.Model):
 	bio							= models.CharField(null=True, verbose_name="Bio", max_length=1024)
 	linkedIn_url 		= models.CharField(null=True, verbose_name="LinkedIn",max_length=32)
 	twitter_handle 	= models.CharField(null=True, verbose_name="Twitter", max_length=32)
-	education				= models.CharField(null=True, verbose_name="Education", max_length=128)
+	college 				= models.CharField(null=True, verbose_name="College", max_length=128)
+	gradschool			= models.CharField(null=True, verbose_name="Grad School", max_length=128)
+	major   				= models.CharField(null=True, verbose_name="Major", max_length=128)
 	skills					= models.CharField(null=True, verbose_name="Skills", max_length=128)
 	expertise				= models.CharField(null=True, verbose_name="Expertise", max_length=128)
 
