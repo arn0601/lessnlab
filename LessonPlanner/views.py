@@ -368,19 +368,6 @@ def saveContent(contentForm, section, lesson, request):
 	return (False, None, None,None);
 
 
-def manageStudents(request):
-	base_dict = base_methods.createBaseDict(request)
-	#get courses with students
-	course_students = {}
-	for course in base_dict['userCourses']:
-		cs_list = ClassStudents.objects.filter(course_class__course__exact = course)
-		
-		student_list = [cs for cs in cs_list]
-		for s in student_list:
-			course_students[course] = student_list
-	base_dict['courseStudents'] = course_students
-	return render(request,'manage_students.html', base_dict)
-
 
 def deleteSectionData(sectionForm, request_user):
 	if 'section_id' in sectionForm.data:
@@ -407,24 +394,6 @@ def getStandardsFromGroup(request):
 	return HttpResponse('')
 
 
-def manageCourseStudents(request):
-	'''if request.method == 'POST':
-		cid = request.POST['course_id']
-		try:
-			course = Course.objects.get(id=cid)
-		except:
-			return HttpResponseRedirect('/courses/')
-		students = request.POST.getlist('students')
-		for sid in students:
-			try:
-				user = User.objects.get(id=sid)
-				s = StudentProfile.objects.get(user=user)
-				cs = CourseStudents.objects.get(course=course, student=s)
-				cs.approved=True
-				cs.save()
-			except:
-				continue'''
-	return HttpResponseRedirect('/manageStudents/')
 
 
 def addStandardAnalysis(request):

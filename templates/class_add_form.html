@@ -1,0 +1,15 @@
+{% block addClassForm %}
+<form method="post" action="{% url Classes.views.addClass %}" id="addClassForm">
+	{% csrf_token %}
+	{% for field in addClassForm %}
+		<div class="control-group">
+       		{{ field.errors.as_text }}
+	        	<label class="control-label">{{ field.label_tag }}</label>
+		        <div class="controls">
+        	       		{{ field }}
+			</div>
+		</div>
+	{% endfor %}
+	<p><button type="button" class="btn btn-primary" onClick="addClass()">Submit</button>
+</form>
+{% endblock %}

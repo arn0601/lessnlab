@@ -1,38 +1,34 @@
-{% extends "base.html" %}
-{% load staticfiles %}
-{% load dictionary_extras %}
-<!DOCTYPE html>
-{% block content %}
-{% for course in userCourses %} 
-	{{ course.name }} : {{ course.subject }}
- 	<form id="manage_{{ course.id }}" method="POST" action="{% url manageCourseStudents %}">
+<div id="manage_student_table">
+{% block manage_students %}
+<table class="table table-hover table-striped table-bordered">
+<thead> <tr><th> Student Name </th> <th> Student Email </th> <th> Approved </th> <th> Delete </th> </tr> </thead>
+	{% for cs in classStudents %}
+	<tr><td> {{ cs.student.user_firstname }} {{ cs.student.user_lastname }} </td><td> {{ cs.student.user.email }} </td> <td> {% if not cs.approved %} {{ cs.approved }}  <button onClick="approveStudent('{{ cs.student.user.id }}', '{{ class_.id }}')">Approve</button>{% endif %} </td> <td> <button onClick="deleteStudent('{{ cs.student.user.id }}', '{{ class_.id }}')"> Delete </button> </td> </tr><br>
 	
-	<table class="table table-hover table-striped table-bordered">
-	<thead> <tr> <th> Check to approve </th> <th> Student Name </th> <th> Student Email </th> <th> Approved </th> </tr> </thead>
-	{% for cs in courseStudents|access:course %}
-	<tr><td><input type="checkbox" name="students" value="{{ cs.student.user.id }}"></td><td> {{ cs.student.user.first_name }} {{ cs.student.user.last_name }} </td><td> {{ cs.student.user.email }} </td> <td> {{ cs.approved }} </td></tr><br>
-	
-	{% endfor %}
-	</table>
-	<button type="button" onClick="manageCourse('{{ course.id }}')" class="btn btn-primary">Approve</button>
-	</form>
-
-
 {% endfor %}
+</table>
+{% endblock %}
+</div>
 
-<script type="text/javascript"> <!-- scroll jquery -->
+<script type="text/javascript">
 
-	function manageCourse(course_id) {
-		var form = document.getElementById("manage_"+course_id);
-		id_text = document.createElement("input");
-		id_text.setAttribute("type","hidden");
-		id_text.setAttribute("name","course_id");
-		id_text.setAttribute("value", course_id);
-		form.appendChild(id_text);
-		form.submit();
-	}
+function approveStudent(sid,cid) {
 
+	$.ajax(
+	{
+		data: {student_id:sid, class_id:cid, action:"A"},
+		dataType : "html",
+                type: "POST",
+                url: "{% url Classes.views.editClassStudents %}",
+                success: function(data) {
+			var obj = jQuery.parseJSON(data)
+			if (obj.success == "1") {
+				$("#manage_student_table").html(obj.response)				
+			}
+		}
+	});
+
+
+}
 
 </script>
-
-{% endblock %}

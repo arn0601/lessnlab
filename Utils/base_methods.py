@@ -16,6 +16,7 @@ from django.core import serializers
 from accounts.models import TeacherProfile, StudentProfile, UserProfile
 import simplejson
 from Classes.models import Class, ClassStudents
+from Classes.forms import TeacherRequestForm
 from django.contrib.auth import logout
 
 
@@ -43,9 +44,9 @@ def createStudentDict(request):
 	user = checkUserIsStudent(request)
 	if not user:
 		return None
-
 	#get all courses associated with the user
-	courses = ClassStudents.objects.filter(student=user, approved=True)
+	classes = [c.course_class for c in ClassStudents.objects.filter(student=user, approved=True)]
+	
 	###################################
 	#get the lesson
 	###################################
@@ -72,31 +73,30 @@ def createStudentDict(request):
 	##########################################
 	#get the course
 	##############################################	
-	course = None
+	class_ = None
 	user_units = None
 	#if we have a unit get a course, and get the lesson for the unit
 	if ( unit ):
 		user_lessons = Lesson.objects.filter(unit=unit)
-		course = unit.course
 
 	#get the course id and course
-	course_id = request.GET.get('course_id')
-	if ( not course_id == None ):
-		course = Course.objects.get(id=course_id)
+	class_id = request.GET.get('class_id')
+	if ( not class_id == None ):
+		class_ = Class.objects.get(id=class_id)
 	
 	#check course
-	if ( course ):
-        	user_units =  Unit.objects.filter(course=course)
+	if ( class_ ):
+        	user_units =  Unit.objects.filter(course=class_.course)
 		try:
-			allowed = ClassStudents.objects.get(course=course, student=user, allowed=True)
+			allowed = ClassStudents.objects.get(course_class=class_, student=user, allowed=True)
 		except:
 			print 'Student not allowed to access course'
-			return HttpResponseRedirect('/studentCourses/');
+			return None
 	
 	uname = request.user.username
 
 	#return (stuff for function, stuff to render)
-	return {'course': course, 'unit': unit, 'lesson': lesson, 'userCourses': courses, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'teacherRequestForm': teacherRequestForm, 'coursesWereRequested': 0}
+	return {'class_': class_, 'unit': unit, 'lesson': lesson, 'userClasses': classes, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'teacherRequestForm': teacherRequestForm, 'coursesWereRequested': 0}
 
 def checkUserIsTeacher(request_user):
 	try:
@@ -176,6 +176,16 @@ def createBaseDict(request):
 
 	base_dict['unit'] = unit
 
+	class_ = None
+	class_id = request.GET.get('class_id')
+	if ( not class_id == None ):
+		try:
+			class_ = Class.objects.get(id=class_id)
+		except:
+			class_ = None
+
+	base_dict['class_'] = class_
+
 	##########################################
 	#get the course
 	##############################################	
@@ -191,6 +201,9 @@ def createBaseDict(request):
 
 	base_dict['userLessons'] = user_lessons
 
+	if ( class_):
+		course = class_.course;
+
 	#get the course id and course
 	course_id = request.GET.get('course_id')
 	if ( not course_id == None ):
@@ -200,12 +213,16 @@ def createBaseDict(request):
 			unitAddForm.fields['course'].initial = course
 		else:
 			course = None
+
+	user_classes = None
 	#check course
 	if ( course ):
-        	user_units =  Unit.objects.filter(course=course)	
+        	user_units =  Unit.objects.filter(course=course)
+		user_classes = Class.objects.filter(course=course)
 
 	base_dict['course'] = course
 	base_dict['userUnits'] = user_units
+	base_dict['userClasses'] = user_classes
 
 	uname = request.user.username
 	fullname = user.user_firstname + " " + user.user_lastname

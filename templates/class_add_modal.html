@@ -1,0 +1,41 @@
+
+<div class="modal hide" id="addClassModal">
+ <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">x</button>
+    <h3>Add a class</h3>
+  </div>
+  <div class="modal-body" id="add_class_modal_body">
+	{% include "class_add_form.html" %}
+  </div>
+</div>
+
+
+
+<script type="text/javascript"> 
+
+
+        function addClass() {
+		var formString = $("#addClassForm").serialize();
+		$.ajax({
+			data : formString,
+			dataType : "html",
+			type: "POST",
+			url: "{% url Classes.views.addClass %}",
+			success: function(data) {
+				if (data != "") {
+					var obj = jQuery.parseJSON(data);
+					if (obj.success == "1") {
+						$("#addClassModal").modal("hide");
+						window.location.reload(true);
+					}
+					else {
+						$("#add_class_modal_body").html(obj.response);
+						$("#addClassModal").modal("show");
+					}
+				}
+			}
+		});
+	}
+
+
+</script>

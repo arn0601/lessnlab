@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+{% load dictionary_extras %}
+<!DOCTYPE html>
+{% block content %}
+<div class="container coursebox" style="width: 100%;">
+
+<div class="row">
+	<div class="span8">
+        {{ class_.name }}
+    </div>
+</div>
+<div class="row">
+	Students in this class
+	{% include "manage_students.html" %}
+</div>
+</div> <!-- Course box -->
+
+{% include "class_add_modal.html" %}
+
+
+
+
+
+{% endblock %}

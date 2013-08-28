@@ -5,7 +5,7 @@
     <h3>Request to be added to teacher's course</h3>
   </div>
   <div class="modal-body">
-    <form method="post" action="{% url Courses.views.studentRequestCourse %}" id="requestCourseForm">
+    <form method="post" action="{% url Classes.views.studentRequestClass %}" id="requestCourseForm">
 	{% csrf_token %}
 	{% for field in teacherRequestForm %}
         <div class="control-group">
@@ -33,11 +33,11 @@ $.ajax({
 	data: formstr,
 	dataType:'html',
 	type: "POST", // GET or POST
-      url: {% url Courses.views.studentRequestCourse %}, // the file to call
+      url: "{% url Classes.views.studentRequestClass %}", // the file to call
 	success : function(data){
 		var obj = jQuery.parseJSON(data);
 		if (obj.success=="1") {
-			$("#choose_course_modal_body").html = obj.response;
+			$("#choose_course_modal_body").html( obj.response);
 			$("#chooseCourses").modal("show");
 			$("#requestCourse").modal("hide");
 		}

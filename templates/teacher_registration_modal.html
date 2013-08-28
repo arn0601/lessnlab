@@ -122,7 +122,7 @@
 			data: formString,
 			url: "{% url accounts.views.validateRegisterTeacher %}",
 			success: function(response) {
-				var obj = jQuery.parseJSON(data);
+				var obj = jQuery.parseJSON(response);
 				
 				if (obj.success == "1") {
 					$("#register_teacher").submit();

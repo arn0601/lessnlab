@@ -2,6 +2,7 @@ from django.db import models
 
 # Create your models here.
 class State(models.Model):
+	dummy = models.CharField(max_length=1, null=True, blank=True)
 	value = models.CharField(max_length=8)
 
 	def __unicode__(self):

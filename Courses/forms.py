@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 import Utils.custom_widgets as custom_widgets
 from Courses.models import *
 from accounts.models import TeacherProfile
@@ -59,28 +60,7 @@ class DeleteCourse(forms.Form):
 	course_id.widget = forms.HiddenInput()
 
 
-class TeacherRequestForm(forms.Form):
-	email = forms.CharField(label='Teacher Email')
 
-	def clean_email(self):
-		data = self.cleaned_data['email']
-		try:
-			user = User.objects.get(email=data)
-			teacher = TeacherProfile.objects.get(user=user)
-			return data
-		except:
-			raise forms.ValidationError("Email doesn't exist")
-
-class ClassRequestForm(forms.Form):
-	teacher = forms.ModelChoiceField(label='', queryset=TeacherProfile.objects.none())
-	teacher.widget = forms.HiddenInput()
-	classes = forms.ModelMultipleChoiceField(label='Choose classes', queryset=Class.objects.none())
-
-	def __init__(self, *args, **kwargs):
-		teacher = kwargs.pop('teacher', None)
-		super(ClassRequestForm, self).__init__(*args, **kwargs)
-		if teacher:
-			self.fields['teacher'].initial = teacher
 
 class RecommendCourseParametersForm(forms.Form):
 	state = forms.ModelChoiceField(queryset=State.objects.all(), label='State')
