@@ -1,0 +1,23 @@
+{% extends "student_base.html" %}
+{% load staticfiles %}
+
+<!DOCTYPE html>
+{% block content %}
+
+<!-- Middle column main content -->
+{% for unit in userUnits %}
+<div class="container coursebox">
+<div class="row">
+	<div class="span3">
+        <a class="courseboxtitle" href="/lessons/?unit_id={{ unit.id }}" >{{ unit.name }}</a>
+    </div>
+</div>
+<div class="row">
+	<div class="span4">
+		<h5 class="coursesubtitle">In class {{ class.name }} for {{unit.course.name}}</h5>
+	</div>
+</div>
+</div> 
+{% endfor %}
+
+{% endblock %}

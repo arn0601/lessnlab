@@ -144,7 +144,7 @@ INSTALLED_APPS = (
     'Objectives',
     'Utils',
     'Rating',
-    'Profile'
+    'Profile',
 )
 
 # A sample logging configuration. The only tangible logging

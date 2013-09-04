@@ -15,9 +15,15 @@ from datetime import datetime
 from Objectives.models import Objective
 # Create your views here.
 def showLessons(request):
-	base_dict = base_methods.createBaseDict(request)
-	request.session['last_page'] = '/lessons/?unit_id='+str(base_dict['unit'].id)
-	return render(request,"lesson.html", base_dict)
+	if base_methods.checkUserIsTeacher(request.user):
+		base_dict = base_methods.createBaseDict(request)
+		request.session['last_page'] = '/lessons/?unit_id='+str(base_dict['unit'].id)
+		return render(request,"lesson.html", base_dict)
+	elif base_methods.checkUserIsStudent(request):
+		student_dict = base_methods.createStudentDict(request)
+		return render(request,"student_lesson.html", student_dict)
+	else:
+		return HttpResponseRedirect('/')
 	
 #this function is used when creating objectives to select the initial standard
 def getLessonStandards(request):
