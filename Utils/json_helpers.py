@@ -26,7 +26,7 @@ def setData(request):
             jsonobj.success = 1 
                     #code
         except Exception as e:
-            print "Error",e.strerror
+            print "Error",e
             jsonobj.success = 0
             jsonobj.errormessage=e.strerror
         return jsonobj.getJsonHttpResponse()

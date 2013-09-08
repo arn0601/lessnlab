@@ -111,6 +111,7 @@ def createBaseDict(request):
 	base_dict = {}
 
 	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm, courseParametersForm) = returnBlankForms()
+	print sectionAddForm
 	user = checkUserIsTeacher(request.user)
 	if not user:
 		logout(request)
@@ -142,6 +143,7 @@ def createBaseDict(request):
 	#get the lesson
 	###################################
 	lesson_id = request.GET.get('lesson_id')
+
 	if ( not lesson_id == None ):
 		lesson = Lesson.objects.get(id=lesson_id)
 		if lesson.owner == user:
@@ -241,29 +243,15 @@ def getLessonSpecificInfo(lesson):
 		content_list = []
 		section_content = Content.objects.filter(section=section)
 		for content in section_content:
+			print content
 			content_objs_m2m = content.objectives.all()
 			contentobjs_list = []
 			for c_o in content_objs_m2m:
 				contentobjs_list.append((c_o.id, c_o.description))
-			content_objs[content.id] = contentobjs_list	
-			if (content.content_type == 'Text'):
-				content_list.append(content.textcontent)
-			elif (content.content_type == 'CFU'):
-                                content_list.append(content.cfucontent)
-			elif (content.content_type == 'OnlineVideo'):
-				content_list.append(content.onlinevideocontent)
-			elif (content.content_type == 'OnlineArticle'):
-				content_list.append(content.onlinearticlecontent)
-			elif (content.content_type == 'OnlinePicture'):
-                                content_list.append(content.onlinepicturecontent)
-			elif (content.content_type == 'TeacherNote'):
-				content_list.append(content.teachernotecontent)
-			elif (content.content_type == 'AdministratorNote'):
-				content_list.append(content.administratornotecontent)
-			elif (content.content_type == 'PowerPoint'):
-                                content_list.append(content.powerpointcontent)
- 			elif (content.content_type == 'Assessment'):
-                                content_list.append(content.assessmentcontent)
+			content_objs[content.id] = contentobjs_list
+			content_list.append(content.as_leaf_class())
+			if (content.content_typename == 'Assessment'):
+				content_list.append(content.assessmentcontent)
 				questions = Question.objects.filter(assessment = content.assessmentcontent)
 				question_answer_map = {}
 				for q in questions:
@@ -273,8 +261,6 @@ def getLessonSpecificInfo(lesson):
 					mcans = [MultipleChoiceAnswer.objects.filter(question = q)]
 					question_answer_map[q]+=mcans
 				assessment_dict[content.assessmentcontent.id] = question_answer_map
-			elif (content.content_type == 'Activity'):
-                                content_list.append(content.activitycontent)
 		section_dict[section] = content_list
 	add_content_form_dict = getAddContentForms(str(-1), objective_list)
 	return { 'content_objs' : content_objs, 'standard_list' : standard_list,'objective_list' : objective_list,'sections' : section_dict,  'assessment_dict':assessment_dict, 'content_choices':getContentChoices(),  'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }
@@ -293,9 +279,9 @@ def getAddContentForms(section_id, objective_list):
 	content_form_dict['Media']["OnlineVideo"] = ("Online Video",online_video_form)
 	
 	power_point_form = AddPowerPointContent()
-        power_point_form.fields['content_type'].initial = 'PowerPoint'
-        power_point_form.fields['section_id'].initial = section_id
-        content_form_dict['Media']["PowerPoint"] = ("PowerPoint",power_point_form)
+	power_point_form.fields['content_type'].initial = 'PowerPoint'
+	power_point_form.fields['section_id'].initial = section_id
+	content_form_dict['Media']["PowerPoint"] = ("PowerPoint",power_point_form)
 	
 	online_picture_form = AddOnlinePictureContent()
 	online_picture_form.fields['content_type'].initial = 'OnlinePicture'
@@ -318,9 +304,9 @@ def getAddContentForms(section_id, objective_list):
 	content_form_dict['General']['TeacherNote'] = ("Teacher Note",teacher_note)
 	
 	cfu = AddCFUContent(objectives=objective_list)
-        cfu.fields['content_type'].initial = 'CFU'
-        cfu.fields['section_id'].initial = section_id
-        content_form_dict['CFU']['CFU'] = ("Check for Understanding",cfu)
+	cfu.fields['content_type'].initial = 'CFU'
+	cfu.fields['section_id'].initial = section_id
+	content_form_dict['CFU']['CFU'] = ("Check for Understanding",cfu)
 	
 	administrator_note = AddAdministratorNoteContent()
 	administrator_note.fields['content_type'].initial = 'AdministratorNote'
@@ -328,9 +314,9 @@ def getAddContentForms(section_id, objective_list):
 	content_form_dict['General']['AdministratorNote'] = ("Administrator Note",administrator_note)
 
 	assessment_form = AddAssessmentContent(objectives=objective_list)
-        assessment_form.fields['content_type'].initial = 'Assessment'
-        assessment_form.fields['section_id'].initial = section_id
-        content_form_dict['Assessment']['Assessment'] = ("Assessement",assessment_form)
+	assessment_form.fields['content_type'].initial = 'Assessment'
+	assessment_form.fields['section_id'].initial = section_id
+	content_form_dict['Assessment']['Assessment'] = ("Assessement",assessment_form)
 
 	return content_form_dict
 

@@ -68,30 +68,25 @@
 
 				<div class="well" id="{{content.id }}_content"> </p>
 					<div style="float:right">
-	
-						<a class="btn btn-primary btn-mini" style="" type="button" 
-								href="?content_id={{ content.id }}&action=Edit">Edit</a>
-
 						<a id="delete_content{{ content.id }}" data-contentid="{{ content.id }}" 	
-							class="btn btn-primary btn-mini delete_content" style="" href="#">x</a>
-				
+							class="btn btn-primary btn-mini delete_content" style="" href="#">Delete</a>
 					</div>
-				{% if content.content_type == "OnlineVideo" %}
-					<script type="text/javascript">
-						document.getElementById("{{content.id }}_content").innerHTML = getVideoHtmlbyLink( "{{ content.link }}","{{content.id }}_content");
-
-					</script>
-	
+					{% if content.content_typename == "OnlineVideo" %}
+					<div id="{{content.id }}_content_video">
+						
+							<script type="text/javascript">
+								document.getElementById("{{content.id }}_content_video").innerHTML = getVideoHtmlbyLink( "{{ content.link }}","{{content.id }}_content_video");
+							</script>
+					</div>
 				<!--	<iframe width="300" height="300" src="{{ content.link }}"> </iframe>-->
-				{% elif content.content_type == "Text" %}
+				{% elif content.content_typename == "Text" %}
 						{{ content.text }} 
-				{% elif content.content_type == "PowerPoint" %}		
-
+				{% elif content.content_typename == "PowerPoint" %}		
 					
-										<div id="loadImg"><img src="/static/loading.gif" /></div>	
+					<div id="loadImg"><img src="/static/loading.gif" /></div>	
 					<iframe src="http://docs.google.com/gview?url={{ content.link }}&embedded=true" style="width:500px; height:300px;" onload="document.getElementById('loadImg').style.display='none'"; frameborder="0"></iframe>
 			
-				{% elif content.content_type == "Assessment" %}
+				{% elif content.content_typename == "Assessment" %}
 						
 						<h6> Assessment - {{ content.title }} </h6>
 						{% for objective in content.objectives.all%}
@@ -127,7 +122,7 @@
 								</div>
 							</div>
 						{% endfor %}	
-				{% elif content.content_type == "Activity" %}
+				{% elif content.content_typename == "Activity" %}
 					<h6> Activity - {{ content.name }} </h6>
 						{{ content.text }}
 					<div> Description - {{ content.description }} </div>
@@ -135,21 +130,24 @@
 					<div> Instructions - {{ content.instructions }} </div>
 					<div> Materials - {{ content.materials }} </div>
 					<div> Length - {{ content.length }} </div>			
-				{% elif content.content_type == "OnlinePicture" %}
+				{% elif content.content_typename == "OnlinePicture" %}
 					<h6> Picture </h6>
 
 					<div id="loadImg"><img src="/static/loading.gif" /></div>	
 					<a href="{{content.link}}"><img src="{{ content.link }}" style="max-width:300px; max-height:300px;" onload="document.getElementById('loadImg').style.display='none'"; frameborder="0"></img></a>
 	
-				{% elif content.content_type == "OnlineArticle" %}
+				{% elif content.content_typename == "OnlineArticle" %}
 						<h6> Article </h6>
-				{% elif content.content_type == "TeacherNote" %}
-						<h6> Teacher Note </h6>
-						<h6> {{content.note}}</h6>
-				{% elif content.content_type == "AdministratorNote" %}
-
-						<h6> Admin Note </h6>
-						<h6> {{content.note}}</h6>
+				{% elif content.content_typename == "TeacherNote" %}
+					<h6> Teacher Note </h6>
+					<div class="editabletextarea" model_map_id="133" obj_id="{{ content.id }}" url="{% url setData %}">
+						{{ content.note }}
+					</div>
+				{% elif content.content_typename == "AdministratorNote" %}
+					<h6> Admin Note </h6>
+					<div class="editabletextarea" model_map_id="144" obj_id="{{ content.id }}" url="{% url setData %}">
+						{{ content.note }}
+					</div>
 				{% else %}
 						OTHER CONTENT - Need to define template
 				{% endif %}

@@ -56,7 +56,6 @@ def direct_block_to_template(request, template, block, extra_context=None, mimet
     """
     if extra_context is None:
     	extra_context = {}
-    print "Extra",extra_context
     dictionary = {'params': kwargs}
     for key, value in extra_context.items():
         if callable(value):
@@ -71,7 +70,6 @@ def direct_block_to_template(request, template, block, extra_context=None, mimet
 def direct_json_to_template(request, template, block, extra_context=None, json_dict={}, **kwargs):
     if extra_context is None:
         extra_context = {}
-    print "Extra",extra_context
     dictionary = {'params': kwargs}
     for key, value in extra_context.items():
         if callable(value):

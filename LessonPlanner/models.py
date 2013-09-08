@@ -5,16 +5,15 @@ from Objectives.models import Objective
 from Rating.models import Rating, Rateable
 from Lessons.models import Lesson
 from Types.models import *
+from django.db import models
+from django.contrib.contenttypes.models import ContentType
+from django.db.models.query import QuerySet
 
 SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
 
 CONTENTTYPE = (('Text','Text'),('OnlineVideo','OnlineVideo'),('OnlineArticle','OnlineArticle'),('OnlinePicture','OnlinePicture'),('TeacherNote','TeacherNote'),('AdministratorNote','AdministratorNote'),('Assessment','Assessment'),('PowerPoint','PowerPoint'),('Activity','Activity'))
 
-
 LESSONPLANNER_DROPDOWN_ORDER = ['General', 'Media', 'Checks for Understanding', 'Activity', 'Assessment']
-
-
-
 
 # Create your models here.
 
@@ -25,12 +24,44 @@ class Section(Rateable):
 	description = models.TextField()
 	creation_date = models.DateTimeField(blank=True, null=True)	
 
+
+class SubclassingQuerySet(QuerySet):
+    def __getitem__(self, k):
+        result = super(SubclassingQuerySet, self).__getitem__(k)
+        return result.as_leaf_class()
+
+    def __iter__(self):
+        for item in super(SubclassingQuerySet, self).__iter__():
+            yield item.as_leaf_class()
+
+class ContentManager(models.Manager):
+    def get_query_set(self):
+			print self
+			return SubclassingQuerySet(self.model)
+
+
 class Content(Rateable):
 	section = models.ForeignKey(Section)
 	creation_date = models.DateTimeField()
 	placement = models.IntegerField()
-	content_type = models.CharField(choices=CONTENTTYPE, max_length=32)
+	content_typename = models.CharField(choices=CONTENTTYPE, max_length=32)
+	content_type = models.ForeignKey(ContentType, editable=False, null=True)
 	objectives = models.ManyToManyField('Objectives.Objective', blank=True, null=True)
+	
+	def __unicode__(self):
+		return "Animal" 
+			
+	def save(self, *args, **kwargs):
+		if not self.content_type:
+				self.content_type = ContentType.objects.get_for_model(self.__class__)
+		super(Content, self).save(*args, **kwargs)
+
+	def as_leaf_class(self):
+			content_type = self.content_type
+			model = content_type.model_class()
+			if model == Content:
+					return self
+			return model.objects.get(id=self.id)
 
 class ContentRating(Rating):
 	content = models.ForeignKey('Content')
@@ -40,18 +71,18 @@ class TextContent(Content):
 	text = models.TextField()
 
 class PowerPointContent(Content):
-        link = models.CharField(max_length=256)
+  link = models.CharField(max_length=256)
 
 class ActivityContent(Content):
 	name = models.CharField(max_length=30)
-        description = models.TextField()
+	description = models.TextField()
 	activity_type = models.CharField(max_length=30)
 	instructions = models.TextField()
 	length = models.FloatField()
 	materials = models.TextField()
 
 class CFUContent(Content):
-        text = models.CharField(max_length=256)
+	text = models.CharField(max_length=256)
 	expected_response = models.CharField(max_length=256) 
 
 class OnlineVideoContent(Content):
@@ -65,12 +96,16 @@ class TeacherNoteContent(Content):
 
 class AdministratorNoteContent(Content):
 	note = models.CharField(max_length=256)
+	objects = ContentManager()
+	
+	def __unicode__(self):
+		return 'Sheep:'
 
 class OnlinePictureContent(Content):
 	link = models.CharField(max_length=256)
 
 class AssessmentContent(Content):
-        title = models.CharField(max_length=256)
+  title = models.CharField(max_length=256)
 
 class Question(models.Model):
 	question = models.CharField(max_length=256)

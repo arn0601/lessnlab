@@ -13,15 +13,22 @@
 	{% csrf_token %}
     <form method="post" action="{% url LessonPlanner.views.addSection %}" name="login_form">
         {% csrf_token %}
-        {% for field in sectionAddForm %}
-        <div class="control-group">
-        {{ field.errors.as_text }}
-         <label class="control-label">{{ field.label_tag }}</label>
-            <div class="controls">
-                {{ field }}
-            </div>
-                </div>
-    {% endfor %}
+				
+				{% for field in sectionAddForm.visible_fields %}
+					<div class="control-group">
+					{{ field.errors.as_text }}
+							<label class="control-label">{{ field.label_tag }}</label>
+							<div class="controls">
+								{{ field }}
+							</div>
+					</div>
+				{% endfor %}
+
+				{% for field in sectionAddForm.hidden_fields %}
+						<div style="display:none;">{{ field }}</div>
+				{% endfor %}
+		
+		
      <p><button type="submit" class="btn btn-primary">Submit</button>
                 <button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
 <!--Department,Subject,Year-->
@@ -43,17 +50,21 @@
 		<div>
     		<form id="content_form" method="post" action="{% url LessonPlanner.views.addContent %}" name="c_{{ type }}">
 		{% csrf_token %}
-			{% for field in tupledata.1 %}
-		 	<div class="control-group">
-			{{ field.errors.as_text }}
-				<label class="control-label">{{ field.label_tag }}</label>
-			    	<div class="controls row-fluid">
-				{{ field }}
-			    	</div>
-			 </div>
-			 {% endfor %}
-			<p>
-			
+			{% for field in tupledata.1.visible_fields %}
+				<div class="control-group">
+				{{ field.errors.as_text }}
+						<label class="control-label">{{ field.label_tag }}</label>
+						<div class="controls">
+							{{ field }}
+						</div>
+				</div>
+			{% endfor %}
+
+			{% for field in tupledata.1.hidden_fields %}
+					<div style="display:none;">{{ field }}</div>
+			{% endfor %}	
+				
+
 			{% if type == "Assessment" %}
 			<div id="assess_q">
 			</div>

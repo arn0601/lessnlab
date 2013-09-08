@@ -6,13 +6,10 @@ input[type=text]
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	-border-radius: 2px;
-	display:none;
 	margin-left: 10px;
-	
-	
 }
 
-textarea
+textarea[class=editabletextarea]
 {
   margin-bottom: 10px;		
 	font-size:12px;
@@ -20,7 +17,6 @@ textarea
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	-border-radius: 2px;
-	display:none;
 	width: 600px;
 	margin-left: 10px;
 }

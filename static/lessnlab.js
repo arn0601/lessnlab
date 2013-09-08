@@ -21,7 +21,7 @@ function getVideoIDfromLink(url)
 			function getVideoHtmlbyLink(video_link,div_id)
 			{
 				video_id = getVideoIDfromLink(video_link);
-				return getVideoHtmlbyID(video_id,div_id);
+				getVideoHtmlbyID(video_id,div_id);
 			};
 
 			function getVideoHtmlbyID(video_id,div_id)
@@ -32,6 +32,23 @@ function getVideoIDfromLink(url)
 					jQuery("#"+div_id).html(getVideoHtml(video));
 				});
 			};
+			function actualNextSibling(el)
+			{    // needed to smooth out default firefox/IE behavior
+				do { el = el.nextSibling } while (el && el.nodeType !== 1);
+          return el;
+			};
+
+
+			function onVidImgClick(el)
+			{
+				actualNextSibling(el).style.display='inline';
+				el.style.display='none';
+				var iframe = actualNextSibling(el).children[0];
+				var url = iframe.getAttribute("temp");
+				iframe.setAttribute("src",url);
+				el.parentNode.style.width='600px';
+				el.parentNode.children[0].style.display='none';
+			};
 
 			function getVideoHtml(video)
 			{
@@ -39,7 +56,12 @@ function getVideoIDfromLink(url)
 				var description = video.description.substring(0,32);
 				var video_id = video.videoId;
 				var url = "http://www.youtube.com/watch?feature=player_embedded&v=" + video_id;
-				return "<div style='width:330px;'> <div style='width:175px; float:right'> <b>Title: </b> <a href='" + url + "' > "  + title + "</a><div> <b> Description: </b>" + description +"</div> </div> <div onclick='onVidImgClick(this)' > <img src='http://img.youtube.com/vi/" + video_id + "/1.jpg' alt='splash' width='120px' height='90px' style='cursor: pointer' style='display:inline'/ ></div> <div style='display: none'>   <iframe width='200px' height='150px' temp='http://www.youtube.com/embed/" + video_id + "?autoplay=0'> </iframe></div>";
+				return "<div style='width:430px;'> <div style='width:275px; float:right'> " +
+							"<b>Title: </b> <a href='" + url + "' > "  + title +
+							"</a><div> <b> Description: </b>" + description +
+							"</div> </div> <div onclick='onVidImgClick(this)' > " +
+							"<img src='http://img.youtube.com/vi/" + video_id + "/1.jpg' alt='splash' width='120px' height='90px' style='cursor: pointer' style='display:inline'/ ></div> " +
+							"<div style='display: none'>   <iframe width='300px' height='200px' temp='http://www.youtube.com/embed/" + video_id + "?autoplay=0&wmode=transparent'> </iframe></div>";
 
 			};
 

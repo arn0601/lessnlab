@@ -2,7 +2,7 @@
 $(document).ready(function(){
 	$('.editabletextarea').click(function(){
 			$(this).hide();
-			var div = $('<textarea wrap="soft">' + $.trim($(this).html()) + '</textarea>');
+			var div = $('<textarea class="editabletextarea" wrap="soft">' + $.trim($(this).html()) + '</textarea>');
 			var attributes = $(this).prop("attributes");
 			// loop through <select> attributes and apply them on <div>
 			$.each(attributes, function() {
@@ -18,7 +18,7 @@ $(document).ready(function(){
 	$('.editabletext').click(function(){
 			$(this).hide();
 		  
-			var div = $('<input type="text" value="' + $.trim($(this).html()) + '" />');
+			var div = $('<input type="text" class="editabletext" value="' + $.trim($(this).html()) + '" />');
 			var attributes = $(this).prop("attributes");
 			// loop through <select> attributes and apply them on <div>
 			$.each(attributes, function() {
@@ -31,7 +31,7 @@ $(document).ready(function(){
 	});
 		
 	$(function(){
-	$(document).on('blur', 'textarea', function(e){ 
+	$(document).on('blur', 'textarea.editabletextarea', function(e){ 
 		if ($.trim(this.value) == ''){  
 		 this.value = (this.defaultValue ? this.defaultValue : '');  
 		}
@@ -55,7 +55,7 @@ $(document).ready(function(){
 	});
 		
 	$(function(){
-	$(document).on('blur', 'input[type="text"]', function(e){ 
+	$(document).on('blur', 'input.editabletext', function(e){ 
 		if ($.trim(this.value) == ''){  
 		 this.value = (this.defaultValue ? this.defaultValue : '');  
 		}

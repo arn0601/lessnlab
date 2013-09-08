@@ -28,11 +28,64 @@ import urlparse
 
 def lesson_presentation(request):
 	base_dict = base_methods.createBaseDict(request)
+	print "Hitting SErver"
 	return render(request,"lesson_presentation.html", base_dict)
+
+
+def get_content_element(request):
+	if request.method == 'GET':
+		base_dict = base_methods.createBaseDict(request)
+		lesson = base_dict['lesson']
+		if ( lesson ):
+			origcontent_num = int(request.GET.get('content_num',-1))
+			origsection_num = int(request.GET.get('section_num',0))
+			direction = int(request.GET.get('direction',0))
+				
+			secs = Section.objects.filter(lesson=lesson).order_by('placement')
+			curSec = secs[origsection_num]
+			conts = Content.objects.filter(section=curSec).order_by('placement')
+			section_num = origsection_num
+			content_num = origcontent_num + direction
+			
+			curCont = None
+			origContent = None
+			if origcontent_num != -1:
+				origContent = conts[origcontent_num]
+			if content_num != -1:
+				curCont = conts[content_num] if len(conts) > content_num else None
+			
+			while len(conts) <= content_num or 0 > content_num:
+				section_num = section_num + direction
+				if len(secs) <= section_num or section_num < 0 :
+					content_num = int(request.GET.get('content_num',-1))
+					section_num = int(request.GET.get('section_num',0))
+					curCont = origContent
+					break
+				curSec = secs[section_num]
+				conts = Content.objects.filter(section=curSec).order_by('placement')
+				if direction != -1:
+					content_num = 0
+				else:
+					content_num = len(conts) - 1
+				curCont = conts[content_num]
+			context = { 'content' : curCont.as_leaf_class() }
+			print str(curCont)
+			additional_params = {'success':'1', 'lesson_id' : lesson.id,
+														'content_num' : content_num, 'section_num' : section_num}
+			if content_num  < 0:
+				print "No Content"
+				return HttpResponse(simplejson.dumps({'success':'0'}))
+	
+			htmlFile = "content/" + curCont.content_typename + "_presentation.html"
+			print htmlFile
+			return direct_json_to_template(request,htmlFile, 'contentData', context, additional_params)
+		return HttpResponse(simplejson.dumps({'success':'0'}))
+	return HttpResponseRedirect('/courses/')
+
 
 def activity_add(request):
 	if request.method == 'POST':
-                addCourseForm = AddActivityContent(data=request.POST)
+		addCourseForm = AddActivityContent(data=request.POST)
 		if addCourseForm.is_valid():
 			addCourseForm.save()
 		else:
@@ -134,7 +187,7 @@ def showLessonPlanner(request):
 	action = request.GET.get('action') 
 	if action == "Edit":
 		content_id = request.GET.get('content_id')
-        	return EditContentRequest(request, content_id)
+		return EditContentRequest(request, content_id)
 	base_dict = base_methods.createBaseDict(request)
 	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
 	base_dict.update(lesson_info)
@@ -199,13 +252,13 @@ def addContent(request):
 			section = Section.objects.get(id=int(contentForm.data['section_id']))
 			content.section = section
 			content.creation_date=datetime.now()
-			content.content_type = contentForm.data['content_type']
+			content.content_typename = contentForm.data['content_type']
 			content.placement = getMaxCount(section)+1
 			content.save()
 			if objectives:
-	                        for obj_id in objectives:
-                                        o = Objective.objects.get(id=obj_id)
-                                        content.objectives.add(o)
+				for obj_id in objectives:
+											o = Objective.objects.get(id=obj_id)
+											content.objectives.add(o)
 			if fields != None:
 				for qa in fields:
 					(q,ans) = qa
@@ -240,23 +293,23 @@ def saveVideoContent(contentForm, request):
 			content = OnlineVideoContent()
 			content.link = cleanVideoLink(online_video_form.data['link'])
 			section = Section.objects.get(id=int(contentForm.data['section_id']))
-                        content.section = section
-                        content.creation_date=datetime.now()
-                        content.content_type = contentForm.data['content_type']
+			content.section = section
+			content.creation_date=datetime.now()
+			content.content_typename = contentForm.data['content_type']
 			content.placement = getMaxCount(section)+1
 			content.save()
 		for link in online_video_form.cleaned_data['rl']:
 			content = OnlineVideoContent()
 			content.link = cleanVideoLink(link)
-                        section = Section.objects.get(id=int(contentForm.data['section_id']))
-                        content.section = section
-                        content.creation_date=datetime.now()
-                        content.content_type = contentForm.data['content_type']
+			section = Section.objects.get(id=int(contentForm.data['section_id']))
+			content.section = section
+			content.creation_date=datetime.now()
+			content.content_typename = contentForm.data['content_type']
 			content.placement = getMaxCount(section)+1
-                        content.save()
+			content.save()
 		return True
 	print online_video_form.errors
-        return (False, None, None)
+	return (False, None, None)
 
 
 def slicedict(s, d):

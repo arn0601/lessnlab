@@ -13,18 +13,14 @@
   	<script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script>
 		<script src="/static/bootstrap.js"></script>
  		<script src="/static/lessnlab.js"></script>
+		<script src="/static/purl.js"></script>
+		<script src="/static/bbq.js"></script>
 	</head>
 <input type="button" value="Go Fullscreen" id="fsbutton">
 	<div id='lesson_presentation'>
-
-		
-
-		asdasd
-		asd
-		asd
-
-
-
+		<div id='content'>
+			
+		</div>
 	</div>
 
 </html>
@@ -34,12 +30,61 @@
 var fsButton = document.getElementById('fsbutton');
 var lesson_presentation = document.getElementById('lesson_presentation');
 
+$(document).ready(function() {
+  getHTMLElementData(0)
+});
+
+function getPreviousHTMLElement()
+{
+	getHTMLElementData(-1)
+}
+
+function getNextHTMLElement()
+{
+	getHTMLElementData(1)
+}
+
+function getHTMLElementData(direction_id) {
+		$.ajax({ // create an AJAX call...
+			data: {
+				lesson_id : $.url().param("lesson_id"),
+				section_num : $.deparam.fragment()["section_num"],
+				content_num : $.deparam.fragment()["content_num"],
+				direction : direction_id,
+			},
+			type: "GET", // GET or POST
+			url: "{% url LessonPresentationContent %}",
+			success: function(response) { // on success..
+				if (response != "") {
+					var obj = response;
+					if (obj.success == "1") {
+						$("#content").html(obj.response);
+						
+						var newUrl = "section_num=" + obj.section_num
+												+ "&content_num=" + obj.content_num
+						location.hash = newUrl
+					}
+					else {
+						$("#content").html("Error. Please reload page.");	
+					}
+				}
+			}
+		});
+	}
+	
+	
+
+
 $('#lesson_presentation').mouseenter(function(){
  	
 });
 $(document).keydown(function(e){
     if (e.keyCode == 37) { 
-       alert( "left pressed" );
+       getPreviousHTMLElement()
+       return false;
+    }
+		else if (e.keyCode == 39) { 
+       getNextHTMLElement()
        return false;
     }
 });
