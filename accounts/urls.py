@@ -9,7 +9,7 @@ from accounts.forms import *
 urlpatterns = patterns('',
 	url(r'^registerTeacher/$',accounts.views.registerTeacher,{'backend':'registration.backends.simple.SimpleBackend', 'form_class' : TeacherRegistrationForm, 'success_url': '/courses/', 'template_name': 'registration/registration_teacher.html' },name='accounts.views.registerTeacher'),
 
-	url(r'^registerStudent/$',accounts.views.registerStudent,{'backend':'registration.backends.simple.SimpleBackend', 'form_class' : StudentRegistrationForm, 'success_url': '/courses/', 'template_name': 'registration/registration_student.html' },name='accounts.views.registerStudent'),
+	url(r'^registerStudent/$',accounts.views.registerStudent,{'backend':'registration.backends.simple.SimpleBackend', 'form_class' : StudentRegistrationForm, 'success_url': '/classes/classes/', 'template_name': 'registration/registration_student.html' },name='accounts.views.registerStudent'),
 
     (r'^validateLogin/$', 'accounts.views.validateLogin'),
     (r'^validateRegisterTeacher/$', 'accounts.views.validateRegisterTeacher'),

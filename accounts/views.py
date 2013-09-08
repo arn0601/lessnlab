@@ -53,6 +53,7 @@ def registerStudent(request, backend, success_url=None, form_class=None,
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
             new_user = backend.register(request, **form.cleaned_data)
+            print new_user.first_name
             if success_url is None:
                 to, args, kwargs = backend.post_registration_redirect(request, new_user)
                 return redirect(to, *args, **kwargs)

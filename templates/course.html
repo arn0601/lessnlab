@@ -22,6 +22,10 @@
     <div class="span1" style="width: 10px;">
     	 <a class="close" rel="tooltip" data-placement="right" title="Delete Course" onClick="requestDeleteCourse('{{ course.id }}')"><i class="icon-trash"></i></a>
     </div>
+
+    <div class="span5">
+    	 <a rel="tooltip" data-placement="right" title="Course Classes" href="{% url Classes.views.showClasses %}?course_id={{ course.id }}">Goto Classes</a>
+    </div>
 </div>
 <div class="row">
 	<div class="span3">

@@ -9,10 +9,10 @@ from django.db import models
 class Class(models.Model):
 	course = models.ForeignKey('Courses.Course')
 	name = models.CharField(max_length=32)
-	current_unit = models.ForeignKey('Units.Unit')
-	current_lesson = models.ForeignKey('Lessons.Lesson')
-	current_section = models.ForeignKey('LessonPlanner.Section')
-	current_content = models.ForeignKey('LessonPlanner.Content')
+	current_unit = models.ForeignKey('Units.Unit', blank=True, null=True)
+	current_lesson = models.ForeignKey('Lessons.Lesson', blank=True, null=True)
+	current_section = models.ForeignKey('LessonPlanner.Section', blank=True, null=True)
+	current_content = models.ForeignKey('LessonPlanner.Content', blank=True, null=True)
 
 class ClassStudents(models.Model):
 	course_class = models.ForeignKey('Class')

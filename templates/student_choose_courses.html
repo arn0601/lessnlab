@@ -6,23 +6,25 @@
   </div>
   <div class="modal-body" id="choose_course_modal_body">
     {% block choose_course_form %}
-    <form method="post" action="{% url Courses.views.studentAddCourse %}" id="choose_course_form">
+	{% if classesForm %}
+    <form method="post" action="{% url Classes.views.studentAddClass %}" id="choose_course_form">
 	{% csrf_token %}
-	{% if teacherCoursesRequestForm %}
-	{% for field in teacherCoursesRequestForm %}
+	{% for field in classesForm %}
         <div class="control-group">
         {{ field.errors.as_text }}
          <label class="control-label">{{ field.label_tag }}</label>
             <div class="controls">
-                {{ field }}
             </div>
+		{{ field }} 
    		</div>
+	</div>
     {% endfor %}
-	{% endif %}
+
      <p><button type="submit" class="btn btn-primary">Submit</button>
 		<button type="button" data-dismiss="modal" class="btn btn-primary">Cancel</button>
       </p>
     </form>
+	{% endif %}
 	{% endblock %}
   </div>
 </div>
@@ -38,7 +40,7 @@ $.ajax({
 			data: formstr,
 			dataType:'html',
 			type: "POST", // GET or POST
-      url: {% url Courses.views.studentAddCourse %}, // the file to call
+      url: "{% url Classes.views.studentAddClass %}", // the file to call
 			success : function(data){
 					var obj = jQuery.parseJSON(data);
 					if (obj.success=="1") {
