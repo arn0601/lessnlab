@@ -4,7 +4,7 @@
 {% block content %}
 {% for class_ in userClasses %}
          <div class="unitbox" id="u1">
-       <a href="/class/?class_id={{ class_.id }}" ><h4>{{ class_.name }}</h4></a>
+       <a href="/units/?class_id={{ class_.id }}" ><h4>{{ class_.name }}</h4></a>
 	<p><b>Year:</b>
         {{ class_.course.year }}
 	<p>

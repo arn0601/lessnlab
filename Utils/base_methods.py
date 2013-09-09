@@ -18,7 +18,7 @@ import simplejson
 from Classes.models import Class, ClassStudents
 from Classes.forms import TeacherRequestForm
 from django.contrib.auth import logout
-
+from datetime import datetime
 
 def returnStudentForms():
 	teacherRequestForm = TeacherRequestForm()
@@ -46,7 +46,8 @@ def createStudentDict(request):
 		return None
 	#get all courses associated with the user
 	classes = [c.course_class for c in ClassStudents.objects.filter(student=user, approved=True)]
-		
+	now = datetime.today()
+	
 	###################################
 	#get the lesson
 	###################################
@@ -77,7 +78,7 @@ def createStudentDict(request):
 	user_units = None
 	#if we have a unit get a course, and get the lesson for the unit
 	if ( unit ):
-		user_lessons = Lesson.objects.filter(unit=unit)
+		user_lessons = Lesson.objects.filter(unit=unit).filter(start_date__lt=now)
 
 	#get the course id and course
 	class_id = request.GET.get('class_id')
@@ -86,9 +87,9 @@ def createStudentDict(request):
 	
 	#check course
 	if ( class_ ):
-		user_units =  Unit.objects.filter(course=class_.course)
+        	user_units =  Unit.objects.filter(course=class_.course).filter(start_date__lt=now)
 		try:
-			allowed = ClassStudents.objects.get(course_class=class_, student=user, allowed=True)
+			allowed = ClassStudents.objects.get(course_class=class_, student=user, approved=True)
 		except:
 			print 'Student not allowed to access course'
 			return None

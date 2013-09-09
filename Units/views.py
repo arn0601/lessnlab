@@ -15,10 +15,16 @@ import simplejson
 
 # Create your views here.
 def showUnits(request):
-	base_dict = base_methods.createBaseDict(request)
-	#return from base
-	request.session['last_page'] = '/units/?course_id='+str(base_dict['course'].id)
-	return render(request,"unit.html", base_dict)	
+	if base_methods.checkUserIsTeacher(request.user):
+		base_dict = base_methods.createBaseDict(request)
+		#return from base
+		request.session['last_page'] = '/units/?course_id='+str(base_dict['course'].id)
+		return render(request,"unit.html", base_dict)
+	if base_methods.checkUserIsStudent(request):
+		student_dict = base_methods.createStudentDict(request)
+		return render(request,"student_unit.html", student_dict)
+	else:
+		return HttpResponseRedirect('/')
 #show the lessons of a unit
 
 def addUnit(request):
@@ -156,3 +162,10 @@ def publicUnitView(request):
 	base_dict['unitStandards'] = unit_standards
 	base_dict['unitLessons'] = unit_lesson_list
 	return render(request,'public_unit_view.html',base_dict)
+
+###############################################
+
+def showStudentUnits(request):
+	if request.method == 'GET':
+		student_dict = base_methods.createStudentDict(request)
+		render(request, "student_units.html", student_dict)
