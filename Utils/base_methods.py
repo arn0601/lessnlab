@@ -35,7 +35,7 @@ def checkUserIsStudent(request):
 	if checkUserType(request) == 'Student':
 		user = StudentProfile.objects.get(user=request.user)
 		return user
-        else:
+	else:
 		logout(request)
 		return None
 
@@ -46,7 +46,7 @@ def createStudentDict(request):
 		return None
 	#get all courses associated with the user
 	classes = [c.course_class for c in ClassStudents.objects.filter(student=user, approved=True)]
-	
+		
 	###################################
 	#get the lesson
 	###################################
@@ -86,7 +86,7 @@ def createStudentDict(request):
 	
 	#check course
 	if ( class_ ):
-        	user_units =  Unit.objects.filter(course=class_.course)
+		user_units =  Unit.objects.filter(course=class_.course)
 		try:
 			allowed = ClassStudents.objects.get(course_class=class_, student=user, allowed=True)
 		except:
@@ -96,7 +96,7 @@ def createStudentDict(request):
 	uname = request.user.username
 
 	#return (stuff for function, stuff to render)
-	return {'class_': class_, 'unit': unit, 'lesson': lesson, 'userClasses': classes, 'userUnits':user_units, 'userLessons': user_lessons, 'username': uname, 'fullname': uname, 'teacherRequestForm': teacherRequestForm, 'coursesWereRequested': 0}
+	return {'user' : user, 'class_': class_, 'unit': unit, 'lesson': lesson, 'userClasses': classes, 'userUnits':user_units, 'userLessons': user_lessons, 'fullname': uname, 'teacherRequestForm': teacherRequestForm, 'coursesWereRequested': 0}
 
 def checkUserIsTeacher(request_user):
 	try:
@@ -111,7 +111,6 @@ def createBaseDict(request):
 	base_dict = {}
 
 	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm, courseParametersForm) = returnBlankForms()
-	print sectionAddForm
 	user = checkUserIsTeacher(request.user)
 	if not user:
 		logout(request)
@@ -260,7 +259,6 @@ def getLessonSpecificInfo(lesson):
 		content_list = []
 		section_content = Content.objects.filter(section=section)
 		for content in section_content:
-			print content
 			content_objs_m2m = content.objectives.all()
 			contentobjs_list = []
 			for c_o in content_objs_m2m:

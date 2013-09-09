@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from accounts.forms import *
 
 def registerUserProfile(sender, user, request, **kwargs):
-	from accounts.models import TeacherProfile, StudentProfile, TeacherProfileAttributes
+	from accounts.models import TeacherProfile, StudentProfile, TeacherProfileAttributes, StudentProfileAttributes
 	form = UserProfileRegistrationForm(data=request.POST)
 	if form.data['user_type'] == 'Teacher':
 		form = TeacherRegistrationForm(request.POST)
@@ -30,3 +30,5 @@ def registerUserProfile(sender, user, request, **kwargs):
 		user_profile.user_school_state = state
 		user_profile.user_type = 'Student'
 		user_profile.save()
+		student_profileAttrs = StudentProfileAttributes(student=user_profile)
+		student_profileAttrs.save()

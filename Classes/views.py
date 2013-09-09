@@ -48,16 +48,16 @@ def addClass(request):
 		return HttpResponse(simplejson.dumps({'success':'0'}))
 
 def requestAddClassForm(request):
-        if request.method == 'POST':
+	if request.method == 'POST':
 		course_id = request.POST.get('course_id')
 		try:
 			course = Course.objects.get(id=course_id)
 		except:
 			return HttpResponse(simplejson.dumps({'success':'0'}))
-                teacher = base_methods.checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request.user)
 		if teacher == None:
 			logout(request)
-                        return HttpResponse(simplejson.dumps({'success':'0'}))
+			return HttpResponse(simplejson.dumps({'success':'0'}))
 		else:
 			acf = AddClassForm()
 			acf.fields['course'].initial = course

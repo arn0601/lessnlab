@@ -19,3 +19,4 @@ class ClassStudents(models.Model):
 	student = models.ForeignKey('accounts.StudentProfile')
 	registered = models.BooleanField()
 	approved = models.BooleanField()
+

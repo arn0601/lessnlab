@@ -1,0 +1,8 @@
+{% block contentData %} 
+  <div>
+		<div id="loadImg"><img src="/static/loading.gif" /></div>	
+		<a href="{{content.link}}"><img src="{{ content.link }}" style="max-width:300px; max-height:300px;"
+                                    onload="document.getElementById('loadImg').style.display='none'";
+                                    frameborder="0"></img></a>
+  </div>
+{% endblock %}

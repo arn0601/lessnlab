@@ -41,6 +41,11 @@ class TeacherRating(Rating):
 
 class StudentProfile(UserProfile):
 	dummy = models.CharField(max_length=32)
+	
+	
+class StudentProfileAttributes(models.Model):
+	student					= models.OneToOneField(StudentProfile)
+	bio							= models.CharField(null=True, verbose_name="Bio", max_length=1024)
 
 
 from registration.signals import user_registered

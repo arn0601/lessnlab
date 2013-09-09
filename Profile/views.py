@@ -1,10 +1,47 @@
 # Create your views here.
 from django.shortcuts import render_to_response,render
 from Utils import base_methods,json_helpers
-from accounts.models import TeacherProfileAttributes
+from accounts.models import TeacherProfileAttributes,StudentProfileAttributes
 from Utils.models import ModelMapDictionary
+from django.contrib.auth import logout
 
 def view_profile(request):
+	if base_methods.checkUserIsTeacher(request.user):
+		return show_teacherprofile(request)
+	elif base_methods.checkUserIsStudent(request):
+		return show_studentprofile(request)
+	else:
+		logout(request)
+
+def show_studentprofile(request):
+	base_dict = base_methods.createStudentDict(request)
+	student = StudentProfileAttributes.objects.get(student=base_dict['user'])
+	
+	row = ModelMapDictionary.objects.get(model_name="StudentProfileAttributes",attribute_name="bio",app_name="accounts" )
+	about_attrs = []
+	bio = {}
+	bio["model_map_id"] 			= row.id
+	bio["id"] 								= student.id
+	bio["value"] 							= getattr(student, row.attribute_name)
+	bio["humanreadable_name"] = row.humanreadable_name
+	bio["istextarea"]						= True
+	
+	row = ModelMapDictionary.objects.get(model_name="User",attribute_name="email",app_name="auth" )
+	email = {}
+	email["model_map_id"] 			= row.id
+	email["id"] 								= request.user.id
+	email["value"] 							= getattr(request.user, row.attribute_name)
+	email["humanreadable_name"] = "Email"
+	
+	about_attrs = []
+	about_attrs.append(bio)
+	about_attrs.append(email)
+	
+	base_dict["about_attrs"] 			= about_attrs
+	return render(request,"student/student_profile.html",base_dict)
+	
+
+def show_teacherprofile(request):
 	base_dict = base_methods.createBaseDict(request)
 	teacher = TeacherProfileAttributes.objects.get(teacher=base_dict['user'])
 	

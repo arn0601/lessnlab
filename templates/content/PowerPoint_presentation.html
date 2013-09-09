@@ -1,0 +1,7 @@
+{% block contentData %} 
+  <div>
+   	<div id="loadImg"><img src="/static/loading.gif" /></div>	
+					<iframe src="http://docs.google.com/gview?url={{ content.link }}&embedded=true" style="width:500px; height:300px;"
+            onload="document.getElementById('loadImg').style.display='none'"; frameborder="0"></iframe>
+  </div>
+{% endblock %}

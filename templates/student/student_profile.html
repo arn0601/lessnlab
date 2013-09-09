@@ -90,10 +90,10 @@
 <hr/>
 <div class="row">
 	<div class="span12">
-		<h4>Courses ({{ userCourses|length }})</h4>
+		<h4>Classes ({{ userClasses|length }})</h4>
 		<ul>
-			{% for course in userCourses %}
-		 		<li><a href="/units/?course_id={{ course.id }}">{{ course.name }} </a> - {{ course.subject }}</li>
+			{% for c in userClasses %}
+		 		<li><a href="/classes/?class_id={{ c.id }}">{{ c.name }} </a> - {{ c.course.name }}</li>
 			{% endfor %}
 		</ul>
 	</div>
