@@ -15,7 +15,7 @@ import simplejson
 
 # Create your views here.
 def showUnits(request):
-	if base_methods.checkUserIsTeacher(request.user):
+	if base_methods.checkUserIsTeacher(request):
 		base_dict = base_methods.createBaseDict(request)
 		#return from base
 		request.session['last_page'] = '/units/?course_id='+str(base_dict['course'].id)
@@ -57,7 +57,7 @@ def editUnit(request):
 def addUnitStandards(request):
 	if request.method == 'POST':
 		form = UnitStandardsForm(data=request.POST)
-		teacher = base_methods.checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request)
 		if not teacher:
 			logout(request)
 			return HttpResponseRedirect('/')
@@ -169,3 +169,23 @@ def showStudentUnits(request):
 	if request.method == 'GET':
 		student_dict = base_methods.createStudentDict(request)
 		render(request, "student_units.html", student_dict)
+
+
+#TODO finish this
+def cloneUnit(request):
+	if request.method  == 'POST':
+		teacher = base_methods.checkUserIsTeacher(request)
+		if not teacher:
+			return HttpResponse('')
+		course_id = request.POST.get('course_id')
+		if course_id == None:
+			return HttpResponse('')
+		try:
+			course = Course.objects.get(id=course_id)
+		except:
+			return HttpResponse('')
+		new_course = course_methods.deepcopy_course(course, teacher)
+		if new_course:
+			return HttpResponse('success')
+	return HttpResponse('')
+

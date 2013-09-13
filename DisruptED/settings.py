@@ -177,7 +177,7 @@ LOGGING = {
 }
 
 import dj_database_url
-DATABASES['default'] =  dj_database_url.config()
+#DATABASES['default'] =  dj_database_url.config()
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.request',
@@ -190,5 +190,6 @@ ACCOUNT_ACTIVATION_DAYS=3
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
-LOGIN_URL = "/"
-LOGIN_EXEMPT_URLS = (r'^accounts/registerTeacher/',r'^accounts/validateLogin/', r'^accounts/validateRegisterTeacher/',r'^$',r'^team/' )
+LOGIN_URL_REGEX = r'^$'
+LOGIN_URL = '/'
+LOGIN_EXEMPT_URLS = (r'^accounts/registerTeacher/',r'^accounts/validateLogin/', r'^accounts/validateRegisterTeacher/',r'^team/',r'^login/' )

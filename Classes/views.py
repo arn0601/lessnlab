@@ -33,7 +33,7 @@ def editClassStudents(request):
 
 def addClass(request):
 	if request.method == 'POST':
-		teacher = base_methods.checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request)
 		if teacher == None:
 			logout(request)
 			return HttpResponse(simplejson.dumps({'success':'0'}))
@@ -54,7 +54,7 @@ def requestAddClassForm(request):
 			course = Course.objects.get(id=course_id)
 		except:
 			return HttpResponse(simplejson.dumps({'success':'0'}))
-		teacher = base_methods.checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request)
 		if teacher == None:
 			logout(request)
 			return HttpResponse(simplejson.dumps({'success':'0'}))
@@ -67,7 +67,7 @@ def requestAddClassForm(request):
 		return HttpResponse(simplejson.dumps({'success':'0'}))
 
 def showClasses(request):
-	if base_methods.checkUserIsTeacher(request.user):
+	if base_methods.checkUserIsTeacher(request):
 		base_dict = base_methods.createBaseDict(request)
 		return render(request, "classes.html", base_dict)
 	elif base_methods.checkUserIsStudent(request):

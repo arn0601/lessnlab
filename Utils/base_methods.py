@@ -99,11 +99,12 @@ def createStudentDict(request):
 	#return (stuff for function, stuff to render)
 	return {'user' : user, 'class_': class_, 'unit': unit, 'lesson': lesson, 'userClasses': classes, 'userUnits':user_units, 'userLessons': user_lessons, 'fullname': uname, 'teacherRequestForm': teacherRequestForm, 'coursesWereRequested': 0}
 
-def checkUserIsTeacher(request_user):
-	try:
-		user = TeacherProfile.objects.get(user=request_user)
+def checkUserIsTeacher(request):
+	if checkUserType(request) == 'Teacher':
+		user = TeacherProfile.objects.get(user=request.user)
 		return user
-	except:
+	else:
+		logout(request)
 		return None
 
 def createBaseDict(request):
@@ -112,7 +113,7 @@ def createBaseDict(request):
 	base_dict = {}
 
 	(courseAddForm, unitAddForm,lessonAddForm,sectionAddForm, courseParametersForm) = returnBlankForms()
-	user = checkUserIsTeacher(request.user)
+	user = checkUserIsTeacher(request)
 	if not user:
 		logout(request)
 		return None

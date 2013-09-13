@@ -15,7 +15,7 @@ from datetime import datetime
 from Objectives.models import Objective
 # Create your views here.
 def showLessons(request):
-	if base_methods.checkUserIsTeacher(request.user):
+	if base_methods.checkUserIsTeacher(request):
 		base_dict = base_methods.createBaseDict(request)
 		request.session['last_page'] = '/lessons/?unit_id='+str(base_dict['unit'].id)
 		return render(request,"lesson.html", base_dict)
@@ -90,7 +90,7 @@ def addLessonObjectives(request):
 	if request.method == 'POST':
 		form = CreateObjectivesForm(data=request.POST)
 		
-		teacher = base_methods.checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request)
 		if not teacher:
 			logout(request)
 			return HttpResponseRedirect('/')
@@ -131,7 +131,7 @@ def addLessonStandards(request):
 	if request.method == 'POST':
 		form = LessonStandardsForm(data=request.POST)
 
-		teacher = base_methods.checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request)
 		if not teacher:
 			logout(request)
 			return HttpResponseRedirect('/')

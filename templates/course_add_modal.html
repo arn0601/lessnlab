@@ -1,4 +1,4 @@
-
+{% load dictionary_extras %}
 <div class="modal hide" id="chooseNewCourse">
 	{% block chooseNewCourse %} 
  <div class="modal-header">
@@ -27,6 +27,18 @@
 	{% endblock %}
 </div>
 
+<div class="modal hide" id="showRecommendedCoursesModal">
+<div class="modal-header">
+	<button type="button" class="close" data-dismiss="modal">x</button>
+	<h3> Recommended Courses </h3>
+</div>
+
+<div class="modal-body" >
+	<div id="showRecommendedCourses">
+	</div>
+</div>
+
+</div>
 
 <div class="modal hide" id="addCourse">
 	{% block addCourse %} 
@@ -94,8 +106,25 @@
 		$("#chooseNewCourse").modal("show");
 	}
 	
-	function getRecommendCourses() {
-		formString = $("#getRecommededCoursesForm").serialize()
+	function getRecommendedCourses() {
+		var formString = $("#getRecommendedCoursesForm").serialize()
+		$.ajax( {
+			data: formString,
+			dataType: "html",
+			type: "POST",
+			url: {% url Courses.views.recommendCourses %},
+			success: function(data) {
+				if (data!= "") {
+					var obj = jQuery.parseJSON(data);
+					if (obj.success == "1") {
+						$("#chooseNewCourse").modal("hide");
+						$("#showRecommendedCourses").html(obj.response);
+						$("#showRecommendedCoursesModal").modal("show");
+					}
+				}
+			}				
+
+		});
 	}
 
 	function chooseAddCourse() {

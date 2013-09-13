@@ -434,24 +434,9 @@ def deleteContentData(contentForm, request_user):
 		return True
 	return False
 
-def getStandardsFromGroup(request):
-	if request.method == 'POST':
-		course_id = request.POST['course_id']
-		try:
-			course = Course.objects.get(id=course_id)
-		except:
-			return HttpResponse('')
-		standard_list = course_methods.getCourseStandards(course, False)
-		context = {'groupStandards': standard_list, 'justSynced': True}
-		return direct_block_to_template(request,'course_view_standards.html', 'showGroupStandards', context)
-	return HttpResponse('')
-
-
-
-
 def addStandardAnalysis(request):
 	if request.method == 'POST':
-		teacher = base_methods.checkUserIsTeacher(request.user)
+		teacher = base_methods.checkUserIsTeacher(request)
 		if not teacher:
 			return HttpResponseRedirect('/')
 
@@ -501,26 +486,4 @@ def rateAnalysis(request):
 			print traceback.format_exception(*sys.exc_info())
 			
 		return HttpResponse(str(sa.cumulative_rating))
-
-'''
-this will get the add form course given the standard
-'''
-
-#TODO finish this
-def cloneUnit(request):
-	if request.method  == 'POST':
-		teacher = base_methods.checkUserIsTeacher(request.user)
-		if not teacher:
-			return HttpResponse('')
-		course_id = request.POST.get('course_id')
-		if course_id == None:
-			return HttpResponse('')
-		try:
-			course = Course.objects.get(id=course_id)
-		except:
-			return HttpResponse('')
-		new_course = course_methods.deepcopy_course(course, teacher)
-		if new_course:
-			return HttpResponse('success')
-	return HttpResponse('')
 

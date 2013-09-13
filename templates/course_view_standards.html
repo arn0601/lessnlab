@@ -26,7 +26,7 @@
 			data:{course_id:id},
 			type:"POST",
 
-      			url: {% url LessonPlanner.views.getStandardsFromGroup %}, // the file to call
+      			url: {% url Courses.views.getStandardsFromGroup %}, // the file to call
 
 			success : function(data){
 				if (data != "") {
