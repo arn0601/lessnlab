@@ -17,7 +17,6 @@ textarea[class=editabletextarea]
 	-moz-border-radius: 2px;
 	-webkit-border-radius: 2px;
 	-border-radius: 2px;
-	width: 600px;
 	margin-left: 10px;
 }
 
@@ -27,6 +26,14 @@ textarea[class=editabletextarea]
 	float: left;
 	font-size:18px;
 	color:#545454;
+	vertical-align: top;
+	margin-bottom: 10px;
+}
+
+.dataAttribnostyle
+{
+  
+	float: left;
 	vertical-align: top;
 	margin-bottom: 10px;
 }

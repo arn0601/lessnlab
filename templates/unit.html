@@ -36,11 +36,11 @@
 </div>
 <div class="row">
 	<div class="span4">
-		<h5 class="coursesubtitle">In {{unit.course.name}}</h5>
+		<h5 class="coursesubtitle">Course: {{unit.course.name}}</h5>
 	</div>
 </div>
 <div class="row courseboxsubtext">
-    <div class="span2">
+    <div class="span3">
     	<p><b>Created By: </b><a href="#">{{fullname}}</a></p><!-- this should link to a public profile view of the user -->
     </div>
     <div class="span2">
@@ -51,14 +51,17 @@
     </div>
 </div>
 <div class="row">
-	<div class="span10">
-		<p>
-		{{ unit.description }}
-		 </p>
-	<!-- TODO remove this as a get -->
-		<a class="btn btn-success btn-small" type="button" href="/lessons/?unit_id={{ unit.id }}">Go To Unit</a>
-    </div>
+	<div class="span6">
+			<div  class="dataAttribnostyle" ><b>
+			Description:
+			</b>
+			</div>
+			<div class="editabletextarea" rows="3" style="margin-left: 79px" model_map_id="367" obj_id="{{ unit.id }}" url="{% url setData %}">
+				 {{ unit.description }}
+			</div>
+	</div>
 </div>
+
 </div> 
 
 <!-- unit box -->
