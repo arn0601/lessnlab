@@ -179,16 +179,10 @@ def changeSectionPlacement(request):
 	return HttpResponse('')
 
 
-
-
-
 def showLessonPlanner(request):
 	base_dict = base_methods.createBaseDict(request)
-	action = request.GET.get('action') 
-	if action == "Edit":
-		content_id = request.GET.get('content_id')
-		return EditContentRequest(request, content_id)
-	base_dict = base_methods.createBaseDict(request)
+	if not base_dict:
+		return HttpResponseRedirect("/")
 	lesson_info = base_methods.getLessonSpecificInfo(base_dict['lesson'])
 	base_dict.update(lesson_info)
 	delete_section_form = DeleteSection()

@@ -55,11 +55,11 @@
 </div>
 <div class="row">
 	<div class="span4">
-		<h5 class="coursesubtitle">In {{lesson.unit.name}} of <a href="/units/?course_id={{ lesson.unit.course.id }}">{{lesson.unit.course.name}}</a></h5>
+		<h5 class="coursesubtitle">Unit: {{lesson.unit.name}} in Course: <a href="/units/?course_id={{ lesson.unit.course.id }}">{{lesson.unit.course.name}}</a></h5>
 	</div>
 </div>
 <div class="row courseboxsubtext">
-    <div class="span2">
+    <div class="span3">
 
     	<p><b>Created By: </b><a href="#">{{ lesson.owner.user_firstname }} {{ lesson.owner.user_lastname }}</a></p><!-- this should link to a public profile view of the user -->
 
