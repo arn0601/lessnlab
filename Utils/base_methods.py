@@ -109,6 +109,7 @@ def checkUserIsTeacher(request):
 
 def createBaseDict(request):
 
+	current_day = datetime.today()
 	#initialize an empty base dict, as we create things, we should add them to the dictionary
 	base_dict = {}
 
@@ -134,10 +135,27 @@ def createBaseDict(request):
 	base_dict['recommendCourseParametersForm'] = courseParametersForm
 
 	#get all courses associated with the user
-	user_courses =  Course.objects.filter(owner=user)
+	user_courses =  Course.objects.filter(owner=user).filter(end_date__gt = current_day).order_by('start_date')
+	past_courses  = Course.objects.filter(owner=user).filter(end_date__lte = current_day).order_by('start_date')
 
-	base_dict['userCourses'] = user_courses	
+	user_courses_list = []
+	for c in user_courses:
+		user_course_units = Unit.objects.filter(course=c).order_by('start_date')
+		user_units_list = []
+		for u in user_course_units:
+			user_unit_lessons = Lesson.objects.filter(unit=u).order_by('start_date')
+			user_units_list.append((u, user_unit_lessons))
+		user_courses_list.append((c, user_units_list))
+	for c in past_courses:
+                user_course_units = Unit.objects.filter(course=c).order_by('start_date')
+		user_units_list = []
+		for u in user_course_units:
+			user_unit_lessons = Lesson.objects.filter(unit=u).order_by('start_date')
+			user_units_list.append((u, user_unit_lessons))
+		user_courses_list.append((c, user_units_list))
 
+	base_dict['curriculum'] = user_courses_list
+	
 	lesson = None	
 	
 	#####################################

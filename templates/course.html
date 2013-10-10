@@ -3,14 +3,14 @@
 {% load dictionary_extras %}
 <!DOCTYPE html>
 {% block content %}
-{% if userCourses|length == 0 %}
+{% if curriculum|length == 0 %}
 <div class="container alertbox" style="width: 100%;">
 	<div class="alert alert-info">
 		<p>You haven't added any courses yet. <a href="#addCourse" data-toggle="modal">Add one.</a></p>
 	</div>
 </div>
 {% else %} 	
-{% for course in userCourses %}
+{% for course, ulist in curriculum %}
 <div class="container coursebox" style="width: 100%;">
 <div class="row">
 	<div class="span4">
