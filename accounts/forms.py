@@ -39,7 +39,7 @@ class TeacherRegistrationForm(UserProfileRegistrationForm):
 	def clean(self):
 		from accounts.models import TeacherProfile
 		cleaned_data = super(TeacherRegistrationForm, self).clean()
-		code = teacher_code['teacher_code']
+		code = cleaned_data['teacher_code']
 		if not (int(code) > 5000000 and (int(code) % 17 == 0)):
 			raise forms.ValidationError('Teacher code invalid')
 		val = cleaned_data['school_state']
