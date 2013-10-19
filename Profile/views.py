@@ -1,12 +1,13 @@
 # Create your views here.
 from django.shortcuts import render_to_response,render
 from Utils import base_methods,json_helpers
+from Utils.data_upload_helpers import getViewableURL
 from accounts.models import TeacherProfileAttributes,StudentProfileAttributes
 from Utils.models import ModelMapDictionary
 from django.contrib.auth import logout
 
 def view_profile(request):
-	if base_methods.checkUserIsTeacher(request.user):
+	if base_methods.checkUserIsTeacher(request):
 		return show_teacherprofile(request)
 	elif base_methods.checkUserIsStudent(request):
 		return show_studentprofile(request)
@@ -17,6 +18,8 @@ def show_studentprofile(request):
 	base_dict = base_methods.createStudentDict(request)
 	student = StudentProfileAttributes.objects.get(student=base_dict['user'])
 	
+	base_dict['profile_picture_url'] = getViewableURL(30,base_dict['username']+"_profilepic");
+		
 	row = ModelMapDictionary.objects.get(model_name="StudentProfileAttributes",attribute_name="bio",app_name="accounts" )
 	about_attrs = []
 	bio = {}
@@ -45,6 +48,8 @@ def show_teacherprofile(request):
 	base_dict = base_methods.createBaseDict(request)
 	teacher = TeacherProfileAttributes.objects.get(teacher=base_dict['user'])
 	
+	base_dict['profile_picture_url'] = getViewableURL(30,base_dict['username']+"_profilepic");
+
 	row = ModelMapDictionary.objects.get(model_name="TeacherProfileAttributes",attribute_name="bio",app_name="accounts" )
 	about_attrs = []
 	bio = {}

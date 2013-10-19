@@ -30,6 +30,12 @@
 			.ui-sortable-placeholder * { visibility: hidden; }
   	</style>
 	<script>
+		
+		function contentFormSubmit(type) {
+			$.forms[type].submit();
+			//code
+		}
+		
 $(function() {
     $( ".portlet" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
       .find( ".portlet-header" )

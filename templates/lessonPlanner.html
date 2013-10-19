@@ -19,10 +19,11 @@
 		<div>
 			<div class="span10 well">
 				<h5>Lesson Description</h5>
-				<p> 
-					{{ lesson.description }}
-				</p>
-				<button class="btn btn-primary btn-mini">Edit Description</button>
+					<div class="span10">
+						<div class="editabletextarea" rows="3" style="margin-left: 0px" model_map_id="11" obj_id="{{ lesson.id }}" url="{% url setData %}">
+							{{ lesson.description }}
+						</div>
+				</div>
 			</div>
 		</div>
 		<div>
@@ -52,7 +53,7 @@
 	</div>
 	{% for section, section_placement in sections|sort_placement %}
 		<div id="section{{ section.id }}" class="" style="
-    	background: #E6E6FF; padding: 12px; padding-right:5px; margin: 5px; margin-right: 0px; margin-bottom:20px
+    	background: #E6E6FF; padding: 12px; margin-bottom:20px
 		">
 			<div class="sectionheader" id="{{ section.id }}">
 				{% with section.name as user_key %}
@@ -84,7 +85,7 @@
 				{% elif content.content_typename == "PowerPoint" %}		
 					
 					<div id="loadImg"><img src="/static/loading.gif" /></div>	
-					<iframe src="http://docs.google.com/gview?url={{ content.link }}&embedded=true" style="width:500px; height:300px;" onload="document.getElementById('loadImg').style.display='none'"; frameborder="0"></iframe>
+					<iframe src="http://docs.google.com/gview?url={{ content.getSecureURL }}&embedded=true" style="width:500px; height:300px;" onload="document.getElementById('loadImg').style.display='none'"; frameborder="0"></iframe>
 			
 				{% elif content.content_typename == "Assessment" %}
 						

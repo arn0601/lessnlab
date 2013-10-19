@@ -13,23 +13,24 @@
 {% for course in userCourses %}
 <div class="container coursebox" style="width: 100%;">
 <div class="row">
-	<div class="span4">
-        <a class="courseboxtitle" href="/units/?course_id={{ course.id }}" >{{ course.name }}</a>
-    </div>
-    <div class="span1 offset5" style="text-align: right; width: 10px;">
-    	<a class="close" rel="tooltip" data-placement="right" title="Edit Course Details" href="javascript:void(0)" onClick="requestEditCourse('{{ course.id }}')"><i class="icon-edit"></i></a>
-    </div>
-    <div class="span1" style="width: 10px;">
-    	 <a class="close" rel="tooltip" data-placement="right" title="Delete Course" onClick="requestDeleteCourse('{{ course.id }}')"><i class="icon-trash"></i></a>
-    </div>
+	<div class="span3">
+    <a class="courseboxtitle" href="/units/?course_id={{ course.id }}" >{{ course.name }}</a>
+  </div>
+	<div class="span1 offset5" style="text-align: right; width: 10px;">
+		<a class="close" rel="tooltip" data-placement="right" title="Edit Course Details" href="javascript:void(0)" onClick="requestEditCourse('{{ course.id }}')"><i class="icon-edit"></i></a>
+	</div>
+	<div class="span1" style="width: 10px;">
+		 <a class="close" rel="tooltip" data-placement="right" title="Delete Course" onClick="requestDeleteCourse('{{ course.id }}')"><i class="icon-trash"></i></a>
+	</div>
 
-    <div class="span5">
-    	 <a rel="tooltip" data-placement="right" title="Course Classes" href="{% url Classes.views.showClasses %}?course_id={{ course.id }}">Goto Classes</a>
-    </div>
+	<div class="span5">
+		 <a rel="tooltip" data-placement="right" title="Course Classes" href="{% url Classes.views.showClasses %}?course_id={{ course.id }}">Goto Classes</a>
+	</div>
 </div>
 <div class="row">
 	<div class="span3">
 		<h5 class="coursesubtitle">Grade {{ course.grade }}, {{ course.subject }}</h5>
+		<h5 class="coursesubtitle"> {{ course.start_date }} - {{ course.end_date }}</h5>
 	</div>
 </div>
 <div class="row courseboxsubtext">

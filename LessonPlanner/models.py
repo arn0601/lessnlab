@@ -8,6 +8,8 @@ from Types.models import *
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.query import QuerySet
+from Utils.data_upload_helpers import getViewableURL
+import urllib
 
 SECTIONTYPE = ((1,'Introduction'), (2,'Review'), (3,'New Material'), (4,'Guided Practice'), (5, 'Independent Practice'))
 
@@ -47,9 +49,7 @@ class Content(Rateable):
 	content_typename = models.CharField(choices=CONTENTTYPE, max_length=32)
 	content_type = models.ForeignKey(ContentType, editable=False, null=True)
 	objectives = models.ManyToManyField('Objectives.Objective', blank=True, null=True)
-	
-	def __unicode__(self):
-		return "Animal" 
+
 			
 	def save(self, *args, **kwargs):
 		if not self.content_type:
@@ -71,7 +71,13 @@ class TextContent(Content):
 	text = models.TextField()
 
 class PowerPointContent(Content):
-  link = models.CharField(max_length=256)
+	data = models.FileField(upload_to="files",blank=True, null=True)
+	link = models.CharField(max_length=256)
+	def getSecureURL(self):
+		print self.link
+		return urllib.quote(getViewableURL(20,self.link))
+
+
 
 class ActivityContent(Content):
 	name = models.CharField(max_length=30)
@@ -96,10 +102,6 @@ class TeacherNoteContent(Content):
 
 class AdministratorNoteContent(Content):
 	note = models.CharField(max_length=256)
-	objects = ContentManager()
-	
-	def __unicode__(self):
-		return 'Sheep:'
 
 class OnlinePictureContent(Content):
 	link = models.CharField(max_length=256)

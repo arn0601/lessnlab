@@ -6,5 +6,7 @@ from registration.views import activate
 from registration.views import register
 
 urlpatterns = patterns('',
-#   url(r'^setData/$', 'Utils.views.setData', name="setData"),
+   url(r'^setData/$', 'Utils.views.setData', name="setData"),
+   url(r'^getPrivateUrl/$', 'Utils.views.getPrivateUrl', name="getPrivateUrl"),
+   url(r'^uploadData/$', 'Utils.views.uploadData', name="uploadData"),
 )

@@ -11,34 +11,31 @@
 		<p>There aren't any units in this course yet. <a href="#addUnit" data-toggle="modal">Add one.</a></p>
 	</div>
 </div>
-{% else %} 	
-{% for unit in userUnits %}
-<div class="container coursebox">
-<div class="row">
-	<div class="span3">
-        <a class="courseboxtitle" href="/lessons/?unit_id={{ unit.id }}" >{{ unit.name }}</a>
-    </div>
-    <div class="span1 offset3" style="width: 10px">
-    	<!--<a class="close" href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add course standards to this unit" onClick="requestUnitStandards('{{ unit.id }}')"><i class="icon-plus"></i></a> -->
-    	<div class="btn-group">
-  			 <a class="close dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus"></i></a>
-  			<ul class="dropdown-menu">
-    			<li><a onClick="requestUnitStandards('{{ unit.id }}')">Add Unit Standards</a></li>
-  			</ul>
-		</div>
-    </div>
-    <div class="span1" style="width: 10px;">
-    	<a class="close" rel="tooltip" data-placement="bottom" title="Edit Unit Details" href="javascript:void(0)" onClick="requestEditUnit('{{ unit.id }}')"><i class="icon-edit"></i></a>
-    </div>
-    <div class="span1" style="width: 10px;">
-    	 <a class="close" rel="tooltip" data-placement="bottom" title="Delete Unit" href="javascript:void(0)" onClick="requestDeleteUnit('{{ unit.id }}')"><i class="icon-trash"></i></a>
-    </div>
-</div>
+{% else %}
+
 <div class="row">
 	<div class="span4">
-		<h5 class="coursesubtitle">Course: {{unit.course.name}}</h5>
+		<h4 class="coursetitle">Course: {{course.course.name}}</h4>
+		<h5 class="coursesubtitle">Grade {{ course.grade }}, {{ course.subject }}</h5>
+		<h5 class="coursesubtitle"> {{ course.start_date }} - {{ course.end_date }}</h5>
 	</div>
 </div>
+
+{% for unit in userUnits %}
+<div class="container coursebox">
+	<div class="row" style="margin-bottom: 10px">
+		<div class="span3">
+					<a class="courseboxtitle" href="/lessons/?unit_id={{ unit.id }}" >{{ unit.name }}</a>
+		</div>
+		<div style="text-align: right;">
+				<!--<a class="close" href="javascript:void(0)" rel="tooltip" data-placement="bottom" title="Add course standards to this unit" onClick="requestUnitStandards('{{ unit.id }}')"><i class="icon-plus"></i></a> -->
+	
+					<a class="close" style="width:30px" rel="tooltip" data-placement="bottom" title="Delete Unit" href="javascript:void(0)" onClick="requestDeleteUnit('{{ unit.id }}')"><i class="icon-trash"></i></a>
+					<a class="close" style="width:30px" rel="tooltip" data-placement="bottom" title="Edit Unit Details" href="javascript:void(0)" onClick="requestEditUnit('{{ unit.id }}')"><i class="icon-edit"></i></a>
+					<a class="close" style="width:50px" rel="tooltip" data-placement="bottom" title="Add Unit Standards" href="javascript:void(0)" onClick="requestUnitStandards('{{ unit.id }}')"><i class="icon-plus"></i></a>
+	</div>
+</div>
+
 <div class="row courseboxsubtext">
     <div class="span3">
     	<p><b>Created By: </b><a href="#">{{fullname}}</a></p><!-- this should link to a public profile view of the user -->
@@ -52,11 +49,8 @@
 </div>
 <div class="row">
 	<div class="span6">
-			<div  class="dataAttribnostyle" ><b>
-			Description:
-			</b>
-			</div>
-			<div class="editabletextarea" rows="3" style="margin-left: 79px" model_map_id="367" obj_id="{{ unit.id }}" url="{% url setData %}">
+
+			<div class="editabletextarea" rows="3" style="margin-left: 0px" model_map_id="367" obj_id="{{ unit.id }}" url="{% url setData %}">
 				 {{ unit.description }}
 			</div>
 	</div>
@@ -103,7 +97,7 @@
 	of the units that are currently in the course. -->
 	
 	<div class="row">
-		<div class="span3 nocontenttext">
+		<div class="span4 nocontenttext">
 			<ul class="nav nav-list" style="width: 95%;">
 				<li class="nav-header">{{course.name}} Units</li>
 				{% if userUnits|length == 0 %}

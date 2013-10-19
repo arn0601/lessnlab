@@ -3,9 +3,26 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
 from Utils.models import ModelMapDictionary
+from Utils.data_upload_helpers import getViewableURL
+
+def getViewableURL_JSON(request):
+    jsonobj = JsonDataObject()
+    if request.method == 'POST':
+        try:
+            keyname         = request.POST.get('keyname', None)
+            timeout         = request.POST.get('timeout', None)
+            url             = getViewableURL(int(timeout),keyname)
+            jsonobj.attributeDictionary["URL"] = url
+            jsonobj.success = 1 
+        except Exception as e:
+            print "Error ",e
+            jsonobj.success = 0
+        return jsonobj.getJsonHttpResponse()
+    return jsonobj.getJsonHttpResponse()
+
+
 
 def setData(request):
-    print "Setting data"
     jsonobj = JsonDataObject()
     if request.method == 'POST':
         try:

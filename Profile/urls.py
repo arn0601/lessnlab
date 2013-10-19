@@ -6,5 +6,5 @@ from registration.views import activate
 from registration.views import register
 
 urlpatterns = patterns('',
-   url(r'^setData/$', 'Profile.views.setData', name="setData"),
+#   url(r'^setData/$', 'Profile.views.setData', name="setData"),
 )

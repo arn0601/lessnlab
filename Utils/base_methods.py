@@ -266,7 +266,6 @@ def getLessonSpecificInfo(lesson):
 			for c_o in content_objs_m2m:
 				contentobjs_list.append((c_o.id, c_o.description))
 			content_objs[content.id] = contentobjs_list
-			content_list.append(content.as_leaf_class())
 			if (content.content_typename == 'Assessment'):
 				content_list.append(content.assessmentcontent)
 				questions = Question.objects.filter(assessment = content.assessmentcontent)
@@ -278,6 +277,8 @@ def getLessonSpecificInfo(lesson):
 					mcans = [MultipleChoiceAnswer.objects.filter(question = q)]
 					question_answer_map[q]+=mcans
 				assessment_dict[content.assessmentcontent.id] = question_answer_map
+			else:
+				content_list.append(content.as_leaf_class())
 		section_dict[section] = content_list
 	add_content_form_dict = getAddContentForms(str(-1), objective_list)
 	return { 'content_objs' : content_objs, 'standard_list' : standard_list,'objective_list' : objective_list,'sections' : section_dict,  'assessment_dict':assessment_dict, 'content_choices':getContentChoices(),  'section_content_forms': add_content_form_dict, 'dropdown_order': LESSONPLANNER_DROPDOWN_ORDER, 'section_types' : getSectionMapping() }

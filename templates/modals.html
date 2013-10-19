@@ -48,15 +48,15 @@
 	</div>
 	 <div class="modal-body">
 		<div>
-    		<form id="content_form" method="post" action="{% url LessonPlanner.views.addContent %}" name="c_{{ type }}">
+    		<form id="content_form"  enctype="multipart/form-data" method="post" action="{% url LessonPlanner.views.addContent %}" name="c_{{ type }}">
 		{% csrf_token %}
 			{% for field in tupledata.1.visible_fields %}
 				<div class="control-group">
 				{{ field.errors.as_text }}
-						<label class="control-label">{{ field.label_tag }}</label>
-						<div class="controls">
-							{{ field }}
-						</div>
+					<label class="control-label">{{ field.label_tag }}</label>
+					<div class="controls">
+						{{ field }}
+					</div>
 				</div>
 			{% endfor %}
 
