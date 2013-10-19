@@ -8,15 +8,14 @@ import time
 class Command(NoArgsCommand):
 	def handle_noargs(self, **options):
 		for model in get_models():
-			model_name 	=  model.__name__
-			app_name		= model._meta.app_label
+			model_name 	=  unicode(model.__name__)
+			app_name		= unicode(model._meta.app_label)
 			for field in model._meta.fields:
-				field_name =  field.name
-				verbose_name = field.verbose_name
+				field_name =  unicode(field.name)
+				verbose_name = unicode(field.verbose_name)
 				if (verbose_name == ""):
 					verbose_name = field_name
 				print model_name, app_name, field_name, verbose_name
-				time.sleep(1)
 				ModelMapDictionary.objects.get_or_create(model_name = model_name,
 																								 app_name = app_name,
 																								 attribute_name=field_name,
