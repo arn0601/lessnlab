@@ -35,7 +35,7 @@ def setData(request):
             attribute_name  = row.attribute_name
             print "Saving",row,model_name,app_label,attribute_name
             
-            model_type = ContentType.objects.get(app_label=app_label, model=model_name)
+            model_type = ContentType.objects.get(app_label=app_label, model=model_name.lower())
             inst = model_type.model_class().objects.get(id=obj_id)
             setattr(inst, attribute_name, value)
             inst.save()
