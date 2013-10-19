@@ -19,6 +19,7 @@ from Classes.models import Class, ClassStudents
 from Classes.forms import TeacherRequestForm
 from django.contrib.auth import logout
 from datetime import datetime
+from Utils.models import ModelMapDictionary
 
 def returnStudentForms():
 	teacherRequestForm = TeacherRequestForm()
@@ -95,9 +96,19 @@ def createStudentDict(request):
 			return None
 	
 	uname = request.user.username
-
-	#return (stuff for function, stuff to render)
-	return {'user' : user, 'class_': class_, 'unit': unit, 'lesson': lesson, 'userClasses': classes, 'userUnits':user_units, 'userLessons': user_lessons, 'fullname': uname, 'teacherRequestForm': teacherRequestForm, 'coursesWereRequested': 0}
+	
+	modelmapdict = {}
+	for row in ModelMapDictionary.objects.all():
+		model_name      = row.model_name
+		app_label       = row.app_name
+		attribute_name  = row.attribute_name
+		if app_label not in modelmapdict:
+			modelmapdict[app_label] = {}
+		if model_name not in modelmapdict[app_label]:
+			modelmapdict[app_label][model_name] = {}
+		modelmapdict[app_label][model_name][attribute_name] = row.id
+		
+		return {'model_map' : modelmapdict, 'user' : user, 'class_': class_, 'unit': unit, 'lesson': lesson, 'userClasses': classes, 'userUnits':user_units, 'userLessons': user_lessons, 'fullname': uname, 'teacherRequestForm': teacherRequestForm, 'coursesWereRequested': 0}
 
 def checkUserIsTeacher(request):
 	if checkUserType(request) == 'Teacher':
@@ -122,9 +133,9 @@ def createBaseDict(request):
 
 	courseAddForm.fields['state'].initial = user.user_school_state
 
-       	courseAddForm.fields['owner'].initial = user
-       	unitAddForm.fields['owner'].initial = user
-       	lessonAddForm.fields['owner'].initial = user
+	courseAddForm.fields['owner'].initial = user
+	unitAddForm.fields['owner'].initial = user
+	lessonAddForm.fields['owner'].initial = user
 
 	base_dict['courseAddForm'] = courseAddForm
 	base_dict['unitAddForm'] = unitAddForm
@@ -231,7 +242,20 @@ def createBaseDict(request):
 	fullname = user.user_firstname + " " + user.user_lastname
 
 	base_dict['username'] = uname
-	base_dict['fullname'] = fullname	
+	base_dict['fullname'] = fullname
+	
+	modelmapdict = {}
+	for row in ModelMapDictionary.objects.all():
+		model_name      = row.model_name
+		app_label       = row.app_name
+		attribute_name  = row.attribute_name
+		if app_label not in modelmapdict:
+			modelmapdict[app_label] = {}
+		if model_name not in modelmapdict[app_label]:
+			modelmapdict[app_label][model_name] = {}
+		modelmapdict[app_label][model_name][attribute_name] = row.id
+		
+	base_dict['model_map'] = modelmapdict
 
 	#return (stuff for function, stuff to render)
 	return base_dict

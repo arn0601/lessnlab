@@ -1,5 +1,6 @@
 {% extends "base-3col.html" %}
 {% load staticfiles %}
+{% load dictionary_extras %}
 
 <!DOCTYPE html>
 {% block content %}
@@ -73,7 +74,7 @@
 </div>
 <div class="row">
 	<div class="span10">
-						<div class="editabletextarea" rows="3" style="margin-left: 0px" model_map_id="11" obj_id="{{ lesson.id }}" url="{% url setData %}">
+						<div class="editabletextarea" rows="3" style="margin-left: 0px"  model_map_id="{{ model_map|access:'Lessons'|access:'Lesson'|access:'description'}}" obj_id="{{ lesson.id }}" url="{% url setData %}">
 				 {{ lesson.description }}
 			</div>
 	</div>

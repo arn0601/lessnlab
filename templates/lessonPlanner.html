@@ -20,7 +20,7 @@
 			<div class="span10 well">
 				<h5>Lesson Description</h5>
 					<div class="span10">
-						<div class="editabletextarea" rows="3" style="margin-left: 0px" model_map_id="11" obj_id="{{ lesson.id }}" url="{% url setData %}">
+						<div class="editabletextarea" rows="3" style="margin-left: 0px"  model_map_id="{{ model_map|access:'Lessons'|access:'Lesson'|access:'description'}}" obj_id="{{ lesson.id }}" url="{% url setData %}">
 							{{ lesson.description }}
 						</div>
 				</div>
@@ -141,12 +141,12 @@
 						<h6> Article </h6>
 				{% elif content.content_typename == "TeacherNote" %}
 					<h6> Teacher Note </h6>
-					<div class="editabletextarea" model_map_id="133" obj_id="{{ content.id }}" url="{% url setData %}">
+					<div class="editabletextarea" model_map_id="{{ model_map|access:'LessonPlanner'|access:'TeacherNoteContent'|access:'note'}}" obj_id="{{ content.id }}" url="{% url setData %}">
 						{{ content.note }}
 					</div>
 				{% elif content.content_typename == "AdministratorNote" %}
 					<h6> Admin Note </h6>
-					<div class="editabletextarea" model_map_id="144" obj_id="{{ content.id }}" url="{% url setData %}">
+					<div class="editabletextarea" model_map_id="{{ model_map|access:'LessonPlanner'|access:'AdministratorNoteContent'|access:'note'}}" obj_id="{{ content.id }}" url="{% url setData %}">
 						{{ content.note }}
 					</div>
 				{% else %}
