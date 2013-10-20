@@ -1,0 +1,55 @@
+
+<link href="/static/bootstrap.min.css" rel="stylesheet" media="screen">
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="/static/lessnlab.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script> 
+<h3 style="font-family: sans-serif; padding-left: 330px;">Course Standards Search</h3>
+<div class="row" style="padding-left: 276px;">
+    	<form method="post" class="form-horizontal" action="{% url ExtraPages.views.StandardsSearch %}" name="standard_search">
+		{% csrf_token %}
+		{% for field in standardsSearchForm %}
+		<div id="div_search_{{ field.auto_id }}">
+			<div class="control-group" >
+			<label class="control-label">{{ field.label }}</label>
+				<div class="controls"> {{ field }} </div>
+			</div>
+		</div>
+		{% endfor %}
+					<div class="control-group" >
+
+		<div class="controls"><input class="btn btn-success" type="submit" value="Find Standards"></div>
+		
+		</div>
+    	</form>
+</div>
+<div class="row" style="padding-left: 40px; padding-right: 20px;">
+<table class="table table-hover table-striped table-bordered">
+	<caption style="padding-bottom: 10px;"><h5>{{ searchedStandards|length }} {% if has_state %} {{ state }} {% else %} {{ standard_type }} {% endif %} Standards Found </h5></caption>
+	<thead> 
+		<tr> 
+			<th>Standard</th> 
+			<th>Grade</th> 
+			<th>Subject</th> 
+			<th>Id</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for standards in searchedStandards %}
+	<tr> 
+		<td> <a href="/extra/ObjectivesPage/?standard_id={{ standards.id }}">{{ standards.description }}</a> </td>
+		<!-- <td> {{ standards.standard_type.value }}</td> 
+		{% if has_state %} <td> {{ standards.state.value }} </td> {% endif %} -->
+		<td> {{ standards.grade.value }} </td> 
+		<td> {{ standards.subject.value }} </td> 
+		<td>{{ standards.numbering }}</td>	 
+	</tr>
+	{% endfor %}
+    </tbody>
+</table>
+</div>
+
+
+<script type="text/javascript"> 
+
+	$("#standard_search_standard_type").change( 
+		function() {

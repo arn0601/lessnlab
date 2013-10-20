@@ -1,0 +1,55 @@
+  <link href="/static/bootstrap.min.css" rel="stylesheet" media="screen">
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="/static/lessnlab.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script> 
+
+   <h3> Create objectives for</h3>
+   <h4> {{ standard.numbering }} : {{ standard.description }}</h4>
+
+    <form method="post" action="/extra/ObjectivesPage/?standard_id={{ standard.id }}" name="createObjectivesForm">
+        {% csrf_token %}
+        {% for field in objectivesAddForm %}
+        <div class="control-group">
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     
+     <button type="button" id="addObjective" onClick="addObj()"  class="btn btn-primary">Add objective</button>
+     <p><button type="submit" class="btn btn-primary">Submit</button>
+     </form>
+
+   <h4> Created Objectives </h4>
+   <ul>
+   {% for objective in createdObj %}
+
+      <li> <a href="/extra/QuestionsPage/?objective_id={{ objective.id }}">{{ objective.description }}</a> </li>
+
+   {% endfor %}
+   </ul>
+
+<script type="text/javascript"> <!-- scroll jquery -->
+        
+        
+        function addObj() {
+                var form = document.getElementsByName("createObjectivesForm");
+                textbox = document.createElement('input');
+                var new_objectives_count = $("[name=new_objectives_count]").val();
+                textbox.name = 'new_objective_' + new_objectives_count;
+                new_objectives_count ++; 
+        
+                div = document.createElement('div');
+                textbox.type = 'text';          
+
+                var reper = document.getElementById('addObjective');
+                var parinte = reper.parentNode;
+
+                parinte.insertBefore(textbox, reper);
+                parinte.insertBefore(div, reper);               
+                
+                $("[name=new_objectives_count]").val(new_objectives_count);
+
+        }
+</script>

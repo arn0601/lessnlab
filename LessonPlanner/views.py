@@ -453,8 +453,6 @@ def addStandardAnalysis(request):
 			sa.save()
 
 	return HttpResponseRedirect('/standard/?standard_id='+str(standard_id))
-		
-
 
 def rateAnalysis(request):
 	if request.method == 'POST':

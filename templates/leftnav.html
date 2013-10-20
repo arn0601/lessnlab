@@ -1,4 +1,5 @@
 {% load base_extras %}
+
 <script>
 function imgError(image){
     image.onerror = "";
@@ -12,15 +13,20 @@ function imgError(image){
 				<li class="nav-header ">My Courses</li>
 				<li><a href="/courses/" class="{% if not course %} active {% endif%}">All Courses</a></li> 
 				{% for c, ulist in curriculum %}  
-				<li><a href="/units/?course_id={{ c.id }}" rel="tooltip" data-placement="left" title="Grade {{ c.grade }}, {{ c.subject}}" class="{% if c.id == course.id %} active {% endif%}">{{ c.name }}</a></li>
-				<!---<ul class="nav nav-list">
+				<li><i type="button" class="icon-plus" data-toggle="collapse" data-target="#unitsfor{{ c.id }}"></i><a href="/units/?course_id={{ c.id }}" rel="tooltip" data-placement="right" title="Grade {{ c.grade }}, {{ c.subject}}" class="{% if c.id == course.id %} active {% endif%}">{{ c.name }}</a></li>
+				<div id="unitsfor{{ c.id }}" class="collapse">
+				<ul class="nav nav-list">
 					{% for u, llist in ulist %}
-						<li>{{ u.name }}</li>
+						<li><i class="icon-plus" type="button" data-toggle="collapse" data-target="#lessonsfor{{ u.id }}"></i>
+							<a href="/lessons/?unit_id={{ u.id }}">{{ u.name }}</a></li>
+						<div id="lessonsfor{{ u.id }}" class="collapse">
 						<ul class="nav nav-list">
-						{% for l in llist %} <li>{{ l.name }}</li> {% endfor %}
+						{% for l in llist %} <li><a href="/lessonPlanner/?lesson_id={{ l.id }}">{{ l.name }}</a></li> {% endfor %}
 						</ul>
+						</div>
 					{% endfor %}
-				</ul>-->
+				</ul>
+				</div>
 				{% endfor %}
 				<li><a href="#chooseNewCourse" data-toggle="modal"><small><i class="icon-plus"></i>Add Course</small></a></li>
 		</ul>

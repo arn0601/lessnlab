@@ -21,3 +21,9 @@ class Grade(models.Model):
 	
 	def __unicode__(self):
 		return u'%s' % (self.value)
+
+class QuestionType(models.Model):
+	value = models.CharField(max_length=16)
+	
+	def __unicode__(self):
+		return u'%s' % (self.value)

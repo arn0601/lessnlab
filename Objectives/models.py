@@ -9,11 +9,11 @@ from datetime import datetime
 class Objective(Rateable):
 	description = models.CharField(max_length=64)
 	standard = models.ForeignKey('Standards.Standard')
-	owner = models.ForeignKey('accounts.TeacherProfile')
+	owner = models.ForeignKey('accounts.TeacherProfile', null=True)
 	creation_date = models.DateField()
 	parent_objective = models.ForeignKey('self', null=True, blank=True)
 	children_objectives = models.ManyToManyField('self', null=True, blank=True)
-	lesson = models.ForeignKey('Lessons.Lesson')
+	lesson = models.ForeignKey('Lessons.Lesson', null=True, blank=True)
 
 	def clone_from_parent(self, objective, teacher, lesson):
 		if objective and objective.id:

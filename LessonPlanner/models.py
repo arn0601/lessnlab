@@ -115,7 +115,7 @@ class Question(models.Model):
 	assessment =  models.ForeignKey(AssessmentContent)
 	
 class Answer(models.Model):
-	owner = models.ForeignKey('accounts.UserProfile')
+	owner = models.ForeignKey('accounts.UserProfile', null=True)
 	question =  models.ForeignKey(Question)
 	
 class FreeResponseAnswer(Answer):
