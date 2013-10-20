@@ -6,13 +6,6 @@
 {% block content %}
 
 <!-- Middle column main content -->
-{% if userUnits|length == 0 %}
-<div class="container alertbox" style="width: 100%;">
-	<div class="alert alert-info">
-		<p>There aren't any units in this course yet. <a href="#addUnit" data-toggle="modal">Add one.</a></p>
-	</div>
-</div>
-
 
 <div class="row">
 	<div class="span4">
@@ -21,6 +14,16 @@
 		<h5 class="coursesubtitle"> {{ course.start_date }} - {{ course.end_date }}</h5>
 	</div>
 </div>
+
+{% if userUnits|length == 0 %}
+<div class="container alertbox" style="width: 100%;">
+	<div class="alert alert-info">
+		<p>There aren't any units in this course yet. <a href="#addUnit" data-toggle="modal">Add one.</a></p>
+	</div>
+</div>
+
+
+
 {% else %}
 
 {% for unit in userUnits %}
