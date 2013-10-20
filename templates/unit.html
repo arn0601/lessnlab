@@ -12,7 +12,7 @@
 		<p>There aren't any units in this course yet. <a href="#addUnit" data-toggle="modal">Add one.</a></p>
 	</div>
 </div>
-{% else %}
+
 
 <div class="row">
 	<div class="span4">
@@ -21,6 +21,7 @@
 		<h5 class="coursesubtitle"> {{ course.start_date }} - {{ course.end_date }}</h5>
 	</div>
 </div>
+{% else %}
 
 {% for unit in userUnits %}
 <div class="container coursebox">
