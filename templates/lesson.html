@@ -5,6 +5,14 @@
 <!DOCTYPE html>
 {% block content %}
 
+<div class="row">
+	<div class="span4">
+				<h4 class="coursetitle">Unit: {{lesson.unit.name}}</h4>
+				<h5 class="coursesubtitle">Course: <a href="/units/?course_id={{ lesson.unit.course.id }}">{{lesson.unit.course.name}}</a></h5>
+
+	</div>
+</div>
+
 <!-- Middle column main content -->
 {% if userLessons|length == 0 %}
 <div class="container alertbox" style="width: 100%;">
@@ -14,33 +22,6 @@
 </div>
 {% else %} 	
 {% for lesson in userLessons %}
-	<!-- <div class="container coursebox" width="100%" id="{{ lesson.id }}">
-				  <p><a href="/lessonPlanner/?lesson_id={{ lesson.id }}"><h4>{{ lesson.name }}</h4></a></p>
-				<p><b>Description: </b> {{ lesson.description }} </p>			 
-				
-		<p><b>Standards for this Lesson: </b> 
-	<br>	{% for standard in lesson.standards.all %}
-			{{ standard.description }}<br>
-		{% endfor %}
-		<p><b>Objectives for this Lesson: </b> 
-	<br>	{% for objective in lesson.objectives.all %}
-			{{ objective.description }}<br>
-		{% endfor %}
-    <br><br>
-	<a class="btn btn-primary btn-small" type="button" href="?lesson_id={{ lesson.id }}&action=Edit">Edit</a>
-  <a class="btn btn-primary btn-small" type="button" href="?lesson_id={{ lesson.id }}&action=Delete">Delete</a>	
-	<a class="btn btn-primary btn-small" type="button" onClick="requestLessonStandards('{{ lesson.id }}')" >Add Standards</a>
-	<a class="btn btn-primary btn-small" type="button" onClick="requestLessonObjectives('{{ lesson.id }}')" >Add Objectives</a>
-</div> -->
-
-
-<div class="row">
-	<div class="span4">
-				<h4 class="coursetitle">Unit: {{lesson.unit.name}}</h4>
-				<h5 class="coursesubtitle">Course: <a href="/units/?course_id={{ lesson.unit.course.id }}">{{lesson.unit.course.name}}</a></h5>
-
-	</div>
-</div>
 
 <div class="container coursebox">
 <div class="row" style="margin-bottom: 10px">
