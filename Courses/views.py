@@ -142,7 +142,7 @@ def createCourseFromStandard(request):
 			s = standard.state
 		b = standard.subject
 		g = standard.grade
-		addCourseForm = AddCourse(grade=g, owner=teacher, subject=b)
+		addCourseForm = AddCourse(grade=g, teacher=teacher, subject=b)
 		context = {'courseAddForm': addCourseForm}
 		return direct_block_to_template(request,'course_add_modal.html', 'addCourse', context)
 	return HttpResponse('')
