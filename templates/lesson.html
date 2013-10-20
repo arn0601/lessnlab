@@ -1,5 +1,6 @@
 {% extends "base-3col.html" %}
 {% load staticfiles %}
+{% load dictionary_extras %}
 
 <!DOCTYPE html>
 {% block content %}
@@ -32,38 +33,38 @@
 	<a class="btn btn-primary btn-small" type="button" onClick="requestLessonObjectives('{{ lesson.id }}')" >Add Objectives</a>
 </div> -->
 
-<div class="container coursebox">
-<div class="row">
-	<div class="span3">
-        <a class="courseboxtitle" href="/lessonPlanner/?lesson_id={{ lesson.id }}" >{{ lesson.name }}</a>
-    </div>
-     <div class="span1 offset3" style="width: 10px;">
-    	<div class="btn-group">
-  			 <a class="close ropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus"></i></a>
-  			<ul class="dropdown-menu">
-    			<li><a href="#" onClick="requestLessonObjectives('{{ lesson.id }}')">Add Lesson Objectives</a></li>
-    			<li><a href="#" onClick="requestLessonStandards('{{ lesson.id }}')">Add Lesson Standards</a></li>
-  			</ul>
-		</div>
-    </div>
-    <div class="span1" style="width: 10px;">
-    	<a class="close" href="#" onClick="requestEditLesson('{{ lesson.id }}')"><i class="icon-edit"></i></a>
-    </div>
-    <div class="span1" style="width: 10px;">
-    	 <a class="close" rel="tooltip" data-placement="right" title="Delete {{lesson.name}} lesson" onClick="requestDeleteLesson('{{ lesson.id }}')"><i class="icon-trash"></i></a>
-    </div>
-</div>
+
 <div class="row">
 	<div class="span4">
-		<h5 class="coursesubtitle">Unit: {{lesson.unit.name}} in Course: <a href="/units/?course_id={{ lesson.unit.course.id }}">{{lesson.unit.course.name}}</a></h5>
+				<h4 class="coursetitle">Unit: {{lesson.unit.name}}</h4>
+				<h5 class="coursesubtitle">Course: <a href="/units/?course_id={{ lesson.unit.course.id }}">{{lesson.unit.course.name}}</a></h5>
+
 	</div>
 </div>
+
+<div class="container coursebox">
+<div class="row" style="margin-bottom: 10px">
+	<div class="span3">
+    <a class="courseboxtitle" href="/lessonPlanner/?lesson_id={{ lesson.id }}" >{{ lesson.name }}</a>
+  </div>
+	<div style="text-align: right;">
+		<a class="close" style="width:30px" rel="tooltip" data-placement="right" title="Delete {{lesson.name}} lesson" onClick="requestDeleteLesson('{{ lesson.id }}')"><i class="icon-trash"></i></a>
+		<a class="close" style="width:30px" href="#" onClick="requestEditLesson('{{ lesson.id }}')"><i class="icon-edit"></i></a>
+	
+    <div class="btn-group">
+  		<a class="close dropdown-toggle" style="width:30px" data-toggle="dropdown" href="#"><i class="icon-plus"></i></a>
+  		<ul class="dropdown-menu">
+    		<li><a href="#" onClick="requestLessonObjectives('{{ lesson.id }}')">Add Lesson Objectives</a></li>
+    		<li><a href="#" onClick="requestLessonStandards('{{ lesson.id }}')">Add Lesson Standards</a></li>
+  		</ul>
+		</div>
+  </div>
+</div>
+			
 <div class="row courseboxsubtext">
-    <div class="span3">
-
-    	<p><b>Created By: </b><a href="#">{{ lesson.owner.user_firstname }} {{ lesson.owner.user_lastname }}</a></p><!-- this should link to a public profile view of the user -->
-
-    </div>
+  <div class="span3">
+		<p><b>Created By: </b><a href="#">{{ lesson.owner.user_firstname }} {{ lesson.owner.user_lastname }}</a></p><!-- this should link to a public profile view of the user -->
+  </div>
     <div class="span2">
     	<p><b>Starts: </b>{{lesson.start_date}}</p>
     </div>
@@ -73,9 +74,9 @@
 </div>
 <div class="row">
 	<div class="span10">
-		<p>
-		{{ lesson.description }}
-		 </p>
+						<div class="editabletextarea" rows="3" style="margin-left: 0px"  model_map_id="{{ model_map|access:'Lessons'|access:'Lesson'|access:'description'}}" obj_id="{{ lesson.id }}" url="{% url setData %}">
+				 {{ lesson.description }}
+			</div>
 	</div>
 </div>
 <div class="row">
@@ -148,11 +149,5 @@
 			</ul>
 		</div>
 	</div>
-<!--	<div class="row-fluid">
-		<div class="span5">
-		
-		</div>
-		<div class="span7 pull-right">
-			<button class="btn btn-primary btn-mini" type="button">Add Unit</button>
-			<button class="btn btn-mini" type="button">Delete Unit</button>-->
+
 {% endblock %}

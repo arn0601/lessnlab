@@ -1,3 +1,29 @@
+var SITE = SITE || {};
+ 
+SITE.fileInputs = function() {
+  var $this = $(this),
+      $val = $this.val(),
+      valArray = $val.split('\\'),
+      newVal = valArray[valArray.length-1],
+      $button = $this.siblings('.button'),
+      $fakeFile = $this.siblings('.file-holder');
+  if(newVal !== '') {
+    if($fakeFile.length === 0) {
+      
+    } else {
+      $fakeFile.text(newVal);
+    }
+  }
+};
+ 
+$(document).ready(function() {
+  $('.file-wrapper input[type=file]').bind('change focus click', SITE.fileInputs);
+});
+ 
+$(document).ready(function() {
+  $('.file-wrapper input[type=file]')
+  .bind('change focus click', SITE.fileInputs);
+});
 
 
 
@@ -6,7 +32,7 @@ function goToByScroll(id){
 	$('html,body').animate({scrollTop: $("#"+id).offset().top - 100},1500);
 }
 			
-
+// Youtube and Video helper functions ///
 function getVideoIDfromLink(url)
 {
 		var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -18,53 +44,57 @@ function getVideoIDfromLink(url)
 		}
 };
 
-			function getVideoHtmlbyLink(video_link,div_id)
-			{
-				video_id = getVideoIDfromLink(video_link);
-				getVideoHtmlbyID(video_id,div_id);
-			};
+function getVideoHtmlbyLink(video_link,div_id)
+{
+	video_id = getVideoIDfromLink(video_link);
+	getVideoHtmlbyID(video_id,div_id);
+};
 
-			function getVideoHtmlbyID(video_id,div_id)
-			{
-				jQTubeUtil.video(video_id,function(response)
-				{
-					var video = response.videos[0];
-					jQuery("#"+div_id).html(getVideoHtml(video));
-				});
-			};
-			function actualNextSibling(el)
-			{    // needed to smooth out default firefox/IE behavior
-				do { el = el.nextSibling } while (el && el.nodeType !== 1);
-          return el;
-			};
+function getVideoHtmlbyID(video_id,div_id)
+{
+	jQTubeUtil.video(video_id,function(response)
+	{
+		var video = response.videos[0];
+		jQuery("#"+div_id).html(getVideoHtml(video));
+	});
+};
+function actualNextSibling(el)
+{    // needed to smooth out default firefox/IE behavior
+	do { el = el.nextSibling } while (el && el.nodeType !== 1);
+		return el;
+};
 
 
-			function onVidImgClick(el)
-			{
-				actualNextSibling(el).style.display='inline';
-				el.style.display='none';
-				var iframe = actualNextSibling(el).children[0];
-				var url = iframe.getAttribute("temp");
-				iframe.setAttribute("src",url);
-				el.parentNode.style.width='600px';
-				el.parentNode.children[0].style.display='none';
-			};
+function onVidImgClick(el)
+{
+	actualNextSibling(el).style.display='inline';
+	el.style.display='none';
+	var iframe = actualNextSibling(el).children[0];
+	var url = iframe.getAttribute("temp");
+	iframe.setAttribute("src",url);
+	el.parentNode.style.width='600px';
+	el.parentNode.children[0].style.display='none';
+};
 
-			function getVideoHtml(video)
-			{
-				var title = video.title.substring(0,32);
-				var description = video.description.substring(0,32);
-				var video_id = video.videoId;
-				var url = "http://www.youtube.com/watch?feature=player_embedded&v=" + video_id;
-				return "<div style='width:430px;'> <div style='width:275px; float:right'> " +
-							"<b>Title: </b> <a href='" + url + "' > "  + title +
-							"</a><div> <b> Description: </b>" + description +
-							"</div> </div> <div onclick='onVidImgClick(this)' > " +
-							"<img src='http://img.youtube.com/vi/" + video_id + "/1.jpg' alt='splash' width='120px' height='90px' style='cursor: pointer' style='display:inline'/ ></div> " +
-							"<div style='display: none'>   <iframe width='300px' height='200px' temp='http://www.youtube.com/embed/" + video_id + "?autoplay=0&wmode=transparent'> </iframe></div>";
+function getVideoHtml(video)
+{
+	var title = video.title.substring(0,32);
+	var description = video.description.substring(0,32);
+	var video_id = video.videoId;
+	var url = "http://www.youtube.com/watch?feature=player_embedded&v=" + video_id;
+	return "<div style='width:430px;'> <div style='width:275px; float:right'> " +
+				"<b>Title: </b> <a href='" + url + "' > "  + title +
+				"</a><div> <b> Description: </b>" + description +
+				"</div> </div> <div onclick='onVidImgClick(this)' > " +
+				"<img src='http://img.youtube.com/vi/" + video_id + "/1.jpg' alt='splash' width='120px' height='90px' style='cursor: pointer' style='display:inline'/ ></div> " +
+				"<div style='display: none'>   <iframe width='300px' height='200px' temp='http://www.youtube.com/embed/" + video_id + "?autoplay=0&wmode=transparent'> </iframe></div>";
 
-			};
+};
+////////////////////////////////////////////////////////////////////////////////
 
+
+
+//Full Screen////////////////////////////////////////////////////////////////
 (function() {
     var
         fullScreenApi = {
@@ -131,6 +161,7 @@ function getVideoIDfromLink(url)
     window.fullScreenApi = fullScreenApi;
 })();
 
+//MODIFIED ajax send to make ajax calls work b/c of CRSF tokens //////////
 
 $(document).ajaxSend(function(event, xhr, settings) {
     function getCookie(name) {
@@ -168,4 +199,4 @@ $(document).ajaxSend(function(event, xhr, settings) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     }
 });
-
+////////////////////////////////////////////////////////////////

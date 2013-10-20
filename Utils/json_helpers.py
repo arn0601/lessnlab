@@ -3,9 +3,26 @@ from django.http import HttpResponse,HttpResponseRedirect
 from django.db.models.loading import get_model
 from django.contrib.contenttypes.models import ContentType
 from Utils.models import ModelMapDictionary
+from Utils.data_upload_helpers import getViewableURL
+
+def getViewableURL_JSON(request):
+    jsonobj = JsonDataObject()
+    if request.method == 'POST':
+        try:
+            keyname         = request.POST.get('keyname', None)
+            timeout         = request.POST.get('timeout', None)
+            url             = getViewableURL(int(timeout),keyname)
+            jsonobj.attributeDictionary["URL"] = url
+            jsonobj.success = 1 
+        except Exception as e:
+            print "Error ",e
+            jsonobj.success = 0
+        return jsonobj.getJsonHttpResponse()
+    return jsonobj.getJsonHttpResponse()
+
+
 
 def setData(request):
-    print "Setting data"
     jsonobj = JsonDataObject()
     if request.method == 'POST':
         try:
@@ -18,7 +35,7 @@ def setData(request):
             attribute_name  = row.attribute_name
             print "Saving",row,model_name,app_label,attribute_name
             
-            model_type = ContentType.objects.get(app_label=app_label, model=model_name)
+            model_type = ContentType.objects.get(app_label=app_label, model=model_name.lower())
             inst = model_type.model_class().objects.get(id=obj_id)
             setattr(inst, attribute_name, value)
             inst.save()
@@ -28,7 +45,7 @@ def setData(request):
         except Exception as e:
             print "Error",e
             jsonobj.success = 0
-            jsonobj.errormessage=e.strerror
+            
         return jsonobj.getJsonHttpResponse()
     return jsonobj.getJsonHttpResponse()
 

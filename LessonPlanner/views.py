@@ -21,6 +21,7 @@ from django.utils import simplejson
 from Utils import base_methods 
 from Utils.ajax_helpers import direct_block_to_template, direct_json_to_template
 from Utils import base_methods
+from Utils.data_upload_helpers import handle_upload_file
 from django.template import loader,Context
 from django.contrib.auth.models import User
 import sys, traceback
@@ -333,12 +334,15 @@ def saveContent(contentForm, section, lesson, request):
 				return (True, content, None,None)
 			return (False, None, None,None)
 		elif (content_type == 'PowerPoint'):
-                        powerpoint_form = AddPowerPointContent(data=request.POST)
-                        if powerpoint_form.is_valid():
-                                content = PowerPointContent()
-                                content.link = powerpoint_form.data['link']
-                                return (True, content, None,None)
-                        return (False, None, None,None)	
+			powerpoint_form = AddPowerPointContent(data=request.POST)
+			if powerpoint_form.is_valid():
+				content = PowerPointContent()
+				print request.FILES
+				content.link = handle_upload_file(request.FILES['data'])
+				return (True, content, None,None)
+			else:
+				print "Invalid Form",powerpoint_form.errors
+			return (False, None, None,None)	
 		elif (content_type == 'Text'):
 			text_form = AddTextContent(data=request.POST)
 			if text_form.is_valid():

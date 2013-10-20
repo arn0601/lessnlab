@@ -85,7 +85,11 @@ class AddActivityContent(forms.ModelForm):
 
 
 class AddPowerPointContent(AddContentForm):
-        link = forms.CharField(label="Link")
+	data = forms.FileField(label="Data",required=False)
+	link = forms.CharField(label="Link",required=False)
+	link.widget = forms.HiddenInput()
+
+	
 
 class AddOnlineArticleContent(AddContentForm):
 	link = forms.CharField(label="Link")
@@ -100,7 +104,7 @@ class AddOnlinePictureContent(AddContentForm):
         link = forms.CharField(label="Link")
 
 class AddAssessmentContent(AddContentForm):
-        title = forms.CharField(label="Title")
+	title = forms.CharField(label="Title")
 	objectives = forms.MultipleChoiceField(label='Select Content Objectives')
 	extra_field_count = forms.CharField(label="",widget=forms.HiddenInput())
 	def __init__(self, *args, **kwargs):
