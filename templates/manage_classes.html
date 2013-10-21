@@ -6,34 +6,42 @@
 
 {% for course in CourseClassInfo %}
 <div class="container coursebox" style="width: 100%;">
-
 		<a class="courseboxtitle" href="/units/?course_id={{ course.id }}" >{{ course.name }}</a>
-		{% for class in CourseClassInfo|access:course %}
-		<div class="row">
-			<div class="span3">
-				<h5 class="coursesubtitle">{{ class.name }}</h5>
-			</div>
-		</div>
-
 		{% if not ClassStudents|access:class%}
 		<div class="container alertbox" style="width: 100%;">
 			<div class="alert alert-info">
-				<p>There are no students in this class</p>
+				<p>There are no classes in this course.</p>
 			</div>
 		</div>
 		{% else %}
+		
+			{% for class in CourseClassInfo|access:course %}
+			<div class="row">
+				<div class="span3">
+					<h5 class="coursesubtitle">{{ class.name }}</h5>
+				</div>
+			</div>
 
-		<div id="manage_student_table">
-			<table class="table table-hover table-striped table-bordered">
-				
-				<thead> <tr><th> Student Name </th> <th> Student Email </th> <th> Approved </th> <th> Delete </th> </tr> </thead>
-				{% for cs in ClassStudents|access:class %}
-					<tr><td> {{ cs.student.user_firstname }} {{ cs.student.user_lastname }} </td><td> {{ cs.student.user.email }} </td> <td> {% if not cs.approved %} {{ cs.approved }}  <button onClick="approveStudent('{{ cs.student.user.id }}', '{{ class.id }}')">Approve</button>{% endif %} </td> <td> <button onClick="deleteStudent('{{ cs.student.user.id }}', '{{ class.id }}')"> Delete </button> </td> </tr><br>	
-				{% endfor %}
-			</table>
-		</div>
+				{% if not ClassStudents|access:class%}
+				<div class="container alertbox" style="width: 100%;">
+					<div class="alert alert-info">
+						<p>There are no students in this class.</p>
+					</div>
+				</div>
+				{% else %}
+		
+				<div id="manage_student_table">
+					<table class="table table-hover table-striped table-bordered">
+						
+						<thead> <tr><th> Student Name </th> <th> Student Email </th> <th> Approved </th> <th> Delete </th> </tr> </thead>
+						{% for cs in ClassStudents|access:class %}
+							<tr><td> {{ cs.student.user_firstname }} {{ cs.student.user_lastname }} </td><td> {{ cs.student.user.email }} </td> <td> {% if not cs.approved %} {{ cs.approved }}  <button onClick="approveStudent('{{ cs.student.user.id }}', '{{ class.id }}')">Approve</button>{% endif %} </td> <td> <button onClick="deleteStudent('{{ cs.student.user.id }}', '{{ class.id }}')"> Delete </button> </td> </tr><br>	
+						{% endfor %}
+					</table>
+				</div>
+				{% endif %}
+			{% endfor %}
 		{% endif %}
-		{% endfor %}
 </div>
 {% endfor %}
 
