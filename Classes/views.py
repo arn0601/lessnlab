@@ -10,6 +10,20 @@ from django.shortcuts import render_to_response,render
 from django.http import HttpResponse,HttpResponseRedirect
 # Create your views here.
 
+def manageStudents(request):
+	if base_methods.checkUserIsTeacher(request):
+                user = base_methods.checkUserIsTeacher(request)
+		base_dict = base_methods.createBaseDict(request)
+        	class_dict = class_methods.getClassesAndStudentInformation(user)
+		base_dict.update(class_dict)
+		print base_dict['CourseClassInfo']
+                return render(request, "manage_classes.html", base_dict)
+        elif base_methods.checkUserIsStudent(request):
+                student_dict = base_methods.createStudentDict(request)
+                return render(request, "student_manage_classes.html", student_dict)
+        else:
+                return HttpResponseRedirect('/')
+
 def editClassStudents(request):
 	if request.method == 'POST':
 		cid = request.POST['class_id']
