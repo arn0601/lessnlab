@@ -12,5 +12,5 @@ urlpatterns = patterns('',
     (r'^studentAddClass/$', 'Classes.views.studentAddClass'),
     (r'^studentRequestClass/$', 'Classes.views.studentRequestClass'),
     (r'^editClassStudents/$', 'Classes.views.editClassStudents'),
-   
+    (r'^manageStudents/$', 'Classes.views.manageStudents'),  
 )
