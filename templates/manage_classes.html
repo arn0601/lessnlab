@@ -7,7 +7,7 @@
 {% for course in CourseClassInfo %}
 <div class="container coursebox" style="width: 100%;">
 		<a class="courseboxtitle" href="/units/?course_id={{ course.id }}" >{{ course.name }}</a>
-		{% if not ClassStudents|access:class%}
+		{% if not CourseClassInfo|access:course%}
 		<div class="container alertbox" style="width: 100%;">
 			<div class="alert alert-info">
 				<p>There are no classes in this course.</p>
