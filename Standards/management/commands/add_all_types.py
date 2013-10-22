@@ -11,7 +11,7 @@ class Command(NoArgsCommand):
 		glist = ['K','1','2','3','4','5','6','7','8','9','10','11','12']
 		qtlist = ['MultipleChoice', 'FreeResponse']
 		stlist = ['Common Core', 'IB', 'AP', 'State']
-		statelist = ['Missouri']
+		statelist = ['Missouri', 'Pennsylvania']
 		subjectlist = ['Mathematics','English','Science','Social Studies']
 		for g in glist:
 			grade,created = Grade.objects.get_or_create(value=g)
