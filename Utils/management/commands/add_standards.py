@@ -31,20 +31,23 @@ class Command(NoArgsCommand):
 					subject = row[5]
 					description = row[8]
 					standard = Standard()
-					standard.standard_type = StandardType.objects.get(value=stype)
-					if (stype == 'State'):
-						standard.state = State.objects.get(value=state)
-					standard.description = description
-					standard.creation_date = datetime.datetime.today()
-					standard.expiration_date = datetime.datetime.today()
-					standard.start_date = datetime.datetime.today()
-					standard.department = Subject.objects.get(value=subject)
-					standard.subject = Subject.objects.get(value=subject)
-					standard.grade = Grade.objects.get(value=grade)
-					standard.numbering = numbering
-					standard.save()
-					sg, created = StandardGrouping.objects.get_or_create(subject=standard.subject, grade=standard.grade, standard_type=standard.standard_type, state=standard.state, prebuilt=True)
-					sg.standard.add(standard)
+					try:
+						standard.standard_type = StandardType.objects.get(value=stype)
+						if (stype == 'State'):
+							standard.state = State.objects.get(value=state)
+						standard.description = description
+						standard.creation_date = datetime.datetime.today()
+						standard.expiration_date = datetime.datetime.today()
+						standard.start_date = datetime.datetime.today()
+						standard.department = Subject.objects.get(value=subject)
+						standard.subject = Subject.objects.get(value=subject)
+						standard.grade = Grade.objects.get(value=grade)
+						standard.numbering = numbering
+						standard.save()
+						sg, created = StandardGrouping.objects.get_or_create(subject=standard.subject, grade=standard.grade, standard_type=standard.standard_type, state=standard.state, prebuilt=True)
+						sg.standard.add(standard)
+					except:
+						print grade
 					print rownum
 		except:
 			traceback.print_exc(file=sys.stdout)
