@@ -23,6 +23,8 @@ class Command(NoArgsCommand):
 					rownum+=1
 					numbering = row[0]
 					grade = row[1]
+					if grade == "":
+						continue
 					stype = row[4]
 					state = row[2]
 					subject = row[5]
