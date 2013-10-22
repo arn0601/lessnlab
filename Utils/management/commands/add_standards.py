@@ -24,6 +24,7 @@ class Command(NoArgsCommand):
 					numbering = row[0]
 					grade = row[1]
 					if grade == "":
+						rownum+=1
 						continue
 					stype = row[4]
 					state = row[2]
