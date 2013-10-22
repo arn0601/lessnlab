@@ -61,7 +61,6 @@ def ObjectivesPage(request):
 	else:
 		return HttpResponseRedirect('/extra/standardsForObjectives/')
 	if request.method == 'POST':
-		print "asdghgfdfghfd"
 		form = CreateObjectivesPoolForm(data=request.POST)
 		
 		standard = Standard.objects.get(id=int(form.data['standard_id']))
@@ -88,18 +87,15 @@ def createCFU(request):
 	base_dict = {}
 	base_dict['mcform'] = CreateMultipleChoiceQuestion(objective_id=objective_id)
 	base_dict['frform'] = CreateFreeResponseQuestion(objective_id=objective_id)
-	qs=  Question.objects.filter(objective=objective)
-	allqs = {}
-        for q in qs:
-		allqs[q] = TeacherAnswer.objects.filter(question=q)
-	base_dict['allqs'] = allqs
 	base_dict['objective'] = objective
+	print request
 	if request.method == 'POST':
 		qtype = request.POST.get('qtype')
 		if qtype:
 			if (qtype == 'MC'):
-				form = CreateMultipleChoiceQuestion(data=request.POST)
+				form = CreateMultipleChoiceQuestion(data=request.POST, objective_id=request.POST.get('objective_id'), new_answer_count=request.POST.get('new_answer_count'))
 				if form.is_valid():
+					print form
 					q = form.cleaned_data['question']
 					objective = Objective.objects.get(id=form.cleaned_data['objective_id'])
 					question = Question()
@@ -109,11 +105,15 @@ def createCFU(request):
 					answer_list = []
 					for i in range(0,int(form.cleaned_data['new_answer_count'])):
 						a = form.cleaned_data['new_answer_{index}'.format(index=i)]
+						print a
 						answer = TeacherAnswer()
-						answer.correct = False
-						if a.startsWith('correct:'):
-							answer=a[8:]
+						if a.startswith('correct:'):
+							a=a[8:]
+							answer.answer=a
 							answer.correct = True
+						else:
+							answer.answer=a
+							answer.correct = False
 						answer.question = question
 						answer.save()
 			if (qtype == 'FR'):
@@ -135,6 +135,11 @@ def createCFU(request):
 		else:
 			return HttpResponseRedirect('/extra/standardsForObjectives/')
 
+	qs=  Question.objects.filter(objective=objective)
+	allqs = {}
+        for q in qs:
+		allqs[q] = TeacherAnswer.objects.filter(question=q)
+	base_dict['allqs'] = allqs
 	return render(request, 'questions_for_objective.html', base_dict)
 
 

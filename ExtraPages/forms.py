@@ -25,6 +25,7 @@ class CreateMultipleChoiceQuestion(forms.Form):
 		new_fields = kwargs.pop('new_answer_count', 0)
 		super(CreateMultipleChoiceQuestion, self).__init__(*args, **kwargs)
 		self.fields['new_answer_count'].initial = new_fields
+		print new_fields
 		for index in range(int(new_fields)):
 			self.fields['new_answer_{index}'.format(index=index)] = forms.CharField(label='New Answer {index}'.format(index=index,required=False))
 		if objective_id:

@@ -25,7 +25,7 @@
 <br><br>
 
 Free response, mark the correct answer with "correct:" at the beginning<br>
-    <form method="post" action="/extra/ObjectivesPage/?objective_id={{ objective.id }}" name="createMC">
+    <form method="post" action="/extra/QuestionsPage/?objective_id={{ objective.id }}" name="createMC">
         {% csrf_token %}
         {% for field in mcform %}
         <div class="control-group">
