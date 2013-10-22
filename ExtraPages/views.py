@@ -72,7 +72,8 @@ def ObjectivesPage(request):
 				new_o.description = form.data['new_objective_{index}'.format(index=index)]
 				new_o.standard = standard
 				new_o.creation_date = datetime.today()
-				new_o.save()
+				if (new_o.description != ""):
+					new_o.save()
 		else:
 			print form.errors
 	base_dict['createdObj'] = Objective.objects.filter(standard=s)
