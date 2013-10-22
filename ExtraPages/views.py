@@ -42,7 +42,7 @@ def StandardsSearch(request):
 			return render(request,'standards_list_for_objectives.html', base_dict)
 		else:
 			print form.errors
-			return HttpResponseRedirect('/standardsForObjectives/')
+			return HttpResponseRedirect('/extra/standardsForObjectives/')
 	else:
 		print "not post"
 		return render(request,'standards_list_for_objectives.html', base_dict)
@@ -55,11 +55,11 @@ def ObjectivesPage(request):
 		s = Standard.objects.get(id=standard_id)
 		base_dict['standard'] = s
 	except:
-		return HttpResponseRedirect('/standardsForObjectives/')
+		return HttpResponseRedirect('/extra/standardsForObjectives/')
 	if standard_id:
 		base_dict['objectivesAddForm'] = CreateObjectivesPoolForm(standard_id=standard_id)
 	else:
-		return HttpResponseRedirect('/standardsForObjectives/')
+		return HttpResponseRedirect('/extra/standardsForObjectives/')
 	if request.method == 'POST':
 		print "asdghgfdfghfd"
 		form = CreateObjectivesPoolForm(data=request.POST)
@@ -83,7 +83,7 @@ def createCFU(request):
 	try:
 		objective = Objective.objects.get(id=objective_id)
 	except:
-		HttpResponseRedirect('/standardsForObjectives/')
+		HttpResponseRedirect('/extra/standardsForObjectives/')
 	base_dict = {}
 	base_dict['mcform'] = CreateMultipleChoiceQuestion(objective_id=objective_id)
 	base_dict['frform'] = CreateFreeResponseQuestion(objective_id=objective_id)
@@ -114,8 +114,6 @@ def createCFU(request):
 							answer=a[8:]
 							answer.correct = True
 						answer.question = question
-						if (a.startsWith('correct:')):
-							answer.correct=True
 						answer.save()
 			if (qtype == 'FR'):
 				form = CreateFreeResponseQuestion(data=request.POST)
@@ -134,7 +132,7 @@ def createCFU(request):
 					answer.save()
 					
 		else:
-			return HttpResponseRedirect('/standardsForObjectives/')
+			return HttpResponseRedirect('/extra/standardsForObjectives/')
 
 	return render(request, 'questions_for_objective.html', base_dict)
 

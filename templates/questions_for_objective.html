@@ -5,6 +5,9 @@
 
 {% load dictionary_extras %}
 
+<h4>Objective: {{ objective.description }} </h4>
+
+
     <form method="post" action="/extra/QuestionsPage/?objective_id={{ objective.id }}" name="createFreeResponse">
         {% csrf_token %}
         {% for field in frform %}
@@ -20,6 +23,8 @@
      <p><button type="submit" class="btn btn-primary">Submit Free Response</button>
 </form>
 <br><br>
+
+Free response, mark the correct answer with "correct:" at the beginning<br>
     <form method="post" action="/extra/ObjectivesPage/?objective_id={{ objective.id }}" name="createMC">
         {% csrf_token %}
         {% for field in mcform %}
