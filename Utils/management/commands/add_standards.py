@@ -42,5 +42,6 @@ class Command(NoArgsCommand):
 					standard.save()
 					sg, created = StandardGrouping.objects.get_or_create(subject=standard.subject, grade=standard.grade, standard_type=standard.standard_type, state=standard.state, prebuilt=True)
 					sg.standard.add(standard)
+					print rownum
 		except:
 			traceback.print_exc(file=sys.stdout)
