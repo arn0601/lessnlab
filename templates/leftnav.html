@@ -12,24 +12,51 @@ function imgError(image){
 		<ul class="nav nav-list">
 				<li class="nav-header ">My Courses</li>
 				<li><a href="/courses/" class="{% if not course %} active {% endif%}">All Courses</a></li> 
-				{% for c, ulist in curriculum %}  
-				<li><i type="button" class="icon-plus" data-toggle="collapse" data-target="#unitsfor{{ c.id }}"></i><a href="/units/?course_id={{ c.id }}" rel="tooltip" data-placement="right" title="Grade {{ c.grade }}, {{ c.subject}}" class="{% if c.id == course.id %} active {% endif%}">{{ c.name }}</a></li>
-				<div id="unitsfor{{ c.id }}" class="collapse">
-				<ul class="nav nav-list">
-					{% for u, llist in ulist %}
-						<li><i class="icon-plus" type="button" data-toggle="collapse" data-target="#lessonsfor{{ u.id }}"></i>
-							<a href="/lessons/?unit_id={{ u.id }}">{{ u.name }}</a></li>
-						<div id="lessonsfor{{ u.id }}" class="collapse">
-						<ul class="nav nav-list">
-						{% for l in llist %} <li><a href="/lessonPlanner/?lesson_id={{ l.id }}">{{ l.name }}</a></li> {% endfor %}
-						</ul>
+				{% for c, ulist in curriculum %}
+				<div>
+						<li>
+								{% if ulist %}
+								<i type="button" class="icon-chevron-right  collapse-btn" data-toggle="collapse" data-target="#unitsfor{{ c.id }}"></i>
+								{% else %}
+								<i type="button" class="icon-none" data-toggle="collapse" data-target="#unitsfor{{ c.id }}"></i>
+								{% endif %}
+								<a href="/units/?course_id={{ c.id }}" rel="tooltip" data-placement="right" title="Grade {{ c.grade }}, {{ c.subject}}" class="{% if c.id == course.id %} active {% endif%}">{{ c.name }}</a>
+						</li>
+						<div id="unitsfor{{ c.id }}" class="collapse">
+								<ul class="nav nav-list">
+									{% for u, llist in ulist %}
+										<div>
+												<li>
+														{% if llist %}
+														<i class="icon-chevron-right collapse-btn" type="button" data-toggle="collapse" data-target="#lessonsfor{{ u.id }}"></i>
+														{% else %}
+														<i class="icon-none" type="button" data-toggle="collapse" data-target="#lessonsfor{{ u.id }}"></i>
+														{% endif %}
+														<a href="/lessons/?unit_id={{ u.id }}">{{ u.name }}</a>
+												</li>
+												<div id="lessonsfor{{ u.id }}" class="collapse">
+														<ul class="nav nav-list">
+														{% for l in llist %} <li><a href="/lessonPlanner/?lesson_id={{ l.id }}">{{ l.name }}</a></li> {% endfor %}
+														</ul>
+												</div>
+										</div>
+								{% endfor %}
+								</ul>
 						</div>
-					{% endfor %}
-				</ul>
 				</div>
 				{% endfor %}
-				<li><a href="#chooseNewCourse" data-toggle="modal"><small><i class="icon-plus"></i>Add Course</small></a></li>
+				<div class="row">
+						<p></p>
+				</div>
+				<li><a href="#chooseNewCourse" data-toggle="modal"><i class="icon-plus-sign"></i>Add Course</a></li>
 		</ul>
 	</div>
 </div>
 
+<script>
+		$('.collapse-btn').on('click', function (e) {
+    //if($(e.target).attr("id") != "collapseH")return;
+    if(!$(this).is(e.target))return; // from Arun P Johny
+    $(this).toggleClass('icon-chevron-right icon-chevron-down', 200);
+});
+</script>
