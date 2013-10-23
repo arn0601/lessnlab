@@ -1109,6 +1109,10 @@ textarea,
   width: 206px;
 }
 
+textarea.extrapage {
+  width: 500px;
+}
+
 textarea {
   height: auto;
 }
