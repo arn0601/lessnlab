@@ -1,10 +1,11 @@
 
-<div class="modal hide" id="showGroupStandards">
+
+<div class="widemodal modal hide" id="showGroupStandards">
   {% block showGroupStandards %}
   <div class="modal-header">
     <button type="button" class="close" {% if justSynced %} onClick="window.location.reload(true)" {% else %} data-dismiss="modal" {% endif %}>{% if justSynced %} OK {% else %} x {% endif %}</button>
 
-    <h4>This group {% if justSynced %} will be {% else %} has been {% endif %} synced based on class parameters</h4>
+    <h4>These standards {% if justSynced %} will be {% else %} have been {% endif %} synced based on class parameters.</h4>
   </div>
   <div class="modal-body">
 	<table class="table table-striped table-bordered">
@@ -27,6 +28,22 @@
 			type:"POST",
 
       			url: {% url Courses.views.getStandardsFromGroup %}, // the file to call
+
+			success : function(data){
+				if (data != "") {
+					$("#showGroupStandards").html(data)
+					$("#showGroupStandards").modal("show")
+				}
+
+			}
+		});
+	}
+		function getUnitStandardsFromGroup(id){
+		$.ajax({
+			data:{unit_id:id},
+			type:"POST",
+
+      			url: {% url Units.views.getStandardsFromGroup %}, // the file to call
 
 			success : function(data){
 				if (data != "") {

@@ -1,16 +1,18 @@
 			* {
-			
 				margin: 0;
-			
-			
 			}
 			
 			body {
-				
 				height:100%;
 				background-image: url('/static/cream_pixels.png');
 				font-family: sans-serif;
 			}
+			
+		.widemodal
+		{
+			width:900px;
+			margin-left:-450px;
+		}
 			
 /* Navigation Bar Styles */
 	
