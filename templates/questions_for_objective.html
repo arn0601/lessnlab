@@ -1,0 +1,82 @@
+<link href="/static/bootstrap.css" rel="stylesheet" media="screen">
+  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+  <script src="/static/lessnlab.js"></script>
+  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script> 
+
+{% load dictionary_extras %}
+<div align="center">
+<h4>Objective: {{ objective.description }} </h4>
+<div align="center">
+<h5> Free response </h5>
+One response per question<br>
+    <form method="post" action="/extra/QuestionsPage/?objective_id={{ objective.id }}" name="createFreeResponse">
+        {% csrf_token %}
+        {% for field in frform %}
+        <div class="control-group">
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <input type="hidden" name="qtype" value="FR">
+     
+     <p><button type="submit" class="btn btn-primary">Submit Free Response</button>
+</form>
+<br><br>
+<h5> Multiple Choice </h5>
+Add as many answers as you want <br>
+Mark the correct answer with "correct:" at the beginning<br>
+    <form method="post" action="/extra/QuestionsPage/?objective_id={{ objective.id }}" name="createMC">
+        {% csrf_token %}
+        {% for field in mcform %}
+        <div class="control-group">
+         <label class="control-label">{{ field.label_tag }}</label>
+            <div class="controls">
+                {{ field }}
+            </div>
+                </div>
+    {% endfor %}
+     <input type="hidden" name="qtype" value="MC">
+     <button type="button" id="addAnswer" onClick="addResponse()"  class="btn btn-primary">Add Reponse</button><br><br>
+     <button type="submit" class="btn btn-primary">Submit MultipleChoice</button>
+</form>
+</div>
+<h4>Questions already created</h4>
+{% for q in allqs %}
+  {{ q.question }}
+  <ul>
+    {% for a in allqs|access:q %}
+    <li>
+      {% if a.correct %} * {% endif %} {{ a.answer }}
+    </li>
+    {% endfor %}
+  </ul>
+
+{% endfor %}
+</div>
+<script type="text/javascript"> <!-- scroll jquery -->
+        
+        
+        function addResponse() {
+                var form = document.getElementsByName("createMC");
+                textbox = document.createElement('input');
+                var new_answer_count = $("[name=new_answer_count]").val();
+                textbox.name = 'new_answer_' + new_answer_count;
+                new_answer_count ++; 
+        
+                div = document.createElement('div');
+                textbox.type = 'text';          
+		label = document.createElement('label')
+		label.innerHTML = "Response: " + (new_answer_count);
+                var reper = document.getElementById('addAnswer');
+                var parinte = reper.parentNode;
+		
+		parinte.insertBefore(label, reper);
+                parinte.insertBefore(textbox, reper);
+                parinte.insertBefore(div, reper);               
+                
+                $("[name=new_answer_count]").val(new_answer_count);
+
+        }
+</script>

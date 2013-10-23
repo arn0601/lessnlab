@@ -42,7 +42,7 @@ def StandardsSearch(request):
 			return render(request,'standards_list_for_objectives.html', base_dict)
 		else:
 			print form.errors
-			return HttpResponseRedirect('/standardsForObjectives/')
+			return HttpResponseRedirect('/extra/standardsForObjectives/')
 	else:
 		print "not post"
 		return render(request,'standards_list_for_objectives.html', base_dict)
@@ -55,13 +55,12 @@ def ObjectivesPage(request):
 		s = Standard.objects.get(id=standard_id)
 		base_dict['standard'] = s
 	except:
-		return HttpResponseRedirect('/standardsForObjectives/')
+		return HttpResponseRedirect('/extra/standardsForObjectives/')
 	if standard_id:
 		base_dict['objectivesAddForm'] = CreateObjectivesPoolForm(standard_id=standard_id)
 	else:
-		return HttpResponseRedirect('/standardsForObjectives/')
+		return HttpResponseRedirect('/extra/standardsForObjectives/')
 	if request.method == 'POST':
-		print "asdghgfdfghfd"
 		form = CreateObjectivesPoolForm(data=request.POST)
 		
 		standard = Standard.objects.get(id=int(form.data['standard_id']))
@@ -72,7 +71,8 @@ def ObjectivesPage(request):
 				new_o.description = form.data['new_objective_{index}'.format(index=index)]
 				new_o.standard = standard
 				new_o.creation_date = datetime.today()
-				new_o.save()
+				if (new_o.description != ""):
+					new_o.save()
 		else:
 			print form.errors
 	base_dict['createdObj'] = Objective.objects.filter(standard=s)
@@ -83,22 +83,19 @@ def createCFU(request):
 	try:
 		objective = Objective.objects.get(id=objective_id)
 	except:
-		HttpResponseRedirect('/standardsForObjectives/')
+		HttpResponseRedirect('/extra/standardsForObjectives/')
 	base_dict = {}
 	base_dict['mcform'] = CreateMultipleChoiceQuestion(objective_id=objective_id)
 	base_dict['frform'] = CreateFreeResponseQuestion(objective_id=objective_id)
-	qs=  Question.objects.filter(objective=objective)
-	allqs = {}
-        for q in qs:
-		allqs[q] = TeacherAnswer.objects.filter(question=q)
-	base_dict['allqs'] = allqs
 	base_dict['objective'] = objective
+	print request
 	if request.method == 'POST':
 		qtype = request.POST.get('qtype')
 		if qtype:
 			if (qtype == 'MC'):
-				form = CreateMultipleChoiceQuestion(data=request.POST)
+				form = CreateMultipleChoiceQuestion(data=request.POST, objective_id=request.POST.get('objective_id'), new_answer_count=request.POST.get('new_answer_count'))
 				if form.is_valid():
+					print form
 					q = form.cleaned_data['question']
 					objective = Objective.objects.get(id=form.cleaned_data['objective_id'])
 					question = Question()
@@ -108,14 +105,16 @@ def createCFU(request):
 					answer_list = []
 					for i in range(0,int(form.cleaned_data['new_answer_count'])):
 						a = form.cleaned_data['new_answer_{index}'.format(index=i)]
+						print a
 						answer = TeacherAnswer()
-						answer.correct = False
-						if a.startsWith('correct:'):
-							answer=a[8:]
+						if a.startswith('correct:'):
+							a=a[8:]
+							answer.answer=a
 							answer.correct = True
+						else:
+							answer.answer=a
+							answer.correct = False
 						answer.question = question
-						if (a.startsWith('correct:')):
-							answer.correct=True
 						answer.save()
 			if (qtype == 'FR'):
 				form = CreateFreeResponseQuestion(data=request.POST)
@@ -134,8 +133,13 @@ def createCFU(request):
 					answer.save()
 					
 		else:
-			return HttpResponseRedirect('/standardsForObjectives/')
+			return HttpResponseRedirect('/extra/standardsForObjectives/')
 
+	qs=  Question.objects.filter(objective=objective)
+	allqs = {}
+        for q in qs:
+		allqs[q] = TeacherAnswer.objects.filter(question=q)
+	base_dict['allqs'] = allqs
 	return render(request, 'questions_for_objective.html', base_dict)
 
 
