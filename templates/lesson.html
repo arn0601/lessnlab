@@ -41,10 +41,10 @@
   </div>
 	<div style="text-align: right;">
 		<a class="close" style="width:30px" rel="tooltip" data-placement="right" title="Delete {{lesson.name}} lesson" onClick="requestDeleteLesson('{{ lesson.id }}')"><i class="icon-trash"></i></a>
-		<a class="close" style="width:30px" href="#" onClick="requestEditLesson('{{ lesson.id }}')"><i class="icon-edit"></i></a>
+		<a class="close" style="width:30px" rel="tooltip" title="Edit {{lesson.name}} lesson" href="#" onClick="requestEditLesson('{{ lesson.id }}')"><i class="icon-edit"></i></a>
 	
     <div class="btn-group">
-  		<a class="close dropdown-toggle" style="width:30px" data-toggle="dropdown" href="#"><i class="icon-plus"></i></a>
+  		<a class="close dropdown-toggle" rel="tooltip" title="Add Objectives & Standardss" style="width:30px" data-toggle="dropdown" href="#"><i class="icon-plus"></i></a>
   		<ul class="dropdown-menu">
     		<li><a href="#" onClick="requestLessonObjectives('{{ lesson.id }}')">Add Lesson Objectives</a></li>
     		<li><a href="#" onClick="requestLessonStandards('{{ lesson.id }}')">Add Lesson Standards</a></li>
