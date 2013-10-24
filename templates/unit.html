@@ -1,4 +1,4 @@
-{% extends "base-3col.html" %}
+{% extends "base.html" %}
 {% load staticfiles %}
 {% load dictionary_extras %}
 
@@ -8,12 +8,21 @@
 <!-- Middle column main content -->
 
 <div class="row">
-	<div class="span4">
+	<div class="span8" style="margin-top: 5px; margin-bottom:-15px;">
 		<h4 class="coursetitle">Course: {{course.course.name}}</h4>
 		<h5 class="coursesubtitle">Grade {{ course.grade }}, {{ course.subject }}</h5>
 		<h5 class="coursesubtitle"> {{ course.start_date }} - {{ course.end_date }}</h5>
+		<a href="#" onClick="getCourseStandardsFromGroup('{{ course.id }}')">View Course Standards</a>
 	</div>
 </div>
+<div class="row">
+	<div class="span2" style="margin-top: 5px; margin-bottom:-15px; float:right">
+		{% if userUnits|length != 0 %}
+			<a href="#addUnit" data-toggle="modal">Add Another Unit</a>
+		{% endif %}
+	</div>
+</div>	
+
 
 {% if userUnits|length == 0 %}
 <div class="container alertbox" style="width: 100%;">
@@ -21,8 +30,6 @@
 		<p>There aren't any units in this course yet. <a href="#addUnit" data-toggle="modal">Add one.</a></p>
 	</div>
 </div>
-
-
 
 {% else %}
 
@@ -54,7 +61,6 @@
 </div>
 <div class="row">
 	<div class="span6">
-
 			<div class="editabletextarea" rows="3" style="margin-left: 0px" model_map_id="{{ model_map|access:'Units'|access:'Unit'|access:'description'}}" obj_id="{{ unit.id }}" url="{% url setData %}">
 				 {{ unit.description }}
 			</div>
@@ -88,32 +94,4 @@
 {% include "unit_standards_modal.html" %}
 {% include "unit_edit_modal.html" %}
 {% include "unit_delete_modal.html" %}
-{% endblock %}
-<!-- right nav -->
-{% block rightnav %}
-	<!-- <div class="row">
-		<div class="span2">
-			<h4>{{ course.name}} Units</h4>
-		</div>
-	</div> -->
-	
-	<!--  RIGHT HAND NAVIGATION - This generates the right hand side naviation on the units page. Code block shows 
-	a prompt to add a unit in the course if no units are present, and otherwise shows a menu 
-	of the units that are currently in the course. -->
-	
-	<div class="row">
-		<div class="span4 nocontenttext">
-			<ul class="nav nav-list" style="width: 95%;">
-				<li class="nav-header">{{course.name}} Units</li>
-				{% if userUnits|length == 0 %}
-					<li><a href="#addUnit" data-toggle="modal"><i class="icon-plus"></i>Add Your First Unit</a></li>
-				{% else %}
-					{% for unit in userUnits %}
-					<li><a href="/lessons/?unit_id={{ unit.id }}" onclick="goToByScroll('u1')">{{ unit.name }}</a></li>
-					{% endfor %}
-					<li><a href="#addUnit" data-toggle="modal"><i class="icon-plus"></i>Add Another Unit</a></li>
-				{% endif %}
-				</ul>
-			</div>
-		</div>
 {% endblock %}

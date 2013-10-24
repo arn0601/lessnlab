@@ -27,16 +27,20 @@ function imgError(image){
 									{% for u, llist in ulist %}
 										<div>
 												<li>
+														<h6 style="margin: 0px">
 														{% if llist %}
 														<i class="icon-chevron-right collapse-btn" type="button" data-toggle="collapse" data-target="#lessonsfor{{ u.id }}"></i>
 														{% else %}
+																
 														<i class="icon-none" type="button" data-toggle="collapse" data-target="#lessonsfor{{ u.id }}"></i>
 														{% endif %}
-														<a href="/lessons/?unit_id={{ u.id }}">{{ u.name }}</a>
+														<a href="/lessons/?unit_id={{ u.id }}">{{ u.name }}</a></h6>
 												</li>
 												<div id="lessonsfor{{ u.id }}" class="collapse">
 														<ul class="nav nav-list">
-														{% for l in llist %} <li><a href="/lessonPlanner/?lesson_id={{ l.id }}">{{ l.name }}</a></li> {% endfor %}
+														{% for l in llist %}
+																<h6 style="margin: 0px"><a href="/lessonPlanner/?lesson_id={{ l.id }}">{{ l.name }}</a> </h6>
+														{% endfor %}
 														</ul>
 												</div>
 										</div>

@@ -1,4 +1,4 @@
-{% extends "base-3col.html" %}
+{% extends "base.html" %}
 {% load staticfiles %}
 {% load dictionary_extras %}
 
@@ -9,9 +9,20 @@
 	<div class="span4">
 				<h4 class="coursetitle">Unit: {{unit.name}} </h4>
 				<h5 class="coursesubtitle">Course: <a href="/units/?course_id={{ unit.course.id }}">{{ unit.course.name }}</a></h5>
+				<h5 class="coursesubtitle">Grade {{ unit.course.grade }}, {{ unit.course.subject }}</h5>
+				<h5 class="coursesubtitle"> {{ unit.start_date }} - {{ unit.end_date }}</h5>
+				<a href="#" onClick="getUnitStandardsFromGroup('{{ unit.id }}')">View Unit Standards</a>
 
 	</div>
 </div>
+
+<div class="row">
+	<div class="span2" style="margin-top: 5px; margin-bottom:-15px; float:right">
+		{% if userLessons|length != 0 %}
+			<a href="#addLesson" data-toggle="modal">Add Another Lesson</a>
+		{% endif %}
+	</div>
+</div>	
 
 <!-- Middle column main content -->
 {% if userLessons|length == 0 %}
@@ -60,30 +71,7 @@
 			</div>
 	</div>
 </div>
-<div class="row">
-	<div class="span3">
-		<!-- <a class="btn btn-success btn-small" href="/lessonPlanner/?lesson_id={{ lesson.id }}">Go To Lesson</a> -->
-		<div class="btn-group">
-  			<a class="btn btn-success btn-small" href="/lessonPlanner/?lesson_id={{ lesson.id }}">View Lesson</a>
-  			<button class="btn btn-success btn-small dropdown-toggle" data-toggle="dropdown">
-    			<span class="caret"></span>
-  			</button>
-  			<ul class="dropdown-menu">
-    			<li></li>
-    			<li><a href="#">View Lesson Objectives</a></li>
-    			<li><a href="#">View Lesson Standards</a></li>
-  			</ul>
-		</div>
-	</div>
-	<!--
-	<div class="span5">
-		<a class="btn btn-success btn-small" type="button" href="/lessonPlanner/?lesson_id={{ lesson.id }}">View Lesson</a>
-    </div>
-    <div class="span5">
-    	<a class="btn btn-primary btn-small" type="button" href="#">View Objectives</a>
-    </div>
-    -->
-</div>
+
 </div> 
 {% endfor %}
 {% endif %}

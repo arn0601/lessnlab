@@ -131,7 +131,7 @@ def createBaseDict(request):
 		return None
 
 	base_dict['user'] = user
-
+	
 	courseAddForm.fields['state'].initial = user.user_school_state
 
 	courseAddForm.fields['owner'].initial = user

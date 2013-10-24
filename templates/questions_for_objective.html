@@ -4,9 +4,11 @@
   <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script> 
 
 {% load dictionary_extras %}
-<div align="center">
-<h4>Objective: {{ objective.description }} </h4>
-<div align="center">
+<div class="span8">
+<h4>Objective: {{ objective.description }}
+		<input  style="text-align: right; float: right" type="button" value="Back"  class="btn btn-primary" onclick="window.history.back()" />
+    </h4>
+<div >
 <h5> Free response </h5>
 One response per question<br>
     <form method="post" action="/extra/QuestionsPage/?objective_id={{ objective.id }}" name="createFreeResponse">

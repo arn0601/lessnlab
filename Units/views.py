@@ -14,6 +14,20 @@ from django.contrib.auth.models import User
 import simplejson
 
 # Create your views here.
+def getStandardsFromGroup(request):
+        if request.method == 'POST':
+                unit_id = request.POST['unit_id']
+                try:
+                        unit = Unit.objects.get(id=unit_id)
+                except:
+                        return HttpResponse('')
+                standard_list = unit_methods.getUnitStandards(unit, False)
+                context = {'groupStandards': standard_list, 'justSynced': False}
+                return direct_block_to_template(request,'course_view_standards.html', 'showGroupStandards', context)
+        return HttpResponse('')
+
+
+
 def showUnits(request):
 	if base_methods.checkUserIsTeacher(request):
 		base_dict = base_methods.createBaseDict(request)
