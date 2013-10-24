@@ -82,6 +82,9 @@ $(document).ready(function(){
 			
 	$(function(){
 		$(document).on('keypress', 'input[type="text"]', function(event){
+			if (this.className != "editabletext") {
+				return;
+			}
 			if (event.keyCode == '13') {
 				if ($.trim(this.value) == ''){  
 					this.value = (this.defaultValue ? this.defaultValue : '');  
