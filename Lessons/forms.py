@@ -82,7 +82,7 @@ class DeleteLesson(forms.Form):
 class LessonStandardsForm(forms.Form):
 	lesson_id = forms.CharField(label='')
 	lesson_id.widget = forms.HiddenInput()
-	standards = forms.MultipleChoiceField(label='Select Lesson Standards')
+	standards = forms.MultipleChoiceField(label='Select Lesson Standards',widget=forms.CheckboxSelectMultiple())
 
 	def __init__(self, *args, **kwargs):
 		lesson_id = kwargs.pop('lesson_id', None)
