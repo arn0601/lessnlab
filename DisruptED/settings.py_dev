@@ -13,7 +13,7 @@ MANAGERS = ADMINS
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', #django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'ENGINE': 'django.db.backends.mysql', 
 
 
 
@@ -130,7 +130,6 @@ INSTALLED_APPS = (
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     'django_evolution',
-    'storages',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
     'Types',
@@ -147,7 +146,7 @@ INSTALLED_APPS = (
     'Rating',
     'Profile',
     'Questions',
-    'ExtraPages'
+    'ExtraPages',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -195,7 +194,7 @@ EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 LOGIN_URL_REGEX = r'^$'
 LOGIN_URL = '/'
-LOGIN_EXEMPT_URLS = (r'^accounts/registerTeacher/',r'^accounts/validateLogin/', r'^accounts/validateRegisterTeacher/',r'^team/',r'^login/' )
+LOGIN_EXEMPT_URLS = (r'^accounts/registerTeacher/',r'^accounts/validateLogin/', r'^accounts/validateRegisterTeacher/',r'^team/',r'^login/',r'^extra/' )
 DEFAULT_FILE_STORAGE = 'storages.backends.s3.S3Storage'
 AWS_ACCESS_KEY_ID="AKIAILHJJ7SZCMFP6NBQ"
 AWS_SECRET_ACCESS_KEY="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"

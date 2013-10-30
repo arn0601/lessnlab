@@ -49,12 +49,10 @@ def registerStudent(request, backend, success_url=None, form_class=None,
              template_name='registration/registration_form.html',
              extra_context=None):
     backend = get_backend(backend)
-    print 'student register2'
     if not backend.registration_allowed(request):
         return redirect(disallowed_url)
     if form_class is None:
         form_class = backend.get_form_class(request)
-    print 'student register'
     if request.method == 'POST':
         form = form_class(data=request.POST, files=request.FILES)
         if form.is_valid():
