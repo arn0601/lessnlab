@@ -21,12 +21,29 @@
 
 	<div class="span10">
 		<h5>{{ fullname }} <i class="icon-ok-sign"></i></h5>
-		<p class="profileSubHeader">{{ user.user_type }} at Liberty High School</p>
+		<p class="profileHeader">{{ user.user_type }}</p>
+		<div  class="dataAttrib" >
+			School Name
+		</div>
+		<div class="editabletext" model_map_id="{{ model_map|access:'accounts'|access:'UserProfile'|access:'user_school_name'}}" obj_id="{{ user.id }}" url="{% url setData %}">
+			{{ user.user_school_name }}
+		</div>
+		<div  class="dataAttrib" >
+			School District
+		</div>
+		<div class="editabletext" model_map_id="{{ model_map|access:'accounts'|access:'UserProfile'|access:'user_school_district'}}" obj_id="{{ user.id }}" url="{% url setData %}">
+			{{ user.user_school_district }}
+		</div>	
 	</div>
+
+</div>
+<div class="row" style="margin-left:140px;">
+	<div class="span10">
 	<span class="file-wrapper" style="margin-left: 20px">
 		<input type="file" class="fileInput" id="files" onchange="s3_upload('{{username}}_profilepic');"/>
-  <span class="button">Choose new Photo</span>
+		<span class="button">Choose new Photo</span>
 	</span>
+	</div>
 </div>
 
 <hr/>

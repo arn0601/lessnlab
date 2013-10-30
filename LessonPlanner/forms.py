@@ -105,7 +105,7 @@ class AddOnlinePictureContent(AddContentForm):
 
 class AddAssessmentContent(AddContentForm):
 	title = forms.CharField(label="Title")
-	objectives = forms.MultipleChoiceField(label='Select Content Objectives')
+	objectives = forms.MultipleChoiceField(label='Select Content Objectives', required=False)
 	extra_field_count = forms.CharField(label="",widget=forms.HiddenInput())
 	def __init__(self, *args, **kwargs):
 	        extra_fields = kwargs.pop('extra', 0)
