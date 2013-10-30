@@ -79,10 +79,19 @@ textarea[class=editabletextarea]
 
 }
 
+.editabletextarea:hover
+{
+  outline:blue dotted thin;
+}
+
 .editabletext
 {
 	margin-bottom: 10px;
 	font-size:14px;
 	color:#545454;
 	margin-left: 150px;
+}
+.editabletext:hover
+{
+  outline:blue dotted thin;
 }

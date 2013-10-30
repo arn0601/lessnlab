@@ -146,6 +146,8 @@ INSTALLED_APPS = (
     'Utils',
     'Rating',
     'Profile',
+    'Questions',
+    'ExtraPages'
 )
 
 # A sample logging configuration. The only tangible logging

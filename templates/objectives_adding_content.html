@@ -1,11 +1,15 @@
-<div class="span8">
-  <link href="/static/bootstrap.min.css" rel="stylesheet" media="screen">
-  <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-  <script src="/static/lessnlab.js"></script>
-  <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script> 
-
-   <h3> Create objectives for</h3>
-   <h4> {{ standard.numbering }} : {{ standard.description }}</h4>
+<div class="span9">
+    <link href="/static/bootstrap.min.css" rel="stylesheet" media="screen">
+    <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+    <script src="/static/lessnlab.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.2/jquery-ui.js"></script> 
+    
+   
+    <h3> Create objectives for:
+        <input  style="text-align: right; float: right" type="button" value="Back"  class="btn btn-primary" onclick="window.history.back()" />
+    </h3>
+    <h4> {{ standard.numbering }} : {{ standard.description }}</h4>
+  
 
     <form method="post" action="/extra/ObjectivesPage/?standard_id={{ standard.id }}" name="createObjectivesForm">
         {% csrf_token %}
@@ -18,13 +22,13 @@
                 </div>
     {% endfor %}
      
-     <div class="row" style="margin: 10px">
-     <button type="button" id="addObjective" onClick="addObj()"  class="btn btn-primary">Add objective</button>
-     </div>
-     <div class="row" style="margin: 10px">
+    <div class="row" style="margin: 10px">
+    <button type="button" id="addObjective" onClick="addObj()"  class="btn btn-primary">Add objective</button>
+    </div>
+    <div class="row" style="margin: 10px">
         <button type="submit" class="btn btn-primary">Submit</button>
-     </div>
-     </form>
+    </div>
+    </form>
 
    <h4> Created Objectives </h4>
    <ul>
