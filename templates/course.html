@@ -29,8 +29,9 @@
 		 <a class="close" rel="tooltip" data-placement="right" title="Delete Course" onClick="requestDeleteCourse('{{ course.id }}')"><i class="icon-trash"></i></a>
 	</div>
 
-	<div class="span5">
-		 <a rel="tooltip" data-placement="right" title="Course Classes" href="{% url Classes.views.showClasses %}?course_id={{ course.id }}">Goto Classes</a>
+	<div class="span10">
+		 <a rel="tooltip" data-placement="right" title="Course Classes" href="{% url Classes.views.showClasses %}?course_id={{ course.id }}">Go to Classes</a>
+    		<br>		<a href="#" onClick="getCourseStandardsFromGroup('{{ course.id }}')">View Course Standards</a>
 	</div>
 </div>
 <div class="row">
@@ -46,15 +47,9 @@
 </div>
 <div class="row">
 	<div class="span10">
-    	<div class="btn-group">
-  			<a class="btn btn-success btn-small" href="/units/?course_id={{ course.id }}">Go To Course</a>
-  			<button class="btn btn-success btn-small dropdown-toggle" data-toggle="dropdown">
-    			<span class="caret"></span>
-  			</button>
-  			<ul class="dropdown-menu">
-    			<li><a href="#" onClick="getCourseStandardsFromGroup('{{ course.id }}')">View Course Standards</a></li>
-  			</ul>
-		</div>
+  			<!--<a class="btn btn-success btn-small" href="/units/?course_id={{ course.id }}">Go To Course</a>-->
+  			<br>
+  			
     </div>
 </div>
 </div> <!-- Course box -->
