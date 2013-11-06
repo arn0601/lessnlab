@@ -46,7 +46,7 @@ Mark the correct answer with "correct:" at the beginning<br>
 </div>
 <h4>Questions already created</h4>
 {% for q in allqs %}
-  {{ q.question }}
+  {{ q.question }} {% if q.owner %} [Author: {{ q.owner.user_firstname }} {{ q.owner.user_lastname }}] {% else %} Anonymous {% endif%}
   <ul>
     {% for a in allqs|access:q %}
     <li>

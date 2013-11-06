@@ -7,6 +7,7 @@ from django.shortcuts import render_to_response, render
 from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
 from datetime import datetime
+from accounts.models import TeacherProfile
 
 # Create your views here.
 
@@ -71,6 +72,8 @@ def ObjectivesPage(request):
 				new_o.description = form.data['new_objective_{index}'.format(index=index)]
 				new_o.standard = standard
 				new_o.creation_date = datetime.today()
+				if request.user:
+					new_o.owner = TeacherProfile.objects.get(user=request.user)
 				if (new_o.description != ""):
 					new_o.save()
 		else:
@@ -101,12 +104,16 @@ def createCFU(request):
 					question = Question()
 					question.objective = objective
 					question.question = q
+					if request.user:
+						question.owner = TeacherProfile.objects.get(user=request.user)
 					question.save()
 					answer_list = []
 					for i in range(0,int(form.cleaned_data['new_answer_count'])):
 						a = form.cleaned_data['new_answer_{index}'.format(index=i)]
 						print a
 						answer = TeacherAnswer()
+						if request.user:
+							answer.owner = TeacherProfile.objects.get(user=request.user)
 						if a.startswith('correct:'):
 							a=a[8:]
 							answer.answer=a
@@ -122,6 +129,8 @@ def createCFU(request):
 					q = form.cleaned_data['question']
 					objective = Objective.objects.get(id=form.cleaned_data['objective_id'])
 					question = Question()
+					if request.user:
+						question.owner = TeacherProfile.objects.get(user=request.user)
 					question.objective = objective
 					question.question = q
 					saved_q = question.save()
@@ -130,6 +139,8 @@ def createCFU(request):
 					answer.question = question
 					answer.answer=a
 					answer.correct = True
+					if request.user:
+							answer.owner = TeacherProfile.objects.get(user=request.user)
 					answer.save()
 					
 		else:

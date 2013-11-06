@@ -34,7 +34,7 @@
    <ul>
    {% for objective in createdObj %}
 
-      <li> <a href="/extra/QuestionsPage/?objective_id={{ objective.id }}">{{ objective.description }}</a> </li>
+      <li> <a href="/extra/QuestionsPage/?objective_id={{ objective.id }}">{{ objective.description }}</a> {% if objective.owner %} [Author: {{ objective.owner.user_firstname }} {{ objective.owner.user_lastname }}] {% else %} Anonymous {% endif%} </li>
 
    {% endfor %}
    </ul>
