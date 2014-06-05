@@ -196,8 +196,6 @@ LOGIN_URL_REGEX = r'^$'
 LOGIN_URL = '/'
 LOGIN_EXEMPT_URLS = (r'^accounts/registerTeacher/',r'^accounts/validateLogin/', r'^accounts/validateRegisterTeacher/',r'^team/',r'^login/',r'^extra/' )
 DEFAULT_FILE_STORAGE = 'storages.backends.s3.S3Storage'
-AWS_ACCESS_KEY_ID="AKIAILHJJ7SZCMFP6NBQ"
-AWS_SECRET_ACCESS_KEY="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"
-AWS_STORAGE_BUCKET_NAME="lessnlab2"
+
 
 DEFAULT_FILE_STORAGE = 'storages.backends.s3boto.S3BotoStorage'
